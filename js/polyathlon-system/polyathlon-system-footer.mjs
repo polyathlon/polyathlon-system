@@ -104,9 +104,9 @@ class PolyathlonSystemFooter extends BaseElement {
     social() {
         return html`
             <div>
-                <a href="https://t.me/v_a_antoshkin"><img src="/images/telegram.svg" alt=""/></a>
-                <a href="https://vk.com/id63554332"><img src="/images/vk.svg" alt=""/></a>
-                <a href="mailto:v.a.antoshkin@mail.ru"><img src="/images/mail.svg" alt=""/></a>
+                <a href="https://t.me/v_a_antoshkin"><img src="images/telegram.svg" alt=""/></a>
+                <a href="https://vk.com/id63554332"><img src="images/vk.svg" alt=""/></a>
+                <a href="mailto:v.a.antoshkin@mail.ru"><img src="images/mail.svg" alt=""/></a>
             </div>
         `;
     }
