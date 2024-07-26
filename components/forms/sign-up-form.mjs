@@ -76,7 +76,7 @@ class SignUpForm extends BaseElement {
 
                         <button type="button" @click=${()=>this.sendSimpleUser()}>Sign Up</button>
                         <div id="google"></div>
-                        <div id="VkIdSdkOneTap"></div>
+
                     </div>
                 </div>
             </div>
@@ -226,7 +226,8 @@ class SignUpForm extends BaseElement {
         const oneTap = new VKID.OneTap();
 
         // Получение контейнера из разметки.
-        const container = this.renderRoot.querySelector('#VkIdSdkOneTap');
+        // const container = this.renderRoot.querySelector('#VkIdSdkOneTap');
+        const container = document.querySelector('#VkIdSdkOneTap');
         // Проверка наличия кнопки в разметке.
         if (container) {
              // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
