@@ -232,7 +232,7 @@ class SignUpForm extends BaseElement {
         if (container) {
              // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
             oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS })
-            .on(VKID.WidgetEvents.ERROR, handleError); // handleError — какой-либо обработчик ошибки.
+            .on(VKID.WidgetEvents.ERROR, e => console.log(e)); // handleError — какой-либо обработчик ошибки.
         }
     }
 
