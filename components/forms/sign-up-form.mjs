@@ -76,6 +76,7 @@ class SignUpForm extends BaseElement {
 
                         <button type="button" @click=${()=>this.sendSimpleUser()}>Sign Up</button>
                         <div id="google"></div>
+                        <div id="VkIdSdkOneTap"></div>
                     </div>
                 </div>
             </div>
@@ -208,9 +209,37 @@ class SignUpForm extends BaseElement {
         );
     }
 
+    createVKButton() {
+        const VKID = window.VKIDSDK;
+
+        VKID.Config.init({
+          app: 52051268, // Идентификатор приложения.
+          redirectUrl: "https://polyathlon.github.io/polyathlon-system", // Адрес для перехода после авторизации.
+          state: 'dj29fnsadjsd82', // Произвольная строка состояния приложения.
+          codeVerifier: 'FGH767Gd65', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
+          scope: 'email phone', // Список прав доступа, которые нужны приложению.
+          mode: VKID.ConfigAuthMode.Redirect // По умолчанию авторизация открывается в новой вкладке.
+        });
+
+
+        // Создание экземпляра кнопки.
+        const oneTap = new VKID.OneTap();
+
+        // Получение контейнера из разметки.
+        const container = this.renderRoot.querySelector('#VkIdSdkOneTap');
+        // Проверка наличия кнопки в разметке.
+        if (container) {
+             // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+            oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS })
+            .on(VKID.WidgetEvents.ERROR, handleError); // handleError — какой-либо обработчик ошибки.
+        }
+    }
+
+
     firstUpdated() {
         super.firstUpdated();
         this.createGoogleButton();
+        this.createVKButton();
     }
 
     open() {
