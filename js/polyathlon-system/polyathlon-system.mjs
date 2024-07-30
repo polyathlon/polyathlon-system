@@ -127,14 +127,6 @@ class PolyathlonSystem extends BaseElement {
     firstUpdated() {
         super.firstUpdated();
         const lazyIterator = this.lazyLoad();
-        const params = new URLSearchParams(window.location.search);
-        let param1 = params.get('code');
-        let param2 = params.get('device_id');
-        if (param1 && param2) {
-            const form = this.renderRoot.querySelector("sign-in-form");
-            form.load();
-        }
-
         const lazyInterval = setInterval(() => lazyIterator.next().done ? clearInterval(lazyInterval) : '', 2000);
     }
 }

@@ -303,6 +303,13 @@ class PolyathlonSystemHeader extends BaseElement {
         super.firstUpdated();
         const md = window.matchMedia( "(min-width: 920px)" );
         this.isHorizontal = md.matches;
+        const params = new URLSearchParams(window.location.search);
+        let param1 = params.get('code');
+        let param2 = params.get('device_id');
+        if (param1 && param2) {
+            const form = this.renderRoot.querySelector("sign-in-form");
+            form.load();
+        }
         md.addEventListener('change', () => this.matchMediaChange, false);
     }
 }
