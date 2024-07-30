@@ -308,7 +308,7 @@ class PolyathlonSystemHeader extends BaseElement {
         let param2 = params.get('device_id');
         if (param1 && param2) {
             const form = this.renderRoot.querySelector("sign-in-form");
-            form.load();
+            form.login();
         }
         md.addEventListener('change', () => this.matchMediaChange, false);
     }
