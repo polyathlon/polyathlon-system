@@ -37,7 +37,7 @@ class SignUpForm extends BaseElement {
                     display: flex;
                     justify-content: right;
                 }
-                
+
             `
         ]
     }
@@ -67,7 +67,7 @@ class SignUpForm extends BaseElement {
                     <div id="db-tab-section" class="form-tab-section selected">
                         <simple-input id="login" icon-name="user" placeholder="Логин" label="Пользователь"></simple-input>
                         <email-input id="email" icon-name="mail" placeholder="EMail" label="Почта" size="28"></email-input>
-                        <password-input id="password" label="Пароль" icon-name="password" visible-icon="eye-slash-regular" invisible-icon="eye-regular"></password-input>
+                        <password-input id="password" label="Пароль" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular"></password-input>
                         <div class="sign-up-options">
                             <div class="checkbox-remember">
                                 <label for="remember"><b>Remember me</b></label>
@@ -340,12 +340,10 @@ class SignUpForm extends BaseElement {
 
     updateLoginValue (e) {
         this.login = e.target.value
-        console.log(this.login)
     }
 
     updatePasswordValue (e) {
         this.password = e.target.value
-        console.log(this.password)
     }
 }
 
