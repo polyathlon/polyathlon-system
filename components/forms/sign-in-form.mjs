@@ -56,46 +56,45 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     // <span id="close" class="close-button no-select" title="Закрыть"  @click=${()=>this.close('CANCEL')}>&times;</span>
     render() {
         return html`
-           <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
-            <modal-dialog></modal-dialog>
-            <cancel-dialog></cancel-dialog>
-            <close-dialog></close-dialog>
-            <sign-up-form></sign-up-form>
-            <form class="form animate" method="post" id="form">
-                <div class="form-header">
-                    <div class="form-tabs no-select">
-                        <div class="form-tab" selected>
-                            Sign in
-                        </div>
-                    </div>
-                    <close-button class="close-button no-select" name="times" @click=${()=>this.close('CANCEL')}></close-button>
-                </div>
-
-                <div class="form-body">
-                    <div id="db-tab-section" class="form-tab-section selected">
-                        <simple-input id="login" type="text" icon-name="user" placeholder="Login" size="20"></simple-input>
-                        <password-input id="password" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular" ></password-input>
-
-                        <div class="login-options">
-                            <div class="checkbox-remember">
-                                <label for="remember">Remember me</label>
-                                <input type="checkbox" id="remember" name="remember" @click=${this.RememberMe}>
+            <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
+                <modal-dialog></modal-dialog>
+                <cancel-dialog></cancel-dialog>
+                <close-dialog></close-dialog>
+                <sign-up-form></sign-up-form>
+                <form class="form animate" method="post" id="form">
+                    <div class="form-header">
+                        <div class="form-tabs no-select">
+                            <div class="form-tab" selected>
+                                Sign in
                             </div>
-                            <a href="http://localhost/forgot" class="forgot-password" title="Forgot password?">Forgot password?</a>
                         </div>
-
-                        <button type="button" @click=${()=>this.sendSimpleUser()}>Login</button>
-                        <div id="google"></div>
-                        <vk-auth></vk-auth>
+                        <close-button class="close-button no-select" name="times" @click=${()=>this.close('CANCEL')}></close-button>
                     </div>
-                </div>
 
-                <div class="form-footer">
-                    <a class="sign-up-link" title="Sign Up" @click=${this.signUpClick}>New user? Sign up!</a>
-                </div>
+                    <div class="form-body">
+                        <div id="db-tab-section" class="form-tab-section selected">
+                            <simple-input id="login" type="text" icon-name="user" placeholder="Login" size="20"></simple-input>
+                            <password-input id="password" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular" ></password-input>
+
+                            <div class="login-options">
+                                <div class="checkbox-remember">
+                                    <label for="remember">Remember me</label>
+                                    <input type="checkbox" id="remember" name="remember" @click=${this.RememberMe}>
+                                </div>
+                                <a href="http://localhost/forgot" class="forgot-password" title="Forgot password?">Forgot password?</a>
+                            </div>
+
+                            <button type="button" @click=${()=>this.sendSimpleUser()}>Login</button>
+                            <div id="google"></div>
+                            <vk-auth></vk-auth>
+                        </div>
+                    </div>
+
+                    <div class="form-footer">
+                        <a class="sign-up-link" title="Sign Up" @click=${this.signUpClick}>New user? Sign up!</a>
+                    </div>
+                </form>
             </div>
-            </form>
-        </div>
         `;
     }
 
