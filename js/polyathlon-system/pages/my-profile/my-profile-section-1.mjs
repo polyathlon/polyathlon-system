@@ -221,10 +221,10 @@ class MyProfileSection1 extends BaseElement {
 
         get #userName() {
             if (localStorage.getItem('rememberMe')) {
-                return localStorage.getItem('loginInfo')
+                return localStorage.getItem('userInfo')
             }
             else {
-                return sessionStorage.getItem('loginInfo')
+                return sessionStorage.getItem('userInfo')
             }
         }
 
@@ -419,7 +419,7 @@ class MyProfileSection1 extends BaseElement {
                 sessionStorage.getItem('accessUserToken')
         }
         async getUserInfo() {
-            return sessionStorage.getItem('userProfile') ? JSON.parse(sessionStorage.getItem('userProfile')) : await this.getUserProfile()
+            return sessionStorage.getItem('userProfile') ? JSON.parse(sessionStorage.getItem('userProfile')) : await this.getUserProfile()            
         }
 
         async confirmDialogShow(message) {

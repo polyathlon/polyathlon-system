@@ -85,7 +85,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                 <input type=${this.type}
                     placeholder=${this.placeholder || nothing}
                     ${this.required ? 'required' : ''}
-                    .value=${this.value} @input=${this.changeValue}
+                    .value=${this.value || ''} @input=${this.changeValue}
                 >
                 ${this.iconName ? this.#icon : ''}
                 ${this.buttonName ? this.#button : ''}

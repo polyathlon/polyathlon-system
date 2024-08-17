@@ -1,4 +1,3 @@
-
 import { BaseElement, html, css } from '../../js/base-element.mjs';
 
 import { formStyles } from './form-css.mjs'
@@ -42,8 +41,6 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                     display: flex;
                     justify-content: right;
                 }
-
-
             `
         ]
     }
@@ -276,7 +273,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     saveUserInfo(userInfo) {
-        sessionStorage.setItem('loginInfo', userInfo)
+        sessionStorage.setItem('userInfo', userInfo)
     }
 
     RememberMe(){
