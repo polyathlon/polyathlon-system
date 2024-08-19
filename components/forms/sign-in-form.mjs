@@ -71,7 +71,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                     <div class="form-body">
                         <div id="db-tab-section" class="form-tab-section selected">
                             <simple-input id="login" type="text" icon-name="user" placeholder="Login" size="20"></simple-input>
-                            <password-input id="password" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular" ></password-input>
+                            <password-input id="password" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular" @keydown=${this.enterDown}></password-input>
 
                             <div class="login-options">
                                 <div class="checkbox-remember">
@@ -95,11 +95,9 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         `;
     }
 
-    sendToken(res) {
-        console.log(res)
-        const token = { token: res.credential, type: 'google'}
-        console.log(JSON.stringify(token))
-        let response = fetch('https://cs.rsu.edu.ru:4500/api/sign-in', {
+    sendGoogleToken(res) {        
+        const token = { token: res.credential, type: 'google'}        
+        fetch('https://localhost:4500/api/sign-in-google', {        
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -118,11 +116,10 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         .catch(err => {console.error(err.message)});
       }
 
-
     createGoogleButton() {
         google.accounts.id.initialize({
             client_id: '152529125992-h422kajfg36g0e9gptsu7auv090okqlv.apps.googleusercontent.com',
-            callback: res => this.sendToken(res)
+            callback: res => this.sendGoogleToken(res)
         });
         google.accounts.id.renderButton(
             this.renderRoot.querySelector('#google'),
@@ -130,13 +127,43 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         );
     }
 
+    sendVKToken(res) {
+        const token = { token: res.credential, type: 'google'}
+        console.log(JSON.stringify(token))
+        fetch('https://localhost:4500/api/sign-in-google', {
+        // fetch('https://localhost:8080/api/sign-in-google', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(token)
+          })
+        .then(response => response.json())
+        .then(json => {
+            if (json.error) {
+                throw Error(json.error)
+            }
+            this.saveToken(json.token)
+            return json.token
+        })
+        .then(token => this.getSimpleUserInfo(token))
+        .catch(err => {console.error(err.message)});
+    }
+
+
     firstUpdated() {
         super.firstUpdated();
-        this.createGoogleButton();
+        this.createGoogleButton();        
+        let params = new URLSearchParams(window.location.search)
+        let code = params.get("code")
+        let device_id = params.get("device_id")       
+        window.VKIDSDK.Auth.exchangeCode(code, device_id)
     }
 
     open() {
         this.opened = true;
+        let params = new URLSearchParams(window.location.search)
+        console.log(params)
         // setDialog(this.renderRoot.querySelector('modal-dialog'))
         // setForm(this);
         return new Promise((res, rej) => {
@@ -168,7 +195,6 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             }
         }, modalResult => this.close(modalResult));
     }
-
 
     get #signUpForm() {
         return this.parentElement.querySelector('sign-up-form') ?? null;
@@ -206,7 +232,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     sendSimpleUser() {
         const user = { username: this.#login, password: this.#password, type: 'simple'}
         console.log(JSON.stringify(user))
-        let response = fetch('https://cs.rsu.edu.ru:4500/api/sign-in', {
+        fetch('https://cs.rsu.edu.ru:4500/api/sign-in', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -222,29 +248,10 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             this.saveToken(json.token)
             return json.token
         })
-        .then(token => this.getSimpleUserInfo(token))
-        // .then( token => this.refreshToken())
+        .then(token => this.getSimpleUserInfo(token))        
         .catch(err => {console.error(err.message)});
     }
-
-    // refreshToken() {
-    //     return fetch('https://cs.rsu.edu.ru:4500/api/refresh-token', {
-    //         method: 'GET',
-    //         headers: {
-    //           'Content-Type': 'application/json;charset=utf-8'
-    //         },
-    //         credentials: "include",
-    //     })
-    //     .then(response => response.json())
-    //     .then(json => {
-    //         if (json.error) {
-    //             throw Error(json.error)
-    //         }
-    //         return json.token
-    //     })
-    //     .then(token => this.saveToken(token))
-    //     .catch(err => {console.error(err.message)});
-    // }
+    
     async saveToken(token) {
         if (localStorage.getItem('rememberMe')) {
             localStorage.setItem('accessUserToken', token)
@@ -255,7 +262,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     getSimpleUserInfo(token) {
-        return fetch('https://cs.rsu.edu.ru:4500/api/user?info=fle', {
+        return fetch('https://cs.rsu.edu.ru:4500/api/user', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -285,15 +292,6 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         }
     }
 
-    async authOk(message) {
-        console.log(JSON.stringify(message))
-        const dialog =  this.renderRoot.querySelector('modal-dialog');
-        let modalResult = await dialog.show(message.text);
-        if (modalResult === "Ok") {
-            this.close(modalResult);
-        }
-    }
-
     async modalDialogShow() {
         const dialog =  this.renderRoot.querySelector('modal-dialog');
         let modalResult = await dialog.show("Подключение прошло успешно");
@@ -301,14 +299,9 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             this.close(modalResult);
         }
     }
-
-    updateLoginValue (e) {
-        this.login = e.target.value
-        console.log(this.login)
-    }
-
-    updatePasswordValue (e) {
-        this.password = e.target.value
-        console.log(this.password)
+   
+    enterDown(e) {   
+        if (e.key === 'Enter') 
+            this.sendSimpleUser()
     }
 })
