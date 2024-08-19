@@ -157,7 +157,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         let params = new URLSearchParams(window.location.search)
         let code = params.get("code")
         let device_id = params.get("device_id")       
-        window.VKIDSDK.Auth.exchangeCode(code, device_id)
+        window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
     }
 
     open() {
