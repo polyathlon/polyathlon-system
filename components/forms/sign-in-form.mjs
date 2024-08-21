@@ -97,7 +97,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     sendGoogleToken(res) {        
         const token = { token: res.credential, type: 'google'}        
-        fetch('https://localhost:4500/api/sign-in-google', {        
+        fetch('https://cs.rsu.edu.ru:4500/api/sign-in-google', {        
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -130,8 +130,8 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     sendVKToken(res) {
         const token = { token: res.credential, type: 'google'}
         console.log(JSON.stringify(token))
-        fetch('https://localhost:4500/api/sign-in-google', {
-        // fetch('https://localhost:8080/api/sign-in-google', {
+        fetch('https://cs.rsu.edu.ru:4500/api/sign-in-google', {
+        // fetch('https://localhost:4500/api/sign-in-google', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -162,10 +162,6 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     open() {
         this.opened = true;
-        let params = new URLSearchParams(window.location.search)
-        console.log(params)
-        // setDialog(this.renderRoot.querySelector('modal-dialog'))
-        // setForm(this);
         return new Promise((res, rej) => {
             this.resolveForm = res
             this.rejectFrom = rej
@@ -180,8 +176,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         if (modalResult == 'Ok')
             this.resolveForm(modalResult)
         else
-            this.rejectFrom(modalResult)
-        // repairDialog()
+            this.rejectFrom(modalResult)        
     }
 
     signUpClick() {
