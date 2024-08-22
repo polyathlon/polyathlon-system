@@ -1,6 +1,6 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
-customElements.define('vk-auth', class VKAuth extends BaseElement {
+customElements.define('vk-button', class VKButton extends BaseElement {
     static get properties() {
         return {
             _useInfo: { type: Boolean, default: true },
@@ -70,18 +70,26 @@ customElements.define('vk-auth', class VKAuth extends BaseElement {
         `;
     }
 
-    get #icon() {
-        return html`<simple-icon icon-name=${this.iconName} size="${this.size}"></simple-icon>`;
+    static get VKID(){
+      return window.VKIDSDK;
     }
 
-    // VKID.Config.init({
-    //   app: 52051268, // Идентификатор приложения.
-    //   redirectUrl: "https://polyathlon.github.io/polyathlon-system", // Адрес для перехода после авторизации.
-    //   state: 'dj29fnsadjsd82', // Произвольная строка состояния приложения.
-    //   codeVerifier: 'FGH767Gd65', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
-    //   scope: 'email phone', // Список прав доступа, которые нужны приложению.
-    //   mode: VKID.ConfigAuthMode.Redirect // По умолчанию авторизация открывается в новой вкладке.
-    // });
+    get #icon() {
+        return html`<simple-icon icon-name=${this.iconName} size="${this.size}"></simple-icon>`;
+    } 
+
+
+    constructor() {
+      super()
+      VKButton.VKID.Config.init({
+        app: 52051268, // Идентификатор приложения.
+        redirectUrl: "https://polyathlon.github.io/polyathlon-system", // Адрес для перехода после авторизации.
+        state: 'dj29fnsadjsd82', // Произвольная строка состояния приложения.
+        codeVerifier: 'FGH767Gd65', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
+        scope: 'email phone', // Список прав доступа, которые нужны приложению.
+        mode: VKButton.VKID.ConfigAuthMode.Redirect // По умолчанию авторизация открывается в новой вкладке.
+      });
+    }
 
     render() {
       return html`
@@ -102,8 +110,11 @@ customElements.define('vk-auth', class VKAuth extends BaseElement {
       `;
     }
 
+    // firstUpdated() {
+    //   super.firstUpdated();      
+    // }
+
     authorization() {
-      const VKID = window.VKIDSDK;
-      VKID.Auth.login()                  
+      VKButton.VKID.Auth.login()     
     }
 });

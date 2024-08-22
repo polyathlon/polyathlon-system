@@ -10,6 +10,7 @@ import './sign-up-form.mjs';
 import '../inputs/simple-input.mjs';
 import '../inputs/password-input.mjs';
 import '../buttons/close-button.mjs';
+import '../buttons/vk-button.mjs';
 import '../auth/vk-auth.mjs';
 
 customElements.define("sign-in-form", class SignInForm extends BaseElement {
@@ -83,7 +84,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
                             <button type="button" @click=${()=>this.sendSimpleUser()}>Login</button>
                             <div id="google"></div>
-                            <vk-auth></vk-auth>
+                            <vk-button></vk-button>
                         </div>
                     </div>
 

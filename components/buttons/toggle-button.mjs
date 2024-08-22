@@ -118,7 +118,7 @@ class ToggleButton extends BaseElement {
     }
     render() {
         return html`
-            <div id="btn" class="btn"  tabindex="0" style="
+            <div id="btn" class="btn" tabindex="0" style="
                     text-align: ${this.textAlign};
                     width: ${this.width || this.size}px;
                     height: ${this.height || this.size}px;
