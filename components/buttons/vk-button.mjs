@@ -86,7 +86,7 @@ customElements.define('vk-button', class VKButton extends BaseElement {
         redirectUrl: "https://polyathlon.github.io/polyathlon-system", // Адрес для перехода после авторизации.
         state: 'dj29fnsadjsd81', // Произвольная строка состояния приложения.        
         code_challenge: 'FGH767Gd65',
-        code_challenge_method: "s256",
+        code_challenge_method: "S256",
         scope: 'email phone', // Список прав доступа, которые нужны приложению.
         mode: VKButton.VKID.ConfigAuthMode.Redirect // По умолчанию авторизация открывается в новой вкладке.
       });
