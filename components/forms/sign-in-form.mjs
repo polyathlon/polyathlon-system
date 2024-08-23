@@ -85,7 +85,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                             <button type="button" @click=${()=>this.sendSimpleUser()}>Login</button>
                             <div id="google"></div>
                             <vk-button></vk-button>
-                            <button type="button" @click=${this.getToken}>Get Tokens</button>
+                            <button type="button" @click=${this.getVKToken}>Get Tokens</button>
                         </div>
                     </div>
 
@@ -108,6 +108,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         params.append("code_verifier", "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE")
         params.append("state", "dj29fnsadjsd85")
         params.append("device_id", device_id)
+        params.append("code", code)
         
         //window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
         let uri = "https://id.vk.com/oauth2/auth?".concat(params.toString())
