@@ -121,6 +121,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         
         fetch(uri, {        
             method: 'Get',
+            mode: 'cors',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
             }           
