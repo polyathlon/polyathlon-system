@@ -108,7 +108,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         params.append("client_id", "52051268")
         params.append("code_verifier", "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE")
         params.append("device_id", device_id)
-        params.append("code", code)
+        //params.append("code", code)
         params.append("state", "dj29fnsadjsd85")
         
         //window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
@@ -120,11 +120,14 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         // device_id=Ljab4hFntNWyWCdLl0BVHFEDswZqk7KoqxesOFMH0nHgk4CM2b4NGrxbicmIKE9J44rALREG8_6fqfHb_jZhPQ
         
         fetch(uri, {        
-            method: 'Get',
+            method: 'POST',
             mode: 'cors',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            }           
+            // headers: {
+            //   'Content-Type': 'application/json;charset=utf-8'
+            // },           
+            body: new URLSearchParams({
+                code
+            })
           })
         .then(response => response.json())
         .then(json => {
