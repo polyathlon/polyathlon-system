@@ -100,8 +100,8 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     getVKToken(res) {   
         let o = window.VKIDSDK.Config.get()
         let params1 = new URLSearchParams(window.location.search)
-        let code = params.get("code")
-        let device_id = params.get("device_id")
+        let code = params1.get("code")
+        let device_id = params1.get("device_id")
         let params = new URLSearchParams()
         params.append("grant_type", "authorization_code")
         params.append("redirect_uri", "https://polyathlon.github.io/polyathlon-system")
