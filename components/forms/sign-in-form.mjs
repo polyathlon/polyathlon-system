@@ -107,9 +107,9 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         params.append("redirect_uri", "https://polyathlon.github.io/polyathlon-system")
         params.append("client_id", "52051268")
         params.append("code_verifier", "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE")
-        params.append("state", "dj29fnsadjsd85")
         params.append("device_id", device_id)
         params.append("code", code)
+        params.append("state", "dj29fnsadjsd85")
         
         //window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
         let uri = "https://id.vk.com/oauth2/auth?".concat(params.toString())
