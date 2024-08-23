@@ -99,9 +99,10 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     getVKToken(res) {   
         let o = window.VKIDSDK.Config.get()
-        let params = new URLSearchParams(window.location.search)
+        let params1 = new URLSearchParams(window.location.search)
         let code = params.get("code")
         let device_id = params.get("device_id")
+        let params = new URLSearchParams()
         params.append("grant_type", "authorization_code")
         params.append("redirect_uri", "https://polyathlon.github.io/polyathlon-system")
         params.append("client_id", "52051268")
@@ -122,8 +123,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             method: 'Get',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: ""
+            }           
           })
         .then(response => response.json())
         .then(json => {
