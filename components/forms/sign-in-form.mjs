@@ -85,6 +85,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                             <button type="button" @click=${()=>this.sendSimpleUser()}>Login</button>
                             <div id="google"></div>
                             <vk-button></vk-button>
+                            <button type="button" @click=${this.getToken}>Get Tokens</button>
                         </div>
                     </div>
 
@@ -95,6 +96,45 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             </div>
         `;
     }
+
+    getVKToken(res) {   
+        let o = window.VKIDSDK.Config.get()
+        let params = new URLSearchParams(window.location.search)
+        let code = params.get("code")
+        let device_id = params.get("device_id")
+        params.append("grant_type", "authorization_code")
+        params.append("redirect_uri", "https://polyathlon.github.io/polyathlon-system")
+        params.append("client_id", "52051268")
+        params.append("code_verifier", "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE")
+        params.append("state", "dj29fnsadjsd85")
+        params.append("device_id", device_id)
+        
+        //window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
+        let uri = "https://id.vk.com/oauth2/auth?".concat(params.toString())
+        // redirect_uri=https%3A%2F%2Fpolyathlon.github.io%2Fpolyathlon-system&
+        // client_id=52051268&
+        // code_verifier=h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE&
+        // state=dj29fnsadjsd85&
+        // device_id=Ljab4hFntNWyWCdLl0BVHFEDswZqk7KoqxesOFMH0nHgk4CM2b4NGrxbicmIKE9J44rALREG8_6fqfHb_jZhPQ
+        
+        fetch(uri, {        
+            method: 'Get',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: ""
+          })
+        .then(response => response.json())
+        .then(json => {
+            if ("error" in json) {
+                throw Error(json)
+            }            
+            return json.token
+        })
+       
+      }
+
+
 
     sendGoogleToken(res) {        
         const token = { token: res.credential, type: 'google'}        

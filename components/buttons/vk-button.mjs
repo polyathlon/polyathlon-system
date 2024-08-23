@@ -88,8 +88,8 @@ customElements.define('vk-button', class VKButton extends BaseElement {
           state: 'dj29fnsadjsd85', // Произвольная строка состояния приложения.
           codeVerifier: "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE",
           codeChallenge: "PTK5OHwJPkG7OtcyzO00PtCiVU-zDZdsPWtm8Iy-Ba4",        
-          code_verifier: 'N79vOusGmoWTOotc1G0rBBqunyWiMU1Pkzt4xbm67pA', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
-          code_challenge: 'tH_mKhHePevOxLHvnblQONlWOqZ4kVbRuBbHeZeQa6s',
+          code_verifier: 'h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
+          code_challenge: 'PTK5OHwJPkG7OtcyzO00PtCiVU-zDZdsPWtm8Iy-Ba4',
           code_challenge_method: "s256",
           scope: 'email phone', // Список прав доступа, которые нужны приложению.
           mode: VKButton.VKID.ConfigAuthMode.Redirect // По умолчанию авторизация открывается в новой вкладке.
