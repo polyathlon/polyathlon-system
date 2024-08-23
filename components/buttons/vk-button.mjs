@@ -85,7 +85,9 @@ customElements.define('vk-button', class VKButton extends BaseElement {
         VKButton.VKID.Config.init({
           app: 52051268, // Идентификатор приложения.
           redirectUrl: "https://polyathlon.github.io/polyathlon-system", // Адрес для перехода после авторизации.
-          state: 'dj29fnsadjsd84', // Произвольная строка состояния приложения.        
+          state: 'dj29fnsadjsd84', // Произвольная строка состояния приложения.
+          codeVerifier: "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE",
+          codeChallenge: "PTK5OHwJPkG7OtcyzO00PtCiVU-zDZdsPWtm8Iy-Ba4",        
           code_verifier: 'N79vOusGmoWTOotc1G0rBBqunyWiMU1Pkzt4xbm67pA', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
           code_challenge: 'tH_mKhHePevOxLHvnblQONlWOqZ4kVbRuBbHeZeQa6s',
           code_challenge_method: "s256",
