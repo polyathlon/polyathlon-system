@@ -97,53 +97,74 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         `;
     }
 
-    getVKToken(res) {   
-        let o = window.VKIDSDK.Config.get()
-        let params1 = new URLSearchParams(window.location.search)
-        let code = params1.get("code")
-        let device_id = params1.get("device_id")
-        let params = new URLSearchParams()
-        params.append("grant_type", "authorization_code")
-        params.append("redirect_uri", "https://polyathlon.github.io/polyathlon-system")
-        params.append("client_id", "52051268")
-        params.append("code_verifier", "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE")
-        params.append("device_id", device_id)
-        //params.append("code", code)
-        params.append("state", "dj29fnsadjsd85")
-        
-        //window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
-        let uri = "https://id.vk.com/oauth2/auth?".concat(params.toString())
-        // redirect_uri=https%3A%2F%2Fpolyathlon.github.io%2Fpolyathlon-system&
-        // client_id=52051268&
-        // code_verifier=h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE&
-        // state=dj29fnsadjsd85&
-        // device_id=Ljab4hFntNWyWCdLl0BVHFEDswZqk7KoqxesOFMH0nHgk4CM2b4NGrxbicmIKE9J44rALREG8_6fqfHb_jZhPQ
-        
-        fetch(uri, {        
+    getVKToken(res) {
+        // let o = window.VKIDSDK.Config.get()
+        // let params1 = new URLSearchParams(window.location.search)
+        // let code = params1.get("code")
+        // let device_id = params1.get("device_id")
+        // let params = new URLSearchParams()
+        // params.append("grant_type", "authorization_code")
+        // params.append("redirect_uri", "https://polyathlon.github.io/polyathlon-system")
+        // params.append("client_id", "52051268")
+        // params.append("code_verifier", "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE")
+        // params.append("device_id", device_id)
+        // //params.append("code", code)
+        // params.append("state", "dj29fnsadjsd85")
+
+        // //window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
+        // let uri = "https://id.vk.com/oauth2/auth?".concat(params.toString())
+        // // redirect_uri=https%3A%2F%2Fpolyathlon.github.io%2Fpolyathlon-system&
+        // // client_id=52051268&
+        // // code_verifier=h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE&
+        // // state=dj29fnsadjsd85&
+        // // device_id=Ljab4hFntNWyWCdLl0BVHFEDswZqk7KoqxesOFMH0nHgk4CM2b4NGrxbicmIKE9J44rALREG8_6fqfHb_jZhPQ
+
+        // fetch(uri, {
+        //     method: 'POST',
+        //     mode: 'cors',
+        //     // headers: {
+        //     //   'Content-Type': 'application/json;charset=utf-8'
+        //     // },
+        //     body: new URLSearchParams({
+        //         code
+        //     })
+        //   })
+        // .then(response => response.json())
+        // .then(json => {
+        //     if ("error" in json) {
+        //         throw Error(json)
+        //     }
+        //     return json.token
+        // })
+
+
+        const params = new URLSearchParams(window.location.search)
+        const result = {
+            code: params.get("code"),
+            device_id: params.get("device_id"),
+            state: params.get("state"),
+        }
+
+        fetch("https://cs.rsu.edu.ru:4500/api/sign-in-vk", {
             method: 'POST',
             mode: 'cors',
-            // headers: {
-            //   'Content-Type': 'application/json;charset=utf-8'
-            // },           
-            body: new URLSearchParams({
-                code
-            })
-          })
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(result)
+        })
         .then(response => response.json())
         .then(json => {
             if ("error" in json) {
-                throw Error(json)
-            }            
-            return json.token
+                throw Error(json.error)
+            }
+            return json?.token
         })
-       
       }
 
-
-
-    sendGoogleToken(res) {        
-        const token = { token: res.credential, type: 'google'}        
-        fetch('https://cs.rsu.edu.ru:4500/api/sign-in-google', {        
+    sendGoogleToken(res) {
+        const token = { token: res.credential, type: 'google'}
+        fetch('https://cs.rsu.edu.ru:4500/api/sign-in-google', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -199,11 +220,35 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     firstUpdated() {
         super.firstUpdated();
-        this.createGoogleButton();        
+        this.createGoogleButton();
         let params = new URLSearchParams(window.location.search)
-        let code = params.get("code")
-        let device_id = params.get("device_id")       
-        window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
+        if (params.size) {
+            this.getCodeChallenge({
+                code: params.get("code"),
+                device_id: params.get("device_id"),
+                state: params.get("device_id"),
+            })
+        }
+        // window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
+    }
+
+    getCodeChallenge(obj) {
+        fetch('https://localhost:4500/api/sign-in-vk', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: obj
+          })
+        .then(response => response.json())
+        .then(json => {
+            if (json.error) {
+                throw Error(json.error)
+            }
+            return json
+        })
+        // .then(token => this.getSimpleUserInfo(token))
+        .catch(err => {console.error(err.message)});
     }
 
     open() {
@@ -222,7 +267,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         if (modalResult == 'Ok')
             this.resolveForm(modalResult)
         else
-            this.rejectFrom(modalResult)        
+            this.rejectFrom(modalResult)
     }
 
     signUpClick() {
@@ -289,10 +334,10 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             this.saveToken(json.token)
             return json.token
         })
-        .then(token => this.getSimpleUserInfo(token))        
+        .then(token => this.getSimpleUserInfo(token))
         .catch(err => {console.error(err.message)});
     }
-    
+
     async saveToken(token) {
         if (localStorage.getItem('rememberMe')) {
             localStorage.setItem('accessUserToken', token)
@@ -340,9 +385,9 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             this.close(modalResult);
         }
     }
-   
-    enterDown(e) {   
-        if (e.key === 'Enter') 
+
+    enterDown(e) {
+        if (e.key === 'Enter')
             this.sendSimpleUser()
     }
 })
