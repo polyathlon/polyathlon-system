@@ -244,7 +244,7 @@ class MyNotificationsSection1 extends BaseElement {
         }
 
         pdfMethod() {
-            <script src='pdfScript.js'></script>
+            alert("Привет, Сергей!")
         }
 
         async getNewFileHandle() {
