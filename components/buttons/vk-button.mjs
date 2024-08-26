@@ -19,7 +19,7 @@ customElements.define('vk-button', class VKButton extends BaseElement {
                 vertical-align: middle;
                 margin: 1px;
                 user-select: none;
-            }            
+            }
 
             .reset {
               border: none;
@@ -36,7 +36,7 @@ customElements.define('vk-button', class VKButton extends BaseElement {
               -webkit-appearance: none;
             }
 
-            .button {              
+            .button {
               border-radius: 8px;
               width: 100%;
               min-height: 44px;
@@ -50,7 +50,7 @@ customElements.define('vk-button', class VKButton extends BaseElement {
                 opacity: 0.7;
                 transform: scale(.97);
               }
-             
+
               .container {
                 display: flex;
                 align-items: center;
@@ -76,27 +76,29 @@ customElements.define('vk-button', class VKButton extends BaseElement {
 
     get #icon() {
         return html`<simple-icon icon-name=${this.iconName} size="${this.size}"></simple-icon>`;
-    } 
-
-
-    constructor() {
-      super()
-      if  (VKButton.VKID.Config.app !== 52051268) {
-        VKButton.VKID.Config.init({
-          app: 52051268, // Идентификатор приложения.
-          redirectUrl: "https://polyathlon.github.io/polyathlon-system", // Адрес для перехода после авторизации.
-          state: 'dj29fnsadjsd84', // Произвольная строка состояния приложения.        
-          code_verifier: 'N79vOusGmoWTOotc1G0rBBqunyWiMU1Pkzt4xbm67pA', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
-          code_challenge: 'tH_mKhHePevOxLHvnblQONlWOqZ4kVbRuBbHeZeQa6s',
-          code_challenge_method: "s256",
-          scope: 'email phone', // Список прав доступа, которые нужны приложению.
-          mode: VKButton.VKID.ConfigAuthMode.Redirect // По умолчанию авторизация открывается в новой вкладке.
-        })
-      };
     }
+
+
+    // constructor() {
+    //   super()
+    //   if  (VKButton.VKID.Config.app !== 52051268) {
+    //     VKButton.VKID.Config.init({
+    //       app: 52051268, // Идентификатор приложения.
+    //       redirectUrl: "https://polyathlon.github.io/polyathlon-system", // Адрес для перехода после авторизации.
+    //       state: 'dj29fnsadjsd85', // Произвольная строка состояния приложения.
+    //       codeVerifier: "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE",
+    //       codeChallenge: "PTK5OHwJPkG7OtcyzO00PtCiVU-zDZdsPWtm8Iy-Ba4",
+    //       code_verifier: 'h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
+    //       code_challenge: 'PTK5OHwJPkG7OtcyzO00PtCiVU-zDZdsPWtm8Iy-Ba4',
+    //       code_challenge_method: "s256",
+    //       scope: 'email phone', // Список прав доступа, которые нужны приложению.
+    //       mode: VKButton.VKID.ConfigAuthMode.Redirect // По умолчанию авторизация открывается в новой вкладке.
+    //     })
+    //   };
+    // }
     render() {
       return html`
-        <button class="button reset" @click=${this.authorization}>
+        <button class="button reset" @click=${this.getCodeChallenge}>
           <div class="container">
             <div class="icon">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -114,10 +116,39 @@ customElements.define('vk-button', class VKButton extends BaseElement {
     }
 
     // firstUpdated() {
-    //   super.firstUpdated();      
+    //   super.firstUpdated();
     // }
 
-    authorization() {
-      VKButton.VKID.Auth.login()     
+    getCodeChallenge() {
+      fetch('https://cs.rsu.edu.ru:4500/api/sign-in-vk/init', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          }
+        })
+      .then(response => response.json())
+      .then(json => {
+          if (json.error) {
+              throw Error(json.error)
+          }
+          this.authorization(json)
+          return json
+      })
+      // .then(token => this.getSimpleUserInfo(token))
+      .catch(err => {console.error(err.message)});
+    }
+
+    authorization(init) {
+      VKButton.VKID.Config.init({
+        app: init.app, // Идентификатор приложения.
+        redirectUrl: init.redirectUrl, // Адрес для перехода после авторизации.
+        state: init.state, // Произвольная строка состояния приложения.
+        // codeVerifier: "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE",
+        codeChallenge: init.codeChallenge,
+        code_challenge_method: "s256",
+        scope: init.scope, // Список прав доступа, которые нужны приложению.
+        mode: VKButton.VKID.ConfigAuthMode.Redirect // По умолчанию авторизация открывается в новой вкладке.
+      })
+      VKButton.VKID.Auth.login()
     }
 });
