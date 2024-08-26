@@ -236,10 +236,15 @@ class MyNotificationsSection1 extends BaseElement {
                 </div>
 
                 <footer>
+                    <simple-button label="Скачать PDF" @click=${this.pdfMethod}></simple-button>
                     <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveProject: this.deleteProject}></simple-button>
                     <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelProject: this.addProject}></simple-button>
                 </footer>
             `;
+        }
+
+        pdfMethod() {
+            <script src='pdfScript.js'></script>
         }
 
         async getNewFileHandle() {

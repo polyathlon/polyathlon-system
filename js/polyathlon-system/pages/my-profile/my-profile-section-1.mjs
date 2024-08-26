@@ -491,6 +491,7 @@ class MyProfileSection1 extends BaseElement {
             }
             return token;
         }
+
         async saveProfile() {
             const token = await this.getToken();
             if (this.avatarFile) {
