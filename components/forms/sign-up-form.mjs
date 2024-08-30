@@ -74,7 +74,7 @@ class SignUpForm extends BaseElement {
                                 <input type="checkbox" id="remember" name="remember" @click=${this.RememberMe}>
                             </div>
                         </div>
-                        <button type="button" @click=${()=>this.sendSimpleUser()}>Sign Up</button>                        
+                        <button type="button" @click=${()=>this.sendSimpleUser()}>Sign Up</button>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@ class SignUpForm extends BaseElement {
     sendSimpleUser() {
         const user = { username: this.#login, password: this.#password, type: 'simple', email: this.#email}
         console.log(JSON.stringify(user))
-        let response = fetch('https://cs.rsu.edu.ru:4500/api/sign-up', {
+        let response = fetch('https://localhost:4500/api/sign-up', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -117,7 +117,7 @@ class SignUpForm extends BaseElement {
     }
 
     getSimpleUserInfo(token) {
-        return fetch('https://cs.rsu.edu.ru:4500/api/user', {
+        return fetch('https://localhost:4500/api/user', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -130,7 +130,7 @@ class SignUpForm extends BaseElement {
             return json.user;
         })
         .then(user => this.saveUserInfo(JSON.stringify(user)))
-        .then(() => this.modalDialogShow())        
+        .then(() => this.modalDialogShow())
         .catch(err => {console.error(err.message)});
     }
 
@@ -157,7 +157,7 @@ class SignUpForm extends BaseElement {
     }
 
     open() {
-        this.opened = true;        
+        this.opened = true;
         return new Promise((resolve, reject) => {
             this.resolve = resolve
             this.reject = reject
@@ -169,7 +169,7 @@ class SignUpForm extends BaseElement {
         this.#login = "";
         this.#password = "";
         this.#email = "";
-        this.#rememberMe = "";        
+        this.#rememberMe = "";
         this.resolve(modalResult)
     }
 

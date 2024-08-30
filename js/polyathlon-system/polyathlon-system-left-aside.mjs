@@ -47,6 +47,8 @@ class PolyathlonSystemLeftAside extends BaseElement {
             {iconName: 'house-sharp-solid', title: 'Home', page: 'home-page', click: () => this.showPage('')},
             {iconName: 'user', title: 'Profile', page: 'my-profile', click: () => this.showPage('my-profile')},
             {iconName: 'square-list-sharp-solid', page: 'my-projects', title: 'Project', click: () => this.showPage('my-projects')},
+            {iconName: 'earth-americas-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
+            {iconName: 'city-solid', page: 'my-cities', title: 'City', click: () => this.showPage('my-cities')},
             // {name: 'square-list-sharp-solid', title: 'Project', click: () => this.showPage('my-projects')},
             // {name: 'chart-pie-simple-circle-dollar-solid', title: 'tariff plan', click: () => this.showPage('traffic-plan')},
             // {name: 'download-file', title: 'Download File', click: () => this.showPage('my-projects')},
@@ -55,17 +57,13 @@ class PolyathlonSystemLeftAside extends BaseElement {
             {iconName: 'bell-sharp-solid', page: 'my-notifications', title: 'Notifications', blink: 1, click: () => this.showPage('my-notifications')},
             {iconName: 'settings-solid', page: 'my-settings', title: 'Settings', click: () => this.showPage('my-settings')},
         ]
-        console.log(this.notificationMaxOffset);
-        console.log(this.notificationCurrentOffset);
     }
-
 
     showPage(page) {
         location.hash = page;
     }
 
     render() {
-        console.log('aside',this.notificationCurrentOffset)
         return html`
             <nav>${this.buttons.map((button, index) =>
                 html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}

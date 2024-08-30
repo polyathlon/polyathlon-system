@@ -4,22 +4,24 @@ import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/project-button.mjs'
+import '../../../../components/buttons/competition-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 
-class MyProjectsSection1 extends BaseElement {
+class MyCompetitionsSection1Page1 extends BaseElement {
         static get properties() {
             return {
                 version: { type: String, default: '1.0.0', save: true },
                 dataSet: {type: Array, default: []},
-                statusDataSet: {type: Map, default: null },
-                currentProject: {type: String, default: ""},
-                isModified: {type: Boolean, default: ""},
+                statusDataSet: {type: Map, default: null, attrubute: "status-data-set" },
+                isModified: {type: Boolean, default: false},
                 isReady: {type: Boolean, default: true},
                 // isValidate: {type: Boolean, default: false, local: true},
-                projectStatus: { type: Object, default: null, local: true },
+                competitionStatus: { type: Object, default: null, local: true },
                 obj: { type: Object, default: null },
-                currentPage: {type: BigInt, default: 0},
+                currentPage: {type: BigInt, default: 0, attrubute: 'current-page'},
+                competition: {type: Object, default: null},
+                isModified: {type: Boolean, default: "", local: true},
+                oldValues: {type: Map, default: null, attrubute: "old-values" },
             }
         }
 
@@ -28,16 +30,11 @@ class MyProjectsSection1 extends BaseElement {
                 BaseElement.styles,
                 css`
                     :host {
-                        display: grid;
-                        width: 100%;
-                        grid-template-columns: 3fr 9fr;
-                        grid-template-rows: 50px 1fr 50px;
-                        grid-template-areas:
-                            "header1 header2"
-                            "sidebar content"
-                            "footer  footer";
-                        gap: 0 20px;
-                        background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        overflow: hidden;
+                        gap: 10px;
                     }
 
                     header{
@@ -46,14 +43,14 @@ class MyProjectsSection1 extends BaseElement {
                         align-items: center;
                     }
 
-                    #project-header{
+                    #competition-header{
                         grid-area: header1;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
                     }
 
-                    #project-header p {
+                    #competition-header p {
                         width: 100%;
                         overflow: hidden;
                         white-space: nowrap;
@@ -77,7 +74,7 @@ class MyProjectsSection1 extends BaseElement {
                         background: rgba(255, 255, 255, 0.1);
                     }
 
-                    .left-layout project-button {
+                    .left-layout competition-button {
                         width: 100%;
                         height: 40px;
                     }
@@ -172,112 +169,18 @@ class MyProjectsSection1 extends BaseElement {
             ]
         }
 
-        constructor() {
-            super();
-            this.statusDataSet = new Map()
-            this.pageNames = ['Project property', 'Project results']
-        }
-
-        update(changedProps) {
-            super.update(changedProps);
-            if (!changedProps) return;
-            if (changedProps.has('projectStatus') && this.projectStatus) {
-                this.statusDataSet.set(this.projectStatus._id, this.projectStatus)
-                this.requestUpdate()
-            }
-        }
-
-        async showProject(index, projectId) {
-            if (this.isModified) {
-                const modalResult = await this.confirmDialogShow('Проект был изменен. Сохранить сделанные изменения?')
-                if (modalResult === 'Ok')
-                    this.saveProject().then(() => this.currentProject = this.dataSet[index]);
-            }
-            else {
-                this.currentProject = this.dataSet[index]
-            }
-        }
-
-        #page1() {
-            return html`
-                <div>
-                    ${this.currentProject.filename}
-                    <simple-input id="name" icon-name="user" label="Project name:" .value=${this.currentProject.name} @input=${this.validateInput}></simple-input>
-                    <avatar-input id="avatar" .value=${this.statusDataSet.get(this.currentProject?._id)?.status} @input=${this.validateAvatar}></avatar-input>
-                    <upload-input id="filename" .value=${this.currentProject.filename} @input=${this.validateInput}></upload-input>
-                    <simple-input id="epochs" icon-name="bars" label="Count of Epochs:" .value=${this.currentProject.epochs} @input=${this.validateInput}></simple-input>
-                    ${this.isReady ? html`<download-input icon-name="download-file" placeholder='Download trained model' id='modelname' .value='Trained model' @click=${this.downloadFile}></download-input>` : ""}
-                    ${!this.isModified ? html`<simple-button label="Обучить" @click=${this.LearnModel}></simple-button>` : ""}
-                    ${this.isLearning ? html`<simple-button label="Обучить" @click=${this.getResults}></simple-button>` : ""}
-                </div>
-        `;
-        }
-
-        #page2() {
-            return html`
-                <div>
-                    ${this.currentProject.filename}
-                    <simple-input id="name" icon-name="user" label="Project name:" .value=${this.currentProject.name} @input=${this.validateInput}></simple-input>
-                    <avatar-input id="avatar" .value=${this.statusDataSet.get(this.currentProject?._id)?.status} @input=${this.validateAvatar}></avatar-input>
-                    <upload-input id="filename" .value=${this.currentProject.filename} @input=${this.validateInput}></upload-input>
-                    <simple-input id="epochs" icon-name="bars" label="Count of Epochs:" .value=${this.currentProject.epochs} @input=${this.validateInput}></simple-input>
-                    ${this.isReady ? html`<download-input icon-name="download-file" placeholder='Download trained model' id='modelname' .value='Trained model' @click=${this.downloadFile}></download-input>` : ""}
-                    ${!this.isModified ? html`<simple-button label="Обучить" @click=${this.LearnModel}></simple-button>` : ""}
-                    ${this.isLearning ? html`<simple-button label="Обучить" @click=${this.getResults}></simple-button>` : ""}
-                </div>
-        `;
-        }
-
-        #page() {
-            return this.currentPage === 0 ? this.#page1() : this.#page2();
-        }
-
-        get #pageName() {
-            return this.pageNames[this.currentPage];
-        }
         render() {
-            //
-
-            // status=${this.statusDataSet.get(project._id)?.status}
-            // project=${project}"https://funik.ru/wp-content/uploads/2018/10/17478da42271207e1d86.jpg"
-
             return html`
-                <confirm-dialog></confirm-dialog>
-                <header id="project-header"><p>Project ${this.currentProject.name}</p></header>
-                <header id="property-header">${this.#pageName}</header>
-                <div class="left-layout">
-                    ${this.dataSet.map((project, index) =>
-                        html `<project-button
-                                    label=${project.name}
-                                    title=${project._id}
-                                    project=${project}
-                                    .status=${this.statusDataSet.get(project._id)}
-                                    @click=${() => this.showProject(index, project._id)}
-                                >
-                              </project-button>
-                    `)}
+                <div>
+                    <simple-input id="name" icon-name="user" label="Project name:" .value=${this.competition?.name} @input=${this.validateInput}></simple-input>
+                    <avatar-input id="avatar" .avatar=${this.competition?.avatar} @input=${this.validateAvatar}></avatar-input>
+                    <upload-input id="file" .value=${this.competition?.file} @input=${this.validateInput}></upload-input>
+                    <simple-input id="epochs" icon-name="bars" label="Count of Epochs:" .value=${this.competition?.epochs} @input=${this.validateInput}></simple-input>
+                    ${this.isReady ? html`<download-input icon-name="download-file" placeholder='Download trained model' id='modelname' .value='Trained model' @click=${this.downloadFile}></download-input>` : ""}
+                    ${!this.isModified ? html`<simple-button label="Обучить" @click=${this.LearnModel}></simple-button>` : ""}
+                    ${!this.isModified ? html`<simple-button label="Предсказать" @click=${this.PredictModel}></simple-button>` : ""}
                 </div>
-                <div class="right-layout">
-                    <div class="left-aside">
-                       <simple-icon icon-name="square-arrow-left-sharp-solid" @click=${this.prevPage}></simple-icon>
-                    </div>
-                    ${this.#page()}
-                    <div class="right-aside">
-                        <simple-icon icon-name="square-arrow-right-sharp-solid" @click=${this.nextPage}></simple-icon>
-                    </div>
-                </div>
-                <footer>
-                    <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveProject: this.deleteProject}></simple-button>
-                    <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelProject: this.addProject}></simple-button>
-                </footer>
             `;
-        }
-
-        nextPage() {
-           this.currentPage++;
-        }
-        prevPage() {
-           this.currentPage--;
         }
 
         async getNewFileHandle() {
@@ -304,9 +207,9 @@ class MyProjectsSection1 extends BaseElement {
 
         async downloadFile() {
             const token = await this.getToken();
-            const projectId = this.currentProject._id;
+            const competitionId = this.currentProject._id;
             // const fileHandle = await window.getNewFileHandle();
-            fetch(`https://localhost:4500/api/download/${projectId}`, {
+            fetch(`https://localhost:4500/api/download/${competitionId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -389,31 +292,44 @@ class MyProjectsSection1 extends BaseElement {
         }
 
         validateAvatar(e) {
-            this.oldValues ??= new Map();
-            const userProfile = this
-            if (!this.oldValues.has(e.target))
-                this.oldValues.set(e.target, userProfile[e.target.id])
+            if (!this.oldValues.has(e.target)) {
+                this.oldValues.set(e.target, e.target.avatar)
+                this.competition.avatar = window.URL.createObjectURL(e.target.value);
+                this.competition.avatarFile = e.target.value;
+                this.parentNode.parentNode.host.requestUpdate()
+                this.requestUpdate();
+            }
             else {
-                if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
+                if (this.oldValues.get(e.target) === e.target.avatar) {
+                    this.oldValues.delete(e.target.id)
+                } else {
+                    this.competition.avatar = window.URL.createObjectURL(e.target.value);
+                    this.competition.avatarFile = e.target.value;
+                    this.parentNode.parentNode.host.requestUpdate()
+                    this.requestUpdate();
                 }
             }
-            userProfile[e.target.id] = e.target.value
             this.isModified = this.oldValues.size !== 0;
         }
 
         validateInput(e) {
             if (e.target.value !== "") {
-                this.oldValues ??= new Map();
-                const currentProject = e.target.currentObject ?? this.currentProject
-                if (!this.oldValues.has(e.target))
-                    this.oldValues.set(e.target, currentProject[e.target.id])
+                const currentProject = e.target.currentObject ?? this.competition
+                if (!this.oldValues.has(e.target)) {
+                    if (currentProject[e.target.id] !== e.target.value) {
+                        this.oldValues.set(e.target, currentProject[e.target.id])
+                    }
+                }
                 else {
                     if (this.oldValues.get(e.target) === e.target.value) {
                         this.oldValues.delete(e.target)
                     }
                 }
+
                 currentProject[e.target.id] = e.target.value
+                if (e.target.id === 'name') {
+                    this.parentNode.parentNode.host.requestUpdate()
+                }
                 this.isModified = this.oldValues.size !== 0;
             }
         }
@@ -430,7 +346,7 @@ class MyProjectsSection1 extends BaseElement {
 
         async getProjectList() {
             const token = await this.getToken();
-            return fetch('https://localhost:4500/api/projects', {
+            return fetch('https://localhost:4500/api/competitions', {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -439,7 +355,7 @@ class MyProjectsSection1 extends BaseElement {
             .then(response => {
                 if (response.status === 419){
                     return this.refreshToken().then( token =>
-                        fetch('https://localhost:4500/api/projects', {
+                        fetch('https://localhost:4500/api/competitions', {
                             headers: {
                             'Authorization': `Bearer ${token}`
                             }
@@ -457,18 +373,18 @@ class MyProjectsSection1 extends BaseElement {
                 }
                 return json.rows;
             })
-            .then(projects => this.saveDataSet(projects))
+            .then(competitions => this.saveDataSet(competitions))
             .then( () => this.getProjectStatusList() )
             .then( () => this.getProjectAvatarList() )
             // .then(() => this.modalDialogShow())
             .catch(err => {console.error(err.message)});
         }
 
-        async saveDataSet(projects) {
-            if (projects.length === 0)
+        async saveDataSet(competitions) {
+            if (competitions.length === 0)
                 return;
-            this.dataSet = projects.map(project =>
-                project.doc
+            this.dataSet = competitions.map(competition =>
+                competition.doc
             ).sort( (a, b) => b._id.localeCompare(a._id) )
             this.currentProject = this.dataSet[0];
             this.requestUpdate()
@@ -476,7 +392,7 @@ class MyProjectsSection1 extends BaseElement {
 
         async getProjectStatusList() {
             const token = await this.getToken();
-            return fetch('https://localhost:4500/api/projects-status', {
+            return fetch('https://localhost:4500/api/competitions-status', {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -485,7 +401,7 @@ class MyProjectsSection1 extends BaseElement {
             .then(response => {
                 if (response.status === 419){
                     return this.refreshToken().then( token =>
-                        fetch('https://localhost:4500/api/projects-status', {
+                        fetch('https://localhost:4500/api/competitions-status', {
                             headers: {
                             'Authorization': `Bearer ${token}`
                             }
@@ -503,7 +419,7 @@ class MyProjectsSection1 extends BaseElement {
                 }
                 return json;
             })
-            .then(projects => this.saveChildDataSet(projects))
+            .then(competitions => this.saveChildDataSet(competitions))
             // .then(() => this.modalDialogShow())
             .catch(err => {console.error(err.message)});
         }
@@ -533,7 +449,7 @@ class MyProjectsSection1 extends BaseElement {
                 // }
                 return blob;
             })
-            // .then(projectHeader => this.updateDataset(projectHeader))
+            // .then(competitionHeader => this.updateDataset(competitionHeader))
             // .then(() => this.modalDialogShow())
             .catch(err => {console.error(err)});
         }
@@ -541,7 +457,7 @@ class MyProjectsSection1 extends BaseElement {
 
         async getProjectAvatarList() {
             const token = await this.getToken();
-            return fetch('https://localhost:4500/api/download/project-avatars', {
+            return fetch('https://localhost:4500/api/download/competition-avatars', {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -550,7 +466,7 @@ class MyProjectsSection1 extends BaseElement {
             .then(response => {
                 if (response.status === 419){
                     return this.refreshToken().then( token =>
-                        fetch('https://localhost:4500/api/download/project-avatars', {
+                        fetch('https://localhost:4500/api/download/competition-avatars', {
                             headers: {
                             'Authorization': `Bearer ${token}`
                             }
@@ -584,7 +500,6 @@ class MyProjectsSection1 extends BaseElement {
                     var file = new File( [blob], filename, {type : 'application/octet-stream'} );
                     this.obj = window.URL.createObjectURL(blob);
                     fileList.push(file);
-                    console.log()
                     // Object key is the filename
                     // var match = filename.match( /REGEX.pdf$/ );
                     // if(match) {
@@ -594,10 +509,10 @@ class MyProjectsSection1 extends BaseElement {
                     // }
                 }
 
-                console.log(fileList)
+
 
             })
-            // .then(projects => this.saveChildDataSet(projects))
+            // .then(competitions => this.saveChildDataSet(competitions))
             // .then(() => this.modalDialogShow())
             .catch(err => {console.error(err.message)});
         }
@@ -642,14 +557,14 @@ class MyProjectsSection1 extends BaseElement {
         }
         async addProject() {
             const token = await this.getToken();
-            const project = {name: "Новый проект"}
-            return fetch(`https://localhost:4500/api/project`, {
+            const competition = {name: "Новый проект"}
+            return fetch(`https://localhost:4500/api/competition`, {
                 method: "POST",
                 headers: {
                   'Authorization': `Bearer ${token}`,
                   'Content-Type': 'application/json;charset=utf-8'
                 },
-                body: JSON.stringify(project)
+                body: JSON.stringify(competition)
             })
             .then(response => response.json())
             .then(json => {
@@ -658,17 +573,49 @@ class MyProjectsSection1 extends BaseElement {
                 }
                 return json.id;
             })
-            .then(projectId => this.getProject(projectId))
-            .then(project => this.addToDataset(project))
+            .then(competitionId => this.getProject(competitionId))
+            .then(competition => this.addToDataset(competition))
             // .then(() => this.modalDialogShow())
             .catch(err => {console.error(err.message)});
         }
 
+        async PredictModel() {
+            const token = await this.getToken();
+            //const result = await this.uploadFile();
+            //if (!result) return;
+            const input = this.competition._id;
+            const parts = input.split(":competition:");
+            const competitionId = parts[1];
+            const steps = {epochs: this.competition.epochs}
+
+            return fetch(`https://localhost:4500/api/learn-model/${competitionId}`, {
+                method: "POST",
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(steps)
+            })
+            .then(response => response.json())
+            .then(json => {
+                if (json.error) {
+                    throw Error(json.error)
+                }
+                return json;
+            })
+            // .then(() => this.modalDialogShow())
+            .catch(err => {console.error(err)});
+        }
+
         async LearnModel() {
             const token = await this.getToken();
-            const result = await this.uploadFile();
-            if (!result) return;
-            return fetch(`https://localhost:4500/api/learn-model/${this.currentProject._id}?epochs=${this.currentProject.epochs}`, {
+            //const result = await this.uploadFile();
+            //if (!result) return;
+            const input = this.competition._id;
+            const parts = input.split(":competition:");
+            const competitionId = parts[1];
+
+            return fetch(`https://localhost:4500/api/learn-model/${competitionId}?epochs=${this.competition.epochs}`, {
                 headers: {
                   'Authorization': `Bearer ${token}`,
                   'Content-Type': 'application/json'
@@ -681,12 +628,12 @@ class MyProjectsSection1 extends BaseElement {
                 }
                 return json;
             })
-            .then(projectHeader => this.afterLearn(projectHeader))
+            .then(competitionHeader => this.afterLearn(competitionHeader))
             // .then(() => this.modalDialogShow())
             .catch(err => {console.error(err)});
         }
 
-        afterLearn(projectHeader) {
+        afterLearn(competitionHeader) {
             this.currentProject.isLearning = true;
             this.isLearning = true;
         }
@@ -696,7 +643,7 @@ class MyProjectsSection1 extends BaseElement {
             if (!result) return;
             result = await this.uploadAvatarFile();
             if (!result) return;
-            return fetch(`https://localhost:4500/api/project/${this.currentProject._id}`, {
+            return fetch(`https://localhost:4500/api/competition/${this.currentProject._id}`, {
                 method: "PUT",
                 headers: {
                   'Authorization': `Bearer ${token}`,
@@ -711,7 +658,7 @@ class MyProjectsSection1 extends BaseElement {
                 }
                 return json;
             })
-            .then(projectHeader => this.afterSave(projectHeader))
+            .then(competitionHeader => this.afterSave(competitionHeader))
             // .then(() => this.modalDialogShow())
             .catch(err => {console.error(err)});
         }
@@ -721,7 +668,7 @@ class MyProjectsSection1 extends BaseElement {
             const formData = new FormData();
             const uploadInput = this.renderRoot?.querySelector('upload-input')
             formData.append("file", uploadInput.file);
-            return fetch(`https://localhost:4500/api/upload/project/${this.currentProject._id}`, {
+            return fetch(`https://localhost:4500/api/upload/competition/${this.currentProject._id}`, {
                 method: "POST",
                 headers: {
                   'Authorization': `Bearer ${token}`,
@@ -735,7 +682,7 @@ class MyProjectsSection1 extends BaseElement {
                 }
                 return json;
             })
-            // .then(projectHeader => this.updateDataset(projectHeader))
+            // .then(competitionHeader => this.updateDataset(competitionHeader))
             // .then(() => this.modalDialogShow())
             .catch(err => {console.error(err)});
         }
@@ -745,7 +692,7 @@ class MyProjectsSection1 extends BaseElement {
             const formData = new FormData();
             const uploadInput = this.renderRoot?.querySelector('avatar-input')
             formData.append("file", uploadInput.value);
-            return fetch(`https://localhost:4500/api/upload/project-avatar/${this.currentProject._id}`, {
+            return fetch(`https://localhost:4500/api/upload/competition-avatar/${this.currentProject._id}`, {
                 method: "POST",
                 headers: {
                   'Authorization': `Bearer ${token}`,
@@ -759,7 +706,7 @@ class MyProjectsSection1 extends BaseElement {
                 }
                 return json;
             })
-            // .then(projectHeader => this.updateDataset(projectHeader))
+            // .then(competitionHeader => this.updateDataset(competitionHeader))
             // .then(() => this.modalDialogShow())
             .catch(err => {console.error(err)});
         }
@@ -776,7 +723,7 @@ class MyProjectsSection1 extends BaseElement {
                 console.error(err.message)
                 return
             }
-            return fetch(`https://localhost:4500/api/project/${this.currentProject._id}?rev=${this.currentProject._rev}`, {
+            return fetch(`https://localhost:4500/api/competition/${this.currentProject._id}?rev=${this.currentProject._rev}`, {
                 method: "DELETE",
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -789,7 +736,7 @@ class MyProjectsSection1 extends BaseElement {
                 }
                 return json;
             })
-            .then(project => this.deleteFromDS(project))
+            .then(competition => this.deleteFromDS(competition))
             // .then(() =>c.modalDialogShowShow())
             .catch(err => {console.error(err.message)});
         }
@@ -824,31 +771,31 @@ class MyProjectsSection1 extends BaseElement {
             this.isModified = false;
         }
 
-        async deleteFromDS(project) {
+        async deleteFromDS(competition) {
             const currentIndex = this.dataSet.indexOf(this.currentProject)
             this.currentProject = this.dataSet.length === 1 ? {} :
                 currentIndex === 0 ? this.dataSet[currentIndex + 1] : this.dataSet[currentIndex - 1]
             this.dataSet.splice(currentIndex, 1)
-            return project
+            return competition
         }
 
-        async addToDataset(project) {
-            this.dataSet.unshift(project);
+        async addToDataset(competition) {
+            this.dataSet.unshift(competition);
             this.currentProject = this.dataSet[0]
-            return project
+            return competition
         }
 
-        async afterSave(projectHeader) {
-            this.currentProject._rev = projectHeader.rev;
+        async afterSave(competitionHeader) {
+            this.currentProject._rev = competitionHeader.rev;
             const uploadInput = this.renderRoot?.querySelector('upload-input')
             uploadInput.file = null;
             this.oldValues?.clear();
             this.isModified = false;
         }
 
-        async getProject(projectId) {
+        async getProject(competitionId) {
             const token = await this.getToken();
-            return fetch(`https://localhost:4500/api/project/${projectId}`, {
+            return fetch(`https://localhost:4500/api/competition/${competitionId}`, {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -860,9 +807,9 @@ class MyProjectsSection1 extends BaseElement {
                 }
                 return json;
             })
-            .then(project => {
-                console.log(project)
-                return project
+            .then(competition => {
+                console.log(competition)
+                return competition
             })
             // .then(() =>c.modalDialogShowShow())
             .catch(err => {console.error(err.message)});
@@ -870,8 +817,7 @@ class MyProjectsSection1 extends BaseElement {
 
         async firstUpdated() {
             super.firstUpdated();
-            await this.getProjectList();
         }
 }
 
-customElements.define("my-projects-section-1", MyProjectsSection1);
+customElements.define("my-competitions-section-1-page-1", MyCompetitionsSection1Page1);

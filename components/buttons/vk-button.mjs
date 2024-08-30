@@ -120,7 +120,7 @@ customElements.define('vk-button', class VKButton extends BaseElement {
     // }
 
     getCodeChallenge() {
-      fetch('https://cs.rsu.edu.ru:4500/api/sign-in-vk/init', {
+      fetch('https://localhost:4500/api/sign-in-vk/init', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json;charset=utf-8'

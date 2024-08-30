@@ -145,7 +145,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             state: params.get("state"),
         }
 
-        fetch("https://cs.rsu.edu.ru:4500/api/sign-in-vk", {
+        fetch("https://localhost:4500/api/sign-in-vk", {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -164,7 +164,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     sendGoogleToken(res) {
         const token = { token: res.credential, type: 'google'}
-        fetch('https://cs.rsu.edu.ru:4500/api/sign-in-google', {
+        fetch('https://localhost:4500/api/sign-in-google', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -197,7 +197,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     sendVKToken(res) {
         const token = { token: res.credential, type: 'google'}
         console.log(JSON.stringify(token))
-        fetch('https://cs.rsu.edu.ru:4500/api/sign-in-google', {
+        fetch('https://localhost:4500/api/sign-in-google', {
         // fetch('https://localhost:4500/api/sign-in-google', {
             method: 'POST',
             headers: {
@@ -318,7 +318,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     sendSimpleUser() {
         const user = { username: this.#login, password: this.#password, type: 'simple'}
         console.log(JSON.stringify(user))
-        fetch('https://cs.rsu.edu.ru:4500/api/sign-in', {
+        fetch('https://localhost:4500/api/sign-in', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -348,7 +348,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     getSimpleUserInfo(token) {
-        return fetch('https://cs.rsu.edu.ru:4500/api/user', {
+        return fetch('https://localhost:4500/api/user', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
