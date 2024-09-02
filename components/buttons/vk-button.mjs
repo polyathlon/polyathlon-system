@@ -119,23 +119,18 @@ customElements.define('vk-button', class VKButton extends BaseElement {
     //   super.firstUpdated();
     // }
 
-    getCodeChallenge() {
-      fetch('https://localhost:4500/api/sign-in-vk/init', {
+    async getCodeChallenge() {
+      const response = await fetch('https://localhost:4500/api/sign-in-vk/init', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json;charset=utf-8'
           }
         })
-      .then(response => response.json())
-      .then(json => {
-          if (json.error) {
-              throw Error(json.error)
-          }
-          this.authorization(json)
-          return json
-      })
-      // .then(token => this.getSimpleUserInfo(token))
-      .catch(err => {console.error(err.message)});
+      const result = await response.json()
+      if (Object.hasOwn(result, "error")) {
+        throw new Error(result)
+      }
+      this.authorization(result);
     }
 
     authorization(init) {

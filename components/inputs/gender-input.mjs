@@ -74,14 +74,15 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
         if (!input) {
             return false
         }
-        return input.checked = this.value === gender;
+        input.checked = this.value == gender
+        return input.checked;
     }
     render() {
         return html`
             <fieldset class="fieldset">
                 ${this.label ? this.#legend : ''}
-                <label><input type="radio" name="gender" ?checked=${this.setChecked("male")} id="male" value="male" @input=${this.changeValue}>Male</label>
-                <label><input type="radio" name="gender" ?checked=${this.setChecked("female")} id="female" value="female" @input=${this.changeValue}>Female</label>
+                <label><input type="radio" name="gender" ?checked=${this.setChecked("0")} id="0" value="0" @input=${this.changeValue}>Male</label>
+                <label><input type="radio" name="gender" ?checked=${this.setChecked("1")} id="1" value="1" @input=${this.changeValue}>Female</label>
             </fieldset>
         `;
     }

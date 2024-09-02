@@ -94,7 +94,7 @@ customElements.define("birthday-input", class BirthdayInput extends BaseElement 
         const day = this.renderRoot.getElementById("day");
         const month = this.renderRoot.getElementById("month");
         const year = this.renderRoot.getElementById("year");
-        const date = new Date(value);
+        const date = new Date(value.replaceAll('.','/'));
         day.value = date.getDate();
         month.value = date.getMonth();
         year.value = date.getFullYear();

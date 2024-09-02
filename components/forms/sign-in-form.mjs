@@ -97,7 +97,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         `;
     }
 
-    getVKToken(res) {
+    async getVKToken(res) {
         // let o = window.VKIDSDK.Config.get()
         // let params1 = new URLSearchParams(window.location.search)
         // let code = params1.get("code")
@@ -138,28 +138,27 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         // })
 
 
-        const params = new URLSearchParams(window.location.search)
-        const result = {
-            code: params.get("code"),
-            device_id: params.get("device_id"),
-            state: params.get("state"),
-        }
+        // const params = new URLSearchParams(window.location.search)
+        // const result = {
+        //     code: params.get("code"),
+        //     device_id: params.get("device_id"),
+        //     state: params.get("state"),
+        // }
 
-        fetch("https://localhost:4500/api/sign-in-vk", {
+        const response = await fetch("https://localhost:4500/api/sign-in-vk", {
             method: 'POST',
             mode: 'cors',
             headers: {
-              'Content-Type': 'application/json;charset=utf-8'
+              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
             },
-            body: JSON.stringify(result)
+            credentials: "include",
+            body: new URLSearchParams(window.location.search)
         })
-        .then(response => response.json())
-        .then(json => {
-            if ("error" in json) {
-                throw Error(json.error)
-            }
-            return json?.token
-        })
+        const result = await response.json()
+        if (Object.hasOwn(result, "error")) {
+            throw Error(result.error)
+        }
+        return result?.token
       }
 
     sendGoogleToken(res) {
@@ -169,6 +168,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
             },
+            credentials: "include",
             body: JSON.stringify(token)
           })
         .then(response => response.json())
@@ -194,40 +194,18 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         );
     }
 
-    sendVKToken(res) {
-        const token = { token: res.credential, type: 'google'}
-        console.log(JSON.stringify(token))
-        fetch('https://localhost:4500/api/sign-in-google', {
-        // fetch('https://localhost:4500/api/sign-in-google', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(token)
-          })
-        .then(response => response.json())
-        .then(json => {
-            if (json.error) {
-                throw Error(json.error)
-            }
-            this.saveToken(json.token)
-            return json.token
-        })
-        .then(token => this.getSimpleUserInfo(token))
-        .catch(err => {console.error(err.message)});
+    async sendVKToken() {
+        const token = await this.getVKToken()
+        this.saveToken(token)
+        this.getSimpleUserInfo(token)
     }
-
 
     firstUpdated() {
         super.firstUpdated();
         this.createGoogleButton();
         let params = new URLSearchParams(window.location.search)
         if (params.size) {
-            this.getCodeChallenge({
-                code: params.get("code"),
-                device_id: params.get("device_id"),
-                state: params.get("device_id"),
-            })
+            this.sendVKToken()
         }
         // window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
     }
@@ -317,7 +295,6 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     sendSimpleUser() {
         const user = { username: this.#login, password: this.#password, type: 'simple'}
-        console.log(JSON.stringify(user))
         fetch('https://localhost:4500/api/sign-in', {
             method: 'POST',
             headers: {
