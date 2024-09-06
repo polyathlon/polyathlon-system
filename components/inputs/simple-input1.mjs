@@ -5,10 +5,10 @@ import '../buttons/simple-button.mjs'
 
 import styles from './input-css.mjs'
 
-customElements.define("year-input", class YearInput extends BaseElement {
+customElements.define("simple-input1", class SimpleInput1 extends BaseElement {
     static get properties() {
         return {
-            type: { type: String, default: 'date'},
+            type: { type: String, default: 'text'},
             required: { type: Boolean, default: false},
             label: { type: String, default: '' },
             _useInfo: { type: Boolean, default: false },
@@ -32,16 +32,6 @@ customElements.define("year-input", class YearInput extends BaseElement {
                 }
             `
         ]
-    }
-
-    constructor() {
-        super();
-        const date = new Date();
-        this.year = date.getFullYear();
-        this.years = ['Year'];
-        for (let i = this.year; i >= this.year - 80; i--) {
-            this.years.push(i)
-        }
     }
 
     firstUpdated(setPath = false) {
@@ -71,20 +61,20 @@ customElements.define("year-input", class YearInput extends BaseElement {
     //     this.requestUpdate('value', oldValue);
     // }
 
-    get value() {
-        return this.renderRoot?.querySelector('select')?.value ?? null;
-    }
+    // get value() {
+    //     return this.renderRoot?.querySelector('input')?.value ?? null;
+    // }
 
-    set value(value) {
-        const input = this.renderRoot?.querySelector('select');
-        if (input) {
-            input.value= value;
-        }
-    }
+    // set value(value) {
+    //     const input = this.renderRoot?.querySelector('input');
+    //     if (input) {
+    //         input.value= value;
+    //     }
+    // }
 
     get #button() {
         return html`
-            <simple-icon class="button" icon-name=${this.buttonName || nothing} @click=${this.updateLoginValue}></simple-icon>
+            <simple-icon class="button" icon-name=${this.buttonName || nothing}></simple-icon>
         `
     }
 
@@ -92,10 +82,13 @@ customElements.define("year-input", class YearInput extends BaseElement {
         return html`
             ${this.label ? this.#label : ''}
             <div class="input-group">
-                <select>
-                    ${this.years.map(year => html`<option ?selected=${year==="Year"} value=${year === "Year" ? nothing : year}>${year}</option>`)}
-                </select>
+                <input type=${this.type}
+                    placeholder=${this.placeholder || nothing}
+                    ${this.required ? 'required' : ''}
+                    .value=${this.value || ''} @input=${this.changeValue}
+                >
                 ${this.iconName ? this.#icon : ''}
+                ${this.buttonName ? this.#button : ''}
             </div>
         `;
     }
@@ -105,10 +98,6 @@ customElements.define("year-input", class YearInput extends BaseElement {
     }
 
     changeValue(e) {
-        const options = {
-            bubbles: true,
-            composed: true
-          };
-        this.dispatchEvent(new CustomEvent('value-changed', options));
+        this.value = e.target.value;
     }
 });

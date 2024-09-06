@@ -77,7 +77,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                             <div class="login-options">
                                 <div class="checkbox-remember">
                                     <label for="remember">Remember me</label>
-                                    <input type="checkbox" id="remember" name="remember" @click=${this.RememberMe}>
+                                    <input type="checkbox" id="remember" name="remember" @click=${this.rememberMe}>
                                 </div>
                                 <a href="http://localhost/forgot" class="forgot-password" title="Forgot password?">Forgot password?</a>
                             </div>
@@ -85,7 +85,6 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                             <button type="button" @click=${()=>this.sendSimpleUser()}>Login</button>
                             <div id="google"></div>
                             <vk-button></vk-button>
-                            <button type="button" @click=${this.getVKToken}>Get Tokens</button>
                         </div>
                     </div>
 
@@ -196,6 +195,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     async sendVKToken() {
         const token = await this.getVKToken()
+        window.history.replaceState(null, '', window.location.pathname);
         this.saveToken(token)
         this.getSimpleUserInfo(token)
     }
@@ -335,7 +335,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             if (json.error) {
                 throw Error(json.error)
             }
-            return json.user;
+            return json;
         })
         .then(user => this.saveUserInfo(JSON.stringify(user)))
         .then(() => this.modalDialogShow())
@@ -346,7 +346,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         sessionStorage.setItem('userInfo', userInfo)
     }
 
-    RememberMe(){
+    rememberMe(){
         if (this.#rememberMe) {
             localStorage.setItem('rememberMe', this.#rememberMe)
         }

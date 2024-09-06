@@ -65,9 +65,9 @@ class SignUpForm extends BaseElement {
 
                 <div class="form-body">
                     <div id="db-tab-section" class="form-tab-section selected">
-                        <simple-input id="login" icon-name="user" placeholder="Login" label="Пользователь"></simple-input>
-                        <email-input id="email" icon-name="mail" placeholder="EMail" label="Почта" size="28"></email-input>
-                        <password-input id="password" label="Пароль" icon-name="lock" placeholder="Password" visible-icon="eye-slash-regular" invisible-icon="eye-regular"></password-input>
+                        <simple-input id="login" icon-name="user" placeholder="Login"></simple-input>
+                        <email-input id="email" icon-name="mail" placeholder="EMail" size="28"></email-input>
+                        <password-input id="password" icon-name="lock" placeholder="Password" visible-icon="eye-slash-regular" invisible-icon="eye-regular"></password-input>
                         <div class="sign-up-options">
                             <div class="checkbox-remember">
                                 <label for="remember"><b>Remember me</b></label>

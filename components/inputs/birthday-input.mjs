@@ -79,25 +79,26 @@ customElements.define("birthday-input", class BirthdayInput extends BaseElement 
 
     get value() {
         if (!this.renderRoot)
-            return;
+            return undefined;
         const day = this.renderRoot.getElementById("day").value;
         const month = this.renderRoot.getElementById("month").value;
         const year = this.renderRoot.getElementById("year").value;
-        if (day&&month&&year)
-           return Number(new Date(year, month, day))
+        if (day&&month&&year) {
+            return (new Date(year, month - 1, day)).toLocaleDateString()
+        }
         return undefined
     }
 
     set value(value) {
-        if (!this.renderRoot)
+        if (!this.renderRoot || !value )
             return;
         const day = this.renderRoot.getElementById("day");
         const month = this.renderRoot.getElementById("month");
         const year = this.renderRoot.getElementById("year");
-        const date = new Date(value.replaceAll('.','/'));
-        day.value = date.getDate();
-        month.value = date.getMonth();
-        year.value = date.getFullYear();
+        const date = value.split('.')
+        day.value = +date[0];
+        month.value = +date[1];
+        year.value = +date[2];
     }
 
     get #button() {
@@ -105,8 +106,6 @@ customElements.define("birthday-input", class BirthdayInput extends BaseElement 
             <simple-icon class="button" icon-name=${this.buttonName || nothing} @click=${this.updateLoginValue}></simple-icon>
         `
     }
-
-
 
     render() {
         return html`
