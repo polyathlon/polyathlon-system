@@ -21,7 +21,6 @@ class MyProfileSection1 extends BaseElement {
             isReady: {type: Boolean, default: true},
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            obj: { type: Object, default: null },
             currentPage: {type: BigInt, default: 0},
             isFirst: {type: Boolean, default: false}
         }
@@ -295,7 +294,7 @@ class MyProfileSection1 extends BaseElement {
             </div>
             <footer>
                 ${ this.isModified ? html`
-                    <simple-button label="Сохранить" @click=${this.saveProfile}></simple-button>
+                    <simple-button label="Сохранить" @click=${this.saveItem}></simple-button>
                     <simple-button label="Отменить" @click=${this.cancelItem}></simple-button>
                 ` : ''
                 }
@@ -364,6 +363,64 @@ class MyProfileSection1 extends BaseElement {
         }
         return token;
     }
+
+    fetchSaveItem(token) {
+        return fetch(`https://localhost:4500/api/user-profile`, {
+            method: "PUT",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(this.dataSet)
+        })
+    }
+
+    async saveItem() {
+        const token = this.getToken();
+
+        if (this.avatarFile) {
+            let result = await this.uploadAvatarFile();
+            if (!result) return;
+        }
+
+        let response = await this.fetchSaveItem(token)
+        if (response.status === 419) {
+            const token = await this.refreshToken()
+            response = await this.fetchSaveItem(token)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        this.afterSave(result)
+    }
+
+    fetchAvatarFile(token, formData) {
+        return fetch(`https://localhost:4500/api/upload/avatar`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData
+        })
+    }
+
+    async uploadAvatarFile() {
+        const token = this.getToken();
+        const formData = new FormData();
+        formData.append("file", this.avatarFile);
+        let response = await this.fetchAvatarFile(token, formData)
+        if (response.status === 419) {
+            const token = await this.refreshToken()
+            response = await this.fetchAvatarFile(token, formData)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
     // saveDataSet(items) {
     //     if (items.length === 0)
     //         return;
@@ -436,98 +493,8 @@ class MyProfileSection1 extends BaseElement {
         this.currentItem = item;
     }
 
-    fetchAddItem(token) {
-        const newItem = {name: "Новая страна"}
-        return fetch(`https://localhost:4500/api/country`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(newItem)
-        })
-    }
-
-    async addItem() {
-        const token = this.getToken();
-        let response = await this.fetchAddItem(token)
-
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchAddItem(token)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-
-        const item = await this.getItem(result.id)
-        this.addToDataset(item)
-    }
-
-    addToDataset(item) {
-        this.dataSet.unshift(item);
-        this.currentItem = this.dataSet[0]
-    }
-
-    fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/country/${itemId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    async getItem(itemId) {
-        const token = this.getToken();
-
-        let response = await this.fetchGetItem(token, itemId)
-
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchGetItem(token, itemId)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result
-    }
-
-    fetchSaveItem(token) {
-        return fetch(`https://localhost:4500/api/country/${this.currentItem._rev}`, {
-            method: "PUT",
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(this.currentItem)
-        })
-    }
-
-    async saveItem() {
-        const token = this.getToken();
-
-        let response = await this.fetchSaveItem(token)
-
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchSaveItem(token)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-
-        this.afterSave(result)
-    }
-
-    async afterSave(projectHeader) {
-        this.currentItem._rev = projectHeader.rev;
+    async afterSave(itemHeader) {
+        this.currentItem._rev = itemHeader.rev;
         this.oldValues?.clear();
         this.isModified = false;
     }
@@ -543,52 +510,6 @@ class MyProfileSection1 extends BaseElement {
         });
         this.oldValues.clear();
         this.isModified = false;
-    }
-
-    fetchDeleteItem(token) {
-        return fetch(`https://localhost:4500/api/country/${this.currentItem._rev}?rev=${this.currentItem._rev}`, {
-            method: "DELETE",
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
-        if (modalResult !== 'Ok')
-            return;
-
-        const token = this.getToken();
-
-        let response = await this.fetchDeleteItem(token)
-
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchDeleteItem(token)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-
-        this.deleteFromDS(result)
-    }
-
-    deleteFromDS(item) {
-        const currentIndex = this.dataSet.indexOf(this.currentItem)
-        if (this.dataSet.length === 1) {
-            this.currentItem = {}
-        }
-        else if (currentIndex === 0) {
-            this.currentItem = this.dataSet[currentIndex + 1]
-        }
-        else {
-            this.currentItem = this.dataSet[currentIndex - 1]
-        }
-        this.dataSet.splice(currentIndex, 1)
     }
 
     async firstUpdated() {
