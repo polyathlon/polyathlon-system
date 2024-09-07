@@ -206,28 +206,28 @@ class MyProfileSection1 extends BaseElement {
         this.oldValues = new Map();
     }
 
-    update(changedProps) {
-        super.update(changedProps);
-        if (!changedProps) return;
-        if (changedProps.has('itemStatus') && this.itemStatus) {
-            this.statusDataSet.set(this.itemStatus._rev, this.itemStatus)
-            this.requestUpdate()
-        }
-        if (changedProps.has('currentCountryItem')) {
-            this.currentPage = 0;
-        }
-    }
+    // update(changedProps) {
+    //     super.update(changedProps);
+    //     if (!changedProps) return;
+    //     if (changedProps.has('itemStatus') && this.itemStatus) {
+    //         this.statusDataSet.set(this.itemStatus._rev, this.itemStatus)
+    //         this.requestUpdate()
+    //     }
+    //     if (changedProps.has('currentCountryItem')) {
+    //         this.currentPage = 0;
+    //     }
+    // }
 
-    async showItem(index, itemId) {
-        if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
-            if (modalResult === 'Ok')
-                this.saveItem().then(() => this.currentItem = this.dataSet[index]);
-        }
-        else {
-            this.setCurrentItem(this.dataSet[index])
-        }
-    }
+    // async showItem(index, itemId) {
+    //     if (this.isModified) {
+    //         const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+    //         if (modalResult === 'Ok')
+    //             this.saveItem().then(() => this.currentItem = this.dataSet[index]);
+    //     }
+    //     else {
+    //         this.setCurrentItem(this.dataSet[index])
+    //     }
+    // }
 
     #page() {
         return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
@@ -361,7 +361,6 @@ class MyProfileSection1 extends BaseElement {
         else {
             sessionStorage.setItem('accessUserToken', token)
         }
-        return token;
     }
 
     fetchSaveItem(token) {
@@ -431,19 +430,19 @@ class MyProfileSection1 extends BaseElement {
     //     this.requestUpdate()
     // }
 
-    validateInput(e) {
-        if (e.target.value !== "") {
-            this.oldValues ??= new Map();
-            const currentItem = e.target.currentObject ?? this.currentItem
-            if (!this.oldValues.has(e.target))
-                this.oldValues.set(e.target, currentItem[e.target.id])
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-            currentItem[e.target.id] = e.target.value
-            this.isModified = this.oldValues.size !== 0;
-        }
-    }
+    // validateInput(e) {
+    //     if (e.target.value !== "") {
+    //         this.oldValues ??= new Map();
+    //         const currentItem = e.target.currentObject ?? this.currentItem
+    //         if (!this.oldValues.has(e.target))
+    //             this.oldValues.set(e.target, currentItem[e.target.id])
+    //         else if (this.oldValues.get(e.target) === e.target.value) {
+    //                 this.oldValues.delete(e.target)
+    //         }
+    //         currentItem[e.target.id] = e.target.value
+    //         this.isModified = this.oldValues.size !== 0;
+    //     }
+    // }
 
     getToken() {
         return localStorage.getItem('rememberMe') ? localStorage.getItem('accessUserToken') : sessionStorage.getItem('accessUserToken')
@@ -453,45 +452,45 @@ class MyProfileSection1 extends BaseElement {
         return await this.renderRoot.querySelector('confirm-dialog').show(message);
     }
 
-    fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/user-profile', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
+    // fetchGetItems(token) {
+    //     return fetch('https://localhost:4500/api/user-profile', {
+    //         headers: {
+    //             'Authorization': `Bearer ${token}`
+    //         }
+    //     })
+    // }
 
-    async getItems() {
-        const token = this.getToken()
-        let response = await this.fetchGetItems(token)
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchGetItems(token)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        const items = [result];
-        this.saveDataSet(items)
-    }
+    // async getItems() {
+    //     const token = this.getToken()
+    //     let response = await this.fetchGetItems(token)
+    //     if (response.status === 419) {
+    //         const token = await this.refreshToken()
+    //         response = await this.fetchGetItems(token)
+    //     }
+    //     const result = await response.json()
+    //     if (!response.ok) {
+    //         throw new Error(result.error)
+    //     }
+    //     const items = [result];
+    //     this.saveDataSet(items)
+    // }
 
-    getCurrentItem(){
-        // const item = sessionStorage.getItem('currentCountry')
-        // if (item) {
-        //     return this.dataSet.find(p => p._rev === item)
-        // }
-        // else {
-        //     sessionStorage.setItem('currentCountry', this.dataSet[0]._rev)
-        //     return this.dataSet[0]
-        // }
-        return this.dataSet[0]
-    }
+    // getCurrentItem(){
+    //     // const item = sessionStorage.getItem('currentCountry')
+    //     // if (item) {
+    //     //     return this.dataSet.find(p => p._rev === item)
+    //     // }
+    //     // else {
+    //     //     sessionStorage.setItem('currentCountry', this.dataSet[0]._rev)
+    //     //     return this.dataSet[0]
+    //     // }
+    //     return this.dataSet[0]
+    // }
 
-    setCurrentItem(item) {
-        sessionStorage.setItem('currentCountry', item._rev)
-        this.currentItem = item;
-    }
+    // setCurrentItem(item) {
+    //     sessionStorage.setItem('currentCountry', item._rev)
+    //     this.currentItem = item;
+    // }
 
     async afterSave(itemHeader) {
         this.currentItem._rev = itemHeader.rev;
@@ -515,7 +514,6 @@ class MyProfileSection1 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;
-        //await this.getItems();
         this.dataSet = await this.getUserInfo();
         this.currentItem = this.dataSet
         this.avatar = null; // await this.downloadAvatar();
