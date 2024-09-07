@@ -23,6 +23,7 @@ class MyProfileSection1 extends BaseElement {
             itemStatus: { type: Object, default: null, local: true },
             obj: { type: Object, default: null },
             currentPage: {type: BigInt, default: 0},
+            isFirst: {type: Boolean, default: false}
         }
     }
 
@@ -73,15 +74,24 @@ class MyProfileSection1 extends BaseElement {
                     grid-area: sidebar;
                     display: flex;
                     flex-direction: column;
+                    justify-content: center;
                     align-items: center;
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
+                    gap: 10px;
                 }
 
-                .left-layout country-button {
-                    width: 100%;
-                    height: 40px;
+                .avatar {
+                    width: 100%
+                }
+
+                avatar-input {
+                    width: 80%;
+                    margin: auto;
+                    aspect-ratio: 1 / 1;
+                    overflow: hidden;
+                    border-radius: 50%;
                 }
 
                 img {
@@ -89,15 +99,31 @@ class MyProfileSection1 extends BaseElement {
                 }
 
                 .right-layout {
+                    overflow-y: auto;
+                    overflow-x: hidden;
                     grid-area: content;
                     display: flex;
-                    /* justify-content: space-between; */
-                    justify-content: center;
+                    justify-content: space-between;
                     align-items: center;
-                    /* margin-right: 20px; */
+                    margin-right: 20px;
                     background: var(--layout-background-color);
-                    overflow: hidden;
-                    gap: 10px;
+                }
+
+                 /* width */
+                 ::-webkit-scrollbar {
+                    width: 10px;
+                }
+
+                /* Track */
+                ::-webkit-scrollbar-track {
+                    box-shadow: inset 0 0 5px grey;
+                    border-radius: 5px;
+                }
+
+                /* Handle */
+                ::-webkit-scrollbar-thumb {
+                    background: red;
+                    border-radius: 5px;
                 }
 
                 h1 {
@@ -154,13 +180,7 @@ class MyProfileSection1 extends BaseElement {
                     width: 200px;
                     height: 100px;
                 }
-                avatar-input {
-                    height: 50px;
-                    margin: auto;
-                    aspect-ratio: 1 / 1;
-                    overflow: hidden;
-                    border-radius: 50%;
-                }
+
                 .left-aside {
                     display: flex;
                     justify-content: center;
@@ -175,19 +195,6 @@ class MyProfileSection1 extends BaseElement {
                     display: none;
                 }
 
-                // simple-icon {
-                //     visibility: hidden;
-                // }
-
-                // simple-icon:hover {
-                //     visibility: visible;
-                // }
-                country-button[selected] {
-                    background: rgba(255, 255, 255, 0.1)
-                }
-                country-button:hover {
-                    background: rgba(255, 255, 255, 0.1)
-                }
             `
         ]
     }
@@ -195,7 +202,8 @@ class MyProfileSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Country property']
+        this.pageNames = ['Person information', 'Passport information']
+        this.currentPage = 0;
         this.oldValues = new Map();
     }
 
@@ -242,71 +250,129 @@ class MyProfileSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    render() {
-        return html`
-            <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Country ${this.currentItem?.name}</p></header>
-            <header id="property-header">${this.#pageName}</header>
-            <div class="left-layout">
-                ${this.dataSet.map((item, index) =>
-                    html `<country-button
-                                label=${item?.name}
-                                title=${item?._rev}
-                                .logotype=${item?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
-                                .status=${this.statusDataSet.get(item?._rev)}
-                                ?selected=${this.currentItem === item}
-                                @click=${() => this.showItem(index, item?._rev)}
-                            >
-                            </country-button>
-                `)}
-            </div>
-            <div class="right-layout">
-                ${this.#page()}
-            </div>
-            <footer>
-                <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
-                <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
-            </footer>
-        `;
-    }
-    async getUserProfile() {
-        const token = await this.getToken();
-        return fetch('https://localhost:4500/api/user-profile', {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-
-        })
-        .then(response => {
-            if (response.status === 419){
-                return this.refreshToken().then( token =>
-                    fetch('https://localhost:4500/api/user-profile', {
-                        headers: {
-                        'Authorization': `Bearer ${token}`
-                        }
-
-                    }).then(response => response.json())
-                )
-            }
-            else {
-                return response.json()
-            }
-        })
-        .then(json => {
-            if (json.error) {
-                throw Error(json.error)
-            }
-            return json;
-        })
-        .then(userProfile => this.saveDataSet(userProfile))
-        .catch(err => {console.error(err.message)});
-    }
     nextPage() {
         this.currentPage++;
     }
+
     prevPage() {
         this.currentPage--;
     }
+
+    get #loginInfo() {
+        if (localStorage.getItem('rememberMe')) {
+            return localStorage.getItem('userInfo')
+        }
+        else {
+            return sessionStorage.getItem('userInfo')
+        }
+    }
+    render() {
+        return html`
+            <confirm-dialog></confirm-dialog>
+            <header id="competition-header"><p>Profile ${this.currentItem?.name}</p></header>
+            <header id="property-header">${this.#pageName}</header>
+            <div class="left-layout">
+                <div class="avatar">
+                    ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
+                </div>
+                <div class="label">
+                    ${JSON.parse(this.#loginInfo).login}
+                </div>
+                <div class="statistic">
+                    <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                    <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                    <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                </div>
+            </div>
+            <div class="right-layout">
+                <div class="left-aside">
+                    <simple-icon icon-name="square-arrow-left-sharp-solid" @click=${this.prevPage} ?visible=${this.currentPage === 0} title=${this.pageNames[this.currentPage - 1]}></simple-icon>
+                </div>
+                ${this.#page()}
+                <div class="right-aside">
+                    <simple-icon icon-name="square-arrow-right-sharp-solid" @click=${this.nextPage} ?visible=${this.currentPage === this.pageNames.length - 1} title=${this.pageNames[this.currentPage + 1]}></simple-icon>
+                </div>
+            </div>
+            <footer>
+                ${ this.isModified ? html`
+                    <simple-button label="Сохранить" @click=${this.saveProfile}></simple-button>
+                    <simple-button label="Отменить" @click=${this.cancelItem}></simple-button>
+                ` : ''
+                }
+            </footer>
+        `;
+    }
+
+    async getUserInfo() {
+        // return sessionStorage.getItem('userProfile') ? JSON.parse(sessionStorage.getItem('userProfile')) : await this.getUserProfile()
+        return await this.getUserProfile()
+    }
+
+    fetchUserProfile(token) {
+        return fetch('https://localhost:4500/api/user-profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    async getUserProfile() {
+        const token = this.getToken()
+        let response = await this.fetchUserProfile(token)
+        if (response.status === 419) {
+            const token = await this.refreshToken()
+            response = await this.fetchUserProfile(token)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return this.saveDataSet(result)
+    }
+
+    saveDataSet(userProfile) {
+        this.dataSet = userProfile;
+        sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
+        return this.dataSet;
+    }
+
+    async refreshToken() {
+        const response = await fetch('https://localhost:4500/api/refresh-token', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            credentials: "include",
+        })
+
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+
+        const token = result.token
+        this.saveToken(token)
+        return token
+    }
+
+    saveToken(token) {
+        if (localStorage.getItem('rememberMe')) {
+            localStorage.setItem('accessUserToken', token)
+        }
+        else {
+            sessionStorage.setItem('accessUserToken', token)
+        }
+        return token;
+    }
+    // saveDataSet(items) {
+    //     if (items.length === 0)
+    //         return;
+    //     this.dataSet = items.map(item => {
+    //         return item;
+    //     }).sort( (a, b) => b._rev.localeCompare(a._rev) )
+    //     this.currentItem = this.getCurrentItem();
+    //     this.requestUpdate()
+    // }
 
     validateInput(e) {
         if (e.target.value !== "") {
@@ -351,45 +417,6 @@ class MyProfileSection1 extends BaseElement {
         }
         const items = [result];
         this.saveDataSet(items)
-    }
-
-    async refreshToken() {
-        const response = await fetch('https://localhost:4500/api/refresh-token', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            credentials: "include",
-        })
-
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-
-        const token = result.token
-        this.saveToken(token)
-        return token
-    }
-
-    saveToken(token) {
-        if (localStorage.getItem('rememberMe')) {
-            localStorage.setItem('accessUserToken', token)
-        }
-        else {
-            sessionStorage.setItem('accessUserToken', token)
-        }
-        return token;
-    }
-
-    saveDataSet(items) {
-        if (items.length === 0)
-            return;
-        this.dataSet = items.map(item => {
-            return item;
-        }).sort( (a, b) => b._rev.localeCompare(a._rev) )
-        this.currentItem = this.getCurrentItem();
-        this.requestUpdate()
     }
 
     getCurrentItem(){
@@ -566,7 +593,12 @@ class MyProfileSection1 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        await this.getItems();
+        this.isFirst  = false;
+        //await this.getItems();
+        this.dataSet = await this.getUserInfo();
+        this.currentItem = this.dataSet
+        this.avatar = null; // await this.downloadAvatar();
+        this.isFirst = true;
     }
 }
 
