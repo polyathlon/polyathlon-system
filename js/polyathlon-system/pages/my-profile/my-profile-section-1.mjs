@@ -510,7 +510,7 @@ class MyProfileSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            const currentItem = key.currentObject ?? this.currentItem
+            const currentItem = key.currentObject ?? this.currentItem.personalInfo
             currentItem[key.id] = value;
             key.value = value;
         });

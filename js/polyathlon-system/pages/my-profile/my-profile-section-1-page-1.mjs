@@ -159,15 +159,15 @@ class MyProfileSection1Page1 extends BaseElement {
     render() {
         return html`
             <div>
-                <simple-input id="name" icon-name="user" label="Country name:" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
-                <simple-input id="flag" icon-name="flag-solid" label="Flag name:" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
+                <simple-input id="firstName" icon-name="user" label="Country name:" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
+                <simple-input id="lastName" icon-name="flag-solid" label="Flag name:" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item
+            const currentItem = e.target.currentObject ?? this.item.personalInfo
             if (!this.oldValues.has(e.target)) {
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
