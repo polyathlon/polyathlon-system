@@ -6,14 +6,17 @@ import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/country-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
+
 import './my-cities-section-1-page-1.mjs'
 // import './my-competitions-section-1-page-2.mjs'
+import DataSet from './my-cities-dataset.mjs'
+import DataSource from './my-cities-datasource.mjs'
 
 class MyCitiesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSet: {type: Array, default: []},
+            dataSource: {type: Array, default: []},
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
@@ -21,7 +24,6 @@ class MyCitiesSection1 extends BaseElement {
             isReady: {type: Boolean, default: true},
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            obj: { type: Object, default: null },
             currentPage: {type: BigInt, default: 0},
         }
     }
@@ -84,10 +86,6 @@ class MyCitiesSection1 extends BaseElement {
                     height: 40px;
                 }
 
-                img {
-                    width: 100%;
-                }
-
                 .right-layout {
                     grid-area: content;
                     display: flex;
@@ -100,41 +98,10 @@ class MyCitiesSection1 extends BaseElement {
                     gap: 10px;
                 }
 
-                h1 {
-                    font-size: 3.4375rem;
-                    font-weight: 700;
-                    text-transform: uppercase;
-                    margin: 20px 0 0;
-                }
-
-                h2 {
-                    font-weight: 300;
-                    line-height: 1.2;
-                    font-size: 1.25rem;
-                }
-
                 p {
                     font-size: 1.25rem;
                     margin: 20px 207px 20px 0;
                     overflow-wrap: break-word;
-                }
-
-                a {
-                    display: inline-block;
-                    text-transform: uppercase;
-                    color: var(--native-color);
-                    margin: 20px auto 0 0;
-                    background-color: var(--background-green);
-                    letter-spacing: 1px;
-                    text-decoration: none;
-                    white-space: nowrap;
-                    padding: 10px 30px;
-                    border-radius: 0;
-                    font-weight: 600;
-                }
-
-                a:hover {
-                    background-color: var(--button-hover-color);
                 }
 
                 footer {
@@ -149,42 +116,11 @@ class MyCitiesSection1 extends BaseElement {
                 footer simple-button {
                     height: 40px;
                 }
-                #drop_zone {
-                    border: 5px solid blue;
-                    width: 200px;
-                    height: 100px;
-                }
-                avatar-input {
-                    height: 50px;
-                    margin: auto;
-                    aspect-ratio: 1 / 1;
-                    overflow: hidden;
-                    border-radius: 50%;
-                }
-                .left-aside {
-                    display: flex;
-                    justify-content: center;
-                    width: 40px;
-                }
-                .right-aside {
-                    display: flex;
-                    justify-content: center;
-                    width: 40px;
-                }
-                simple-icon[visible] {
-                    display: none;
-                }
 
-                // simple-icon {
-                //     visibility: hidden;
-                // }
-
-                // simple-icon:hover {
-                //     visibility: visible;
-                // }
                 country-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
+
                 country-button:hover {
                     background: rgba(255, 255, 255, 0.1)
                 }
@@ -214,11 +150,15 @@ class MyCitiesSection1 extends BaseElement {
     async showItem(index, itemId) {
         if (this.isModified) {
             const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
-            if (modalResult === 'Ok')
-                this.saveItem().then(() => this.currentItem = this.dataSet[index]);
+            if (modalResult === 'Ok') {
+                await this.dataSource.saveItem(this.currentItem);
+            }
+            else {
+                await this.cancelItem()
+            }
         }
         else {
-            this.setCurrentItem(this.dataSet[index])
+            this.dataSource.setCurrentItem(this.dataSource.items[index])
         }
     }
 
@@ -248,7 +188,7 @@ class MyCitiesSection1 extends BaseElement {
             <header id="competition-header"><p>City ${this.currentItem?.name}</p></header>
             <header id="property-header">${this.#pageName}</header>
             <div class="left-layout">
-                ${this.dataSet.map((item, index) =>
+                ${this.dataSource?.items?.map((item, index) =>
                     html `<country-button
                                 label=${item.name}
                                 title=${item._id}
@@ -277,198 +217,16 @@ class MyCitiesSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    validateInput(e) {
-        if (e.target.value !== "") {
-            this.oldValues ??= new Map();
-            const currentItem = e.target.currentObject ?? this.currentItem
-            if (!this.oldValues.has(e.target))
-                this.oldValues.set(e.target, currentItem[e.target.id])
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-            currentItem[e.target.id] = e.target.value
-            this.isModified = this.oldValues.size !== 0;
-        }
-    }
-
-    getToken() {
-        return localStorage.getItem('rememberMe') ? localStorage.getItem('accessUserToken') : sessionStorage.getItem('accessUserToken')
-    }
-
     async confirmDialogShow(message) {
         return await this.renderRoot.querySelector('confirm-dialog').show(message);
     }
 
-    fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/cities', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    async getItems() {
-        const token = this.getToken()
-        let response = await this.fetchGetItems(token)
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchGetItems(token)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        const items = result.rows;
-        this.saveDataSet(items)
-    }
-
-    async refreshToken() {
-        const response = await fetch('https://localhost:4500/api/refresh-token', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            credentials: "include",
-        })
-
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-
-        const token = result.token
-        this.saveToken(token)
-        return token
-    }
-
-    saveToken(token) {
-        if (localStorage.getItem('rememberMe')) {
-            localStorage.setItem('accessUserToken', token)
-        }
-        else {
-            sessionStorage.setItem('accessUserToken', token)
-        }
-        return token;
-    }
-
-    saveDataSet(items) {
-        if (items.length === 0)
-            return;
-        this.dataSet = items.map(item => {
-            return item.doc;
-        }).sort( (a, b) => b._id.localeCompare(a._id) )
-        this.currentItem = this.getCurrentItem();
-        this.requestUpdate()
-    }
-
-    getCurrentItem(){
-        const item = sessionStorage.getItem('currentCity')
-        if (item) {
-            return this.dataSet.find(p => p._id === item)
-        }
-        else {
-            sessionStorage.setItem('currentCity', this.dataSet[0]._id)
-            return this.dataSet[0]
-        }
-    }
-
-    setCurrentItem(item) {
-        sessionStorage.setItem('currentCity', item._id)
-        this.currentItem = item;
-    }
-
-    fetchAddItem(token) {
-        const newItem = {name: "Новая страна"}
-        return fetch(`https://localhost:4500/api/city`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(newItem)
-        })
-    }
-
     async addItem() {
-        const token = this.getToken();
-        let response = await this.fetchAddItem(token)
-
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchAddItem(token)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-
-        const item = await this.getItem(result.id)
-        this.addToDataset(item)
-    }
-
-    addToDataset(item) {
-        this.dataSet.unshift(item);
-        this.currentItem = this.dataSet[0]
-    }
-
-    fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/city/${itemId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    async getItem(itemId) {
-        const token = this.getToken();
-
-        let response = await this.fetchGetItem(token, itemId)
-
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchGetItem(token, itemId)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result
-    }
-
-    fetchSaveItem(token) {
-        return fetch(`https://localhost:4500/api/city/${this.currentItem._id}`, {
-            method: "PUT",
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(this.currentItem)
-        })
+        this.dataSource.addItem();
     }
 
     async saveItem() {
-        const token = this.getToken();
-
-        let response = await this.fetchSaveItem(token)
-
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchSaveItem(token)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-
-        this.afterSave(result)
-    }
-
-    async afterSave(projectHeader) {
-        this.currentItem._rev = projectHeader.rev;
+        await this.dataSource.saveItem(this.currentItem);
         this.oldValues?.clear();
         this.isModified = false;
     }
@@ -486,56 +244,17 @@ class MyCitiesSection1 extends BaseElement {
         this.isModified = false;
     }
 
-    fetchDeleteItem(token) {
-        return fetch(`https://localhost:4500/api/city/${this.currentItem._id}?rev=${this.currentItem._rev}`, {
-            method: "DELETE",
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
     async deleteItem() {
         const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
         if (modalResult !== 'Ok')
             return;
-
-        const token = this.getToken();
-
-        let response = await this.fetchDeleteItem(token)
-
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchDeleteItem(token)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-
-        this.deleteFromDS(result)
-    }
-
-    deleteFromDS(item) {
-        const currentIndex = this.dataSet.indexOf(this.currentItem)
-        if (this.dataSet.length === 1) {
-            this.currentItem = {}
-        }
-        else if (currentIndex === 0) {
-            this.currentItem = this.dataSet[currentIndex + 1]
-        }
-        else {
-            this.currentItem = this.dataSet[currentIndex - 1]
-        }
-        this.dataSet.splice(currentIndex, 1)
+        this.dataSource.deleteItem(this.currentItem)
     }
 
     async firstUpdated() {
         super.firstUpdated();
-        await this.getItems();
+        this.dataSource = new DataSource(this, await DataSet.getDataSet())
     }
 }
 
-customElements.define("my-cities-section-1", MyCitiesSection1);
+customElements.define("my-cities-section-1", MyCitiesSection1)

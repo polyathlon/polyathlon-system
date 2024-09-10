@@ -15,7 +15,7 @@ class MyCountriesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Array, default: []},
+            dataSource: {type: Object, default: null},
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
@@ -119,7 +119,7 @@ class MyCountriesSection1 extends BaseElement {
                 country-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
-                
+
                 country-button:hover {
                     background: rgba(255, 255, 255, 0.1)
                 }
