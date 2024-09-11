@@ -46,7 +46,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
         this.buttons = [
             {iconName: 'house-sharp-solid', title: 'Home', page: 'home-page', click: () => this.showPage('')},
             {iconName: 'user', title: 'Profile', page: 'my-profile', click: () => this.showPage('my-profile')},
-            {iconName: 'square-list-sharp-solid', page: 'my-projects', title: 'Project', click: () => this.showPage('my-projects')},
+            {iconName: 'square-list-sharp-solid', page: 'my-competition-types', title: 'Project', click: () => this.showPage('my-competition-types')},
             {iconName: 'earth-americas-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
             {iconName: 'city-solid', page: 'my-cities', title: 'City', click: () => this.showPage('my-cities')},
             {iconName: 'judge-solid', page: 'my-cities', title: 'City', click: () => this.showPage('my-cities')},
