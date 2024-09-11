@@ -12,18 +12,18 @@ export default class DataSource {
     }
 
     getCurrentItem(){
-        const item = sessionStorage.getItem('currentReferee-categories')
+        const item = sessionStorage.getItem('currentRefereeCategories')
         if (item) {
             return this.items.find(p => p._id === item)
         }
         else {
-            sessionStorage.setItem('currentReferee-categories', this.items[0]._id)
+            sessionStorage.setItem('currentRefereeCategories', this.items[0]?._id)
             return this.items?.[0]
         }
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentReferee-categories', item._id)
+        sessionStorage.setItem('currentRefereeCategories', item._id)
         this.component.currentItem = item;
     }
 

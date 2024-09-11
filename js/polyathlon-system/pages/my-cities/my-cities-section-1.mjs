@@ -87,6 +87,8 @@ class MyCitiesSection1 extends BaseElement {
                 }
 
                 .right-layout {
+                    overflow-y: auto;
+                    overflow-x: hidden;
                     grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
@@ -94,7 +96,7 @@ class MyCitiesSection1 extends BaseElement {
                     align-items: center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    overflow: hidden;
+                    /* overflow: hidden; */
                     gap: 10px;
                 }
 
@@ -123,6 +125,22 @@ class MyCitiesSection1 extends BaseElement {
 
                 country-button:hover {
                     background: rgba(255, 255, 255, 0.1)
+                }
+                 /* width */
+                 ::-webkit-scrollbar {
+                    width: 10px;
+                }
+
+                /* Track */
+                ::-webkit-scrollbar-track {
+                    box-shadow: inset 0 0 5px grey;
+                    border-radius: 5px;
+                }
+
+                /* Handle */
+                ::-webkit-scrollbar-thumb {
+                    background: red;
+                    border-radius: 5px;
                 }
             `
         ]

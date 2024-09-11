@@ -24,6 +24,11 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
         }
     }
 
+    constructor(){
+        super()
+        this.isListFocus = false;
+    }
+
     static get styles() {
         return [
             styles,
@@ -31,8 +36,33 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             css`
                 :host {
                     display: inline-block;
+                    position: relative;
                     width: 100%;
                     color: var(--form-input-color, gray);
+                }
+                .options-list {
+                    padding: 0 8px;
+                    position: absolute;
+                    bottom: -12px;
+                    box-sizing: border-box;
+                    width: calc(100% + 2px);
+                    border-radius: 12px;
+                    z-index: 999;
+                    background: var(--control-overlay-bg, white);
+                    color: var(--text-primary, black);
+                    overflow: hidden;
+                    transition: opacity .2s ease-in-out,border .2s ease-in-out;
+                    transform: translateY(100%);
+                    box-shadow: var(--shadow-overlay, 10px 5px 5px black);
+                    display: flex;
+                    flex-direction: column;
+                }
+                country-button {
+                    height: 40px;
+                    border-radius: 10px;
+                }
+                country-button:hover {
+                    background-color: red;
                 }
             `
         ]
@@ -89,11 +119,10 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                 <input type=${this.type}
                     placeholder=${this.placeholder || nothing}
                     ${this.required ? 'required' : ''}
-                    .value=${this.value || ''}
+                    .value=${this.value?.name || ''}
                     @input=${this.changeValue}
                     @focus=${this.changeFocus}
-
-
+                    @blur=${this.changeBlur}
                 >
                 ${this.iconName ? this.#icon : ''}
                 ${this.buttonName ? this.#button : ''}
@@ -104,18 +133,20 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
 
     get #list() {
       return html`
-        ${this.dataSource?.items?.map((item, index) =>
-          html `
-            <country-button
-              label=${item.name}
-              title=${item._id}
-              .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
-              .status=${this.statusDataSet?.get(item._id)}
-              ?selected=${this.currentItem === item}
-              @click=${() => this.selectItem(index, item._id)}
-            >
-            </country-button>
-      `)}
+        <div class="options-list" @mouseenter=${this.listInFocus} @mouseleave=${this.listOutFocus}>
+            ${this.dataSource?.items?.map((item, index) =>
+                html `
+                    <country-button
+                        label=${item.name}
+                        title=${item._id}
+                        .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
+                        .status=${this.statusDataSet?.get(item._id)}
+                        ?selected=${this.currentItem === item}
+                        @click=${() => this.selectItem(index, item)}
+                    >
+                    </country-button>
+            `)}
+        </div>
       `
     }
 
@@ -124,14 +155,35 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
     }
 
     changeValue(e) {
-        this.value = e.target.value;
+        this.dataSource?.items?.map((item, index) =>{}
+    )
+        // this.value = e.target.value;
     }
 
     changeFocus(e) {
       this.isFocus = true;
     }
 
-    selectItem(index, indexId) {
-        alert(index)
+    changeBlur(e) {
+        if (this.isListFocus)
+            return
+        this.isFocus = false;
     }
+
+    selectItem(index, item) {
+
+        this.isFocus = false;
+        this.isListFocus = false;
+        this.value = item;
+        this.fire('input')
+    }
+
+    listInFocus() {
+        this.isListFocus = true;
+    }
+
+    listOutFocus(){
+        this.isListFocus = false;
+    }
+
 });

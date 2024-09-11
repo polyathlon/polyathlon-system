@@ -38,7 +38,7 @@ export default class DataSet {
 
     static fetchAddItem(token) {
         const newItem = {name: "Новая страна"}
-        return fetch(`https://localhost:4500/api/referee-categories`, {
+        return fetch(`https://localhost:4500/api/referee-category`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -71,7 +71,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/referee-categories/${itemId}`, {
+        return fetch(`https://localhost:4500/api/referee-category/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -97,7 +97,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/referee-categories/${item._id}`, {
+        return fetch(`https://localhost:4500/api/referee-category/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -130,7 +130,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/referee-categories/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/referee-category/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`

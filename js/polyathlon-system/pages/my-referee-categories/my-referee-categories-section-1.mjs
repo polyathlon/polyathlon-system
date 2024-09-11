@@ -130,7 +130,7 @@ class MyRefereeCategoriesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Country property']
+        this.pageNames = ['Referee categories property']
         this.oldValues = new Map();
     }
 
@@ -141,7 +141,7 @@ class MyRefereeCategoriesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCountryItem')) {
+        if (changedProps.has('currentRefereeCategoriesItem')) {
             this.currentPage = 0;
         }
     }
@@ -184,14 +184,14 @@ class MyRefereeCategoriesSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Country ${this.currentItem?.name}</p></header>
+            <header id="competition-header"><p>Referee categories: ${this.currentItem?.name}</p></header>
             <header id="property-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.dataSource?.items?.map((item, index) =>
                     html `<country-button
                                 label=${item.name}
                                 title=${item._id}
-                                .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
+                                .logotype='/images/home/project-avatar.svg'
                                 .status=${this.statusDataSet.get(item._id)}
                                 ?selected=${this.currentItem === item}
                                 @click=${() => this.showItem(index, item._id)}
