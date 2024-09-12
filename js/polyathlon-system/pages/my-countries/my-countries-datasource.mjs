@@ -17,7 +17,7 @@ export default class DataSource {
             return this.items.find(p => p._id === item)
         }
         else {
-            sessionStorage.setItem('currentCountry', this.items[0]._id)
+            sessionStorage.setItem('currentCountry', this.items[0]?._id)
             return this.items?.[0]
         }
     }

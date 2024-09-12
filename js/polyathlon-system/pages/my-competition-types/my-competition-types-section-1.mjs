@@ -4,7 +4,7 @@ import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/project-button.mjs'
+import '../../../../components/buttons/country-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import './my-competition-types-section-1-page-1.mjs'
 import DataSet from './my-competition-types-dataset.mjs'
@@ -80,7 +80,7 @@ class MyCompetitionTypesSection1 extends BaseElement {
                     background: var(--layout-background-color);
                 }
 
-                .left-layout project-button {
+                .left-layout country-button {
                     width: 100%;
                     height: 40px;
                 }
@@ -116,11 +116,11 @@ class MyCompetitionTypesSection1 extends BaseElement {
                     height: 40px;
                 }
 
-                project-button[selected] {
+                country-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                project-button:hover {
+                country-button:hover {
                     background: rgba(255, 255, 255, 0.1)
                 }
             `
@@ -130,7 +130,7 @@ class MyCompetitionTypesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Competition Type property']
+        this.pageNames = ['Competition types property']
         this.oldValues = new Map();
     }
 
@@ -141,7 +141,7 @@ class MyCompetitionTypesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCompetitionTypeItem')) {
+        if (changedProps.has('currentCompetitionTypesItem')) {
             this.currentPage = 0;
         }
     }
@@ -184,11 +184,11 @@ class MyCompetitionTypesSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Competition Type ${this.currentItem?.name}</p></header>
+            <header id="competition-header"><p>Competition types ${this.currentItem?.name}</p></header>
             <header id="property-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.dataSource?.items?.map((item, index) =>
-                    html `<project-button
+                    html `<country-button
                                 label=${item.name}
                                 title=${item._id}
                                 .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
@@ -196,7 +196,7 @@ class MyCompetitionTypesSection1 extends BaseElement {
                                 ?selected=${this.currentItem === item}
                                 @click=${() => this.showItem(index, item._id)}
                             >
-                            </project-button>
+                            </country-button>
                 `)}
             </div>
             <div class="right-layout">
