@@ -46,7 +46,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
         this.buttons = [
             {iconName: 'house-sharp-solid', title: 'Home', page: 'home-page', click: () => this.showPage('')},
             {iconName: 'user', title: 'Profile', page: 'my-profile', click: () => this.showPage('my-profile')},
-            {iconName: 'square-list-sharp-solid', page: 'my-competition-types', title: 'Project', click: () => this.showPage('my-competition-types')},
+            {iconName: 'square-list-sharp-solid', page: 'my-competition-types', title: 'Competition Types', click: () => this.showPage('my-competition-types')},
             {iconName: 'earth-americas-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
             {iconName: 'city-solid', page: 'my-cities', title: 'City', click: () => this.showPage('my-cities')},
             {iconName: 'judge-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
@@ -58,6 +58,8 @@ class PolyathlonSystemLeftAside extends BaseElement {
             {iconName: 'chart-pie-simple-circle-dollar-solid', page: 'tariff-plans', title: 'Tariff Plans', click: () => this.showPage('tariff-plans')},
             {iconName: 'bell-sharp-solid', page: 'my-notifications', title: 'Notifications', blink: 1, click: () => this.showPage('my-notifications')},
             {iconName: 'settings-solid', page: 'my-settings', title: 'Settings', click: () => this.showPage('my-settings')},
+            {iconName: 'square-list-sharp-solid', page: 'my-competition-kinds', title: 'Competition Kinds', click: () => this.showPage('my-competition-kinds')},
+
         ]
     }
 
