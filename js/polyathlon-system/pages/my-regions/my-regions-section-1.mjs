@@ -5,19 +5,17 @@ import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/country-button.mjs'
-import '../../../../components/buttons/project-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
-
-import './my-referees-section-1-page-1.mjs'
+import './my-regions-section-1-page-1.mjs'
+import DataSet from './my-regions-dataset.mjs'
+import DataSource from './my-regions-datasource.mjs'
 // import './my-competitions-section-1-page-2.mjs'
-import DataSet from './my-referees-dataset.mjs'
-import DataSource from './my-referees-datasource.mjs'
 
-class MyRefereesSection1 extends BaseElement {
+class MyRegionsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Array, default: []},
+            dataSource: {type: Object, default: null},
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
@@ -82,16 +80,12 @@ class MyRefereesSection1 extends BaseElement {
                     background: var(--layout-background-color);
                 }
 
-                .left-layout country-button,
-                .left-layout project-button
-                {
+                .left-layout country-button {
                     width: 100%;
                     height: 40px;
                 }
 
                 .right-layout {
-                    overflow-y: auto;
-                    overflow-x: hidden;
                     grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
@@ -99,7 +93,7 @@ class MyRefereesSection1 extends BaseElement {
                     align-items: center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    /* overflow: hidden; */
+                    overflow: hidden;
                     gap: 10px;
                 }
 
@@ -122,32 +116,12 @@ class MyRefereesSection1 extends BaseElement {
                     height: 40px;
                 }
 
-                country-button[selected],
-                project-button[selected]
-                {
+                country-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                country-button:hover,
-                project-button:hover
-                {
+                country-button:hover {
                     background: rgba(255, 255, 255, 0.1)
-                }
-                 /* width */
-                 ::-webkit-scrollbar {
-                    width: 10px;
-                }
-
-                /* Track */
-                ::-webkit-scrollbar-track {
-                    box-shadow: inset 0 0 5px grey;
-                    border-radius: 5px;
-                }
-
-                /* Handle */
-                ::-webkit-scrollbar-thumb {
-                    background: red;
-                    border-radius: 5px;
                 }
             `
         ]
@@ -156,7 +130,7 @@ class MyRefereesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Referee property']
+        this.pageNames = ['Country property']
         this.oldValues = new Map();
     }
 
@@ -167,7 +141,7 @@ class MyRefereesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRefereeItem')) {
+        if (changedProps.has('currentCountryItem')) {
             this.currentPage = 0;
         }
     }
@@ -193,13 +167,13 @@ class MyRefereesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-referees-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-referees-section-1-page-1>
+            <my-regions-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-regions-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-referees-section-1-page-2 .item=${this.currentItem}></my-referees-section-1-page-2>
+            <my-regions-section-1-page-2 .item=${this.currentItem}></my-regions-section-1-page-2>
         `;
     }
 
@@ -210,19 +184,19 @@ class MyRefereesSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Referee</p></header>
+            <header id="competition-header"><p>Country ${this.currentItem?.name}</p></header>
             <header id="property-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.dataSource?.items?.map((item, index) =>
-                    html `<project-button
-                                label=${item.lastName}
+                    html `<country-button
+                                label=${item.name}
                                 title=${item._id}
                                 .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
-                                .status=${item.category}
+                                .status=${this.statusDataSet.get(item._id)}
                                 ?selected=${this.currentItem === item}
                                 @click=${() => this.showItem(index, item._id)}
                             >
-                            </project-button>
+                            </country-button>
                 `)}
             </div>
             <div class="right-layout">
@@ -282,4 +256,4 @@ class MyRefereesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-referees-section-1", MyRefereesSection1)
+customElements.define("my-regions-section-1", MyRegionsSection1);
