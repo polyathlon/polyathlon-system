@@ -100,8 +100,11 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
 
     get #status() {
         return html`
-            <div class="status">
-                <h2>${this.status?.name}</h2>
+            <div class="status" title=${
+                (new Date(+this.status?.timestamp)).toLocaleTimeString([],{ hour: "2-digit", minute: "2-digit", second: "2-digit" })
+            }>
+                <simple-icon icon-name=${this.status?.status.toLowerCase()+'-status'} scale="0.9"></simple-icon>
+                <h2>${this.status?.status}</h2>
             </div>
         `
     }
