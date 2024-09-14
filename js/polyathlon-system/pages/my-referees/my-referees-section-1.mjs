@@ -191,6 +191,10 @@ class MyRefereesSection1 extends BaseElement {
         ]
     }
 
+    showPage(page) {
+        location.hash = page;
+    }
+    
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
