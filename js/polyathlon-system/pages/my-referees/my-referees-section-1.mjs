@@ -1,4 +1,4 @@
-import { BaseElement, html, css, cache } from '../../../base-element.mjs'
+import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
 import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
@@ -7,6 +7,7 @@ import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/country-button.mjs'
 import '../../../../components/buttons/project-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
+import '../../../../components/buttons/aside-button.mjs';
 
 import './my-referees-section-1-page-1.mjs'
 // import './my-competitions-section-1-page-2.mjs'
@@ -41,7 +42,7 @@ class MyRefereesSection1 extends BaseElement {
                     grid-template-areas:
                         "header1 header2"
                         "sidebar content"
-                        "footer  footer";
+                        "footer1  footer2";
                     gap: 0 20px;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
@@ -96,7 +97,7 @@ class MyRefereesSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: center;
+                    align-items: flex-start;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
@@ -109,8 +110,16 @@ class MyRefereesSection1 extends BaseElement {
                     overflow-wrap: break-word;
                 }
 
-                footer {
-                    grid-area: footer;
+                .left-footer {
+                    grid-area: footer1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    gap: 10px;
+                }
+
+                .right-footer {
+                    grid-area: footer2;
                     display: flex;
                     align-items: center;
                     justify-content: end;
@@ -118,9 +127,26 @@ class MyRefereesSection1 extends BaseElement {
                     gap: 10px;
                 }
 
-                footer simple-button {
-                    height: 40px;
+                .left-footer nav{
+                    background-color: rgba(255, 255, 255, 0.1);
+                    width: 100%;
+                    height: 70%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    /* padding-right: 10px; */
+                    gap: 10px;
                 }
+
+                .right-footer {
+                    simple-button {
+                        height: 36px;
+                        &:hover {
+                            background-color: red;
+                        }
+                    }
+                }
+
 
                 country-button[selected],
                 project-button[selected]
@@ -132,6 +158,7 @@ class MyRefereesSection1 extends BaseElement {
                 project-button:hover
                 {
                     background: rgba(255, 255, 255, 0.1)
+
                 }
                  /* width */
                  ::-webkit-scrollbar {
@@ -158,6 +185,10 @@ class MyRefereesSection1 extends BaseElement {
         this.statusDataSet = new Map()
         this.pageNames = ['Referee property']
         this.oldValues = new Map();
+        this.buttons = [
+            {iconName: 'city-solid', page: 'my-cities', title: 'City', click: () => this.showPage('my-cities')},
+            {iconName: 'judge-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
+        ]
     }
 
     update(changedProps) {
@@ -207,28 +238,45 @@ class MyRefereesSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
+    get #list() {
+        return html`
+            ${this.dataSource?.items?.map((item, index) =>
+                html `<project-button
+                        label=${item.lastName}
+                        title=${item._id}
+                        .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
+                        .status=${item.category}
+                        ?selected=${this.currentItem === item}
+                        @click=${() => this.showItem(index, item._id)}
+                    >
+                    </project-button>
+            `)}
+        `
+    }
+
+    get #task() {
+        return html`
+            <nav>${this.buttons.map((button, index) =>
+                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
+            </nav>
+        `
+    }
+
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
             <header id="competition-header"><p>Referee</p></header>
             <header id="property-header">${this.#pageName}</header>
             <div class="left-layout">
-                ${this.dataSource?.items?.map((item, index) =>
-                    html `<project-button
-                                label=${item.lastName}
-                                title=${item._id}
-                                .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
-                                .status=${item.category}
-                                ?selected=${this.currentItem === item}
-                                @click=${() => this.showItem(index, item._id)}
-                            >
-                            </project-button>
-                `)}
+                ${this.#list}
             </div>
             <div class="right-layout">
                 ${this.#page()}
             </div>
-            <footer>
+            <footer class="left-footer">
+                ${this.#task}
+            </footer>
+            <footer class="right-footer">
                 <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
                 <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
             </footer>
