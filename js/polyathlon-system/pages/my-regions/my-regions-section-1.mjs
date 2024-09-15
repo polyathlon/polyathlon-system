@@ -123,7 +123,7 @@ class MyRegionsSection1 extends BaseElement {
                 country-button:hover {
                     background: rgba(255, 255, 255, 0.1)
                 }
-                
+
                 /* width */
                 ::-webkit-scrollbar {
                     width: 10px;
@@ -148,7 +148,7 @@ class MyRegionsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Country property']
+        this.pageNames = ['Region property']
         this.oldValues = new Map();
     }
 
@@ -159,7 +159,7 @@ class MyRegionsSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCountryItem')) {
+        if (changedProps.has('currentRegionItem')) {
             this.currentPage = 0;
         }
     }
@@ -202,7 +202,7 @@ class MyRegionsSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Country ${this.currentItem?.name}</p></header>
+            <header id="competition-header"><p>Region ${this.currentItem?.name}</p></header>
             <header id="property-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.dataSource?.items?.map((item, index) =>

@@ -31,6 +31,7 @@ class MyRefereeCategoriesSection1Page1 extends BaseElement {
         return html`
             <div>
                 <simple-input id="name" icon-name="judge-solid" label="Referee category:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="short-name" icon-name="judge-solid" label="Category short name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

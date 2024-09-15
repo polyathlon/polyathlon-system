@@ -49,7 +49,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
             {iconName: 'square-list-sharp-solid', page: 'my-competition-types', title: 'Competition Types', click: () => this.showPage('my-competition-types')},
             {iconName: 'earth-americas-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
             {iconName: 'city-solid', page: 'my-cities', title: 'City', click: () => this.showPage('my-cities')},
-            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
+            {iconName: 'regions-solid', page: 'my-regions', title: 'Region', click: () => this.showPage('my-regions')},
             {iconName: 'judge1-solid', page: 'my-referees', title: 'Referees', click: () => this.showPage('my-referees')},
             // {name: 'square-list-sharp-solid', title: 'Project', click: () => this.showPage('my-projects')},
             // {name: 'chart-pie-simple-circle-dollar-solid', title: 'tariff plan', click: () => this.showPage('traffic-plan')},

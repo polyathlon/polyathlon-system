@@ -186,7 +186,7 @@ class MyRefereesSection1 extends BaseElement {
         this.pageNames = ['Referee property']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'city-solid', page: 'my-cities', title: 'City', click: () => this.showPage('my-cities')},
+            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-categories')},
             {iconName: 'judge-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
         ]
     }
@@ -194,7 +194,7 @@ class MyRefereesSection1 extends BaseElement {
     showPage(page) {
         location.hash = page;
     }
-    
+
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;

@@ -159,8 +159,7 @@ class MyRegionsSection1Page1 extends BaseElement {
     render() {
         return html`
             <div>
-                <simple-input id="name" icon-name="user" label="Country name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="flag" icon-name="flag-solid" label="Flag name:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="regions-solid" label="Region name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
