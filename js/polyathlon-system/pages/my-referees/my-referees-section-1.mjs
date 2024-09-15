@@ -186,7 +186,7 @@ class MyRefereesSection1 extends BaseElement {
         this.pageNames = ['Referee property']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-categories')},
+            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
             {iconName: 'judge-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
         ]
     }

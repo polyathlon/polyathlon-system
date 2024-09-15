@@ -30,7 +30,7 @@ class MyRefereePositionsSection1Page1 extends BaseElement {
     render() {
         return html`
             <div>
-                <simple-input id="name" icon-name="judge-solid" label="Referee position:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="referee-solid" label="Referee position:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
