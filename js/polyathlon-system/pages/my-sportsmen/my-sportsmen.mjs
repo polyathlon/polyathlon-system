@@ -1,9 +1,9 @@
 import { BaseElement, html, css} from '../../../base-element.mjs'
 
-import './my-competitions-section-1.mjs';
+import './my-sportsmen-section-1.mjs';
 import '../../../../components/buttons/aside-button.mjs';
 
-class MyCompetitions extends BaseElement {
+class MySportsmen extends BaseElement {
     static get styles() {
         return [
             css`
@@ -33,9 +33,9 @@ class MyCompetitions extends BaseElement {
 
     render() {
         return html`
-            <my-competitions-section-1></my-competitions-section-1>
+            <my-sportsmen-section-1></my-sportsmen-section-1>
         `;
     }
 }
 
-customElements.define("my-competitions", MyCompetitions);
+customElements.define("my-sportsmen", MySportsmen);

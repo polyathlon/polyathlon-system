@@ -46,19 +46,17 @@ class PolyathlonSystemLeftAside extends BaseElement {
         this.buttons = [
             {iconName: 'house-sharp-solid', title: 'Home', page: 'home-page', click: () => this.showPage('')},
             {iconName: 'user', title: 'Profile', page: 'my-profile', click: () => this.showPage('my-profile')},
-            {iconName: 'square-list-sharp-solid', page: 'my-competition-types', title: 'Competition Types', click: () => this.showPage('my-competition-types')},
-            {iconName: 'earth-americas-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
-            {iconName: 'city-solid', page: 'my-cities', title: 'City', click: () => this.showPage('my-cities')},
-            {iconName: 'regions-solid', page: 'my-regions', title: 'Region', click: () => this.showPage('my-regions')},
             {iconName: 'judge1-solid', page: 'my-referees', title: 'Referees', click: () => this.showPage('my-referees')},
+            {iconName: 'sportsmen-solid', page: 'my-sportsmen', title: 'Sportsmen', click: () => this.showPage('my-sportsmen')},
+            {iconName: 'competition-solid', page: 'my-competitions', title: 'Copmetition', click: () => this.showPage('my-competitions')},
             // {name: 'square-list-sharp-solid', title: 'Project', click: () => this.showPage('my-projects')},
             // {name: 'chart-pie-simple-circle-dollar-solid', title: 'tariff plan', click: () => this.showPage('traffic-plan')},
             // {name: 'download-file', title: 'Download File', click: () => this.showPage('my-projects')},
             // {name: 'credit-card', title: 'Tariff Plans', click: () => this.showPage('tariff-plans')},
-            {iconName: 'chart-pie-simple-circle-dollar-solid', page: 'tariff-plans', title: 'Tariff Plans', click: () => this.showPage('tariff-plans')},
+            {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
+            // {iconName: 'chart-pie-simple-circle-dollar-solid', page: 'tariff-plans', title: 'Tariff Plans', click: () => this.showPage('tariff-plans')},
             {iconName: 'bell-sharp-solid', page: 'my-notifications', title: 'Notifications', blink: 1, click: () => this.showPage('my-notifications')},
             {iconName: 'settings-solid', page: 'my-settings', title: 'Settings', click: () => this.showPage('my-settings')},
-            {iconName: 'square-list-sharp-solid', page: 'my-competition-kinds', title: 'Competition Kinds', click: () => this.showPage('my-competition-kinds')},
 
         ]
     }

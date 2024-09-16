@@ -8,6 +8,7 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
             label: { type: String, default: '' },
             name: { type: String, default: '', isIcon: true },
             avatar: { type: String, default: '/images/home/project-avatar.svg' },
+            iconName: { type: String, default: '', attribute: 'icon-name'},
             project: {type: Object, default: null},
             status: {type: Object, default: null},
         }
@@ -29,7 +30,7 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
                     width: 100%;
                     height: 100%;
                     align-items: center;
-                    gap: 10px;
+                    gap: 5px;
                 }
                 .content {
                     display: flex;
@@ -39,6 +40,9 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
                 }
                 .avatar {
                     position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     height: 100%;
                     aspect-ratio: 1 / 1;
                     margin-left: 2px;
@@ -74,20 +78,28 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
                     height: 100%;
                     aspect-ratio: 1 / 1;
                 }
+                simple-icon {
+                    display: block;
+                    line-height: 0;
+                    border-radius: 50%;
+                    position: relative;
+                    height: 70%;
+                    aspect-ratio: 1 / 1;
+                }
                 .status {
                     display: flex;
                     align-items: center;
                     gap: 5px
                 }
-                simple-icon {
-                    width: 1rem;
-                    height: 1rem;
-                    background-color: red;
-                    border-radius: 50%;
-                }
-            `
+                `
         ];
     }
+    // /* simple-icon {
+    //     width: 1rem;
+    //     height: 1rem;
+    //     background-color: red;
+    //     border-radius: 50%;
+    // } */
 
     constructor() {
         super()
@@ -106,11 +118,23 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
         `
     }
 
+    get #icon() {
+        return html`
+            <simple-icon class="icon" icon-name=${this.iconName}></simple-icon>
+        `
+    }
+
+    get #image() {
+        return html`
+            <img src=${this.avatar || '/images/home/project-avatar.svg'} alt="Логотип проекта" />
+        `
+    }
+
     render() {
         return html`
             <div class="container">
                 <div class="avatar">
-                    <img src=${this.avatar || '/images/home/project-avatar.svg'} alt="Логотип проекта" />
+                    ${this.iconName ? this.#icon : this.#image}
                 </div>
                 <div class="content">
                     <h1>${this.label}</h1>

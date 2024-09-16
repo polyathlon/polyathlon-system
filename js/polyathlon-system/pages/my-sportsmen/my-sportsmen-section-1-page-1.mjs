@@ -5,7 +5,7 @@ import '../../../../components/selects/simple-select.mjs'
 import CountryDataSource from '../my-countries/my-countries-datasource.mjs'
 import CountryDataset from '../my-countries/my-countries-dataset.mjs'
 
-class MyCompetitionsSection1Page1 extends BaseElement {
+class MySportsmenSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -71,4 +71,4 @@ class MyCompetitionsSection1Page1 extends BaseElement {
 
 }
 
-customElements.define("my-competitions-section-1-page-1", MyCompetitionsSection1Page1);
+customElements.define("my-sportsmen-section-1-page-1", MySportsmenSection1Page1);

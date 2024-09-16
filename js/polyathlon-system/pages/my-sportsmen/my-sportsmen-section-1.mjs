@@ -1,20 +1,18 @@
-import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
+import { BaseElement, html, css, cache } from '../../../base-element.mjs'
 
 import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/country-button.mjs'
-import '../../../../components/buttons/project-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
-import '../../../../components/buttons/aside-button.mjs';
 
-import './my-referees-section-1-page-1.mjs'
-// import './my-competitions-section-1-page-2.mjs'
-import DataSet from './my-referees-dataset.mjs'
-import DataSource from './my-referees-datasource.mjs'
+import './my-sportsmen-section-1-page-1.mjs'
+// import './my-sportsmen-section-1-page-2.mjs'
+import DataSet from './my-sportsmen-dataset.mjs'
+import DataSource from './my-sportsmen-datasource.mjs'
 
-class MyRefereesSection1 extends BaseElement {
+class MySportsmenSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -42,7 +40,7 @@ class MyRefereesSection1 extends BaseElement {
                     grid-template-areas:
                         "header1 header2"
                         "sidebar content"
-                        "footer1  footer2";
+                        "footer  footer";
                     gap: 0 20px;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
@@ -83,9 +81,7 @@ class MyRefereesSection1 extends BaseElement {
                     background: var(--layout-background-color);
                 }
 
-                .left-layout country-button,
-                .left-layout project-button
-                {
+                .left-layout country-button {
                     width: 100%;
                     height: 40px;
                 }
@@ -97,7 +93,7 @@ class MyRefereesSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: flex-start;
+                    align-items: center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
@@ -110,16 +106,8 @@ class MyRefereesSection1 extends BaseElement {
                     overflow-wrap: break-word;
                 }
 
-                .left-footer {
-                    grid-area: footer1;
-                    display: flex;
-                    align-items: center;
-                    justify-content: end;
-                    gap: 10px;
-                }
-
-                .right-footer {
-                    grid-area: footer2;
+                footer {
+                    grid-area: footer;
                     display: flex;
                     align-items: center;
                     justify-content: end;
@@ -127,38 +115,16 @@ class MyRefereesSection1 extends BaseElement {
                     gap: 10px;
                 }
 
-                .left-footer nav{
-                    background-color: rgba(255, 255, 255, 0.1);
-                    width: 100%;
-                    height: 70%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    /* padding-right: 10px; */
-                    gap: 10px;
+                footer simple-button {
+                    height: 40px;
                 }
 
-                .right-footer {
-                    simple-button {
-                        height: 36px;
-                        &:hover {
-                            background-color: red;
-                        }
-                    }
-                }
-
-
-                country-button[selected],
-                project-button[selected]
-                {
+                country-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                country-button:hover,
-                project-button:hover
-                {
+                country-button:hover {
                     background: rgba(255, 255, 255, 0.1)
-
                 }
                  /* width */
                  ::-webkit-scrollbar {
@@ -183,21 +149,8 @@ class MyRefereesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Referee property']
+        this.pageNames = ['Competition property']
         this.oldValues = new Map();
-        this.buttons = [
-            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
-            {iconName: 'judge-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
-            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
-        ]
-    }
-
-    showPage(page) {
-        location.hash = page;
-    }
-
-    gotoBack(page) {
-        history.back();
     }
 
     update(changedProps) {
@@ -207,7 +160,7 @@ class MyRefereesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRefereeItem')) {
+        if (changedProps.has('currentCompetitionItem')) {
             this.currentPage = 0;
         }
     }
@@ -233,13 +186,13 @@ class MyRefereesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-referees-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-referees-section-1-page-1>
+            <my-sportsmen-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-sportsmen-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-referees-section-1-page-2 .item=${this.currentItem}></my-referees-section-1-page-2>
+            <my-sportsmen-section-1-page-2 .item=${this.currentItem}></my-sportsmen-section-1-page-2>
         `;
     }
 
@@ -247,45 +200,28 @@ class MyRefereesSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    get #list() {
-        return html`
-            ${this.dataSource?.items?.map((item, index) =>
-                html `<project-button
-                        label=${item.lastName}
-                        title=${item._id}
-                        icon-name="judge1-solid"
-                        .status=${item.category}
-                        ?selected=${this.currentItem === item}
-                        @click=${() => this.showItem(index, item._id)}
-                    >
-                    </project-button>
-            `)}
-        `
-    }
-
-    get #task() {
-        return html`
-            <nav>${this.buttons.map((button, index) =>
-                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
-            </nav>
-        `
-    }
-
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Referee</p></header>
+            <header id="competition-header"><p>Competition ${this.currentItem?.name}</p></header>
             <header id="property-header">${this.#pageName}</header>
             <div class="left-layout">
-                ${this.#list}
+                ${this.dataSource?.items?.map((item, index) =>
+                    html `<country-button
+                                label=${item.name}
+                                title=${item._id}
+                                .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
+                                .status=${this.statusDataSet.get(item._id)}
+                                ?selected=${this.currentItem === item}
+                                @click=${() => this.showItem(index, item._id)}
+                            >
+                            </country-button>
+                `)}
             </div>
             <div class="right-layout">
                 ${this.#page()}
             </div>
-            <footer class="left-footer">
-                ${this.#task}
-            </footer>
-            <footer class="right-footer">
+            <footer>
                 <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
                 <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
             </footer>
@@ -339,4 +275,4 @@ class MyRefereesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-referees-section-1", MyRefereesSection1)
+customElements.define("my-sportsmen-section-1", MySportsmenSection1)
