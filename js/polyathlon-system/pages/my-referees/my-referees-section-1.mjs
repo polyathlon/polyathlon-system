@@ -187,7 +187,7 @@ class MyRefereesSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
-            {iconName: 'judge-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
+            {iconName: 'judge-rank-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }

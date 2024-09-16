@@ -96,7 +96,7 @@ customElements.define('simple-icon', class SimpleIcon extends BaseElement {
                 viewBox=${this.viewBox}
                 width=${this.width || this.size}
                 height=${this.height || this.size}
-                style="transform:rotate(${this.rotate}deg) scale(${this.scale}); width: 100%; height: 100%">
+                style="transform:rotate(${this.rotate}deg) scale(${this.scale}); width: 100%; height: 100%; fill-rule:evenodd;">
                 <g
                     fill=${this.fill || nothing}
                     stroke=${this.stroke}
