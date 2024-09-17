@@ -191,7 +191,7 @@ class MyClubsSection1 extends BaseElement {
                     html `<country-button
                                 label=${item.name}
                                 title=${item._id}
-                                .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
+                                icon-name='club-solid'
                                 .status=${this.statusDataSet.get(item._id)}
                                 ?selected=${this.currentItem === item}
                                 @click=${() => this.showItem(index, item._id)}

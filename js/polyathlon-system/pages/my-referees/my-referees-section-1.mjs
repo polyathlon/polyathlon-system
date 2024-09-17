@@ -237,7 +237,32 @@ class MyRefereesSection1 extends BaseElement {
         const workbook = XLSX.read(await file.arrayBuffer());
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-        raw_data.forEach(r => console.log(r[0],r[1], r[1].l,r[2], r[3], r[4], r[5]));
+        // raw_data.forEach(r => console.log(r[0],r[1], r[2], r[3], r[4], r[5]));
+        <simple-input id="lastName" icon-name="user" label="Referee LastName:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+        <simple-input id="firstName" icon-name="user-group-solid" label="Referee FistName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+        <simple-input id="middleName" icon-name="users-solid" label="Referee MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
+        <simple-select id="category" icon-name="judge-rank-solid" label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+        <simple-input id="order" icon-name="flag-solid" label="Order number:" .value=${this.item?.order} @input=${this.validateInput}></simple-input>
+        <simple-input id="orderLink" icon-name="flag-solid" label="Order link:" .value=${this.item?.orderLink} @input=${this.validateInput}></simple-input>
+        raw_data.forEach( (r, index) => {
+            if (index !== 0) {
+                const newItem = {
+                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
+                    firstName: r[1].split(' ')[1],
+                    middleName: r[1].split(' ')[2],
+                    category: {
+                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
+                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
+                        "name": "Судья всероссийской категории",
+                        "owner": "01J6VY01Y135G76YA7NB6HXXX8",
+                        "short-name": "ВК"
+                      },
+                      
+                }
+                this.dataSource.addItem(newItem);
+                console.log(r[0],r[1])
+            }
+        });
     }
 
     update(changedProps) {

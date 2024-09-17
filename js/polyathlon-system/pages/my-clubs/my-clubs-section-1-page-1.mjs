@@ -73,6 +73,8 @@ class MyClubsSection1Page1 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.countryDataSource = new CountryDataSource(this, await CountryDataset.getDataSet())
+        this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
+        this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }
 }
 

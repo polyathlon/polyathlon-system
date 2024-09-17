@@ -139,7 +139,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                     <country-button
                         label=${item.name}
                         title=${item._id}
-                        .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
+                        icon-name=${this.iconName}
                         .status=${this.statusDataSet?.get(item._id)}
                         ?selected=${this.currentItem === item}
                         @click=${() => this.selectItem(index, item)}
