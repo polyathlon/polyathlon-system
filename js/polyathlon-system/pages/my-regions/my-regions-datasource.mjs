@@ -24,12 +24,12 @@ export default class DataSource {
 
     setCurrentItem(item) {
         sessionStorage.setItem('currentRegion', item._id)
-        this.component.currentItem = item;
+        this.component.currentItem = item
     }
 
-    async addItem() {
-        const item = await DataSet.addItem()
-        this.addTo(item)
+    async addItem(item) {
+        const newItem = await DataSet.addItem(item)
+        this.addTo(newItem)
     }
 
     addTo(item) {

@@ -6,7 +6,10 @@ customElements.define('country-button', class CountryButton extends BaseElement 
     static get properties() {
         return {
             label: { type: String, default: '' },
-            logotype: { type: String, default: '/images/home/project-avatar.svg' },
+            name: { type: String, default: '', isIcon: true },
+            imageName: { type: String, default: '', attribute: 'image-name'},
+            iconName: { type: String, default: 'project-avatar-solid', attribute: 'icon-name'},
+            status: {type: Object, default: null},
         }
     }
 
@@ -26,7 +29,7 @@ customElements.define('country-button', class CountryButton extends BaseElement 
                     width: 100%;
                     height: 100%;
                     align-items: center;
-                    gap: 10px;
+                    gap: 5px;
                 }
                 .content {
                     display: flex;
@@ -34,9 +37,12 @@ customElements.define('country-button', class CountryButton extends BaseElement 
                     flex-direction: column;
 
                 }
-                .logotype {
+                .icon {
                     position: relative;
-                    height: var(--logotype-height, 80%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 80%;
                     aspect-ratio: 1 / 1;
                     margin-left: 2px;
                 }
@@ -72,20 +78,62 @@ customElements.define('country-button', class CountryButton extends BaseElement 
                     aspect-ratio: 1 / 1;
                 }
                 simple-icon {
-                    width: 1rem;
-                    height: 1rem;
-                    background-color: red;
+                    display: block;
+                    line-height: 0;
                     border-radius: 50%;
+                    position: relative;
+                    height: 70%;
+                    aspect-ratio: 1 / 1;
+                }
+                .status {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px
                 }
             `
         ];
+    }
+    // /* simple-icon {
+    //     width: 1rem;
+    //     height: 1rem;
+    //     background-color: red;
+    //     border-radius: 50%;
+    // } */
+
+    // constructor() {
+    //     super()
+    //     this.status = {icon: 'sparkles-regular', text: 'Новый'}
+    // }
+
+    // firstUpdated() {
+    //     super.firstUpdated();
+    // }
+
+    // get #status() {
+    //     return html`
+    //         <div class="status">
+    //             <h2>${this.status?.name}</h2>
+    //         </div>
+    //     `
+    // }
+
+    get #icon() {
+        return html`
+            <simple-icon class="icon" icon-name=${this.iconName}></simple-icon>
+        `
+    }
+
+    get #image() {
+        return html`
+            <img src=${this.imageName} alt="Логотип проекта" />
+        `
     }
 
     render() {
         return html`
             <div class="container">
-                <div class="logotype">
-                    <img src=${this.logotype || '/images/home/project-avatar.svg'} alt="Логотип" />
+                <div class="icon">
+                    ${this.imageName ? this.#image : this.#icon}
                 </div>
                 <div class="content">
                     <h1>${this.label}</h1>

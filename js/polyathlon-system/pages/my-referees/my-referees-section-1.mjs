@@ -18,7 +18,7 @@ class MyRefereesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Array, default: []},
+            dataSource: {type: Object, default: []},
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
@@ -176,6 +176,9 @@ class MyRefereesSection1 extends BaseElement {
                     background: red;
                     border-radius: 5px;
                 }
+                #fileInput {
+                    display: none;
+                }
             `
         ]
     }
@@ -188,6 +191,7 @@ class MyRefereesSection1 extends BaseElement {
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
             {iconName: 'judge-rank-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
@@ -198,6 +202,42 @@ class MyRefereesSection1 extends BaseElement {
 
     gotoBack(page) {
         history.back();
+    }
+
+
+    async getNewFileHandle() {
+        const options = {
+          types: [
+            {
+              description: 'Excel files',
+              accept: {
+                'application/octet-stream': ['.xslx'],
+              },
+            },
+            {
+              description: 'Neural Models',
+              accept: {
+                'application/octet-stream': ['.pkl'],
+              },
+            },
+
+          ],
+        };
+        const handle = await window.showSaveFilePicker(options);
+        return handle;
+    }
+
+
+    ExcelFile() {
+        this.renderRoot.getElementById("fileInput").click();
+    }
+
+    async importFromExcel(e) {
+        const file = e.target.files[0];
+        const workbook = XLSX.read(await file.arrayBuffer());
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+        raw_data.forEach(r => console.log(r[0],r[1], r[1].l,r[2], r[3], r[4], r[5]));
     }
 
     update(changedProps) {
@@ -289,6 +329,7 @@ class MyRefereesSection1 extends BaseElement {
                 <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
                 <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
             </footer>
+            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 

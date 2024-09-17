@@ -7,9 +7,8 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
         return {
             label: { type: String, default: '' },
             name: { type: String, default: '', isIcon: true },
-            avatar: { type: String, default: '/images/home/project-avatar.svg' },
+            imageName: { type: String, default: '', attribute: 'image-name'},
             iconName: { type: String, default: '', attribute: 'icon-name'},
-            project: {type: Object, default: null},
             status: {type: Object, default: null},
         }
     }

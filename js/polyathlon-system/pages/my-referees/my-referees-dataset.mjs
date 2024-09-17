@@ -16,6 +16,8 @@ export default class DataSet {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
+        }).catch(e => {
+            throw new Error(`Ошибка доступа к серверу: ${e.message}`);
         })
     }
 
@@ -36,34 +38,33 @@ export default class DataSet {
         return items
     }
 
-    static fetchAddItem(token) {
-        const newItem = {name: "Новый город"}
+    static fetchAddItem(token, item) {
         return fetch(`https://localhost:4500/api/referee`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json;charset=utf-8'
             },
-            body: JSON.stringify(newItem)
+            body: JSON.stringify(item)
         })
     }
 
-    static async addItem() {
+    static async addItem(item) {
         const token = getToken();
-        let response = await DataSet.fetchAddItem(token)
+        let response = await DataSet.fetchAddItem(token, item)
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchAddItem(token)
+            response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)
         }
 
-        const item = await DataSet.getItem(result.id)
-        DataSet.addToDataset(item)
-        return item
+        const newItem = await DataSet.getItem(result.id)
+        DataSet.addToDataset(newItem)
+        return newItem
     }
 
     static addToDataset(item) {
