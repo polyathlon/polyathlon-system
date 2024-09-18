@@ -244,11 +244,13 @@ class MyRefereesSection1 extends BaseElement {
                     firstName: r[1].split(' ')[1],
                     middleName: r[1].split(' ')[2],
                     category: {
-                            "name": "Судья всероссийской категории",
+                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
+                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
+                        "name": "Судья всероссийской категории",
                     },
                     order: r[5],
-                    orderlink: r[6].l,
-                    personlink: r[7].l,
+                    orderlink: r[6],
+                    personlink: r[7],
                 }
                 this.dataSource.addItem(newItem);
                 console.log(r[0],r[1])
