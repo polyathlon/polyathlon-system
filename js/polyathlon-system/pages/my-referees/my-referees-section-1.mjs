@@ -305,11 +305,24 @@ class MyRefereesSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
+    fio(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName[0]}.`
+        }
+        if (item.middleName) {
+            result += `${item.middleName[0]}.`
+        }
+        return result
+    }
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
                 html `<project-button
-                        label=${item.lastName}
+                        label=${this.fio(item)}
                         title=${item._id}
                         icon-name="judge1-solid"
                         .status=${item.category}
