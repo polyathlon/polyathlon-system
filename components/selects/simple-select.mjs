@@ -13,7 +13,6 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             required: { type: Boolean, default: false},
             label: { type: String, default: '' },
             _useInfo: { type: Boolean, default: false },
-            iconName: { type: String, default: '', attribute: 'icon-name'},
             buttonName: { type: String, default: '', attribute: 'button-name' },
             placeholder: { type: String, default: '' },
             value: { type: String, default: ''},
@@ -21,6 +20,8 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             isFocus: {type: Boolean, default: false},
             dataSource: {type: Object, default: null},
             currentItem: {type: Object, default: null},
+            iconName: { type: String, default: 'project-avatar-solid', attribute: 'icon-name'},
+            imageName: { type: String, default: '', attribute: 'image-name'},
         }
     }
 
@@ -56,17 +57,26 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                     box-shadow: var(--shadow-overlay, 10px 5px 5px black);
                     display: flex;
                     flex-direction: column;
+                    country-button {
+                        height: 40px;
+                        border-radius: 10px;
+                        color: red;
+                    }
+                    country-button:hover {
+                        background-color: red;
+                        color: white;
+                    }
                 }
-                country-button {
-                    height: 40px;
-                    border-radius: 10px;
-                }
-                country-button:hover {
-                    background-color: red;
-                }
-            `
+                `
         ]
     }
+    // /* country-button {
+    //     height: 40px;
+    //     border-radius: 10px;
+    // }
+    // country-button:hover {
+    //     background-color: red;
+    // } */
 
     firstUpdated(setPath = false) {
         super.firstUpdated();
@@ -85,6 +95,11 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
         `
     }
 
+    get #image() {
+        return html`
+            <img src=${this.imageName} alt="Логотип проекта" />
+        `
+    }
     // get value() {
     //     return this._value;
     // }
@@ -124,7 +139,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                     @focus=${this.changeFocus}
                     @blur=${this.changeBlur}
                 >
-                ${this.iconName ? this.#icon : ''}
+                ${this.imageName ? this.#image : this.#icon }
                 ${this.buttonName ? this.#button : ''}
             </div>
             ${this.isFocus ? this.#list : ''}
@@ -140,6 +155,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                         label=${item.name}
                         title=${item._id}
                         icon-name=${this.iconName}
+                        image-name=${item.flag ? 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' : this.imageName}
                         .status=${this.statusDataSet?.get(item._id)}
                         ?selected=${this.currentItem === item}
                         @click=${() => this.selectItem(index, item)}

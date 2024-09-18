@@ -1,4 +1,4 @@
-import { BaseElement, html, css, cache } from '../../../base-element.mjs'
+import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
 import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
@@ -6,6 +6,7 @@ import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/country-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
+import '../../../../components/buttons/aside-button.mjs';
 import './my-clubs-section-1-page-1.mjs'
 import DataSet from './my-clubs-dataset.mjs'
 import DataSource from './my-clubs-datasource.mjs'
@@ -39,7 +40,7 @@ class MyClubsSection1 extends BaseElement {
                     grid-template-areas:
                         "header1 header2"
                         "sidebar content"
-                        "footer  footer";
+                        "footer1  footer2";
                     gap: 0 20px;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
@@ -103,8 +104,16 @@ class MyClubsSection1 extends BaseElement {
                     overflow-wrap: break-word;
                 }
 
-                footer {
-                    grid-area: footer;
+                .left-footer {
+                    grid-area: footer1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    gap: 10px;
+                }
+
+                .right-footer {
+                    grid-area: footer2;
                     display: flex;
                     align-items: center;
                     justify-content: end;
@@ -112,9 +121,26 @@ class MyClubsSection1 extends BaseElement {
                     gap: 10px;
                 }
 
-                footer simple-button {
-                    height: 40px;
+                .left-footer nav{
+                    background-color: rgba(255, 255, 255, 0.1);
+                    width: 100%;
+                    height: 70%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    /* padding-right: 10px; */
+                    gap: 10px;
                 }
+
+                .right-footer {
+                    simple-button {
+                        height: 36px;
+                        &:hover {
+                            background-color: red;
+                        }
+                    }
+                }
+
 
                 country-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
@@ -122,6 +148,26 @@ class MyClubsSection1 extends BaseElement {
 
                 country-button:hover {
                     background: rgba(255, 255, 255, 0.1)
+                }
+
+                /* width */
+                ::-webkit-scrollbar {
+                    width: 10px;
+                }
+
+                /* Track */
+                ::-webkit-scrollbar-track {
+                    box-shadow: inset 0 0 5px grey;
+                    border-radius: 5px;
+                }
+
+                /* Handle */
+                ::-webkit-scrollbar-thumb {
+                    background: red;
+                    border-radius: 5px;
+                }
+                #fileInput {
+                    display: none;
                 }
             `
         ]
@@ -132,6 +178,60 @@ class MyClubsSection1 extends BaseElement {
         this.statusDataSet = new Map()
         this.pageNames = ['Club property']
         this.oldValues = new Map();
+        this.buttons = [
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
+    }
+
+    showPage(page) {
+        location.hash = page;
+    }
+
+    gotoBack(page) {
+        history.back();
+    }
+
+
+    async getNewFileHandle() {
+        const options = {
+          types: [
+            {
+              description: 'Excel files',
+              accept: {
+                'application/octet-stream': ['.xslx'],
+              },
+            },
+            {
+              description: 'Neural Models',
+              accept: {
+                'application/octet-stream': ['.pkl'],
+              },
+            },
+
+          ],
+        };
+        const handle = await window.showSaveFilePicker(options);
+        return handle;
+    }
+
+
+    ExcelFile() {
+        this.renderRoot.getElementById("fileInput").click();
+    }
+
+    async importFromExcel(e) {
+        const file = e.target.files[0];
+        const workbook = XLSX.read(await file.arrayBuffer());
+        const worksheet = workbook.Sheets[workbook.SheetNames[2]];
+        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+        raw_data.forEach( (r, index) => {
+            if (index !== 0) {
+                const newItem = { name: r[1] }
+                this.dataSource.addItem(newItem);
+                console.log(r[0],r[1])
+            }
+        });
     }
 
     update(changedProps) {
@@ -181,31 +281,48 @@ class MyClubsSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    render() {
+    get #list() {
         return html`
-            <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Club ${this.currentItem?.name}</p></header>
-            <header id="property-header">${this.#pageName}</header>
-            <div class="left-layout">
                 ${this.dataSource?.items?.map((item, index) =>
                     html `<country-button
                                 label=${item.name}
                                 title=${item._id}
-                                icon-name='club-solid'
-                                .status=${this.statusDataSet.get(item._id)}
+                                icon-name="club-solid"
                                 ?selected=${this.currentItem === item}
                                 @click=${() => this.showItem(index, item._id)}
                             >
                             </country-button>
                 `)}
+        `
+    }
+
+    get #task() {
+        return html`
+            <nav>${this.buttons.map((button, index) =>
+                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
+            </nav>
+        `
+    }
+
+    render() {
+        return html`
+            <confirm-dialog></confirm-dialog>
+            <header id="competition-header"><p>Region ${this.currentItem?.name}</p></header>
+            <header id="property-header">${this.#pageName}</header>
+            <div class="left-layout">
+                ${this.#list}
             </div>
             <div class="right-layout">
                 ${this.#page()}
             </div>
-            <footer>
+            <footer class="left-footer">
+                ${this.#task}
+            </footer>
+            <footer class="right-footer">
                 <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
                 <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
             </footer>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
@@ -221,7 +338,8 @@ class MyClubsSection1 extends BaseElement {
     }
 
     async addItem() {
-        this.dataSource.addItem();
+        const newItem = { name: "Новый клуб" }
+        this.dataSource.addItem(newItem);
     }
 
     async saveItem() {

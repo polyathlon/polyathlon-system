@@ -27,9 +27,9 @@ export default class DataSource {
         this.component.currentItem = item;
     }
 
-    async addItem() {
-        const item = await DataSet.addItem()
-        this.addTo(item)
+    async addItem(item) {
+        const newItem = await DataSet.addItem(item)
+        this.addTo(newItem)
     }
 
     addTo(item) {
