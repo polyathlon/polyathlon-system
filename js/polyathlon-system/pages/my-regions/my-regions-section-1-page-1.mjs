@@ -160,6 +160,7 @@ class MyRegionsSection1Page1 extends BaseElement {
         return html`
             <div>
                 <simple-input id="name" icon-name="regions-solid" label="Region name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="link" icon-name="regions-solid" label="Link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

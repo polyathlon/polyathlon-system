@@ -229,9 +229,9 @@ class MyRegionsSection1 extends BaseElement {
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
         raw_data.forEach( (r, index) => {
             if (index !== 0) {
-                const newItem = { name: r[1] }
+                const newItem = { name: r[1], link: r[2]}
                 this.dataSource.addItem(newItem);
-                console.log(r[0],r[1])
+                console.log(r[0],r[1],r[2])
             }
         });
     }
