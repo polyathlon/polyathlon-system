@@ -237,7 +237,23 @@ class MyRefereesSection1 extends BaseElement {
         const workbook = XLSX.read(await file.arrayBuffer());
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-        raw_data.forEach(r => console.log(r[0],r[1], r[1].l,r[2], r[3], r[4], r[5]));
+        raw_data.forEach((r, index) => {
+            if(index !== 0){
+                const newItem = {
+                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
+                    firstName: r[1].split(' ')[1],
+                    middleName: r[1].split(' ')[2],
+                    category: {
+                            "name": "Судья всероссийской категории",
+                    },
+                    order: r[5],
+                    orderlink: r[6].l,
+                    personlink: r[7].l,
+                }
+                this.dataSource.addItem(newItem);
+                console.log(r[0],r[1])
+            }
+        });
     }
 
     update(changedProps) {
