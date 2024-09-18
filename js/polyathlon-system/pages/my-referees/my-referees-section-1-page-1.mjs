@@ -42,7 +42,8 @@ class MyRefereesSection1Page1 extends BaseElement {
                 <simple-input id="middleName" icon-name="users-solid" label="Referee MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 <simple-select id="category" icon-name="judge-rank-solid" label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-input id="order" icon-name="flag-solid" label="Order number:" .value=${this.item?.order} @input=${this.validateInput}></simple-input>
-                <simple-input id="orderLink" icon-name="flag-solid" label="Order link:" .value=${this.item?.orderLink} @input=${this.validateInput}></simple-input>
+                <simple-input id="orderlink" icon-name="flag-solid" label="Order link:" .value=${this.item?.orderlink} @input=${this.validateInput}></simple-input>
+                <simple-input id="personlink" icon-name="user" label="Person link:" .value=${this.item?.personlink} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
