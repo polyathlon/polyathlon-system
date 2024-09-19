@@ -2,13 +2,14 @@ import { BaseElement, html, css } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
 
-customElements.define('country-button', class CountryButton extends BaseElement {
+customElements.define('icon-button', class IconButton extends BaseElement {
     static get properties() {
         return {
             label: { type: String, default: '' },
             name: { type: String, default: '', isIcon: true },
             imageName: { type: String, default: '', attribute: 'image-name'},
             iconName: { type: String, default: '', attribute: 'icon-name'},
+            title: { type: String, default: '' },
             status: {type: Object, default: null},
         }
     }
@@ -125,7 +126,7 @@ customElements.define('country-button', class CountryButton extends BaseElement 
 
     get #image() {
         return html`
-            <img src=${this.imageName} alt="Логотип проекта" />
+            <img src=${this.imageName} alt="Логотип проекта" title=${this.title || nothing}/>
         `
     }
 

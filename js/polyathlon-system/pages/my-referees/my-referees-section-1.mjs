@@ -4,8 +4,7 @@ import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/country-button.mjs'
-import '../../../../components/buttons/project-button.mjs'
+import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 
@@ -81,13 +80,10 @@ class MyRefereesSection1 extends BaseElement {
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
-                }
-
-                .left-layout country-button,
-                .left-layout project-button
-                {
-                    width: 100%;
-                    height: 40px;
+                    icon-button {
+                        width: 100%;
+                        height: 40px;
+                    }
                 }
 
                 .right-layout {
@@ -148,20 +144,19 @@ class MyRefereesSection1 extends BaseElement {
                 }
 
 
-                country-button[selected],
-                project-button[selected]
+                icon-button[selected]
                 {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                country-button:hover,
-                project-button:hover
+                icon-button:hover
                 {
                     background: rgba(255, 255, 255, 0.1)
 
                 }
-                 /* width */
-                 ::-webkit-scrollbar {
+
+                /* width */
+                ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -321,7 +316,7 @@ class MyRefereesSection1 extends BaseElement {
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `<project-button
+                html `<icon-button
                         label=${this.fio(item)}
                         title=${item._id}
                         icon-name="judge1-solid"
@@ -329,7 +324,7 @@ class MyRefereesSection1 extends BaseElement {
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
                     >
-                    </project-button>
+                    </icon-button>
             `)}
         `
     }
