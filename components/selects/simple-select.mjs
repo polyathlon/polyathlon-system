@@ -67,6 +67,14 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                         color: white;
                     }
                 }
+                img {
+                    display: block;
+                    line-height: 0;
+                    border-radius: 50%;
+                    position: relative;
+                    height: 100%;
+                    aspect-ratio: 1 / 1;
+                }
                 `
         ]
     }
