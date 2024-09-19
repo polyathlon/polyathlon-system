@@ -2,7 +2,7 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
 
-class MyGenderAgesSection1Page1 extends BaseElement {
+class MyAgeGroupsSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -57,4 +57,4 @@ class MyGenderAgesSection1Page1 extends BaseElement {
 
 }
 
-customElements.define("my-genders-ages-section-1-page-1", MyGenderAgesSection1Page1);
+customElements.define("my-age-groups-section-1-page-1", MyAgeGroupsSection1Page1);

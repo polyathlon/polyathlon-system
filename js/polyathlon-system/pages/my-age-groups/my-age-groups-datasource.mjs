@@ -1,4 +1,4 @@
-import DataSet from "./my-genders-ages-dataset.mjs";
+import DataSet from "./my-age-groups-dataset.mjs";
 
 export default class DataSource {
 

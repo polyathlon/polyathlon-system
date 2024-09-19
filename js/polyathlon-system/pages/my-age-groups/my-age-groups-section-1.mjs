@@ -6,12 +6,12 @@ import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/country-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
-import './my-genders-ages-section-1-page-1.mjs'
-import DataSet from './my-genders-ages-dataset.mjs'
-import DataSource from './my-genders-ages-datasource.mjs'
+import './my-age-groups-section-1-page-1.mjs'
+import DataSet from './my-age-groups-dataset.mjs'
+import DataSource from './my-age-groups-datasource.mjs'
 // import './my-competitions-section-1-page-2.mjs'
 
-class MyGenderAgesSection1 extends BaseElement {
+class MyAgeGroupsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -167,13 +167,13 @@ class MyGenderAgesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-genders-ages-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-genders-ages-section-1-page-1>
+            <my-age-groups-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-age-groups-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-genders-ages-section-1-page-2 .item=${this.currentItem}></my-genders-ages-section-1-page-2>
+            <my-age-groups-section-1-page-2 .item=${this.currentItem}></my-age-groups-section-1-page-2>
         `;
     }
 
@@ -256,4 +256,4 @@ class MyGenderAgesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-genders-ages-section-1", MyGenderAgesSection1);
+customElements.define("my-age-groups-section-1", MyAgeGroupsSection1);

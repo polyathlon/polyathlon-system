@@ -192,7 +192,7 @@ class MyCompetitionsSection1 extends BaseElement {
             {iconName: 'city-solid', page: 'my-cities', title: 'Cities', click: () => this.showPage('my-cities')},
             {iconName: 'regions-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
             {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
-            {iconName: 'type-solid', page: 'my-genders-ages', title: 'Gender Ages', click: () => this.showPage('my-genders-ages')},
+            {iconName: 'type-solid', page: 'my-age-groups', title: 'Gender Ages', click: () => this.showPage('my-age-groups')},
 
         ]
     }

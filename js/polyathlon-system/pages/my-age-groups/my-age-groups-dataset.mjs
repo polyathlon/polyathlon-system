@@ -1,6 +1,6 @@
 import { BaseElement, html, css} from '../../../base-element.mjs'
 
-import './my-genders-ages-section-1.mjs';
+import './my-age-groups-section-1.mjs';
 import '../../../../components/buttons/aside-button.mjs';
 
 class MyCompetitionTypes extends BaseElement {
@@ -33,9 +33,9 @@ class MyCompetitionTypes extends BaseElement {
 
     render() {
         return html`
-            <my-genders-ages-section-1></my-genders-ages-section-1>
+            <my-age-groups-section-1></my-age-groups-section-1>
         `;
     }
 }
 
-customElements.define("my-genders-ages", MyCompetitionTypes);
+customElements.define("my-age-groups", MyCompetitionTypes);
