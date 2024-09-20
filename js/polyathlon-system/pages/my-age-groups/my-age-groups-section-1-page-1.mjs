@@ -31,8 +31,8 @@ class MyAgeGroupsSection1Page1 extends BaseElement {
         return html`
             <div>
                 <simple-input id="name" icon-name="age-group-solid" label="Age group:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="minAge" icon-name="user" label="Min Age:" .value=${this.item?.minAge} @input=${this.validateInput}></simple-input>
-                <simple-input id="maxAge" icon-name="user" label="Max Age:" .value=${this.item?.maxAge} @input=${this.validateInput}></simple-input>
+                <simple-input id="minAge" icon-name="age-group-min" label="Min Age:" .value=${this.item?.minAge} @input=${this.validateInput}></simple-input>
+                <simple-input id="maxAge" icon-name="max-age-solid" label="Max Age:" .value=${this.item?.maxAge} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
