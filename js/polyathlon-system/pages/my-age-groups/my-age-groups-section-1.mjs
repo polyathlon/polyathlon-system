@@ -130,7 +130,7 @@ class MyAgeGroupsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Gender Ages property']
+        this.pageNames = ['Age Groups property']
         this.oldValues = new Map();
     }
 
@@ -141,7 +141,7 @@ class MyAgeGroupsSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCompetitionTypesItem')) {
+        if (changedProps.has('currentAgeGroupsItem')) {
             this.currentPage = 0;
         }
     }
