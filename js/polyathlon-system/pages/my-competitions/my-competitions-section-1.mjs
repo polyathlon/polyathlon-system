@@ -193,9 +193,60 @@ class MyCompetitionsSection1 extends BaseElement {
             {iconName: 'regions-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
             {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
             {iconName: 'age-group-solid', page: 'my-age-groups', title: 'Gender Ages', click: () => this.showPage('my-age-groups')},
+            {iconName: 'pdf-make', title: 'Make in PDF', click: () => this.pdfMethod()},
 
         ]
     }
+
+    pdfMethod() {
+            
+        var docInfo = {
+            
+            info: {
+                title:'Тестовый документ PDF',
+                author:'Viktor',
+                subject:'Theme',
+                keywords:'Ключевые слова'
+            },
+            
+            pageSize:'A4',
+            pageOrientation:'landscape',//'portrait'
+            pageMargins:[50,50,30,60],
+            
+            header:function(currentPage,pageCount) {
+                return {
+                    text: currentPage.toString() + 'из' + pageCount,
+                    alignment:'right',
+                    margin:[0,30,10,50]
+                }
+            },
+            
+            footer:[
+                {
+                    text:'нижний колонтитул',
+                    alignment:'center',//left  right
+                }
+            ],
+            
+            content: [
+            
+                {
+                    text:'Медведев',
+                    fontSize:20,
+                    margin:[150,80, 30,0]
+                    //pageBreak:'after'
+                },
+                
+                {
+                    text:'Сергей',
+                    style:'header'
+                    //pageBreak:'before'
+                }
+            ]
+        }
+        pdfMake.createPdf(docInfo).open();
+        
+                }
 
     showPage(page) {
         location.hash = page;
