@@ -4,13 +4,14 @@ import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/country-button.mjs'
+import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
+
 import './my-clubs-section-1-page-1.mjs'
+
 import DataSet from './my-clubs-dataset.mjs'
 import DataSource from './my-clubs-datasource.mjs'
-// import './my-competitions-section-1-page-2.mjs'
 
 class MyClubsSection1 extends BaseElement {
     static get properties() {
@@ -51,23 +52,22 @@ class MyClubsSection1 extends BaseElement {
                     align-items: center;
                 }
 
-                #competition-header{
+                .left-header{
                     grid-area: header1;
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
-                }
-
-                #competition-header p {
+                    p {
                     width: 100%;
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     font-size: 1rem;
                     margin: 0;
+                    }
                 }
 
-                #property-header{
+                .right-header{
                     grid-area: header2;
                 }
 
@@ -79,14 +79,16 @@ class MyClubsSection1 extends BaseElement {
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
-                }
-
-                .left-layout country-button {
-                    width: 100%;
-                    height: 40px;
+                    icon-button {
+                        width: 100%;
+                        height: 40px;
+                        flex: 0 0 40px;
+                    }
                 }
 
                 .right-layout {
+                    overflow-y: auto;
+                    overflow-x: hidden;
                     grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
@@ -94,7 +96,7 @@ class MyClubsSection1 extends BaseElement {
                     align-items: center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    overflow: hidden;
+                    /* overflow: hidden; */
                     gap: 10px;
                 }
 
@@ -110,6 +112,16 @@ class MyClubsSection1 extends BaseElement {
                     align-items: center;
                     justify-content: end;
                     gap: 10px;
+                    nav {
+                        background-color: rgba(255, 255, 255, 0.1);
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        /* padding-right: 10px; */
+                        gap: 10px;
+                    }
                 }
 
                 .right-footer {
@@ -119,20 +131,6 @@ class MyClubsSection1 extends BaseElement {
                     justify-content: end;
                     margin-right: 20px;
                     gap: 10px;
-                }
-
-                .left-footer nav{
-                    background-color: rgba(255, 255, 255, 0.1);
-                    width: 100%;
-                    height: 70%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    /* padding-right: 10px; */
-                    gap: 10px;
-                }
-
-                .right-footer {
                     simple-button {
                         height: 36px;
                         &:hover {
@@ -141,12 +139,11 @@ class MyClubsSection1 extends BaseElement {
                     }
                 }
 
-
-                country-button[selected] {
+                icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                country-button:hover {
+                icon-button:hover {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
@@ -166,6 +163,7 @@ class MyClubsSection1 extends BaseElement {
                     background: red;
                     border-radius: 5px;
                 }
+
                 #fileInput {
                     display: none;
                 }
@@ -176,9 +174,12 @@ class MyClubsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Club property']
+        this.pageNames = ['Property']
         this.oldValues = new Map();
         this.buttons = [
+            {iconName: 'country-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
+            {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
+            {iconName: 'city-solid', page: 'my-cities', title: 'Cities', click: () => this.showPage('my-cities')},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
@@ -191,7 +192,6 @@ class MyClubsSection1 extends BaseElement {
     gotoBack(page) {
         history.back();
     }
-
 
     async getNewFileHandle() {
         const options = {
@@ -215,7 +215,6 @@ class MyClubsSection1 extends BaseElement {
         return handle;
     }
 
-
     ExcelFile() {
         this.renderRoot.getElementById("fileInput").click();
     }
@@ -223,13 +222,29 @@ class MyClubsSection1 extends BaseElement {
     async importFromExcel(e) {
         const file = e.target.files[0];
         const workbook = XLSX.read(await file.arrayBuffer());
-        const worksheet = workbook.Sheets[workbook.SheetNames[2]];
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-        raw_data.forEach( (r, index) => {
-            if (index !== 0) {
-                const newItem = { name: r[1] }
+        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const regionDataset = await RegionDataset.RegionDataset()
+        raw_data.forEach((r, index) => {
+            if(index !== 0){
+                const newItem = {
+                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
+                    firstName: r[1].split(' ')[1],
+                    middleName: r[1].split(' ')[2],
+                    category: {
+                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
+                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
+                        "name": "Судья всероссийской категории",
+                    },
+                    region: regionDataset.find("name", r[4]),
+                    order: {
+                        number: r[5],
+                        link: r[6]
+                    },
+                    link: r[7],
+                }
                 this.dataSource.addItem(newItem);
-                console.log(r[0],r[1])
             }
         });
     }
@@ -284,15 +299,16 @@ class MyClubsSection1 extends BaseElement {
     get #list() {
         return html`
                 ${this.dataSource?.items?.map((item, index) =>
-                    html `<country-button
+                html `<icon-button
                                 label=${item.name}
                                 title=${item._id}
                                 icon-name="club-solid"
                                 ?selected=${this.currentItem === item}
                                 @click=${() => this.showItem(index, item._id)}
                             >
-                            </country-button>
-                `)}
+                    </icon-button>
+                `
+            )}
         `
     }
 
@@ -307,8 +323,8 @@ class MyClubsSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Region ${this.currentItem?.name}</p></header>
-            <header id="property-header">${this.#pageName}</header>
+            <header class="left-header"><p>Club ${this.currentItem?.name}</p></header>
+            <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.#list}
             </div>
@@ -329,6 +345,7 @@ class MyClubsSection1 extends BaseElement {
     nextPage() {
         this.currentPage++;
     }
+
     prevPage() {
         this.currentPage--;
     }

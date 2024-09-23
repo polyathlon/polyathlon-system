@@ -2,6 +2,7 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/selects/simple-select.mjs'
+
 import CountryDataSource from '../my-countries/my-countries-datasource.mjs'
 import CountryDataset from '../my-countries/my-countries-dataset.mjs'
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
@@ -29,12 +30,16 @@ class MyClubsSection1Page1 extends BaseElement {
                 :host {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    overflow-x: hidden;
+                    align-items: safe center;
+                    height: 100%;
                     gap: 10px;
                 }
                 .container {
-                    width: 600px;
+                    max-width: 600px;
+                }
+                #country {
+                    --icon-height: 90%;
+                    --image-height: 90%
                 }
             `
         ]
@@ -44,13 +49,21 @@ class MyClubsSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="club-solid" label="Club name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="country" icon-name="earth-americas-solid" image-name=${this.item?.country?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.country?.flag + '.svg'} label="Country name:" .dataSource=${this.countryDataSource} .value=${this.item?.country} @input=${this.validateInput}></simple-select>
-                <simple-select id="region" icon-name="regions-solid" label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="city" icon-name="city-solid" label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="country" icon-name="country-solid" image-name=${this.item?.city?.region?.country?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.city?.region?.country?.flag + '.svg'} label="Country name:" .dataSource=${this.countryDataSource} .value=${this.item?.city?.region?.country} @input=${this.countryChange}></simple-select>
+                <simple-select id="region" icon-name="region-solid" label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.city?.region} @input=${this.regionChange}></simple-select>
+                <simple-select id="city" icon-name="city-solid" label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
             </div>
         `;
     }
 
+    countryChange(e) {
+        this.regionDataSource.filter(e.target.value)
+
+    }
+    regionChange(e) {
+        this.cityDataSource.filter(e.target.value)
+
+    }
     validateInput(e) {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? this.item
@@ -66,6 +79,9 @@ class MyClubsSection1Page1 extends BaseElement {
             currentItem[e.target.id] = e.target.value
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
+            }
+            if (e.target.id === 'city') {
+                this.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;
         }

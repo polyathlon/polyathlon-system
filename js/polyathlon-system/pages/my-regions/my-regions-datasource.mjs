@@ -11,6 +11,12 @@ export default class DataSource {
         this.component.currentItem = this.getCurrentItem();
     }
 
+    filter(value) {
+        this.items = this.dataSet.filter(item => {
+            return item?.country?.name === value?.name;
+        }).sort( (a, b) => a.name.localeCompare(b.name) )
+    }
+
     getCurrentItem(){
         const item = sessionStorage.getItem('currentRegion')
         if (item) {

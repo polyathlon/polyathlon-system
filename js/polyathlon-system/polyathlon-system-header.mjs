@@ -32,8 +32,8 @@ class PolyathlonSystemHeader extends BaseElement {
 
                 header {
                     display: flex;
-                    height: 100px;
-                    padding: 10px 0px;
+                    height: 80px;
+                    padding: 0px 0px;
                     justify-content: space-between;
                     align-items: center;
                 }
@@ -53,8 +53,8 @@ class PolyathlonSystemHeader extends BaseElement {
                 }
                 .logo img {
                     margin-right: 1rem;
-                    width: 80px;
-                    height: 80px;
+                    width: 70px;
+                    height: 70px;
                 }
                 h3 {
                     margin: 0;
@@ -64,7 +64,7 @@ class PolyathlonSystemHeader extends BaseElement {
                 }
                 nav.vertical{
                     align-items: flex-start;
-                    content-justify: space-between;
+                    justify-content: space-between;
                     margin: 0;
                     padding: 0;
                     height: 200px;
@@ -169,10 +169,10 @@ class PolyathlonSystemHeader extends BaseElement {
                 ${this.logo()}
                 <nav class="horizontal">
                     <ul>
-                        <li><a href="#my-pride" ?active=${this.activePage==="my-pride" || this.activePage==="home-page"}>My pride</a></li>
-                        <li><a href="#about-me" ?active=${this.activePage==="about-me"}>About me</a></li>
-                        <li><a href="#my-courses" ?active=${this.activePage==="my-courses"}>My courses</a></li>
-                        <li><a href="#my-stack" ?active=${this.activePage=="my-stack"}>My stack</a></li>
+                        <li><a href="#my-competitions" ?active=${this.activePage==="my-competitions" || this.activePage==="home-page"}>Competitions</a></li>
+                        <li><a href="#my-referees" ?active=${this.activePage==="my-referees"}>Referees</a></li>
+                        <li><a href="#my-sportsmen" ?active=${this.activePage==="my-courses"}>Sportsmen</a></li>
+                        <li><a href="#about-me" ?active=${this.activePage=="my-stack"}>About</a></li>
                         ${this.userAccount()}
                     </ul>
                 </nav>
@@ -207,7 +207,6 @@ class PolyathlonSystemHeader extends BaseElement {
             this.showMenu();
         import( '../../components/forms/sign-in-form.mjs')
             .then(() => this.renderRoot.querySelector("sign-in-form").open().then(() => this.showUserAccount()).catch(() => ''));
-        // import '../../components/forms/sign-up-form.mjs';
     }
 
     clearStorage(){

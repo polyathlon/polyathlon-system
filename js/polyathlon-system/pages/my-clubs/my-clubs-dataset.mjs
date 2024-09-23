@@ -11,6 +11,13 @@ export default class DataSet {
         return DataSet.#dataSet
     }
 
+    static find(name, value) {
+        const index = DataSet.#dataSet.findIndex(element =>
+            element[name] === value || element[name].toLowerCase() === value
+        )
+        return index === -1 ? null : DataSet.#dataSet[index]
+    }
+
     static #fetchGetItems(token) {
         return fetch('https://localhost:4500/api/clubs', {
             headers: {

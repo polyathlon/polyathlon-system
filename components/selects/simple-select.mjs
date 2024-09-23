@@ -54,15 +54,15 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                     overflow: hidden;
                     transition: opacity .2s ease-in-out,border .2s ease-in-out;
                     transform: translateY(100%);
-                    box-shadow: var(--shadow-overlay, 10px 5px 5px black);
+                    /* box-shadow: var(--shadow-overlay, 10px 5px 5px black); */
                     display: flex;
                     flex-direction: column;
-                    country-button {
+                    icon-button {
                         height: 40px;
                         border-radius: 10px;
                         color: red;
                     }
-                    country-button:hover {
+                    icon-button:hover {
                         background-color: red;
                         color: white;
                     }
@@ -71,8 +71,9 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                     display: block;
                     line-height: 0;
                     border-radius: 50%;
-                    position: relative;
-                    height: 100%;
+                    position: absolute;
+                    height: 24px;
+                    margin: 8px;
                     aspect-ratio: 1 / 1;
                 }
                 `
@@ -159,16 +160,16 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
         <div class="options-list" @mouseenter=${this.listInFocus} @mouseleave=${this.listOutFocus}>
             ${this.dataSource?.items?.map((item, index) =>
                 html `
-                    <country-button
+                    <icon-button
                         label=${item.name}
                         title=${item._id}
                         icon-name=${this.iconName}
-                        image-name=${item.flag ? 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' : this.imageName}
+                        image-name=${item.flag ? 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' : ''}
                         .status=${this.statusDataSet?.get(item._id)}
                         ?selected=${this.currentItem === item}
                         @click=${() => this.selectItem(index, item)}
                     >
-                    </country-button>
+                    </icon-button>
             `)}
         </div>
       `

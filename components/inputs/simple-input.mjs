@@ -11,12 +11,15 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             type: { type: String, default: 'text'},
             required: { type: Boolean, default: false},
             label: { type: String, default: '' },
-            _useInfo: { type: Boolean, default: false },
+
+            imageName: { type: String, default: '', attribute: 'image-name'},
             iconName: { type: String, default: '', attribute: 'icon-name'},
+            errorImage: { type: String, default: 'error-image', attribute: 'error-image'},
             buttonName: { type: String, default: '', attribute: 'button-name' },
             placeholder: { type: String, default: '' },
             value: { type: String, default: ''},
             oldValue: { type: String, default: ''},
+            currentObject: { type: Object, default: undefined},
         }
     }
 
@@ -29,6 +32,16 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                     display: inline-block;
                     width: 100%;
                     color: var(--form-input-color, gray);
+                }
+                img {
+                    display: block;
+                    line-height: 0;
+                    border-radius: 50%;
+                    position: relative;
+                    height: 28px;
+                    aspect-ratio: 1 / 1;
+                    position: absolute;
+                    left: 8px;
                 }
             `
         ]
@@ -46,31 +59,27 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
     }
 
     get #icon() {
+        if (!this.iconName) {
+            return ''
+        }
         return html`
             <simple-icon class="icon" icon-name=${this.iconName}></simple-icon>
         `
     }
 
-    // get value() {
-    //     return this._value;
-    // }
+    get #image() {
+        if (!this.imageName) {
+            return this.#icon
+        }
+        return html`
+            <img src=${this.imageName} alt="" title=${this.title || nothing} @error=${this.defaultImage} />
+        `
+    }
 
-    // set value(value) {
-    //     const oldValue = this.value;
-    //     this._value = value;
-    //     this.requestUpdate('value', oldValue);
-    // }
-
-    // get value() {
-    //     return this.renderRoot?.querySelector('input')?.value ?? null;
-    // }
-
-    // set value(value) {
-    //     const input = this.renderRoot?.querySelector('input');
-    //     if (input) {
-    //         input.value= value;
-    //     }
-    // }
+    defaultImage(e) {
+        e.target.src = `../../images/${this.errorImage}.svg`
+        e.onerror = null
+    }
 
     get #button() {
         return html`
@@ -87,7 +96,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                     ${this.required ? 'required' : ''}
                     .value=${this.value || ''} @input=${this.changeValue}
                 >
-                ${this.iconName ? this.#icon : ''}
+                ${this.#image}
                 ${this.buttonName ? this.#button : ''}
             </div>
         `;

@@ -9,6 +9,7 @@ customElements.define('icon-button', class IconButton extends BaseElement {
             name: { type: String, default: '', isIcon: true },
             imageName: { type: String, default: '', attribute: 'image-name'},
             iconName: { type: String, default: '', attribute: 'icon-name'},
+            errorImage: { type: String, default: 'error-image', attribute: 'error-image'},
             title: { type: String, default: '' },
             status: {type: Object, default: null},
         }
@@ -43,7 +44,7 @@ customElements.define('icon-button', class IconButton extends BaseElement {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    height: 80%;
+                    height: var(--icon-height, 80%);
                     aspect-ratio: 1 / 1;
                     margin-left: 2px;
                 }
@@ -75,7 +76,7 @@ customElements.define('icon-button', class IconButton extends BaseElement {
                     line-height: 0;
                     border-radius: 50%;
                     position: relative;
-                    height: 100%;
+                    height: var(--image-height, 100%);
                     aspect-ratio: 1 / 1;
                 }
                 simple-icon {
@@ -126,8 +127,13 @@ customElements.define('icon-button', class IconButton extends BaseElement {
 
     get #image() {
         return html`
-            <img src=${this.imageName} alt="Логотип проекта" title=${this.title || nothing}/>
+            <img src=${this.imageName} alt="" title=${this.title || nothing} @error=${this.defaultImage} />
         `
+    }
+
+    defaultImage(e) {
+        e.target.src = `../../images/${this.errorImage}.svg`
+        e.onerror = null
     }
 
     get #status() {

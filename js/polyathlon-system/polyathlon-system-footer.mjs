@@ -18,8 +18,8 @@ class PolyathlonSystemFooter extends BaseElement {
             BaseElement.styles,
             css`
                 :host {
-                    padding: 20px 0;
-                    height: 100px;
+                    padding: 10px 0;
+                    height: 80px;
                     background-color: var(--footer-background-color);
                 }
 

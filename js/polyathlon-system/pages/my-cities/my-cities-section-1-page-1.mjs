@@ -2,15 +2,16 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/selects/simple-select.mjs'
-import CountryDataSource from '../my-countries/my-countries-datasource.mjs'
-import CountryDataset from '../my-countries/my-countries-dataset.mjs'
+
+import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
+import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 
 class MyCitiesSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
-            countryDataSource: {type: Object, default: null},
+            regionDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
         }
@@ -23,12 +24,16 @@ class MyCitiesSection1Page1 extends BaseElement {
                 :host {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    overflow-x: hidden;
+                    align-items: safe center;
+                    height: 100%;
                     gap: 10px;
                 }
                 .container {
-                    width: 600px;
+                    max-width: 600px;
+                }
+                #region {
+                    --icon-height: 90%;
+                    --image-height: 90%
                 }
             `
         ]
@@ -38,9 +43,7 @@ class MyCitiesSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="user" label="City name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="country" icon-name="earth-americas-solid" label="Country name:" .dataSource=${this.countryDataSource} .value=${this.item?.country} @input=${this.validateInput}></simple-select>
-                <simple-input id="region" icon-name="flag-solid" label="Region name:" .value=${this.item?.region} @input=${this.validateInput}></simple-input>
-                <simple-input id="flag" icon-name="flag-solid" label="Flag name:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
+                <simple-select id="region" icon-name="region-solid" label="Region:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
             </div>
         `;
     }
@@ -56,19 +59,18 @@ class MyCitiesSection1Page1 extends BaseElement {
             else if (this.oldValues.get(e.target) === e.target.value) {
                     this.oldValues.delete(e.target)
             }
-
             currentItem[e.target.id] = e.target.value
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
+
             this.isModified = this.oldValues.size !== 0;
         }
     }
     async firstUpdated() {
         super.firstUpdated();
-        this.countryDataSource = new CountryDataSource(this, await CountryDataset.getDataSet())
+        this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
     }
-
 }
 
 customElements.define("my-cities-section-1-page-1", MyCitiesSection1Page1);

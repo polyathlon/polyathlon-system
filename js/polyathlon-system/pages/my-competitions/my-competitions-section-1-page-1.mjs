@@ -38,7 +38,7 @@ class MyCompetitionsSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="user" label="Competition name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="country" icon-name="earth-americas-solid" label="Country name:" .dataSource=${this.countryDataSource} .value=${this.item?.country} @input=${this.validateInput}></simple-select>
+                <simple-select id="country" icon-name="country-solid" label="Country name:" .dataSource=${this.countryDataSource} .value=${this.item?.country} @input=${this.validateInput}></simple-select>
                 <simple-input id="region" icon-name="flag-solid" label="Region name:" .value=${this.item?.region} @input=${this.validateInput}></simple-input>
                 <simple-input id="flag" icon-name="flag-solid" label="Flag name:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
             </div>

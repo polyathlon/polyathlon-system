@@ -9,7 +9,7 @@ import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 
 import './my-referees-section-1-page-1.mjs'
-// import './my-competitions-section-1-page-2.mjs'
+
 import DataSet from './my-referees-dataset.mjs'
 import DataSource from './my-referees-datasource.mjs'
 
@@ -17,7 +17,7 @@ class MyRefereesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Object, default: []},
+            dataSource: {type: Object, default: null},
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
@@ -52,23 +52,22 @@ class MyRefereesSection1 extends BaseElement {
                     align-items: center;
                 }
 
-                #competition-header{
+                .left-header{
                     grid-area: header1;
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
+                    p {
+                        width: 100%;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        font-size: 1rem;
+                        margin: 0;
+                    }
                 }
 
-                #competition-header p {
-                    width: 100%;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    font-size: 1rem;
-                    margin: 0;
-                }
-
-                #property-header{
+                .right-header{
                     grid-area: header2;
                 }
 
@@ -83,6 +82,7 @@ class MyRefereesSection1 extends BaseElement {
                     icon-button {
                         width: 100%;
                         height: 40px;
+                        flex: 0 0 40px;
                     }
                 }
 
@@ -112,6 +112,16 @@ class MyRefereesSection1 extends BaseElement {
                     align-items: center;
                     justify-content: end;
                     gap: 10px;
+                    nav {
+                        background-color: rgba(255, 255, 255, 0.1);
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        /* padding-right: 10px; */
+                        gap: 10px;
+                    }
                 }
 
                 .right-footer {
@@ -121,20 +131,7 @@ class MyRefereesSection1 extends BaseElement {
                     justify-content: end;
                     margin-right: 20px;
                     gap: 10px;
-                }
 
-                .left-footer nav{
-                    background-color: rgba(255, 255, 255, 0.1);
-                    width: 100%;
-                    height: 70%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    /* padding-right: 10px; */
-                    gap: 10px;
-                }
-
-                .right-footer {
                     simple-button {
                         height: 36px;
                         &:hover {
@@ -142,7 +139,6 @@ class MyRefereesSection1 extends BaseElement {
                         }
                     }
                 }
-
 
                 icon-button[selected]
                 {
@@ -152,7 +148,6 @@ class MyRefereesSection1 extends BaseElement {
                 icon-button:hover
                 {
                     background: rgba(255, 255, 255, 0.1)
-
                 }
 
                 /* width */
@@ -171,6 +166,7 @@ class MyRefereesSection1 extends BaseElement {
                     background: red;
                     border-radius: 5px;
                 }
+
                 #fileInput {
                     display: none;
                 }
@@ -181,7 +177,7 @@ class MyRefereesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Referee property']
+        this.pageNames = ['Property']
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
@@ -198,7 +194,6 @@ class MyRefereesSection1 extends BaseElement {
     gotoBack(page) {
         history.back();
     }
-
 
     async getNewFileHandle() {
         const options = {
@@ -222,7 +217,6 @@ class MyRefereesSection1 extends BaseElement {
         return handle;
     }
 
-
     ExcelFile() {
         this.renderRoot.getElementById("fileInput").click();
     }
@@ -232,6 +226,8 @@ class MyRefereesSection1 extends BaseElement {
         const workbook = XLSX.read(await file.arrayBuffer());
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const regionDataset = await RegionDataset.RegionDataset()
         raw_data.forEach((r, index) => {
             if(index !== 0){
                 const newItem = {
@@ -243,12 +239,14 @@ class MyRefereesSection1 extends BaseElement {
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
                         "name": "Судья всероссийской категории",
                     },
-                    order: r[5],
-                    orderlink: r[6],
-                    personlink: r[7],
+                    region: regionDataset.find("name", r[4]),
+                    order: {
+                        number: r[5],
+                        link: r[6]
+                    },
+                    link: r[7],
                 }
                 this.dataSource.addItem(newItem);
-                console.log(r[0],r[1])
             }
         });
     }
@@ -313,6 +311,7 @@ class MyRefereesSection1 extends BaseElement {
         }
         return result
     }
+
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
@@ -325,7 +324,8 @@ class MyRefereesSection1 extends BaseElement {
                         @click=${() => this.showItem(index, item._id)}
                     >
                     </icon-button>
-            `)}
+                `
+            )}
         `
     }
 
@@ -340,8 +340,8 @@ class MyRefereesSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Referee</p></header>
-            <header id="property-header">${this.#pageName}</header>
+            <header class="left-header"><p>Referee</p></header>
+            <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.#list}
             </div>
@@ -362,6 +362,7 @@ class MyRefereesSection1 extends BaseElement {
     nextPage() {
         this.currentPage++;
     }
+
     prevPage() {
         this.currentPage--;
     }
@@ -371,7 +372,8 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     async addItem() {
-        this.dataSource.addItem();
+        const newItem = { name: "Новый регион" }
+        this.dataSource.addItem(newItem);
     }
 
     async saveItem() {

@@ -28,7 +28,8 @@ class PolyathlonSystemLeftAside extends BaseElement {
                     justify-content: space-between;
                     align-items: center;
                     padding: 20px 0;
-                    height: 100%;
+                    height: calc(100vh - 160px);
+                    overflow: hidden;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
                 nav {
