@@ -199,20 +199,20 @@ class MyCompetitionsSection1 extends BaseElement {
     }
 
     pdfMethod() {
-            
+
         var docInfo = {
-            
+
             info: {
                 title:'Тестовый документ PDF',
                 author:'Viktor',
                 subject:'Theme',
                 keywords:'Ключевые слова'
             },
-            
+
             pageSize:'A4',
             pageOrientation:'landscape',//'portrait'
             pageMargins:[50,50,30,60],
-            
+
             header:function(currentPage,pageCount) {
                 return {
                     text: currentPage.toString() + 'из' + pageCount,
@@ -220,23 +220,23 @@ class MyCompetitionsSection1 extends BaseElement {
                     margin:[0,30,10,50]
                 }
             },
-            
+
             footer:[
                 {
                     text:'нижний колонтитул',
                     alignment:'center',//left  right
                 }
             ],
-            
+
             content: [
-            
+
                 {
                     text:'Медведев',
                     fontSize:20,
                     margin:[150,80, 30,0]
                     //pageBreak:'after'
                 },
-                
+
                 {
                     text:'Сергей',
                     style:'header'
@@ -245,7 +245,7 @@ class MyCompetitionsSection1 extends BaseElement {
             ]
         }
         pdfMake.createPdf(docInfo).open();
-        
+
                 }
 
     showPage(page) {

@@ -187,9 +187,51 @@ class MyRefereesSection1 extends BaseElement {
             {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
             {iconName: 'judge-rank-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'pdf-make', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
+
+    pdfMethod() {
+
+        var docInfo = {
+
+            info: {
+                title:'Referees',
+                author:'Polyathlon systems',
+            },
+
+            pageSize:'A4',
+            pageOrientation:'landscape',//'portrait'
+            pageMargins:[50,50,30,60],
+
+            header:function(currentPage,pageCount) {
+                return {
+                    text: currentPage.toString() + 'из' + pageCount,
+                    alignment:'right',
+                    margin:[0,30,10,50]
+                }
+            },
+
+            content: [
+
+                {
+                    text:'Дмитрий',
+                    fontSize:20,
+                    margin:[150, 80, 30,0]
+                    //pageBreak:'after'
+                },
+
+                {
+                    text:'Гуськов',
+                    style:'header'
+                    //pageBreak:'before'
+                }
+            ]
+        }
+        pdfMake.createPdf(docInfo).open();
+
+        }
 
     showPage(page) {
         location.hash = page;
