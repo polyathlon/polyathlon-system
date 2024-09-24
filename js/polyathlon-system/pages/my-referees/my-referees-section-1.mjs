@@ -140,13 +140,11 @@ class MyRefereesSection1 extends BaseElement {
                     }
                 }
 
-                icon-button[selected]
-                {
+                icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                icon-button:hover
-                {
+                icon-button:hover {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
@@ -181,7 +179,7 @@ class MyRefereesSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
-            {iconName: 'judge-rank-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
+            {iconName: 'referee-category-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'pdf-make', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
@@ -269,7 +267,7 @@ class MyRefereesSection1 extends BaseElement {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
         const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-        const regionDataset = await RegionDataset.RegionDataset()
+        const regionDataset = RegionDataset.default
         raw_data.forEach((r, index) => {
             if(index !== 0){
                 const newItem = {
@@ -281,7 +279,7 @@ class MyRefereesSection1 extends BaseElement {
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
                         "name": "Судья всероссийской категории",
                     },
-                    region: regionDataset.find("name", r[4]),
+                    region: regionDataset.find("name", r[3]),
                     order: {
                         number: r[5],
                         link: r[6]
@@ -397,7 +395,7 @@ class MyRefereesSection1 extends BaseElement {
                 <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
                 <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
             </footer>
-            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
@@ -429,8 +427,17 @@ class MyRefereesSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            const currentItem = key.currentObject ?? this.currentItem
-            currentItem[key.id] = value;
+            let id = key.id
+            let currentItem = this.currentItem
+            if (id == "order.number") {
+                id = "number"
+                currentItem = this.currentItem.order
+            }
+            if (id == "order.link") {
+                id = "link"
+                currentItem = this.currentItem.order
+            }
+            currentItem[id] = value;
             key.value = value;
         });
         this.oldValues.clear();

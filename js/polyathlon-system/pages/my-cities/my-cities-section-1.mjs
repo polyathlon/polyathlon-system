@@ -135,7 +135,7 @@ class MyCitiesSection1 extends BaseElement {
                         height: 36px;
                         &:hover {
                             background-color: red;
-                }
+                        }
                     }
                 }
 
@@ -322,7 +322,7 @@ class MyCitiesSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header class="left-header"><p>City ${this.currentItem?.name}</p></header>
+            <header class="left-header"><p>City</p></header>
             <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.#list}

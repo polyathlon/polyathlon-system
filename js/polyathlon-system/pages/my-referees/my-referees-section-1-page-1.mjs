@@ -2,6 +2,7 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/selects/simple-select.mjs'
+
 import RefereeCategoryDataSource from '../my-referee-categories/my-referee-categories-datasource.mjs'
 import RefereeCategoryDataset from '../my-referee-categories/my-referee-categories-dataset.mjs'
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
@@ -47,10 +48,10 @@ class MyRefereesSection1Page1 extends BaseElement {
                     <simple-input id="firstName" icon-name="user-group-solid" label="Referee FistName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="middleName" icon-name="users-solid" label="Referee MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <simple-select id="category" icon-name="judge-rank-solid" label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="category" icon-name="referee-category-solid" label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" icon-name="region-solid" label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-input id="order" icon-name="flag-solid" label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="orderLink" icon-name="flag-solid" label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order.link} @input=${this.validateInput}></simple-input>
+                <simple-input id="order.number" icon-name="flag-solid" label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order.number} @input=${this.validateInput}></simple-input>
+                <simple-input id="order.link" icon-name="flag-solid" label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order.link} @input=${this.validateInput}></simple-input>
                 <simple-input id="personLink" icon-name="user" label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
@@ -58,23 +59,41 @@ class MyRefereesSection1Page1 extends BaseElement {
 
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item
+            let id = e.target.id
+            let currentItem = this.item
+            if (id == "order.number") {
+                id = "number"
+                if (!this.item.order) {
+                    this.item.order = {}
+                }
+                currentItem = this.item.order
+            }
+            if (id == "order.link") {
+                id = "link"
+                if (!this.item.order) {
+                    this.item.order = {}
+                }
+                currentItem = this.item.order
+            }
+
             if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
+                if (currentItem[id] !== e.target.value) {
+                    this.oldValues.set(e.target, currentItem[id])
                 }
             }
             else if (this.oldValues.get(e.target) === e.target.value) {
                     this.oldValues.delete(e.target)
             }
 
-            currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
+            currentItem[id] = e.target.value
+
+            if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;
         }
     }
+
     async firstUpdated() {
         super.firstUpdated();
         this.refereeCategoryDataSource = new RefereeCategoryDataSource(this, await RefereeCategoryDataset.getDataSet())

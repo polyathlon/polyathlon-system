@@ -1,14 +1,15 @@
-import { BaseElement, html, css, cache } from '../../../base-element.mjs'
+import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
 import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/country-button.mjs'
+import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
+import '../../../../components/buttons/aside-button.mjs';
 
 import './my-sportsmen-section-1-page-1.mjs'
-// import './my-sportsmen-section-1-page-2.mjs'
+
 import DataSet from './my-sportsmen-dataset.mjs'
 import DataSource from './my-sportsmen-datasource.mjs'
 
@@ -16,7 +17,7 @@ class MySportsmenSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Array, default: []},
+            dataSource: {type: Object, default: null},
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
@@ -40,7 +41,7 @@ class MySportsmenSection1 extends BaseElement {
                     grid-template-areas:
                         "header1 header2"
                         "sidebar content"
-                        "footer  footer";
+                        "footer1  footer2";
                     gap: 0 20px;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
@@ -51,23 +52,22 @@ class MySportsmenSection1 extends BaseElement {
                     align-items: center;
                 }
 
-                #competition-header{
+                .left-header{
                     grid-area: header1;
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
-                }
-
-                #competition-header p {
+                    p {
                     width: 100%;
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     font-size: 1rem;
                     margin: 0;
+                    }
                 }
 
-                #property-header{
+                .right-header{
                     grid-area: header2;
                 }
 
@@ -79,11 +79,11 @@ class MySportsmenSection1 extends BaseElement {
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
-                }
-
-                .left-layout country-button {
+                    icon-button {
                     width: 100%;
                     height: 40px;
+                        flex: 0 0 40px;
+                    }
                 }
 
                 .right-layout {
@@ -106,26 +106,48 @@ class MySportsmenSection1 extends BaseElement {
                     overflow-wrap: break-word;
                 }
 
-                footer {
-                    grid-area: footer;
+                .left-footer {
+                    grid-area: footer1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    gap: 10px;
+                    nav {
+                        background-color: rgba(255, 255, 255, 0.1);
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        /* padding-right: 10px; */
+                        gap: 10px;
+                    }
+                }
+
+                .right-footer {
+                    grid-area: footer2;
                     display: flex;
                     align-items: center;
                     justify-content: end;
                     margin-right: 20px;
                     gap: 10px;
+
+                    simple-button {
+                        height: 36px;
+                        &:hover {
+                            background-color: red;
+                }
+                    }
                 }
 
-                footer simple-button {
-                    height: 40px;
-                }
-
-                country-button[selected] {
+                icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                country-button:hover {
+                icon-button:hover {
                     background: rgba(255, 255, 255, 0.1)
                 }
+
                  /* width */
                  ::-webkit-scrollbar {
                     width: 10px;
@@ -142,6 +164,10 @@ class MySportsmenSection1 extends BaseElement {
                     background: red;
                     border-radius: 5px;
                 }
+
+                #fileInput {
+                    display: none;
+                }
             `
         ]
     }
@@ -149,8 +175,80 @@ class MySportsmenSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Competition property']
+        this.pageNames = ['Property']
         this.oldValues = new Map();
+        this.buttons = [
+            {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
+            {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
+            {iconName: 'sports-category-solid', page: 'my-sports-category', title: 'Sports Category', click: () => this.showPage('my-sports-category')},
+
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
+    }
+
+    showPage(page) {
+        location.hash = page;
+    }
+
+    gotoBack(page) {
+        history.back();
+    }
+
+    async getNewFileHandle() {
+        const options = {
+          types: [
+            {
+              description: 'Excel files',
+              accept: {
+                'application/octet-stream': ['.xslx'],
+              },
+            },
+            {
+              description: 'Neural Models',
+              accept: {
+                'application/octet-stream': ['.pkl'],
+              },
+            },
+
+          ],
+        };
+        const handle = await window.showSaveFilePicker(options);
+        return handle;
+    }
+
+    ExcelFile() {
+        this.renderRoot.getElementById("fileInput").click();
+    }
+
+    async importFromExcel(e) {
+        const file = e.target.files[0];
+        const workbook = XLSX.read(await file.arrayBuffer());
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const regionDataset = await RegionDataset.RegionDataset()
+        raw_data.forEach((r, index) => {
+            if(index !== 0){
+                const newItem = {
+                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
+                    firstName: r[1].split(' ')[1],
+                    middleName: r[1].split(' ')[2],
+                    category: {
+                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
+                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
+                        "name": "Судья всероссийской категории",
+                    },
+                    region: regionDataset.find("name", r[4]),
+                    order: {
+                        number: r[5],
+                        link: r[6]
+                    },
+                    link: r[7],
+                }
+                this.dataSource.addItem(newItem);
+            }
+        });
     }
 
     update(changedProps) {
@@ -160,7 +258,7 @@ class MySportsmenSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCompetitionItem')) {
+        if (changedProps.has('currentSportsmanItem')) {
             this.currentPage = 0;
         }
     }
@@ -200,37 +298,71 @@ class MySportsmenSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
+    fio(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName[0]}.`
+        }
+        if (item.middleName) {
+            result += `${item.middleName[0]}.`
+        }
+        return result
+    }
+
+    get #list() {
+        return html`
+            ${this.dataSource?.items?.map((item, index) =>
+                html `<icon-button
+                        label=${ this.fio(item) }
+                        title=${ item._id }
+                        icon-name=${ item.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+                        .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'hash-number-solid'} : '' }
+                        ?selected=${ this.currentItem === item }
+                        @click=${() => this.showItem(index, item._id)}
+                    >
+                    </icon-button>
+                `
+            )}
+        `
+    }
+
+    get #task() {
+        return html`
+            <nav>${this.buttons.map((button, index) =>
+                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
+            </nav>
+        `
+    }
+
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Competition ${this.currentItem?.name}</p></header>
-            <header id="property-header">${this.#pageName}</header>
+            <header class="left-header"><p>Sportsmen</p></header>
+            <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
-                ${this.dataSource?.items?.map((item, index) =>
-                    html `<country-button
-                                label=${item.name}
-                                title=${item._id}
-                                .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
-                                .status=${this.statusDataSet.get(item._id)}
-                                ?selected=${this.currentItem === item}
-                                @click=${() => this.showItem(index, item._id)}
-                            >
-                            </country-button>
-                `)}
+                ${this.#list}
             </div>
             <div class="right-layout">
                 ${this.#page()}
             </div>
-            <footer>
+            <footer class="left-footer">
+                ${this.#task}
+            </footer>
+            <footer class="right-footer">
                 <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
                 <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
             </footer>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
     nextPage() {
         this.currentPage++;
     }
+
     prevPage() {
         this.currentPage--;
     }
@@ -240,7 +372,8 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     async addItem() {
-        this.dataSource.addItem();
+        const newItem = { name: "Новый спортсмен" }
+        this.dataSource.addItem(newItem);
     }
 
     async saveItem() {
@@ -254,8 +387,17 @@ class MySportsmenSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            const currentItem = key.currentObject ?? this.currentItem
-            currentItem[key.id] = value;
+            let id = key.id
+            let currentItem = this.currentItem
+            if (id == "order.number") {
+                id = "number"
+                currentItem = this.currentItem.order
+            }
+            if (id == "order.link") {
+                id = "link"
+                currentItem = this.currentItem.order
+            }
+            currentItem[id] = value;
             key.value = value;
         });
         this.oldValues.clear();

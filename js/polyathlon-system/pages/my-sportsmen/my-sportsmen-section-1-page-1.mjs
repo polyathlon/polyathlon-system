@@ -2,15 +2,26 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/selects/simple-select.mjs'
-import CountryDataSource from '../my-countries/my-countries-datasource.mjs'
-import CountryDataset from '../my-countries/my-countries-dataset.mjs'
+import '../../../../components/inputs/gender-input.mjs'
+import '../../../../components/inputs/birthday-input.mjs'
+
+import SportsCategoryDataSource from '../my-referee-categories/my-referee-categories-datasource.mjs'
+import SportsCategoryDataset from '../my-referee-categories/my-referee-categories-dataset.mjs'
+
+import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
+import RegionDataset from '../my-regions/my-regions-dataset.mjs'
+
+import ClubDataSource from '../my-clubs/my-clubs-datasource.mjs'
+import ClubDataset from '../my-clubs/my-clubs-dataset.mjs'
 
 class MySportsmenSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
-            countryDataSource: {type: Object, default: null},
+            sportsCategorySource: {type: Object, default: null},
+            regionDataSource: {type: Object, default: null},
+            clubDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
         }
@@ -23,12 +34,16 @@ class MySportsmenSection1Page1 extends BaseElement {
                 :host {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    overflow-x: hidden;
+                    align-items: safe center;
+                    height: 100%;
                     gap: 10px;
                 }
                 .container {
-                    width: 600px;
+                    max-width: 600px;
+                }
+                .name-group {
+                    display: flex;
+                    gap: 10px;
                 }
             `
         ]
@@ -37,38 +52,67 @@ class MySportsmenSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="user" label="Competition name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="country" icon-name="country-solid" label="Country name:" .dataSource=${this.countryDataSource} .value=${this.item?.country} @input=${this.validateInput}></simple-select>
-                <simple-input id="region" icon-name="flag-solid" label="Region name:" .value=${this.item?.region} @input=${this.validateInput}></simple-input>
-                <simple-input id="flag" icon-name="flag-solid" label="Flag name:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
+                <div class="name-group">
+                    <simple-input id="lastName" icon-name="user" label="LastName:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" icon-name="user-group-solid" label="FistName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+                </div>
+                <simple-input id="middleName" icon-name="users-solid" label="MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
+                <birthday-input id="birthday" label="Data of Birth:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
+                <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
+                <simple-select id="region" icon-name="region-solid" label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="club" icon-name="club-solid" label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+                <simple-input id="hashNumber" icon-name="hash-number-solid" label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
+                <simple-select id="category" icon-name="referee-category-solid" label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="order.number" icon-name="order-number-solid" label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
+                <simple-input id="order.link" icon-name="link-solid" label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
+                <simple-input id="personLink" icon-name="user" label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item
+            let id = e.target.id
+            let currentItem = this.item
+            if (id == "order.number") {
+                id = "number"
+                if (!this.item.order) {
+                    this.item.order = {}
+                }
+                currentItem = this.item.order
+            }
+            if (id == "order.link") {
+                id = "link"
+                if (!this.item.order) {
+                    this.item.order = {}
+                }
+                currentItem = this.item.order
+            }
+
             if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
+                if (currentItem[id] !== e.target.value) {
+                    this.oldValues.set(e.target, currentItem[id])
                 }
             }
             else if (this.oldValues.get(e.target) === e.target.value) {
                     this.oldValues.delete(e.target)
             }
 
-            currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
+            currentItem[id] = e.target.value
+
+            if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender' ) {
                 this.parentNode.parentNode.host.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;
         }
     }
+
     async firstUpdated() {
         super.firstUpdated();
-        this.countryDataSource = new CountryDataSource(this, await CountryDataset.getDataSet())
+        this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
+        this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
+        this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
     }
-
 }
 
 customElements.define("my-sportsmen-section-1-page-1", MySportsmenSection1Page1);

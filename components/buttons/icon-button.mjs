@@ -90,7 +90,15 @@ customElements.define('icon-button', class IconButton extends BaseElement {
                 .status {
                     display: flex;
                     align-items: center;
-                    gap: 5px
+                    gap: 5px;
+                    simple-icon {
+                        display: block;
+                        line-height: 0;
+                        border-radius: 50%;
+                        position: relative;
+                        height: 13px;
+                        aspect-ratio: 1 / 1;
+                    }
                 }
             `
         ];
@@ -136,9 +144,16 @@ customElements.define('icon-button', class IconButton extends BaseElement {
         e.onerror = null
     }
 
+    get #statusIcon() {
+        return html`
+            <simple-icon icon-name=${this.status.icon}></simple-icon>
+        `
+    }
+
     get #status() {
         return html`
             <div class="status">
+                ${this.status.icon ? this.#statusIcon : ''}
                 <h2>${this.status?.name}</h2>
             </div>
         `

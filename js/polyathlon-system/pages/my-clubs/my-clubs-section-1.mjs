@@ -323,7 +323,7 @@ class MyClubsSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header class="left-header"><p>Club ${this.currentItem?.name}</p></header>
+            <header class="left-header"><p>Club</p></header>
             <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.#list}

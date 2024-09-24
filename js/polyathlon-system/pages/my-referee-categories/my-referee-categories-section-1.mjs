@@ -1,15 +1,17 @@
-import { BaseElement, html, css, cache } from '../../../base-element.mjs'
+import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
 import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/country-button.mjs'
+import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
+import '../../../../components/buttons/aside-button.mjs';
+
 import './my-referee-categories-section-1-page-1.mjs'
+
 import DataSet from './my-referee-categories-dataset.mjs'
 import DataSource from './my-referee-categories-datasource.mjs'
-// import './my-competitions-section-1-page-2.mjs'
 
 class MyRefereeCategoriesSection1 extends BaseElement {
     static get properties() {
@@ -39,7 +41,7 @@ class MyRefereeCategoriesSection1 extends BaseElement {
                     grid-template-areas:
                         "header1 header2"
                         "sidebar content"
-                        "footer  footer";
+                        "footer1  footer2";
                     gap: 0 20px;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
@@ -50,23 +52,22 @@ class MyRefereeCategoriesSection1 extends BaseElement {
                     align-items: center;
                 }
 
-                #competition-header{
+                .left-header{
                     grid-area: header1;
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
+                    p {
+                        width: 100%;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        font-size: 1rem;
+                        margin: 0;
+                    }
                 }
 
-                #competition-header p {
-                    width: 100%;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    font-size: 1rem;
-                    margin: 0;
-                }
-
-                #property-header{
+                .right-header{
                     grid-area: header2;
                 }
 
@@ -78,14 +79,16 @@ class MyRefereeCategoriesSection1 extends BaseElement {
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
-                }
-
-                .left-layout country-button {
+                    icon-button {
                     width: 100%;
                     height: 40px;
+                        flex: 0 0 40px;
+                    }
                 }
 
                 .right-layout {
+                    overflow-y: auto;
+                    overflow-x: hidden;
                     grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
@@ -93,7 +96,7 @@ class MyRefereeCategoriesSection1 extends BaseElement {
                     align-items: center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    overflow: hidden;
+                    /* overflow: hidden; */
                     gap: 10px;
                 }
 
@@ -103,24 +106,44 @@ class MyRefereeCategoriesSection1 extends BaseElement {
                     overflow-wrap: break-word;
                 }
 
-                footer {
-                    grid-area: footer;
+                .left-footer {
+                    grid-area: footer1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    gap: 10px;
+                    nav {
+                        background-color: rgba(255, 255, 255, 0.1);
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        /* padding-right: 10px; */
+                        gap: 10px;
+                    }
+                }
+
+                .right-footer {
+                    grid-area: footer2;
                     display: flex;
                     align-items: center;
                     justify-content: end;
                     margin-right: 20px;
                     gap: 10px;
+                    simple-button {
+                        height: 36px;
+                        &:hover {
+                            background-color: red;
+                        }
+                    }
                 }
 
-                footer simple-button {
-                    height: 40px;
-                }
-
-                country-button[selected] {
+                icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                country-button:hover {
+                icon-button:hover {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
@@ -141,6 +164,9 @@ class MyRefereeCategoriesSection1 extends BaseElement {
                     border-radius: 5px;
                 }
 
+                #fileInput {
+                    display: none;
+                }
             `
         ]
     }
@@ -148,8 +174,76 @@ class MyRefereeCategoriesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Referee categories property']
+        this.pageNames = ['Property']
         this.oldValues = new Map();
+        this.buttons = [
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
+    }
+
+    showPage(page) {
+        location.hash = page;
+    }
+
+    gotoBack(page) {
+        history.back();
+    }
+
+    async getNewFileHandle() {
+        const options = {
+          types: [
+            {
+              description: 'Excel files',
+              accept: {
+                'application/octet-stream': ['.xslx'],
+              },
+            },
+            {
+              description: 'Neural Models',
+              accept: {
+                'application/octet-stream': ['.pkl'],
+              },
+            },
+
+          ],
+        };
+        const handle = await window.showSaveFilePicker(options);
+        return handle;
+    }
+
+    ExcelFile() {
+        this.renderRoot.getElementById("fileInput").click();
+    }
+
+    async importFromExcel(e) {
+        const file = e.target.files[0];
+        const workbook = XLSX.read(await file.arrayBuffer());
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const regionDataset = await RegionDataset.RegionDataset()
+        raw_data.forEach((r, index) => {
+            if(index !== 0){
+                const newItem = {
+                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
+                    firstName: r[1].split(' ')[1],
+                    middleName: r[1].split(' ')[2],
+                    category: {
+                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
+                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
+                        "name": "Судья всероссийской категории",
+                    },
+                    region: regionDataset.find("name", r[4]),
+                    order: {
+                        number: r[5],
+                        link: r[6]
+                    },
+                    link: r[7],
+                }
+                this.dataSource.addItem(newItem);
+            }
+        });
     }
 
     update(changedProps) {
@@ -159,7 +253,7 @@ class MyRefereeCategoriesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRefereeCategoriesItem')) {
+        if (changedProps.has('currentRefereeCategoryItem')) {
             this.currentPage = 0;
         }
     }
@@ -199,37 +293,56 @@ class MyRefereeCategoriesSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
+    get #list() {
+        return html`
+            ${this.dataSource?.items?.map((item, index) =>
+                html `<icon-button
+                        label=${item.name}
+                        title=${item._id}
+                        icon-name="referee-category-solid"
+                        ?selected=${this.currentItem === item}
+                        @click=${() => this.showItem(index, item._id)}
+                    >
+                    </icon-button>
+                `
+            )}
+        `
+    }
+
+    get #task() {
+        return html`
+            <nav>${this.buttons.map((button, index) =>
+                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
+            </nav>
+        `
+    }
+
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Referee categories: ${this.currentItem?.name}</p></header>
-            <header id="property-header">${this.#pageName}</header>
+            <header class="left-header"><p>Referee categories</p></header>
+            <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
-                ${this.dataSource?.items?.map((item, index) =>
-                    html `<country-button
-                                label=${item.name}
-                                title=${item._id}
-                                .logotype=${'/images/judge-referee-category.svg'}
-                                .status=${this.statusDataSet.get(item._id)}
-                                ?selected=${this.currentItem === item}
-                                @click=${() => this.showItem(index, item._id)}
-                            >
-                            </country-button>
-                `)}
+                ${this.#list}
             </div>
             <div class="right-layout">
                 ${this.#page()}
             </div>
-            <footer>
+            <footer class="left-footer">
+                ${this.#task}
+            </footer>
+            <footer class="right-footer">
                 <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
                 <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
             </footer>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
     nextPage() {
         this.currentPage++;
     }
+
     prevPage() {
         this.currentPage--;
     }
@@ -239,7 +352,8 @@ class MyRefereeCategoriesSection1 extends BaseElement {
     }
 
     async addItem() {
-        this.dataSource.addItem();
+        const newItem = { name: "Новая категория" }
+        this.dataSource.addItem(newItem);
     }
 
     async saveItem() {

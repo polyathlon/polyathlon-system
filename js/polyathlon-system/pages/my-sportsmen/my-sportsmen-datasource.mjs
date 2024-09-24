@@ -7,29 +7,35 @@ export default class DataSource {
         this.dataSet = dataSet;
         this.items = this.dataSet.map(item => {
             return item;
-        }).sort( (a, b) => b._id.localeCompare(a._id) )
+        }).sort( (a, b) => a.name.localeCompare(b.name) )
         this.component.currentItem = this.getCurrentItem();
     }
 
+    filter(value) {
+        this.items = this.dataSet.filter(item => {
+            return item?.country?.name === value?.name;
+        }).sort( (a, b) => a.name.localeCompare(b.name) )
+    }
+
     getCurrentItem(){
-        const item = sessionStorage.getItem('currentCompetition')
+        const item = sessionStorage.getItem('currentSportsman')
         if (item) {
             return this.items.find(p => p._id === item)
         }
         else {
-            sessionStorage.setItem('currentCompetition', this.items[0]._id)
+            sessionStorage.setItem('currentSportsman', this.items[0]?._id)
             return this.items?.[0]
         }
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentCompetition', item._id)
-        this.component.currentItem = item;
+        sessionStorage.setItem('currentSportsman', item._id)
+        this.component.currentItem = item
     }
 
-    async addItem() {
-        const item = await DataSet.addItem()
-        this.addTo(item)
+    async addItem(item) {
+        const newItem = await DataSet.addItem(item)
+        this.addTo(newItem)
     }
 
     addTo(item) {

@@ -19,9 +19,12 @@ class MyRefereeCategoriesSection1Page1 extends BaseElement {
                 :host {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    overflow: hidden;
+                    align-items: safe center;
+                    height: 100%;
                     gap: 10px;
+                }
+                .container {
+                    max-width: 600px;
                 }
             `
         ]
@@ -29,9 +32,9 @@ class MyRefereeCategoriesSection1Page1 extends BaseElement {
 
     render() {
         return html`
-            <div>
-                <simple-input id="name" icon-name="judge-solid" label="Referee category:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="short-name" icon-name="judge-solid" label="Category short name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+            <div class="container">
+                <simple-input id="name" icon-name="referee-category-solid" label="Referee category:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="shortName" icon-name="referee-category-solid" label="Category short name:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -52,6 +55,7 @@ class MyRefereeCategoriesSection1Page1 extends BaseElement {
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
+
             this.isModified = this.oldValues.size !== 0;
         }
     }
