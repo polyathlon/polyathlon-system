@@ -188,7 +188,8 @@ class MyCompetitionsSection1 extends BaseElement {
         this.buttons = [
             {iconName: 'type-solid', page: 'my-competition-types', title: 'Competition Types', click: () => this.showPage('my-competition-types')},
             {iconName: 'category-solid', page: 'my-competition-kinds', title: 'Competition Kinds', click: () => this.showPage('my-competition-kinds')},
-            {iconName: 'country-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
+            {iconName: 'swimming-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
+            {iconName: 'throwing-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
             {iconName: 'city-solid', page: 'my-cities', title: 'Cities', click: () => this.showPage('my-cities')},
             {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
             {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},

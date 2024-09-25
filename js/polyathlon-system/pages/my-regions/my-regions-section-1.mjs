@@ -220,27 +220,17 @@ class MyRegionsSection1 extends BaseElement {
     async importFromExcel(e) {
         const file = e.target.files[0];
         const workbook = XLSX.read(await file.arrayBuffer());
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const worksheet = workbook.Sheets[workbook.SheetNames[2]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-        const regionDataset = await RegionDataset.RegionDataset()
-        raw_data.forEach((r, index) => {
-            if(index !== 0){
+        const CountryDataset = await import('../my-countries/my-countries-dataset.mjs');
+        const countryDataset = CountryDataset.default
+        raw_data.forEach( (r, index) => {
+            if (index !== 0) {
                 const newItem = {
-                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
-                    firstName: r[1].split(' ')[1],
-                    middleName: r[1].split(' ')[2],
-                    category: {
-                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
-                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
-                        "name": "Судья всероссийской категории",
-                    },
-                    region: regionDataset.find("name", r[4]),
-                    order: {
-                        number: r[5],
-                        link: r[6]
-                    },
-                    link: r[7],
+                    name: r[0],
+                    country: countryDataset.find('name', r[1]),
+                    link: r[2],
+                    code: r[3]
                 }
                 this.dataSource.addItem(newItem);
             }
