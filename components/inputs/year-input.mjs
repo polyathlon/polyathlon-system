@@ -22,13 +22,26 @@ customElements.define("year-input", class YearInput extends BaseElement {
 
     static get styles() {
         return [
-            styles,
             BaseElement.styles,
+            styles,
             css`
                 :host {
                     display: inline-block;
                     width: 100%;
                     color: var(--form-input-color, gray);
+                }
+
+                option:disabled {
+                    color: white;
+                    background-color: red;
+                }
+
+                select option:hover {
+                box-shadow: 0 0 10px 100px green inset;
+                color:white;
+                }
+                select option:checked{
+                box-shadow: 0 0 10px 100px green inset;
                 }
             `
         ]
@@ -92,8 +105,12 @@ customElements.define("year-input", class YearInput extends BaseElement {
         return html`
             ${this.label ? this.#label : ''}
             <div class="input-group">
-                <select>
-                    ${this.years.map(year => html`<option ?selected=${year==="Year"} value=${year === "Year" ? nothing : year}>${year}</option>`)}
+                <select onfocus=''>
+                    ${this.years.map( year =>
+                        html`
+                            <option ?selected=${year==="Year"} ?disabled=${year==="Year"} value=${year}>${year}</option>
+                        `)
+                    }
                 </select>
                 ${this.iconName ? this.#icon : ''}
             </div>

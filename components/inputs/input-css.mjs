@@ -65,16 +65,19 @@ select > option {
 }
 
 option:hover {
-    background-color: gray;
+    background-color: red;
 }
 
 select > option:nth-child(1),
 select > option:checked
  {
-    background-color: gray;
+    background-color: red;
     color: white;
 }
 
+select:focus > option:hover {
+    background: red !important;
+}
 
 [placeholder] {
     text-overflow: ellipsis;

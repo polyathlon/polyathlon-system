@@ -90,11 +90,24 @@ customElements.define("birthday-input", class BirthdayInput extends BaseElement 
     }
 
     set value(value) {
-        if (!this.renderRoot || !value )
+        if (!this.renderRoot) {
             return;
+        }
         const day = this.renderRoot.getElementById("day");
         const month = this.renderRoot.getElementById("month");
         const year = this.renderRoot.getElementById("year");
+        if (!value) {
+            if (day.value) {
+                day.value = ""
+            }
+            if (month.value) {
+                month.value = 0
+            }
+            if (year.value) {
+                year.value = 'Year'
+            }
+            return;
+        }
         const date = value.split('.')
         day.value = +date[0];
         month.value = +date[1];

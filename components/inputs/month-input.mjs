@@ -83,14 +83,16 @@ customElements.define("month-input", class MonthInput extends BaseElement {
         `
     }
 
-
-
     render() {
         return html`
             ${this.label ? this.#label : ''}
             <div class="input-group">
                 <select>
-                    ${this.months.map( (month , index) => html`<option ?selected=${month==="Month"} ?disabled=${month==="Month"} value=${index}>${month}</option>`)}
+                    ${this.months.map( (month , index) =>
+                        html`
+                            <option ?selected=${month==="Month"} ?disabled=${month==="Month"} value=${index}>${month}</option>
+                        `)
+                    }
                 </select>
                 ${this.iconName ? this.#icon : ''}
             </div>
