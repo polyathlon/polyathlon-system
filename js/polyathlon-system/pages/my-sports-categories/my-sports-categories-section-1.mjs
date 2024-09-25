@@ -8,12 +8,12 @@ import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 
-import './my-sportsmen-section-1-page-1.mjs'
+import './my-sports-categories-section-1-page-1.mjs'
 
-import DataSet from './my-sportsmen-dataset.mjs'
-import DataSource from './my-sportsmen-datasource.mjs'
+import DataSet from './my-sports-categories-dataset.mjs'
+import DataSource from './my-sports-categories-datasource.mjs'
 
-class MySportsmenSection1 extends BaseElement {
+class MySportsCategoriesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -58,12 +58,12 @@ class MySportsmenSection1 extends BaseElement {
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     p {
-                    width: 100%;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    font-size: 1rem;
-                    margin: 0;
+                        width: 100%;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        font-size: 1rem;
+                        margin: 0;
                     }
                 }
 
@@ -80,8 +80,8 @@ class MySportsmenSection1 extends BaseElement {
                     overflow-x: hidden;
                     background: var(--layout-background-color);
                     icon-button {
-                    width: 100%;
-                    height: 40px;
+                        width: 100%;
+                        height: 40px;
                         flex: 0 0 40px;
                     }
                 }
@@ -96,7 +96,7 @@ class MySportsmenSection1 extends BaseElement {
                     align-items: center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    /* overflow: hidden; */
+                    overflow: hidden;
                     gap: 10px;
                 }
 
@@ -136,7 +136,7 @@ class MySportsmenSection1 extends BaseElement {
                         height: 36px;
                         &:hover {
                             background-color: red;
-                }
+                        }
                     }
                 }
 
@@ -148,8 +148,8 @@ class MySportsmenSection1 extends BaseElement {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                 /* width */
-                 ::-webkit-scrollbar {
+                /* width */
+                ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -178,10 +178,6 @@ class MySportsmenSection1 extends BaseElement {
         this.pageNames = ['Property']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
-            {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
-            {iconName: 'sports-category-solid', page: 'my-sports-categories', title: 'Sports Categories', click: () => this.showPage('my-sports-categories')},
-
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
@@ -258,7 +254,7 @@ class MySportsmenSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentSportsmanItem')) {
+        if (changedProps.has('currentSportsCategoryItem')) {
             this.currentPage = 0;
         }
     }
@@ -284,13 +280,13 @@ class MySportsmenSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-sportsmen-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-sportsmen-section-1-page-1>
+            <my-sports-categories-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-sports-categories-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-sportsmen-section-1-page-2 .item=${this.currentItem}></my-sportsmen-section-1-page-2>
+            <my-sports-categories-section-1-page-2 .item=${this.currentItem}></my-sports-categories-section-1-page-2>
         `;
     }
 
@@ -298,29 +294,16 @@ class MySportsmenSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    fio(item) {
-        if (!item) {
-            return item
-        }
-        let result = item.lastName
-        if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
-        }
-        if (item.middleName) {
-            result += `${item.middleName[0]}.`
-        }
-        return result
-    }
-
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
                 html `<icon-button
-                        label=${ this.fio(item) }
-                        title=${ item._id }
-                        icon-name=${ item.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
-                        .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'hash-number-solid'} : '' }
-                        ?selected=${ this.currentItem === item }
+                        label=${item.name}
+                        title=${item._id}
+                        icon-name="sports-category-solid"
+                        image-name=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
+                        error-image="sports-category-solid"
+                        ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
                     >
                     </icon-button>
@@ -340,7 +323,7 @@ class MySportsmenSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header class="left-header"><p>Sportsmen</p></header>
+            <header class="left-header"><p>Sports Categories</p></header>
             <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.#list}
@@ -355,7 +338,7 @@ class MySportsmenSection1 extends BaseElement {
                 <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
                 <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
             </footer>
-            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
+            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
@@ -372,7 +355,7 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новый спортсмен" }
+        const newItem = { name: "Новая страна" }
         this.dataSource.addItem(newItem);
     }
 
@@ -387,17 +370,8 @@ class MySportsmenSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            let id = key.id
-            let currentItem = this.currentItem
-            if (id == "order.number") {
-                id = "number"
-                currentItem = this.currentItem.order
-            }
-            if (id == "order.link") {
-                id = "link"
-                currentItem = this.currentItem.order
-            }
-            currentItem[id] = value;
+            const currentItem = key.currentObject ?? this.currentItem
+            currentItem[key.id] = value;
             key.value = value;
         });
         this.oldValues.clear();
@@ -417,4 +391,4 @@ class MySportsmenSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-sportsmen-section-1", MySportsmenSection1)
+customElements.define("my-sports-categories-section-1", MySportsCategoriesSection1);
