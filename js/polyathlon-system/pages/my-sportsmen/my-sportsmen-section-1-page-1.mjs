@@ -5,8 +5,8 @@ import '../../../../components/selects/simple-select.mjs'
 import '../../../../components/inputs/gender-input.mjs'
 import '../../../../components/inputs/birthday-input.mjs'
 
-import SportsCategoryDataSource from '../my-referee-categories/my-referee-categories-datasource.mjs'
-import SportsCategoryDataset from '../my-referee-categories/my-referee-categories-dataset.mjs'
+import SportsCategoryDataSource from '../my-sports-categories/my-sports-categories-datasource.mjs'
+import SportsCategoryDataset from '../my-sports-categories/my-sports-categories-dataset.mjs'
 
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../my-regions/my-regions-dataset.mjs'
@@ -62,7 +62,7 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <simple-select id="region" icon-name="region-solid" label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" icon-name="club-solid" label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
                 <simple-input id="hashNumber" icon-name="hash-number-solid" label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
-                <simple-select id="category" icon-name="referee-category-solid" label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="category" icon-name="sports-category-solid" label="Category name:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-input id="order.number" icon-name="order-number-solid" label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
                 <simple-input id="order.link" icon-name="link-solid" label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
                 <simple-input id="personLink" icon-name="user" label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>

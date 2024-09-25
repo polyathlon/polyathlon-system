@@ -32,8 +32,9 @@ class MySportsCategoriesSection1Page1 extends BaseElement {
 
     render() {
         return html`
-            <div>
-                <simple-input id="name" icon-name="sports-category-solid" image-name=${this.item?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.flag + '.svg' } error-image="sports-category-red-solid" label="Sports Сategory name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+            <div class="container">
+                <simple-input id="name" icon-name="sports-category-solid" label="Sports category name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="shortName" icon-name="sports-category-solid" label="Short name:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -51,6 +52,7 @@ class MySportsCategoriesSection1Page1 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
+
             if (e.target.id === 'name' || e.target.id === 'flag') {
                 this.parentNode.parentNode.host.requestUpdate()
             }

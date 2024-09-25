@@ -297,16 +297,14 @@ class MySportsCategoriesSection1 extends BaseElement {
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
+                html `
+                    <icon-button
                         label=${item.name}
                         title=${item._id}
                         icon-name="sports-category-solid"
-                        image-name=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
-                        error-image="sports-category-solid"
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
-                    >
-                    </icon-button>
+                    ></icon-button>
                 `
             )}
         `

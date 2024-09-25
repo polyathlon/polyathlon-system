@@ -32,7 +32,7 @@ class MyCountriesSection1Page1 extends BaseElement {
 
     render() {
         return html`
-            <div>
+            <div class="container">
                 <simple-input id="name" icon-name="country-solid" image-name=${this.item?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.flag + '.svg' } error-image="country-red-solid" label="Country name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
                 <simple-input id="flag" icon-name="flag-solid" label="Flag:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
             </div>
@@ -52,6 +52,7 @@ class MyCountriesSection1Page1 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
+            
             if (e.target.id === 'name' || e.target.id === 'flag') {
                 this.parentNode.parentNode.host.requestUpdate()
             }

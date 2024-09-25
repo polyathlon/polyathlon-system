@@ -297,7 +297,8 @@ class MyCountriesSection1 extends BaseElement {
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
+                html `
+                    <icon-button
                         label=${item.name}
                         title=${item._id}
                         icon-name="country-solid"
@@ -305,8 +306,7 @@ class MyCountriesSection1 extends BaseElement {
                         error-image="country-solid"
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
-                    >
-                    </icon-button>
+                    ></icon-button>
                 `
             )}
         `
