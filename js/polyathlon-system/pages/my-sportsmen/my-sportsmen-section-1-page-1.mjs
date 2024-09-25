@@ -65,7 +65,7 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <simple-select id="category" icon-name="sports-category-solid" label="Category name:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-input id="order.number" icon-name="order-number-solid" label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
                 <simple-input id="order.link" icon-name="link-solid" label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
-                <simple-input id="personLink" icon-name="user" label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
+                <simple-input id="personLink" icon-name="user-link" label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

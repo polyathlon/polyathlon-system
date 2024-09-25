@@ -34,7 +34,7 @@ class MySportsCategoriesSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="sports-category-solid" label="Sports category name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="shortName" icon-name="sports-category-solid" label="Short name:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
+                <simple-input id="shortName" icon-name="short-sports-category-solid" label="Short name:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
