@@ -48,14 +48,34 @@ class MyRefereesSection1Page1 extends BaseElement {
                     <simple-input id="firstName" icon-name="user-group-solid" label="Referee FistName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="middleName" icon-name="users-solid" label="Referee MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <simple-select id="category" icon-name="referee-category-solid" label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-select id="region" icon-name="region-solid" label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-input id="order.number" icon-name="order-number-solid" label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order.number} @input=${this.validateInput}></simple-input>
-                <simple-input id="order.link" icon-name="link-solid" label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order.link} @input=${this.validateInput}></simple-input>
-                <simple-input id="personLink" icon-name="user-link" label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
+                <simple-select id="category" icon-name="referee-category-solid" .iconClick=${this.categoryClick} label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" icon-name="region-solid" label="Region name:" .iconClick=${this.regionClick} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <div class="name-group">
+                    <simple-input id="order.number" icon-name="order-number-solid" .iconClick=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order.number} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.link" icon-name="link-solid" .iconClick=${this.linkClick} label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order.link} @input=${this.validateInput}></simple-input>
+                </div>
+                <simple-input id="personLink" icon-name="user-link" .iconClick=${this.linkClick} label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
+
+    linkClick(e) {
+        window.open(this.value);
+    }
+
+    categoryClick() {
+        window.location.hash = 'my-referee-categories'
+    }
+
+    regionClick() {
+        window.location.hash = 'my-regions'
+    }
+
+    numberClick(e) {
+        window.open(this.getRootNode().host.$id('order.link').value);
+    }
+
+
 
     validateInput(e) {
         if (e.target.value !== "") {

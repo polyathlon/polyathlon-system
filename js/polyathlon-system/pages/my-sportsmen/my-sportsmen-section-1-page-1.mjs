@@ -59,15 +59,37 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <simple-input id="middleName" icon-name="users-solid" label="MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 <birthday-input id="birthday" label="Data of Birth:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
                 <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="region" icon-name="region-solid" label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="club" icon-name="club-solid" label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" icon-name="region-solid" .iconClick=${this.regionClick} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="club" icon-name="club-solid" .iconClick=${this.clubClick} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
                 <simple-input id="hashNumber" icon-name="hash-number-solid" label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
-                <simple-select id="category" icon-name="sports-category-solid" label="Category name:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-input id="order.number" icon-name="order-number-solid" label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
-                <simple-input id="order.link" icon-name="link-solid" label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
-                <simple-input id="personLink" icon-name="user-link" label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
+                <simple-select id="category" icon-name="sports-category-solid" .iconClick=${this.categoryClick} label="Category name:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <div class="name-group">
+                    <simple-input id="order.number" icon-name="order-number-solid" .iconClick=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.link" icon-name="link-solid" .iconClick=${this.linkClick} label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
+                </div>
+                <simple-input id="personLink" icon-name="user-link" .iconClick=${this.linkClick} label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
+    }
+
+    linkClick(e) {
+        window.open(this.value);
+    }
+
+    numberClick(e) {
+        window.open(this.getRootNode().host.$id('order.link').value);
+    }
+
+    categoryClick() {
+        window.location.hash = 'my-sports-categories'
+    }
+
+    regionClick() {
+        window.location.hash = 'my-regions'
+    }
+
+    clubClick() {
+        window.location.hash = 'my-clubs'
     }
 
     validateInput(e) {

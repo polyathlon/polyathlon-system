@@ -177,7 +177,7 @@ class MyRegionsSection1 extends BaseElement {
         this.pageNames = ['Property']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'country-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
+            // {iconName: 'country-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
@@ -230,7 +230,7 @@ class MyRegionsSection1 extends BaseElement {
                     name: r[0],
                     country: countryDataset.find('name', r[1]),
                     link: r[2],
-                    code: r[3]
+                    code: r[3] < 10 ? "0" + r[3] : r[3].toString()
                 }
                 this.dataSource.addItem(newItem);
             }

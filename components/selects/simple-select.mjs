@@ -22,6 +22,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             currentItem: {type: Object, default: null},
             iconName: { type: String, default: 'project-avatar-solid', attribute: 'icon-name'},
             imageName: { type: String, default: '', attribute: 'image-name'},
+            iconClick: { type: Function, default: undefined},
         }
     }
 
@@ -100,13 +101,13 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
 
     get #icon() {
         return html`
-            <simple-icon class="icon" icon-name=${this.iconName}></simple-icon>
+            <simple-icon class="icon" icon-name=${this.iconName} @click=${this.iconClick || nothing}></simple-icon>
         `
     }
 
     get #image() {
         return html`
-            <img src=${this.imageName} alt="Логотип проекта" />
+            <img src=${this.imageName} alt="" @click=${this.iconClick || nothing}/>
         `
     }
     // get value() {

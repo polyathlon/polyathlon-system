@@ -179,9 +179,8 @@ class MyRefereesSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
-            {iconName: 'referee-category-solid', page: 'my-referee-categories', title: 'Referee Categories', click: () => this.showPage('my-referee-categories')},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'pdf-make', title: 'Make in PDF', click: () => this.pdfMethod()},
+            {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }

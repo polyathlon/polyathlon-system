@@ -178,9 +178,9 @@ class MySportsmenSection1 extends BaseElement {
         this.pageNames = ['Property']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
-            {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
-            {iconName: 'sports-category-solid', page: 'my-sports-categories', title: 'Sports Categories', click: () => this.showPage('my-sports-categories')},
+            // {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
+            // {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
+            // {iconName: 'sports-category-solid', page: 'my-sports-categories', title: 'Sports Categories', click: () => this.showPage('my-sports-categories')},
 
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},

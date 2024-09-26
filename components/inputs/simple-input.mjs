@@ -11,9 +11,9 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             type: { type: String, default: 'text'},
             required: { type: Boolean, default: false},
             label: { type: String, default: '' },
-
-            imageName: { type: String, default: '', attribute: 'image-name'},
             iconName: { type: String, default: '', attribute: 'icon-name'},
+            imageName: { type: String, default: '', attribute: 'image-name'},
+            iconClick: { type: Function, default: undefined},
             errorImage: { type: String, default: 'error-image', attribute: 'error-image'},
             buttonName: { type: String, default: '', attribute: 'button-name' },
             placeholder: { type: String, default: '' },
@@ -63,7 +63,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             return ''
         }
         return html`
-            <simple-icon class="icon" icon-name=${this.iconName}></simple-icon>
+            <simple-icon class="icon" icon-name=${this.iconName} @click=${this.iconClick || nothing}></simple-icon>
         `
     }
 
@@ -72,7 +72,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             return this.#icon
         }
         return html`
-            <img src=${this.imageName} alt="" title=${this.title || nothing} @error=${this.defaultImage} />
+            <img src=${this.imageName} alt="" title=${this.title || nothing} @error=${this.defaultImage} @click=${this.iconClick || nothing}/>
         `
     }
 
