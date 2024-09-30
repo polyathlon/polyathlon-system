@@ -120,7 +120,7 @@ class MyClubsSection1 extends BaseElement {
                         align-items: center;
                         justify-content: center;
                         /* padding-right: 10px; */
-                        gap: 10px;
+                        gap: 1vw;
                     }
                 }
 
@@ -177,9 +177,6 @@ class MyClubsSection1 extends BaseElement {
         this.pageNames = ['Property']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'country-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
-            {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
-            {iconName: 'city-solid', page: 'my-cities', title: 'Cities', click: () => this.showPage('my-cities')},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]

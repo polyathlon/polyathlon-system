@@ -21,13 +21,13 @@ class MyProfileSection1Page1 extends BaseElement {
                 :host {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    overflow: hidden;
+                    align-items: safe center;
+                    height: 100%;
                     gap: 10px;
                 }
 
                 .right-container {
-                    width: 600px;
+                    max-width: 600px;
                 }
             `
         ]

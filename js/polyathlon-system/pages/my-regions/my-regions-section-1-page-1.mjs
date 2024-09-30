@@ -43,19 +43,19 @@ class MyRegionsSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="region-solid" label="Region name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="country" icon-name="country-solid" .iconClick=${this.countryClick} image-name=${this.item?.country?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.country?.flag + '.svg' } error-image="country-red-solid" label="Country:" .dataSource=${this.countryDataSource} .value=${this.item?.country} @input=${this.validateInput}></simple-select>
+                <simple-select id="country" icon-name="country-solid" .iconClick=${() => this.showPage('my-countries')} image-name=${this.item?.country?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.country?.flag + '.svg' } error-image="country-red-solid" label="Country:" .dataSource=${this.countryDataSource} .value=${this.item?.country} @input=${this.validateInput}></simple-select>
                 <simple-input id="link" icon-name="link-solid" .iconClick=${this.linkClick} label="Link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
                 <simple-input id="code" icon-name="order-number-solid" label="Code:" .value=${this.item?.code} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
-    linkClick(e) {
-        window.open(this.value);
+    showPage(page) {
+        location.hash = page;
     }
 
-    countryClick() {
-        window.location.hash = 'my-countries'
+    linkClick(e) {
+        window.open(this.value);
     }
 
     validateInput(e) {

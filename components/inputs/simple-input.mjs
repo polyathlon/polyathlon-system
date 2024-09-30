@@ -16,6 +16,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             iconClick: { type: Function, default: undefined},
             errorImage: { type: String, default: 'error-image', attribute: 'error-image'},
             buttonName: { type: String, default: '', attribute: 'button-name' },
+            buttonClick: { type: Function, default: undefined},
             placeholder: { type: String, default: '' },
             value: { type: String, default: ''},
             oldValue: { type: String, default: ''},
@@ -83,7 +84,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
 
     get #button() {
         return html`
-            <simple-icon class="button" icon-name=${this.buttonName || nothing}></simple-icon>
+            <simple-icon class="button" icon-name=${this.buttonName || nothing} @click=${this.buttonClick || nothing}></simple-icon>
         `
     }
 

@@ -5,7 +5,7 @@ import '../../../../components/selects/simple-select.mjs'
 import '../../../../components/inputs/gender-input.mjs'
 import '../../../../components/inputs/birthday-input.mjs'
 
-import DataSet from './my-sportsmen-dataset.mjs'
+import DataSet from '../my-sportsman-registrations/my-sportsman-registrations-dataset.mjs'
 
 import SportsCategoryDataSource from '../my-sports-categories/my-sports-categories-datasource.mjs'
 import SportsCategoryDataset from '../my-sports-categories/my-sports-categories-dataset.mjs'
@@ -16,7 +16,7 @@ import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 import ClubDataSource from '../my-clubs/my-clubs-datasource.mjs'
 import ClubDataset from '../my-clubs/my-clubs-dataset.mjs'
 
-class MySportsmenSection1Page1 extends BaseElement {
+class MyProfileSection1Page3 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -148,4 +148,4 @@ class MySportsmenSection1Page1 extends BaseElement {
     }
 }
 
-customElements.define("my-sportsmen-section-1-page-1", MySportsmenSection1Page1);
+customElements.define("my-profile-section-1-page-3", MyProfileSection1Page3);

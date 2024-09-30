@@ -1,4 +1,4 @@
-import DataSet from "./my-sportsmen-dataset.mjs";
+import DataSet from "./my-sportsman-registrations-dataset.mjs";
 
 export default class DataSource {
 
@@ -18,18 +18,18 @@ export default class DataSource {
     }
 
     getCurrentItem(){
-        const item = sessionStorage.getItem('currentSportsman')
+        const item = sessionStorage.getItem('currentSportsmanRegistration')
         if (item) {
             return this.items.find(p => p._id === item)
         }
         else {
-            sessionStorage.setItem('currentSportsman', this.items[0]?._id)
+            sessionStorage.setItem('currentSportsmanRegistration', this.items[0]?._id)
             return this.items?.[0]
         }
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentSportsman', item._id)
+        sessionStorage.setItem('currentSportsmanRegistration', item._id)
         this.component.currentItem = item
     }
 

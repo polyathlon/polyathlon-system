@@ -1,19 +1,25 @@
-import { BaseElement, html, css, cache } from '../../../base-element.mjs'
+import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
 import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/country-button.mjs'
+import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
+import '../../../../components/buttons/aside-button.mjs';
+
 import './my-profile-section-1-page-1.mjs'
-// import './my-competitions-section-1-page-2.mjs'
+import './my-profile-section-1-page-2.mjs'
+import './my-profile-section-1-page-3.mjs'
+
+import DataSet from './my-profile-dataset.mjs'
+import DataSource from './my-profile-datasource.mjs'
 
 class MyProfileSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSet: {type: Array, default: []},
+            dataSource: {type: Object, default: null},
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
@@ -38,7 +44,7 @@ class MyProfileSection1 extends BaseElement {
                     grid-template-areas:
                         "header1 header2"
                         "sidebar content"
-                        "footer  footer";
+                        "footer1  footer2";
                     gap: 0 20px;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
@@ -49,24 +55,35 @@ class MyProfileSection1 extends BaseElement {
                     align-items: center;
                 }
 
-                #competition-header{
+                .left-header{
                     grid-area: header1;
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
+                    p {
+                        width: 100%;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        font-size: 1rem;
+                        margin: 0;
+                    }
                 }
 
-                #competition-header p {
-                    width: 100%;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    font-size: 1rem;
-                    margin: 0;
-                }
-
-                #property-header{
+                .right-header{
                     grid-area: header2;
+                    justify-content: flex-start;
+                    icon-button {
+                        height: 100%;
+                        padding: 0 1vw;
+                        &[active] {
+                            background-color: var(--layout-background-color);
+                        }
+                        &hover {
+                            background-color: var(--layout-background-color);
+                        }
+                    }
+
                 }
 
                 .left-layout {
@@ -79,6 +96,11 @@ class MyProfileSection1 extends BaseElement {
                     overflow-x: hidden;
                     background: var(--layout-background-color);
                     gap: 10px;
+                    icon-button {
+                        width: 100%;
+                        height: 40px;
+                        flex: 0 0 40px;
+                    }
                 }
 
                 .avatar {
@@ -102,10 +124,74 @@ class MyProfileSection1 extends BaseElement {
                     overflow-x: hidden;
                     grid-area: content;
                     display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-right: 20px;
+                    /* justify-content: space-between; */
+                    justify-content: center;
+                    align-items: flex-start;
+                    /* margin-right: 20px; */
                     background: var(--layout-background-color);
+                    /* overflow: hidden; */
+                    gap: 10px;
+                }
+
+                p {
+                    font-size: 1.25rem;
+                    margin: 20px 207px 20px 0;
+                    overflow-wrap: break-word;
+                }
+
+                .left-footer {
+                    grid-area: footer1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    gap: 10px;
+                    nav {
+                        background-color: rgba(255, 255, 255, 0.1);
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        /* padding-right: 10px; */
+                        gap: 1vw;
+                    }
+
+                }
+
+                .right-footer {
+                    grid-area: footer2;
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    gap: 10px;
+                    nav {
+                        background-color: rgba(255, 255, 255, 0.1);
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 0 10px;
+                        /* padding-right: 10px; */
+                        gap: 1vw;
+                        &.save {
+                            justify-content: flex-end;
+                        }
+                        simple-button {
+                            height: 36px;
+                            &:hover {
+                                background-color: red;
+                            }
+                        }
+                    }
+                }
+
+                icon-button[selected] {
+                    background: rgba(255, 255, 255, 0.1)
+                }
+
+                icon-button:hover {
+                    background: rgba(255, 255, 255, 0.1)
                 }
 
                  /* width */
@@ -125,75 +211,9 @@ class MyProfileSection1 extends BaseElement {
                     border-radius: 5px;
                 }
 
-                h1 {
-                    font-size: 3.4375rem;
-                    font-weight: 700;
-                    text-transform: uppercase;
-                    margin: 20px 0 0;
-                }
-
-                h2 {
-                    font-weight: 300;
-                    line-height: 1.2;
-                    font-size: 1.25rem;
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
-                }
-
-                a {
-                    display: inline-block;
-                    text-transform: uppercase;
-                    color: var(--native-color);
-                    margin: 20px auto 0 0;
-                    background-color: var(--background-green);
-                    letter-spacing: 1px;
-                    text-decoration: none;
-                    white-space: nowrap;
-                    padding: 10px 30px;
-                    border-radius: 0;
-                    font-weight: 600;
-                }
-
-                a:hover {
-                    background-color: var(--button-hover-color);
-                }
-
-                footer {
-                    grid-area: footer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: end;
-                    margin-right: 20px;
-                    gap: 10px;
-                }
-
-                footer simple-button {
-                    height: 40px;
-                }
-                #drop_zone {
-                    border: 5px solid blue;
-                    width: 200px;
-                    height: 100px;
-                }
-
-                .left-aside {
-                    display: flex;
-                    justify-content: center;
-                    width: 40px;
-                }
-                .right-aside {
-                    display: flex;
-                    justify-content: center;
-                    width: 40px;
-                }
-                simple-icon[visible] {
+                #fileInput {
                     display: none;
                 }
-
             `
         ]
     }
@@ -201,36 +221,118 @@ class MyProfileSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Person information', 'Passport information']
+        this.pageNames = [
+            {label: 'User', iconName: 'user'},
+            {label: 'Passport', iconName: 'judge1-solid'},
+            {label: 'Sportsman', iconName: 'user'},
+            {label: 'Competition', iconName: 'competition-solid'},
+        ]
+
         this.currentPage = 0;
         this.oldValues = new Map();
+        this.buttons = [
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
     }
 
-    // update(changedProps) {
-    //     super.update(changedProps);
-    //     if (!changedProps) return;
-    //     if (changedProps.has('itemStatus') && this.itemStatus) {
-    //         this.statusDataSet.set(this.itemStatus._rev, this.itemStatus)
-    //         this.requestUpdate()
-    //     }
-    //     if (changedProps.has('currentCountryItem')) {
-    //         this.currentPage = 0;
-    //     }
-    // }
+    showPage(page) {
+        location.hash = page;
+    }
 
-    // async showItem(index, itemId) {
-    //     if (this.isModified) {
-    //         const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
-    //         if (modalResult === 'Ok')
-    //             this.saveItem().then(() => this.currentItem = this.dataSet[index]);
-    //     }
-    //     else {
-    //         this.setCurrentItem(this.dataSet[index])
-    //     }
-    // }
+    gotoBack(page) {
+        history.back();
+    }
+
+    async getNewFileHandle() {
+        const options = {
+          types: [
+            {
+              description: 'Excel files',
+              accept: {
+                'application/octet-stream': ['.xslx'],
+              },
+            },
+            {
+              description: 'Neural Models',
+              accept: {
+                'application/octet-stream': ['.pkl'],
+              },
+            },
+
+          ],
+        };
+        const handle = await window.showSaveFilePicker(options);
+        return handle;
+    }
+
+    ExcelFile() {
+        this.renderRoot.getElementById("fileInput").click();
+    }
+
+    async importFromExcel(e) {
+        const file = e.target.files[0];
+        const workbook = XLSX.read(await file.arrayBuffer());
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const regionDataset = RegionDataset.default
+        raw_data.forEach((r, index) => {
+            if(index !== 0){
+                const newItem = {
+                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
+                    firstName: r[1].split(' ')[1],
+                    middleName: r[1].split(' ')[2],
+                    category: {
+                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
+                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
+                        "name": "Судья всероссийской категории",
+                    },
+                    region: regionDataset.find("name", r[4]),
+                    order: {
+                        number: r[5],
+                        link: r[6]
+                    },
+                    link: r[7],
+                }
+                this.dataSource.addItem(newItem);
+            }
+        });
+    }
+
+    update(changedProps) {
+        super.update(changedProps);
+        if (!changedProps) return;
+        if (changedProps.has('itemStatus') && this.itemStatus) {
+            this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
+            this.requestUpdate()
+        }
+        if (changedProps.has('currentCountryItem')) {
+            this.currentPage = 0;
+        }
+    }
+
+    async showItem(index, itemId) {
+        if (this.isModified) {
+            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+            if (modalResult === 'Ok') {
+                await this.dataSource.saveItem(this.currentItem);
+            }
+            else {
+                await this.cancelItem()
+            }
+        }
+        else {
+            this.dataSource.setCurrentItem(this.dataSource.items[index])
+        }
+    }
 
     #page() {
-        return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
+        switch(this.currentPage) {
+            case 0: return cache(this.#page1())
+            case 1: return cache(this.#page2())
+            case 2: return cache(this.#page3())
+        }
     }
 
     #page1() {
@@ -241,7 +343,13 @@ class MyProfileSection1 extends BaseElement {
 
     #page2() {
         return html`
-            <my-profile-section-1-page-1 .item=${this.currentItem}></my-profile-section-1-page-1>
+            <my-profile-section-1-page-2 .item=${this.currentItem}></my-profile-section-1-page-2>
+        `;
+    }
+
+    #page3() {
+        return html`
+            <my-profile-section-1-page-3 .item=${this.currentItem}></my-profile-section-1-page-3>
         `;
     }
 
@@ -249,12 +357,28 @@ class MyProfileSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    nextPage() {
-        this.currentPage++;
+    get #list() {
+        return html`
+            <div class="avatar">
+                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
+            </div>
+            <div class="label">
+                ${JSON.parse(this.#loginInfo).login}
+            </div>
+            <div class="statistic">
+                <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+            </div>
+        `
     }
 
-    prevPage() {
-        this.currentPage--;
+    get #task() {
+        return html`
+            <nav>${this.buttons.map((button, index) =>
+                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
+            </nav>
+        `
     }
 
     get #loginInfo() {
@@ -265,235 +389,61 @@ class MyProfileSection1 extends BaseElement {
             return sessionStorage.getItem('userInfo')
         }
     }
+
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Profile ${this.currentItem?.name}</p></header>
-            <header id="property-header">${this.#pageName}</header>
+            <header class="left-header">
+                <p>Profile ${this.currentItem?.name}</p>
+            </header>
+            <header class="right-header">
+                ${this.pageNames.map( (page, index) =>
+                    html `
+                        <icon-button ?active=${index === this.currentPage} icon-name=${page.iconName} label=${page.label} @click=${() => this.currentPage = index}></icon-button>
+                    `
+                )}
+            </header>
             <div class="left-layout">
-                <div class="avatar">
-                    ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
-                </div>
-                <div class="label">
-                    ${JSON.parse(this.#loginInfo).login}
-                </div>
-                <div class="statistic">
-                    <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                    <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                    <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                </div>
+                ${this.#list}
             </div>
             <div class="right-layout">
-                <div class="left-aside">
-                    <simple-icon icon-name="square-arrow-left-sharp-solid" @click=${this.prevPage} ?visible=${this.currentPage === 0} title=${this.pageNames[this.currentPage - 1]}></simple-icon>
-                </div>
                 ${this.#page()}
-                <div class="right-aside">
-                    <simple-icon icon-name="square-arrow-right-sharp-solid" @click=${this.nextPage} ?visible=${this.currentPage === this.pageNames.length - 1} title=${this.pageNames[this.currentPage + 1]}></simple-icon>
-                </div>
             </div>
-            <footer>
+            <footer class="left-footer">
+                ${this.#task}
+            </footer>
+            <footer class="right-footer">
                 ${ this.isModified ? html`
-                    <simple-button label="Сохранить" @click=${this.saveItem}></simple-button>
-                    <simple-button label="Отменить" @click=${this.cancelItem}></simple-button>
-                ` : ''
+                    <nav class='save'>
+                        <simple-button label="Сохранить" @click=${this.saveItem}></simple-button>
+                        <simple-button label="Отменить" @click=${this.cancelItem}></simple-button>
+                    </nav>
+                ` :  html`
+                    <nav>
+                        <simple-icon icon-name="square-arrow-left-sharp-solid" @click=${this.prevPage} ?visible=${this.currentPage === 0} title=${this.pageNames[this.currentPage - 1]}></simple-icon>
+                        <simple-icon icon-name="square-arrow-right-sharp-solid" @click=${this.nextPage} ?visible=${this.currentPage === this.pageNames.length - 1} title=${this.pageNames[this.currentPage + 1]}></simple-icon>
+                    </nav>
+                `
                 }
             </footer>
+            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
-    async getUserInfo() {
-        // return sessionStorage.getItem('userProfile') ? JSON.parse(sessionStorage.getItem('userProfile')) : await this.getUserProfile()
-        return await this.getUserProfile()
+    nextPage() {
+        this.currentPage++;
     }
 
-    fetchUserProfile(token) {
-        return fetch('https://localhost:4500/api/user-profile', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    async getUserProfile() {
-        const token = this.getToken()
-        let response = await this.fetchUserProfile(token)
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchUserProfile(token)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return this.saveDataSet(result)
-    }
-
-    saveDataSet(userProfile) {
-        this.dataSet = userProfile;
-        sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
-        return this.dataSet;
-    }
-
-    async refreshToken() {
-        const response = await fetch('https://localhost:4500/api/refresh-token', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            credentials: "include",
-        })
-
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-
-        const token = result.token
-        this.saveToken(token)
-        return token
-    }
-
-    saveToken(token) {
-        if (localStorage.getItem('rememberMe')) {
-            localStorage.setItem('accessUserToken', token)
-        }
-        else {
-            sessionStorage.setItem('accessUserToken', token)
-        }
-    }
-
-    fetchSaveItem(token) {
-        return fetch(`https://localhost:4500/api/user-profile`, {
-            method: "PUT",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(this.dataSet)
-        })
-    }
-
-    async saveItem() {
-        const token = this.getToken();
-
-        if (this.avatarFile) {
-            let result = await this.uploadAvatarFile();
-            if (!result) return;
-        }
-
-        let response = await this.fetchSaveItem(token)
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchSaveItem(token)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        this.afterSave(result)
-    }
-
-    fetchAvatarFile(token, formData) {
-        return fetch(`https://localhost:4500/api/upload/avatar`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-            body: formData
-        })
-    }
-
-    async uploadAvatarFile() {
-        const token = this.getToken();
-        const formData = new FormData();
-        formData.append("file", this.avatarFile);
-        let response = await this.fetchAvatarFile(token, formData)
-        if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchAvatarFile(token, formData)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result
-    }
-
-    // saveDataSet(items) {
-    //     if (items.length === 0)
-    //         return;
-    //     this.dataSet = items.map(item => {
-    //         return item;
-    //     }).sort( (a, b) => b._rev.localeCompare(a._rev) )
-    //     this.currentItem = this.getCurrentItem();
-    //     this.requestUpdate()
-    // }
-
-    // validateInput(e) {
-    //     if (e.target.value !== "") {
-    //         this.oldValues ??= new Map();
-    //         const currentItem = e.target.currentObject ?? this.currentItem
-    //         if (!this.oldValues.has(e.target))
-    //             this.oldValues.set(e.target, currentItem[e.target.id])
-    //         else if (this.oldValues.get(e.target) === e.target.value) {
-    //                 this.oldValues.delete(e.target)
-    //         }
-    //         currentItem[e.target.id] = e.target.value
-    //         this.isModified = this.oldValues.size !== 0;
-    //     }
-    // }
-
-    getToken() {
-        return localStorage.getItem('rememberMe') ? localStorage.getItem('accessUserToken') : sessionStorage.getItem('accessUserToken')
+    prevPage() {
+        this.currentPage--;
     }
 
     async confirmDialogShow(message) {
         return await this.renderRoot.querySelector('confirm-dialog').show(message);
     }
 
-    // fetchGetItems(token) {
-    //     return fetch('https://localhost:4500/api/user-profile', {
-    //         headers: {
-    //             'Authorization': `Bearer ${token}`
-    //         }
-    //     })
-    // }
-
-    // async getItems() {
-    //     const token = this.getToken()
-    //     let response = await this.fetchGetItems(token)
-    //     if (response.status === 419) {
-    //         const token = await this.refreshToken()
-    //         response = await this.fetchGetItems(token)
-    //     }
-    //     const result = await response.json()
-    //     if (!response.ok) {
-    //         throw new Error(result.error)
-    //     }
-    //     const items = [result];
-    //     this.saveDataSet(items)
-    // }
-
-    // getCurrentItem(){
-    //     // const item = sessionStorage.getItem('currentCountry')
-    //     // if (item) {
-    //     //     return this.dataSet.find(p => p._rev === item)
-    //     // }
-    //     // else {
-    //     //     sessionStorage.setItem('currentCountry', this.dataSet[0]._rev)
-    //     //     return this.dataSet[0]
-    //     // }
-    //     return this.dataSet[0]
-    // }
-
-    // setCurrentItem(item) {
-    //     sessionStorage.setItem('currentCountry', item._rev)
-    //     this.currentItem = item;
-    // }
-
-    async afterSave(itemHeader) {
-        this.currentItem._rev = itemHeader.rev;
+    async saveItem() {
+        await this.dataSource.saveItem(this.currentItem);
         this.oldValues?.clear();
         this.isModified = false;
     }
@@ -503,7 +453,7 @@ class MyProfileSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            const currentItem = key.currentObject ?? this.currentItem.personalInfo
+            const currentItem = key.currentObject ?? this.currentItem
             currentItem[key.id] = value;
             key.value = value;
         });
@@ -511,11 +461,11 @@ class MyProfileSection1 extends BaseElement {
         this.isModified = false;
     }
 
+
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;
-        this.dataSet = await this.getUserInfo();
-        this.currentItem = this.dataSet
+        this.dataSource = new DataSource(this, await DataSet.getDataSet())
         this.avatar = null; // await this.downloadAvatar();
         this.isFirst = true;
     }

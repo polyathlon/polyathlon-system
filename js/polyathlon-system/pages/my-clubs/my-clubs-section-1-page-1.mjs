@@ -49,21 +49,17 @@ class MyClubsSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="club-solid" label="Club name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="country" icon-name="country-solid" image-name=${this.item?.city?.region?.country?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.city?.region?.country?.flag + '.svg'} label="Country name:" .dataSource=${this.countryDataSource} .value=${this.item?.city?.region?.country} @input=${this.countryChange}></simple-select>
-                <simple-select id="region" icon-name="region-solid" label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.city?.region} @input=${this.regionChange}></simple-select>
-                <simple-select id="city" icon-name="city-solid" label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-select id="country" icon-name="country-solid" .iconClick=${() => this.showPage('my-countries')} image-name=${this.item?.city?.region?.country?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.city?.region?.country?.flag + '.svg'} label="Country name:" .dataSource=${this.countryDataSource} .value=${this.item?.city?.region?.country} @input=${this.countryChange}></simple-select>
+                <simple-select id="region" icon-name="region-solid" .iconClick=${() => this.showPage('my-regions')} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.city?.region} @input=${this.regionChange}></simple-select>
+                <simple-select id="city" icon-name="city-solid" .iconClick=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
             </div>
         `;
     }
 
-    countryChange(e) {
-        this.regionDataSource.filter(e.target.value)
-
+    showPage(page) {
+        location.hash = page;
     }
-    regionChange(e) {
-        this.cityDataSource.filter(e.target.value)
 
-    }
     validateInput(e) {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? this.item

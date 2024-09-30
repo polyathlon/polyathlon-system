@@ -8,12 +8,12 @@ import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 
-import './my-referees-section-1-page-1.mjs'
+import './my-sportsman-registrations-section-1-page-1.mjs'
 
-import DataSet from './my-referees-dataset.mjs'
-import DataSource from './my-referees-datasource.mjs'
+import DataSet from './my-sportsman-registrations-dataset.mjs'
+import DataSource from './my-sportsman-registrations-datasource.mjs'
 
-class MyRefereesSection1 extends BaseElement {
+class MySportsmanRegistrationsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -58,12 +58,12 @@ class MyRefereesSection1 extends BaseElement {
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     p {
-                        width: 100%;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        font-size: 1rem;
-                        margin: 0;
+                    width: 100%;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    font-size: 1rem;
+                    margin: 0;
                     }
                 }
 
@@ -80,8 +80,8 @@ class MyRefereesSection1 extends BaseElement {
                     overflow-x: hidden;
                     background: var(--layout-background-color);
                     icon-button {
-                        width: 100%;
-                        height: 40px;
+                    width: 100%;
+                    height: 40px;
                         flex: 0 0 40px;
                     }
                 }
@@ -93,7 +93,7 @@ class MyRefereesSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: flex-start;
+                    align-items: center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
@@ -136,7 +136,7 @@ class MyRefereesSection1 extends BaseElement {
                         height: 36px;
                         &:hover {
                             background-color: red;
-                        }
+                }
                     }
                 }
 
@@ -148,8 +148,8 @@ class MyRefereesSection1 extends BaseElement {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                /* width */
-                ::-webkit-scrollbar {
+                 /* width */
+                 ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -178,53 +178,14 @@ class MyRefereesSection1 extends BaseElement {
         this.pageNames = ['Property']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
+            // {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
+            // {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
+            // {iconName: 'sports-category-solid', page: 'my-sports-categories', title: 'Sports Categories', click: () => this.showPage('my-sports-categories')},
+
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
-
-    pdfMethod() {
-
-        var docInfo = {
-
-            info: {
-                title:'Referees',
-                author:'Polyathlon systems',
-            },
-
-            pageSize:'A4',
-            pageOrientation:'landscape',//'portrait'
-            pageMargins:[50,50,30,60],
-
-            header:function(currentPage,pageCount) {
-                return {
-                    text: currentPage.toString() + 'из' + pageCount,
-                    alignment:'right',
-                    margin:[0,30,10,50]
-                }
-            },
-
-            content: [
-
-                {
-                    text:'Дмитрий',
-                    fontSize:20,
-                    margin:[150, 80, 30,0]
-                    //pageBreak:'after'
-                },
-
-                {
-                    text:'Гуськов',
-                    style:'header'
-                    //pageBreak:'before'
-                }
-            ]
-        }
-        pdfMake.createPdf(docInfo).open();
-
-        }
 
     showPage(page) {
         location.hash = page;
@@ -266,7 +227,7 @@ class MyRefereesSection1 extends BaseElement {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
         const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-        const regionDataset = RegionDataset.default
+        const regionDataset = await RegionDataset.RegionDataset()
         raw_data.forEach((r, index) => {
             if(index !== 0){
                 const newItem = {
@@ -278,7 +239,7 @@ class MyRefereesSection1 extends BaseElement {
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
                         "name": "Судья всероссийской категории",
                     },
-                    region: regionDataset.find("name", r[3]),
+                    region: regionDataset.find("name", r[4]),
                     order: {
                         number: r[5],
                         link: r[6]
@@ -297,7 +258,7 @@ class MyRefereesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRefereeItem')) {
+        if (changedProps.has('currentSportsmanRegistrationItem')) {
             this.currentPage = 0;
         }
     }
@@ -323,13 +284,13 @@ class MyRefereesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-referees-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-referees-section-1-page-1>
+            <my-sportsman-registrations-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-sportsman-registrations-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-referees-section-1-page-2 .item=${this.currentItem}></my-referees-section-1-page-2>
+            <my-sportsman-registrations-section-1-page-2 .item=${this.currentItem}></my-sportsman-registrations-section-1-page-2>
         `;
     }
 
@@ -355,11 +316,11 @@ class MyRefereesSection1 extends BaseElement {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
                 html `<icon-button
-                        label=${this.fio(item)}
-                        title=${item._id}
-                        icon-name="judge1-solid"
-                        .status=${item.category}
-                        ?selected=${this.currentItem === item}
+                        label=${ this.fio(item) }
+                        title=${ item._id }
+                        icon-name=${ item.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+                        .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'hash-number-solid'} : '' }
+                        ?selected=${ this.currentItem === item }
                         @click=${() => this.showItem(index, item._id)}
                     >
                     </icon-button>
@@ -379,7 +340,7 @@ class MyRefereesSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header class="left-header"><p>Referee</p></header>
+            <header class="left-header"><p>Sportsmen</p></header>
             <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.#list}
@@ -411,7 +372,7 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новый регион" }
+        const newItem = { name: "Новый спортсмен" }
         this.dataSource.addItem(newItem);
     }
 
@@ -456,4 +417,4 @@ class MyRefereesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-referees-section-1", MyRefereesSection1)
+customElements.define("my-sportsman-registrations-section-1", MySportsmanRegistrationsSection1)

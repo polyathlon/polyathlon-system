@@ -93,7 +93,7 @@ class MyCountriesSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: center;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     overflow: hidden;
@@ -120,7 +120,7 @@ class MyCountriesSection1 extends BaseElement {
                         align-items: center;
                         justify-content: center;
                         /* padding-right: 10px; */
-                        gap: 10px;
+                        gap: 1vw;
                     }
                 }
 

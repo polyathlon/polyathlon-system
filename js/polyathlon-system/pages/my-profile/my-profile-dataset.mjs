@@ -19,7 +19,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/sportsmen', {
+        return fetch('https://localhost:4500/api/user-profile', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -37,14 +37,12 @@ export default class DataSet {
         if (!response.ok) {
             throw new Error(result.error)
         }
-        const items = result.rows.map(item => {
-            return item.doc;
-        })
+        const items = [result]
         return items
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman`, {
+        return fetch(`https://localhost:4500/api/country`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -77,7 +75,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/sportsman/${itemId}`, {
+        return fetch(`https://localhost:4500/api/user-profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -103,7 +101,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman/${item._id}`, {
+        return fetch(`https://localhost:4500/api/user-profile`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -136,7 +134,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/user-profile/?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -171,29 +169,29 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchCreateHashNumber(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman-hash-number`, {
+    fetchAvatarFile(token, formData) {
+        return fetch(`https://localhost:4500/api/upload/avatar`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
             },
-            body: JSON.stringify(item)
+            body: formData
         })
     }
 
-    static async createHashNumber(item) {
-        const token = getToken();
-        let response = await DataSet.fetchCreateHashNumber(token, item)
-
+    async uploadAvatarFile() {
+        const token = this.getToken();
+        const formData = new FormData();
+        formData.append("file", this.avatarFile);
+        let response = await this.fetchAvatarFile(token, formData)
         if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchCreateHashNumber(token, item)
+            const token = await this.refreshToken()
+            response = await this.fetchAvatarFile(token, formData)
         }
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)
         }
-        return result.number
+        return result
     }
 }

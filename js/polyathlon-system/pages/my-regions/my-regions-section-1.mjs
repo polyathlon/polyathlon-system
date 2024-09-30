@@ -120,7 +120,7 @@ class MyRegionsSection1 extends BaseElement {
                         align-items: center;
                         justify-content: center;
                         /* padding-right: 10px; */
-                        gap: 10px;
+                        gap: 1vw;
                     }
                 }
 

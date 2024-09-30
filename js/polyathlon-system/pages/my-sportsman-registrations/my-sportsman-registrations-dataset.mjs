@@ -19,7 +19,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/sportsmen', {
+        return fetch('https://localhost:4500/api/sportsman-registrations', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -44,7 +44,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman`, {
+        return fetch(`https://localhost:4500/api/sportsman-registration`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -77,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/sportsman/${itemId}`, {
+        return fetch(`https://localhost:4500/api/sportsman-registration/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -103,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman/${item._id}`, {
+        return fetch(`https://localhost:4500/api/sportsman-registration/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -136,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/sportsman-registration/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -169,31 +169,5 @@ export default class DataSet {
             return
         }
         DataSet.#dataSet.splice(itemIndex, 1)
-    }
-
-    static fetchCreateHashNumber(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman-hash-number`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(item)
-        })
-    }
-
-    static async createHashNumber(item) {
-        const token = getToken();
-        let response = await DataSet.fetchCreateHashNumber(token, item)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchCreateHashNumber(token, item)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result.number
     }
 }
