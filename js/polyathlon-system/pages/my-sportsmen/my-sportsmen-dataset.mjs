@@ -172,7 +172,7 @@ export default class DataSet {
     }
 
     static fetchCreateHashNumber(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman-hash-number`, {
+        return fetch(`https://localhost:4500/api/sportsman-id`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,

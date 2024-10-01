@@ -227,10 +227,11 @@ class MyRegionsSection1 extends BaseElement {
         raw_data.forEach( (r, index) => {
             if (index !== 0) {
                 const newItem = {
-                    name: r[0],
-                    country: countryDataset.find('name', r[1]),
-                    link: r[2],
-                    code: r[3] < 10 ? "0" + r[3] : r[3].toString()
+                    number: r[0],
+                    name: r[1],
+                    country: countryDataset.find('name', r[2]),
+                    link: r[3],
+                    code: r[4] < 10 ? "0" + r[4] : r[4].toString()
                 }
                 this.dataSource.addItem(newItem);
             }
