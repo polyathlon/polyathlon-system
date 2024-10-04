@@ -22,7 +22,6 @@ customElements.define('icon-button', class IconButton extends BaseElement {
                 :host {
                     display: inline-block;
                     vertical-align: middle;
-                    margin: 1px;
                     height: 60px;
                     user-select: none;
                 }

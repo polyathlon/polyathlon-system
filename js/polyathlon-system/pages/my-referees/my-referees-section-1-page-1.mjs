@@ -3,6 +3,8 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/selects/simple-select.mjs'
 
+import DataSet from './my-referees-dataset.mjs'
+
 import RefereeCategoryDataSource from '../my-referee-categories/my-referee-categories-datasource.mjs'
 import RefereeCategoryDataset from '../my-referee-categories/my-referee-categories-dataset.mjs'
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
@@ -12,6 +14,8 @@ class MyRefereesSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
+            refereeCategorySource: {type: Object, default: null},
+            regionDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
@@ -50,13 +54,30 @@ class MyRefereesSection1Page1 extends BaseElement {
                 <simple-input id="middleName" icon-name="users-solid" label="Referee MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 <simple-select id="category" icon-name="referee-category-solid" .iconClick=${() => this.showPage('my-referee-categories')} label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" icon-name="region-solid" label="Region name:" .iconClick=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-input id="hashNumber" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard} .buttonClick=${this.createHashNumber} label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="order.number" icon-name="order-number-solid" .iconClick=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order.number} @input=${this.validateInput}></simple-input>
-                    <simple-input id="order.link" icon-name="link-solid" .iconClick=${this.linkClick} label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order.link} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.number" icon-name="order-number-solid" .iconClick=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.link" icon-name="link-solid" .iconClick=${this.linkClick} label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="personLink" icon-name="user-link" .iconClick=${this.linkClick} label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
+    }
+
+    async createHashNumber() {
+        const host = this.getRootNode().host
+        const hashNumber = await DataSet.createHashNumber({
+            countryCode: host.item?.region?.country?.flag.toUpperCase(),
+            regionCode: host.item?.region?.code,
+            ulid: host.item?.profileUlid,
+        })
+        this.setValue(hashNumber)
+    }
+
+    copyToClipboard() {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(this.value)
+        }
     }
 
     linkClick(e) {
@@ -72,7 +93,7 @@ class MyRefereesSection1Page1 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
+        // if (e.target.value !== "") {
             let id = e.target.id
             let currentItem = this.item
             if (id == "order.number") {
@@ -105,7 +126,7 @@ class MyRefereesSection1Page1 extends BaseElement {
                 this.parentNode.parentNode.host.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;
-        }
+        // }
     }
 
     async firstUpdated() {

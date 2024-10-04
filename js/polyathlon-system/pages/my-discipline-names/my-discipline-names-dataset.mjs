@@ -11,13 +11,18 @@ export default class DataSet {
         return DataSet.#dataSet
     }
 
+    static find(name, value) {
+        const index = DataSet.#dataSet.findIndex(element =>
+            element[name] === value || element[name].toLowerCase() === value
+        )
+        return index === -1 ? null : DataSet.#dataSet[index]
+    }
+
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/referees', {
+        return fetch('https://localhost:4500/api/discipline-names', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
-        }).catch(e => {
-            throw new Error(`Ошибка доступа к серверу: ${e.message}`);
         })
     }
 
@@ -39,7 +44,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/referee`, {
+        return fetch(`https://localhost:4500/api/discipline-name`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -72,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/referee/${itemId}`, {
+        return fetch(`https://localhost:4500/api/discipline-name/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -98,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/referee/${item._id}`, {
+        return fetch(`https://localhost:4500/api/discipline-name/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -131,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/referee/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/discipline-name/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -164,30 +169,5 @@ export default class DataSet {
             return
         }
         DataSet.#dataSet.splice(itemIndex, 1)
-    }
-    static fetchCreateHashNumber(token, item) {
-        return fetch(`https://localhost:4500/api/referee-id`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(item)
-        })
-    }
-
-    static async createHashNumber(item) {
-        const token = getToken();
-        let response = await DataSet.fetchCreateHashNumber(token, item)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchCreateHashNumber(token, item)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result.number
     }
 }

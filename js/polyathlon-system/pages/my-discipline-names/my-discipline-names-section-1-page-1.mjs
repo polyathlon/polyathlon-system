@@ -1,16 +1,12 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/selects/simple-select.mjs'
-import CountryDataSource from '../my-countries/my-countries-datasource.mjs'
-import CountryDataset from '../my-countries/my-countries-dataset.mjs'
 
-class MyCompetitionsSection1Page1 extends BaseElement {
+class MyDisciplineNamesSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
-            countryDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
         }
@@ -23,12 +19,12 @@ class MyCompetitionsSection1Page1 extends BaseElement {
                 :host {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    overflow-x: hidden;
+                    align-items: safe center;
+                    height: 100%;
                     gap: 10px;
                 }
                 .container {
-                    width: 600px;
+                    max-width: 600px;
                 }
             `
         ]
@@ -37,10 +33,7 @@ class MyCompetitionsSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="user" label="Competition name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                
-                <simple-input id="region" icon-name="flag-solid" label="Region name:" .value=${this.item?.region} @input=${this.validateInput}></simple-input>
-                <simple-input id="flag" icon-name="flag-solid" label="Flag name:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="country-solid" image-name=${this.item?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.flag + '.svg' } error-image="country-red-solid" label="Country name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -58,17 +51,17 @@ class MyCompetitionsSection1Page1 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
+
+            if (e.target.id === 'name' || e.target.id === 'flag') {
                 this.parentNode.parentNode.host.requestUpdate()
+            }
+            if (e.target.id === 'flag') {
+                this.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;
         }
     }
-    async firstUpdated() {
-        super.firstUpdated();
-        this.countryDataSource = new CountryDataSource(this, await CountryDataset.getDataSet())
-    }
 
 }
 
-customElements.define("my-competitions-section-1-page-1", MyCompetitionsSection1Page1);
+customElements.define("my-discipline-names-section-1-page-1", MyDisciplineNamesSection1Page1);

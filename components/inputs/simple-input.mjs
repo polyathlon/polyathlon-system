@@ -88,6 +88,11 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
         `
     }
 
+    setValue(value) {
+        this.value = value;
+        this.fire('input')
+    }
+
     render() {
         return html`
             ${this.label ? this.#label : ''}
