@@ -4,20 +4,21 @@ import '../../../../components/dialogs/confirm-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/icon-button.mjs'
+import '../../../../components/buttons/country-button.mjs'
+import '../../../../components/buttons/project-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 
-import './my-countries-section-1-page-1.mjs'
+import './my-competitions-section-1-page-1.mjs'
+// import './my-competitions-section-1-page-2.mjs'
+import DataSet from './my-competitions-dataset.mjs'
+import DataSource from './my-competitions-datasource.mjs'
 
-import DataSet from './my-countries-dataset.mjs'
-import DataSource from './my-countries-datasource.mjs'
-
-class MyCountriesSection1 extends BaseElement {
+class MyCompetitionsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Object, default: null},
+            dataSource: {type: Array, default: []},
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
@@ -36,10 +37,6 @@ class MyCountriesSection1 extends BaseElement {
                 :host {
                     display: grid;
                     width: 100%;
-                    min-width: 320px;
-                        max-width: 320px;
-                        font-size: 14px;
-                        background-color: rgba(0, 0, 0, 0.1);
                     grid-template-columns: 3fr 9fr;
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
@@ -50,49 +47,29 @@ class MyCountriesSection1 extends BaseElement {
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
 
-                header {
-                    grid-area: header;
+                header{
                     display: flex;
-                    justify-content: flex-start;
-                    flex-direction: row-reverse;
-                    flex: 0 0 auto;
-                    user-select: none;
-                    background-color: #6001d2;
-                    font-family: 'Rubik', sans-serif;
-                    font-size: 18px;
-                    color: #FFF;
-                    line-height: 25px;
-                    box-sizing: border-box;
-                    font-weight: 600;
-                    text-align: center;
-                    padding: 5px;
-                    .poly-competition-number {
-                        white-space: nowrap;
-                        user-select: text;
-                    }
-                    .poly-competition-name {
-                        width: 100%;
-                        text-align: center;
-                        user-select: text;
-                    }
+                    justify-content: space-between;
+                    align-items: center;
                 }
 
-                .left-header{
+                #competition-header{
                     grid-area: header1;
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
-                    p {
-                        width: 100%;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        font-size: 1rem;
-                        margin: 0;
-                    }
                 }
 
-                .right-header{
+                #competition-header p {
+                    width: 100%;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    font-size: 1rem;
+                    margin: 0;
+                }
+
+                #property-header{
                     grid-area: header2;
                 }
 
@@ -104,11 +81,13 @@ class MyCountriesSection1 extends BaseElement {
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
-                    icon-button {
-                        width: 100%;
-                        height: 40px;
-                        flex: 0 0 40px;
-                    }
+                }
+
+                .left-layout country-button,
+                .left-layout project-button
+                {
+                    width: 100%;
+                    height: 40px;
                 }
 
                 .right-layout {
@@ -118,10 +97,10 @@ class MyCountriesSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: safe center;
+                    align-items: flex-start;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    overflow: hidden;
+                    /* overflow: hidden; */
                     gap: 10px;
                 }
 
@@ -137,16 +116,6 @@ class MyCountriesSection1 extends BaseElement {
                     align-items: center;
                     justify-content: end;
                     gap: 10px;
-                    nav {
-                        background-color: rgba(255, 255, 255, 0.1);
-                        width: 100%;
-                        height: 70%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        /* padding-right: 10px; */
-                        gap: 1vw;
-                    }
                 }
 
                 .right-footer {
@@ -156,6 +125,20 @@ class MyCountriesSection1 extends BaseElement {
                     justify-content: end;
                     margin-right: 20px;
                     gap: 10px;
+                }
+
+                .left-footer nav{
+                    background-color: rgba(255, 255, 255, 0.1);
+                    width: 100%;
+                    height: 70%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    /* padding-right: 10px; */
+                    gap: 10px;
+                }
+
+                .right-footer {
                     simple-button {
                         height: 36px;
                         &:hover {
@@ -164,16 +147,21 @@ class MyCountriesSection1 extends BaseElement {
                     }
                 }
 
-                icon-button[selected] {
+
+                country-button[selected],
+                project-button[selected]
+                {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                icon-button:hover {
+                country-button:hover,
+                project-button:hover
+                {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                /* width */
-                ::-webkit-scrollbar {
+                 /* width */
+                 ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -188,10 +176,6 @@ class MyCountriesSection1 extends BaseElement {
                     background: red;
                     border-radius: 5px;
                 }
-
-                #fileInput {
-                    display: none;
-                }
             `
         ]
     }
@@ -199,76 +183,74 @@ class MyCountriesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Property']
+        this.pageNames = ['Competition property']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'type-solid', page: 'my-competition-types', title: 'Competition Types', click: () => this.showPage('my-competition-types')},
+            {iconName: 'category-solid', page: 'my-competition-kinds', title: 'Competition Kinds', click: () => this.showPage('my-competition-kinds')},
+            {iconName: 'swimming-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
+            {iconName: 'throwing-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
+            {iconName: 'city-solid', page: 'my-cities', title: 'Cities', click: () => this.showPage('my-cities')},
+            {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
+            {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
+            {iconName: 'age-group-solid', page: 'my-age-groups', title: 'Gender Ages', click: () => this.showPage('my-age-groups')},
+            {iconName: 'pdf-make', title: 'Make in PDF', click: () => this.pdfMethod()},
+
         ]
     }
 
+    pdfMethod() {
+
+        var docInfo = {
+
+            info: {
+                title:'Тестовый документ PDF',
+                author:'Viktor',
+                subject:'Theme',
+                keywords:'Ключевые слова'
+            },
+
+            pageSize:'A4',
+            pageOrientation:'landscape',//'portrait'
+            pageMargins:[50,50,30,60],
+
+            header:function(currentPage,pageCount) {
+                return {
+                    text: currentPage.toString() + 'из' + pageCount,
+                    alignment:'right',
+                    margin:[0,30,10,50]
+                }
+            },
+
+            footer:[
+                {
+                    text:'нижний колонтитул',
+                    alignment:'center',//left  right
+                }
+            ],
+
+            content: [
+
+                {
+                    text:'Медведев',
+                    fontSize:20,
+                    margin:[150,80, 30,0]
+                    //pageBreak:'after'
+                },
+
+                {
+                    text:'Сергей',
+                    style:'header'
+                    //pageBreak:'before'
+                }
+            ]
+        }
+        pdfMake.createPdf(docInfo).open();
+
+                }
+
     showPage(page) {
         location.hash = page;
-    }
-
-    gotoBack(page) {
-        history.back();
-    }
-
-    async getNewFileHandle() {
-        const options = {
-          types: [
-            {
-              description: 'Excel files',
-              accept: {
-                'application/octet-stream': ['.xslx'],
-              },
-            },
-            {
-              description: 'Neural Models',
-              accept: {
-                'application/octet-stream': ['.pkl'],
-              },
-            },
-
-          ],
-        };
-        const handle = await window.showSaveFilePicker(options);
-        return handle;
-    }
-
-    ExcelFile() {
-        this.renderRoot.getElementById("fileInput").click();
-    }
-
-    async importFromExcel(e) {
-        const file = e.target.files[0];
-        const workbook = XLSX.read(await file.arrayBuffer());
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-        const regionDataset = await RegionDataset.RegionDataset()
-        raw_data.forEach((r, index) => {
-            if(index !== 0){
-                const newItem = {
-                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
-                    firstName: r[1].split(' ')[1],
-                    middleName: r[1].split(' ')[2],
-                    category: {
-                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
-                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
-                        "name": "Судья всероссийской категории",
-                    },
-                    region: regionDataset.find("name", r[4]),
-                    order: {
-                        number: r[5],
-                        link: r[6]
-                    },
-                    link: r[7],
-                }
-                this.dataSource.addItem(newItem);
-            }
-        });
     }
 
     update(changedProps) {
@@ -278,7 +260,7 @@ class MyCountriesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCountryItem')) {
+        if (changedProps.has('currentCompetitionItem')) {
             this.currentPage = 0;
         }
     }
@@ -304,13 +286,13 @@ class MyCountriesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-countries-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-countries-section-1-page-1>
+            <my-competitions-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competitions-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-countries-section-1-page-2 .item=${this.currentItem}></my-countries-section-1-page-2>
+            <my-competitions-section-1-page-2 .item=${this.currentItem}></my-competitions-section-1-page-2>
         `;
     }
 
@@ -321,18 +303,16 @@ class MyCountriesSection1 extends BaseElement {
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `
-                    <icon-button
-                        label=${item.name}
+                html `<project-button
+                        label=${item.lastName}
                         title=${item._id}
-                        icon-name="country-solid"
-                        image-name=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
-                        error-image="country-solid"
+                        .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
+                        .status=${item.category}
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
-                    ></icon-button>
-                `
-            )}
+                    >
+                    </project-button>
+            `)}
         `
     }
 
@@ -347,8 +327,8 @@ class MyCountriesSection1 extends BaseElement {
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header class="left-header"><p>Countries</p></header>
-            <header class="right-header">${this.#pageName}</header>
+            <header id="competition-header"><p>Competition ${this.currentItem?.name}</p></header>
+            <header id="property-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.#list}
             </div>
@@ -362,14 +342,12 @@ class MyCountriesSection1 extends BaseElement {
                 <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
                 <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
             </footer>
-            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
     nextPage() {
         this.currentPage++;
     }
-
     prevPage() {
         this.currentPage--;
     }
@@ -379,8 +357,7 @@ class MyCountriesSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новая страна" }
-        this.dataSource.addItem(newItem);
+        this.dataSource.addItem();
     }
 
     async saveItem() {
@@ -415,4 +392,4 @@ class MyCountriesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-countries-section-1", MyCountriesSection1);
+customElements.define("my-competitions-section-1", MyCompetitionsSection1)

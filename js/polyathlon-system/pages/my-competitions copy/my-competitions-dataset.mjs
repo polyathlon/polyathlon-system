@@ -11,13 +11,6 @@ export default class DataSet {
         return DataSet.#dataSet
     }
 
-    static find(name, value) {
-        const index = DataSet.#dataSet.findIndex(element =>
-            element[name] === value || element[name].toLowerCase() === value
-        )
-        return index === -1 ? null : DataSet.#dataSet[index]
-    }
-
     static #fetchGetItems(token) {
         return fetch('https://localhost:4500/api/competitions', {
             headers: {
@@ -43,33 +36,34 @@ export default class DataSet {
         return items
     }
 
-    static fetchAddItem(token, item) {
+    static fetchAddItem(token) {
+        const newItem = {name: "Новый город"}
         return fetch(`https://localhost:4500/api/competition`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json;charset=utf-8'
             },
-            body: JSON.stringify(item)
+            body: JSON.stringify(newItem)
         })
     }
 
     static async addItem() {
         const token = getToken();
-        let response = await DataSet.fetchAddItem(token, item)
+        let response = await DataSet.fetchAddItem(token)
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchAddItem(token, item)
+            response = await DataSet.fetchAddItem(token)
         }
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)
         }
 
-        const newItem = await DataSet.getItem(result.id)
-        DataSet.addToDataset(newItem)
-        return newItem
+        const item = await DataSet.getItem(result.id)
+        DataSet.addToDataset(item)
+        return item
     }
 
     static addToDataset(item) {

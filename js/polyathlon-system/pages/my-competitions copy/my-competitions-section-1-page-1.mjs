@@ -23,12 +23,12 @@ class MyCompetitionsSection1Page1 extends BaseElement {
                 :host {
                     display: flex;
                     justify-content: space-between;
-                    align-items: safe center;
-                    height: 100%;
+                    align-items: center;
+                    overflow-x: hidden;
                     gap: 10px;
                 }
                 .container {
-                    max-width: 600px;
+                    width: 600px;
                 }
             `
         ]
@@ -38,7 +38,7 @@ class MyCompetitionsSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="user" label="Competition name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-
+                
                 <simple-input id="region" icon-name="flag-solid" label="Region name:" .value=${this.item?.region} @input=${this.validateInput}></simple-input>
                 <simple-input id="flag" icon-name="flag-solid" label="Flag name:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
             </div>
