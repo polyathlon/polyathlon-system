@@ -31,6 +31,18 @@ class MyCompetitionKindsSection1Page1 extends BaseElement {
         return html`
             <div>
                 <simple-input id="name" icon-name="user" label="Competition Kind name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="running" icon-name="user" label="Бег:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="throwing" icon-name="user" label="Метание:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="shooting" icon-name="user" label="Стрельба:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="swimming" icon-name="user" label="Плавание:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="running2" icon-name="user" label="Бег:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="pull-up" icon-name="user" label="Подтягивание:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="bend-arms" icon-name="user" label="Сгибание и разгибание рук в упоре лежа:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="cross-country-skiing" icon-name="user" label="Лыжная гонка:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="jump" icon-name="user" label="Прыжок в длину:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="roller-ski-race" icon-name="user" label="Гонка на лыжероллерах:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="ski-relay" icon-name="user" label="Лыжная эстафета:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+
             </div>
         `;
     }
