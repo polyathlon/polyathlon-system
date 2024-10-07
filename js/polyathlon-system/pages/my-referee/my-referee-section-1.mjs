@@ -231,6 +231,7 @@ class MyRefereeSection1 extends BaseElement {
         this.currentPage = 0;
         this.oldValues = new Map();
         this.buttons = [
+            {iconName: 'qrcode-solid', page: 'my-referee-categories', title: 'qrcode', click: () => this.getQRCode},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
@@ -242,6 +243,16 @@ class MyRefereeSection1 extends BaseElement {
 
     gotoBack(page) {
         history.back();
+    }
+
+    async getQRCode() {
+        const host = this.getRootNode().host
+        const hashNumber = await DataSet.getQRCode({
+            countryCode: host.item?.region?.country?.flag.toUpperCase(),
+            regionCode: host.item?.region?.code,
+            ulid: host.item?.profileUlid,
+        })
+        this.setValue(hashNumber);
     }
 
     async getNewFileHandle() {

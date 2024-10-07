@@ -171,4 +171,29 @@ export default class DataSet {
         }
         return result
     }
+    
+    static fetchGetQRCode(token, item) {
+        return fetch(`https://localhost:4500/api/qr-code?data=123`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        })
+    }
+
+    static async getQRCode(item) {
+        const token = getToken();
+        let response = await DataSet.fetchGetQRCode(token, item)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchGetQRCode(token, item)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result.qr
+    }
 }
