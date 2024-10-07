@@ -25,7 +25,7 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
                         "header header"
                         "aside main"
                         "footer  footer";
-                    gap: 0 10px;
+                    gap: 0 0px;
                     min-width: 320px;
                     max-width: 320px;
                     font-size: 12px;
@@ -79,7 +79,6 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
                 }
                 main {
                     grid-area: main;
-                    flex: 1;
                     padding: 5px 0px 5px 5px;
                     .title {
                         width: 100%;
@@ -103,7 +102,6 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
                     grid-area: footer;
                     display: flex;
                     justify-content: space-evenly;
-                    flex: 0 0 auto;
                     font-size: 16px;
                     color: white;
                     line-height: 25px;

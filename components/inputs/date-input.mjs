@@ -5,10 +5,10 @@ import '../buttons/simple-button.mjs'
 
 import styles from './input-css.mjs'
 
-customElements.define("simple-input", class SimpleInput extends BaseElement {
+customElements.define("date-input", class DateInput extends BaseElement {
     static get properties() {
         return {
-            type: { type: String, default: 'text'},
+            type: { type: String, default: 'date'},
             required: { type: Boolean, default: false},
             label: { type: String, default: '' },
             iconName: { type: String, default: '', attribute: 'icon-name'},
@@ -21,7 +21,6 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             value: { type: String, default: ''},
             oldValue: { type: String, default: ''},
             currentObject: { type: Object, default: undefined},
-            lang: { type: String, default: ''},
         }
     }
 
@@ -102,7 +101,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                     placeholder=${this.placeholder || nothing}
                     ${this.required ? 'required' : ''}
                     .value=${this.value || ''} @input=${this.changeValue}
-                    lang=${this.lang || nothing}
+                    lang="ru-Ru"
                 >
                 ${this.#image}
                 ${this.buttonName ? this.#button : ''}

@@ -69,7 +69,11 @@ class MyCompetitionsSection1 extends BaseElement {
                 }
 
                 .right-header{
-                    grid-area: header2;
+                    grid-area: header1 / header1 / header1 / header2;
+                }
+
+                .filter {
+                    display: flex;
                 }
 
                 .left-layout {
@@ -126,7 +130,7 @@ class MyCompetitionsSection1 extends BaseElement {
                 }
 
                 .right-footer {
-                    grid-area: footer2;
+                    grid-area: footer1 / footer1 / footer2 / footer2;
                     display: flex;
                     align-items: center;
                     justify-content: end;
@@ -309,8 +313,9 @@ class MyCompetitionsSection1 extends BaseElement {
         ]
     }
 
-    showPage(page) {
-        location.hash = page;
+    showPage(hash, param) {
+        localStorage.setItem('currentCompetition', param)
+        location.hash = hash;
     }
 
     gotoBack(page) {
@@ -404,126 +409,10 @@ class MyCompetitionsSection1 extends BaseElement {
         return html`
             <div class="poly-items">
                 <competition-card></competition-card>
-            <div class="poly-item" id="11">
-                    <div class="poly-header" data-color="4">
-                        <span class="poly-competition-number">26484</span>
-                        <span class="poly-competition-name">Кубок России 1 этап</span>
-                    </div>
-                    <div class="poly-schedule">
-                        <div class="poly-left">
-                            <div class="poly-dates" data-color="4">
-                                <span data-start="2023-01-12" data-end="2023-01-15">12-15 января</span>
-                            </div>
-                            <div class="poly-image">
-                                <img src="https://polyathlon.ru/wp-content/uploads/2023/02/Kovrov-240x300.png">
-                            </div>
-                            <div class="poly-place">
-                                <span>Ковров, Владимирская область, Россия</span>
-                            </div>
-                        </div>
-
-                        <div class="poly-main">
-                            <div class="poly-schedule-title"><span>3-борье с лыжной гонкой, командные соревнования</span></div>
-                            <div class="poly-age-groups">
-                                                                    <div class="poly-age-group">
-                                        <span>
-                                          Мужчины, женщины                                        </span>
-                                    </div>
-                                                            </div>
-                        </div>
-                    </div>
-                    <div class="poly-footer">
-                                                    <div class="poly-button">
-                                <a href="https://disk.yandex.ru/i/_QbpRO4n_PoLVA" target="_blank">Регламент</a>
-                            </div>
-                                                                            <div class="poly-button">
-                                <a href="https://disk.yandex.ru/i/OrhNEGOFzvoCsw" target="_blank">Протоколы</a>
-                            </div>
-                                                                            <div class="poly-button">
-                                <a href="https://polyathlon.ru/competitions/соревнования-в-коврове-в-феврале-2023-год/">Подробнее</a>
-                            </div>
-                                                                    </div>
-                </div>
-                <div class="poly-item" id="14">
-                    <div class="poly-header" data-color="4">
-                        <span class="poly-competition-number">26484</span>
-                        <span class="poly-competition-name">Кубок России 1 этап</span>
-                    </div>
-                    <div class="poly-schedule">
-                        <div class="poly-left">
-                            <div class="poly-dates" data-color="4">
-                                <span data-start="2023-01-12" data-end="2023-01-15">12-15 января</span>
-                            </div>
-                            <div class="poly-image">
-                                <img src="https://polyathlon.ru/wp-content/uploads/2023/02/Kovrov-240x300.png">
-                            </div>
-                            <div class="poly-place">
-                                <span>Ковров, Владимирская область, Россия</span>
-                            </div>
-                        </div>
-
-                        <div class="poly-main">
-                            <div class="poly-schedule-title"><span>3-борье с лыжной гонкой, командные соревнования</span></div>
-                            <div class="poly-age-groups">
-                                                                    <div class="poly-age-group">
-                                        <span>
-                                          Мужчины, женщины                                        </span>
-                                    </div>
-                                                            </div>
-                        </div>
-                    </div>
-                    <div class="poly-footer">
-                                                    <div class="poly-button">
-                                <a href="https://disk.yandex.ru/i/_QbpRO4n_PoLVA" target="_blank">Регламент</a>
-                            </div>
-                                                                            <div class="poly-button">
-                                <a href="https://disk.yandex.ru/i/OrhNEGOFzvoCsw" target="_blank">Протоколы</a>
-                            </div>
-                                                                            <div class="poly-button">
-                                <a href="https://polyathlon.ru/competitions/соревнования-в-коврове-в-феврале-2023-год/">Подробнее</a>
-                            </div>
-                                                                    </div>
-                </div>
-                <div class="poly-item" id="11">
-                    <div class="poly-header" data-color="4">
-                        <span class="poly-competition-number">26484</span>
-                        <span class="poly-competition-name">Кубок России 1 этап</span>
-                    </div>
-                    <div class="poly-schedule">
-                        <div class="poly-left">
-                            <div class="poly-dates" data-color="4">
-                                <span data-start="2023-01-12" data-end="2023-01-15">12-15 января</span>
-                            </div>
-                            <div class="poly-image">
-                                <img src="https://polyathlon.ru/wp-content/uploads/2023/02/Kovrov-240x300.png">
-                            </div>
-                            <div class="poly-place">
-                                <span>Ковров, Владимирская область, Россия</span>
-                            </div>
-                        </div>
-
-                        <div class="poly-main">
-                            <div class="poly-schedule-title"><span>3-борье с лыжной гонкой, командные соревнования</span></div>
-                            <div class="poly-age-groups">
-                                                                    <div class="poly-age-group">
-                                        <span>
-                                          Мужчины, женщины                                        </span>
-                                    </div>
-                                                            </div>
-                        </div>
-                    </div>
-                    <div class="poly-footer">
-                                                    <div class="poly-button">
-                                <a href="https://disk.yandex.ru/i/_QbpRO4n_PoLVA" target="_blank">Регламент</a>
-                            </div>
-                                                                            <div class="poly-button">
-                                <a href="https://disk.yandex.ru/i/OrhNEGOFzvoCsw" target="_blank">Протоколы</a>
-                            </div>
-                                                                            <div class="poly-button">
-                                <a href="https://polyathlon.ru/competitions/соревнования-в-коврове-в-феврале-2023-год/">Подробнее</a>
-                            </div>
-                                                                    </div>
-                </div>
+                <competition-card></competition-card>
+                <competition-card></competition-card>
+                <competition-card></competition-card>
+                <competition-card></competition-card>
             </div>
         `
         // return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
@@ -547,21 +436,26 @@ class MyCompetitionsSection1 extends BaseElement {
 
     get #list() {
         return html`
-            ${this.dataSource?.items?.map((item, index) =>
-                html `
-                    <icon-button
-                        label=${item.name}
-                        title=${item._id}
-                        icon-name="country-solid"
-                        image-name=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
-                        error-image="country-solid"
-                        ?selected=${this.currentItem === item}
-                        @click=${() => this.showItem(index, item._id)}
-                    ></icon-button>
-                `
-            )}
+            <div class="poly-items">
+                ${this.dataSource?.items?.map((item, index) =>
+                    html `
+                        <competition-card .item=${item} @click=${() => this.showPage('my-competition', item._id)}></competition-card>
+                    `
+                )}
+            </div>
         `
     }
+    // get #list() {
+    //     return html`
+    //         <div class="poly-items">
+    //             ${this.dataSource?.items?.map((item, index) =>
+    //                 html `
+    //                     <competition-card .item=${item}></competition-card>
+    //                 `
+    //             )}
+    //         </div>
+    //     `
+    // }
 
     get #task() {
         return html`
@@ -571,16 +465,44 @@ class MyCompetitionsSection1 extends BaseElement {
         `
     }
 
+    get #filter() {
+        return html`
+        <div class="filter">
+            <input type="date" id="competition-time" min="2023-01-01" class="form-control" value="2024-10-07" onchange="competitionTimeFilter(event)">
+            <!-- <input type="date" id="from" name="from" data-provide="datepicker" placeholder="Дата начало" class="form-control"> -->
+            <select name="select" id="competition-status" class="form-control" onchange="competitionStatusFilter(event)">
+                <option value="--Статус--">--Статус--</option>
+                <option value="Текущее">Текущее</option>
+                <option value="Прошедшее">Прошедшее</option>
+                <option value="Ближайшее">Ближайшее</option>
+            </select>
+            <select name="select" id="competition-name" class="form-control" onchange="competitionNameFilter(event)">
+                <option value="--Соревнование--">--Соревнование--</option>
+                                    <option value="Кубок мира">Кубок мира</option>
+                                    <option value="Кубок России">Кубок России</option>
+                                    <option value="Первенство федерального округа">Первенство федерального округа</option>
+                                    <option value="Чемпионат федерального округа">Чемпионат федерального округа</option>
+                                    <option value="Первенство России">Первенство России</option>
+                                    <option value="Чемпионат РССС (Всероссийские соревнования)">Чемпионат РССС (Всероссийские соревнования)</option>
+                                    <option value="Всероссийские соревнования">Всероссийские соревнования</option>
+                                    <option value="Чемпионат России">Чемпионат России</option>
+                                    <option value="Чемпионат мира">Чемпионат мира</option>
+                                    <option value="Первенство мира">Первенство мира</option>
+                                    <option value="Фестиваль">Фестиваль</option>
+                            </select>
+        </div>
+        `
+    }
+
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header class="left-header"><p>Countries</p></header>
-            <header class="right-header">${this.#pageName}</header>
+            <header class="right-header">${this.#filter}</header>
             <div class="left-layout">
-                ${this.#page()}
+                ${this.#list}
             </div>
-            <footer class="left-footer">
-                ${this.#task}
+            <footer class="right-footer">
+                <simple-button label="Добавить" @click=${() => this.showPage('my-competition', 'new')}></simple-button>
             </footer>
             `;
     }
@@ -598,7 +520,7 @@ class MyCompetitionsSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новая страна" }
+        const newItem = { name: "Новое соревнование" }
         this.dataSource.addItem(newItem);
     }
 

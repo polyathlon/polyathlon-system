@@ -47,6 +47,24 @@ input[type="date"] {
     color: var(--form-input-color, gray);
 }
 
+input[type="date"] {
+    padding-right: 10px;
+    &::-webkit-calendar-picker-indicator {
+        display: block;
+        width: 20px;
+        height: 20px;
+        background: url('/images/calendar-solid.svg') no-repeat;
+    }
+    /* &::-webkit-datetime-edit { padding: 1em; }
+    &::-webkit-datetime-edit-fields-wrapper { background: silver; }
+    &::-webkit-datetime-edit-text { color: red; padding: 0 0.3em; }
+    &::-webkit-datetime-edit-month-field { color: blue; }
+    &::-webkit-datetime-edit-day-field { color: green; }
+    &::-webkit-datetime-edit-year-field { color: purple; } */
+
+}
+
+
 select {
     display: inline-block;
     width: 100%;

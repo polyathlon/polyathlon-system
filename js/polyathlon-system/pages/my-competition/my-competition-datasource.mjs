@@ -1,39 +1,37 @@
-import DataSet from "./my-competition-kinds-dataset.mjs";
+import DataSet from "./my-competition-dataset.mjs";
 
 export default class DataSource {
 
-    constructor(component, dataSet) {
+    constructor(component) {
         this.component = component;
-        this.dataSet = dataSet;
-        this.items = this.dataSet.map(item => {
-            return item;
-        }).sort( (a, b) => a.name.localeCompare(b.name) )
-        this.component.currentItem = this.getCurrentItem();
+        this.item = {};
+        this.component.currentItem = this.item;
     }
 
-    getCurrentItem(){
-        const item = sessionStorage.getItem('currentCompetitionKind')
-        if (item) {
-            return this.items.find(p => p._id === item)
+    async getItem() {
+        const id = localStorage.getItem('currentCompetition')
+        if (id === 'new') {
+            this.item = {};
+            this.component.currentItem = this.item;
+        } else {
+            this.item = await DataSet.getItem(id)
+            this.setCurrentItem(this.item)
         }
-        else {
-            sessionStorage.setItem('currentCompetitionKind', this.items[0]?._id)
-            return this.items?.[0]
-        }
+        return this.item;
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentCompetitionKind', item._id)
+        localStorage.setItem('currentCountry', item._id)
         this.component.currentItem = item;
     }
 
-    async addItem() {
-        const item = await DataSet.addItem()
-        this.addTo(item)
+    async addItem(item) {
+        const newItem = await DataSet.addItem(item)
+        this.addTo(newItem)
     }
 
     addTo(item) {
-        this.items.unshift(item)
+        this.item = item
         this.setCurrentItem(item)
     }
 
