@@ -61,6 +61,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
             // {iconName: 'chart-pie-simple-circle-dollar-solid', page: 'tariff-plans', title: 'Tariff Plans', click: () => this.showPage('tariff-plans')},
             {iconName: 'bell-sharp-solid', page: 'my-notifications', title: 'Notifications', blink: 1, click: () => this.showPage('my-notifications')},
             {iconName: 'settings-solid', page: 'my-settings', title: 'Settings', click: () => this.showPage('my-settings')},
+            {iconName: 'user', page: 'my-referee', title: 'Settings', click: () => this.showPage('my-referee')},
         ]
     }
 
