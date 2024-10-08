@@ -9,13 +9,13 @@ import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 
 import './my-competition-section-1-page-1.mjs'
-import './my-competition-section-1-page-2.mjs'
+import './my-competition-section-2-page-2.mjs'
 import './my-competition-section-1-page-3.mjs'
 
 import DataSet from './my-competition-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
-class MyCompetitionSection1 extends BaseElement {
+class MyCompetitionSection2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -27,7 +27,7 @@ class MyCompetitionSection1 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: { type: BigInt, default: 0},
+            currentPage: { type: BigInt, default: 1},
             currentSection: { type: BigInt, default: 0, local: true },
             isFirst: { type: Boolean, default: false }
         }
@@ -432,8 +432,8 @@ class MyCompetitionSection1 extends BaseElement {
     }
 
     gotoPage(index) {
-        if (index === 1) {
-            this.currentSection = 1
+        if (index === 0) {
+            this.currentSection = 0
         }
         this.currentPage = index
     }
@@ -488,4 +488,4 @@ class MyCompetitionSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-competition-section-1", MyCompetitionSection1);
+customElements.define("my-competition-section-2", MyCompetitionSection2);
