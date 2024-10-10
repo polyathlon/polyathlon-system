@@ -234,10 +234,10 @@ class MySportsmenSection1 extends BaseElement {
     async importFromExcel(e) {
         const file = e.target.files[0];
         const workbook = XLSX.read(await file.arrayBuffer());
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const worksheet = workbook.Sheets[workbook.SheetNames[2]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
         const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-        const regionDataset = await RegionDataset.RegionDataset()
+        const regionDataset = RegionDataset.default;
         raw_data.forEach((r, index) => {
             if(index !== 0){
                 const newItem = {
@@ -245,16 +245,16 @@ class MySportsmenSection1 extends BaseElement {
                     firstName: r[1].split(' ')[1],
                     middleName: r[1].split(' ')[2],
                     category: {
-                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
-                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
-                        "name": "Судья всероссийской категории",
+                        "_id": "sports-category:01J8MHN8VBXKDFNWT8KA508TPK",
+                        "_rev": "3-c6945ff709aefbf467c95356dff1f470",
+                        "name": "Мастер спорта международного класса",
                     },
-                    region: regionDataset.find("name", r[4]),
+                    region: regionDataset.find("name", r[3]),
                     order: {
-                        number: r[5],
-                        link: r[6]
+                        number: r[4],
+                        link: r[5]
                     },
-                    link: r[7],
+                    link: r[6],
                 }
                 this.dataSource.addItem(newItem);
             }
