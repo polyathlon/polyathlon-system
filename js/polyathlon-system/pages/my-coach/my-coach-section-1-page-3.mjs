@@ -5,7 +5,7 @@ import '../../../../components/selects/simple-select.mjs'
 import '../../../../components/inputs/gender-input.mjs'
 import '../../../../components/inputs/birthday-input.mjs'
 
-import DataSet from './my-sportsmen-dataset.mjs'
+import DataSet from '../my-sportsman-registrations/my-sportsman-registrations-dataset.mjs'
 
 import SportsCategoryDataSource from '../my-sports-categories/my-sports-categories-datasource.mjs'
 import SportsCategoryDataset from '../my-sports-categories/my-sports-categories-dataset.mjs'
@@ -16,7 +16,7 @@ import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 import ClubDataSource from '../my-clubs/my-clubs-datasource.mjs'
 import ClubDataset from '../my-clubs/my-clubs-dataset.mjs'
 
-class MySportsmenSection1Page1 extends BaseElement {
+class MyRefereeSection1Page3 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -63,9 +63,8 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="region" icon-name="region-solid" .iconClick=${() => this.showPage('my-regions')} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" icon-name="club-solid" .iconClick=${() => this.showPage('my-clubs')} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
-                <simple-input id="profileUlid" icon-name="card-id-solid" .iconClick=${this.copyToClipboard} label="Sportsman ulid:" .value=${this.item?._id} @input=${this.validateInput}></simple-input>
-                <simple-input id="hashNumber" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard} .buttonClick=${this.createHashNumber} label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
-                <simple-input id="qrCode" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard} .buttonClick=${this.getQRCode} label="Sportsman qr-code:" .value=${this.item?.qrCode} @input=${this.validateInput}></simple-input>
+                <simple-input id="profileUlid" icon-name="card-id-solid" .iconClick=${this.copyToClipboard} label="Sportsman ulid:" .value=${this.item?.profileUlid} @input=${this.validateInput}></simple-input>
+                <simple-input id="hashNumber" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard}  .buttonClick=${this.createHashNumber} label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
                 <simple-select id="category" icon-name="sports-category-solid" .iconClick=${() => this.showPage('my-sports-categories')} label="Category name:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input id="order.number" icon-name="order-number-solid" .iconClick=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
@@ -83,17 +82,7 @@ class MySportsmenSection1Page1 extends BaseElement {
             regionCode: host.item?.region?.code,
             ulid: host.item?.profileUlid,
         })
-        this.setValue(hashNumber);
-    }
-
-    async getQRCode() {
-        const host = this.getRootNode().host
-        const hashNumber = await DataSet.getQRCode({
-            countryCode: host.item?.region?.country?.flag.toUpperCase(),
-            regionCode: host.item?.region?.code,
-            ulid: host.item?.profileUlid,
-        })
-        this.setValue(hashNumber);
+        this.value = hashNumber;
     }
 
     copyToClipboard() {
@@ -159,4 +148,4 @@ class MySportsmenSection1Page1 extends BaseElement {
     }
 }
 
-customElements.define("my-sportsmen-section-1-page-1", MySportsmenSection1Page1);
+customElements.define("my-coach-section-1-page-3", MyRefereeSection1Page3);

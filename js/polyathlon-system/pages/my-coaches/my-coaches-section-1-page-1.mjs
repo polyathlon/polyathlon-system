@@ -52,7 +52,7 @@ class MyCoachesSection1Page1 extends BaseElement {
                     <simple-input id="firstName" icon-name="user-group-solid" label="Coach FistName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="middleName" icon-name="users-solid" label="Coach MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <simple-select id="category" icon-name="referee-category-solid" .iconClick=${() => this.showPage('my-referee-categories')} label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="category" icon-name="referee-category-solid" .iconClick=${() => this.showPage('my-coach-categories')} label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" icon-name="region-solid" label="Region name:" .iconClick=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-input id="id" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard}  .buttonClick=${this.createHashNumber} label="Coach ID:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">

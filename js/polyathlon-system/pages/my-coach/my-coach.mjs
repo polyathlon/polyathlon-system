@@ -1,8 +1,9 @@
-import { BaseElement, html, css } from '../../../base-element.mjs'
+import { BaseElement, html, css} from '../../../base-element.mjs'
 
-import './my-competition-section-1.mjs';
+import './my-coach-section-1.mjs';
+import '../../../../components/buttons/aside-button.mjs';
 
-class MyCompetition extends BaseElement {
+class MyReferee extends BaseElement {
     static get styles() {
         return [
             css`
@@ -27,15 +28,15 @@ class MyCompetition extends BaseElement {
     }
 
     constructor() {
-        super()
-        this.version = "1.0.0"
+        super();
+        this.version = "1.0.0";
     }
 
     render() {
         return html`
-            <my-competition-section-1></my-competition-section-1>
+            <my-coach-section-1></my-coach-section-1>
         `;
     }
 }
 
-customElements.define("my-competition", MyCompetition)
+customElements.define("my-coach", MyReferee);
