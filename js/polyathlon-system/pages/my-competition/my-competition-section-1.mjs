@@ -7,12 +7,16 @@ import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
+import '../../../../components/dialogs/add-sportsman-dialog.mjs';
 
 import './my-competition-section-1-page-1.mjs'
+import './my-competition-section-1-list-1.mjs'
 import './my-competition-section-1-page-2.mjs'
 import './my-competition-section-1-page-3.mjs'
+import './my-competition-section-1-list-3.mjs'
 
 import DataSet from './my-competition-dataset.mjs'
+import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
 class MyCompetitionSection1 extends BaseElement {
@@ -28,7 +32,6 @@ class MyCompetitionSection1 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0},
-            currentSection: { type: BigInt, default: 0, local: true },
             isFirst: { type: Boolean, default: false }
         }
     }
@@ -102,6 +105,11 @@ class MyCompetitionSection1 extends BaseElement {
                         height: 40px;
                         flex: 0 0 40px;
                     }
+                }
+
+                .left-layout[page="2"] {
+                    justify-content: flex-start;
+                    gap: 0px;
                 }
 
                 .avatar {
@@ -358,20 +366,24 @@ class MyCompetitionSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    get #list() {
+    #list1() {
         return html`
-            <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
-            </div>
-            <div class="label">
-                ${JSON.parse(this.#loginInfo).login}
-            </div>
-            <div class="statistic">
-                <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-            </div>
-        `
+            <my-competition-section-1-list-1></my-competition-section-1-list-1>
+        `;
+    }
+
+    #list3() {
+        return html`
+            <my-competition-section-1-list-3 .parent=${this.currentItem}></my-competition-section-1-list-3>
+        `;
+    }
+
+    get #list() {
+        switch(this.currentPage) {
+            case 0: return cache(this.#list1())
+            case 1: return cache(this.#list1())
+            case 2: return cache(this.#list3())
+        }
     }
 
     get #task() {
@@ -382,18 +394,10 @@ class MyCompetitionSection1 extends BaseElement {
         `
     }
 
-    get #loginInfo() {
-        if (localStorage.getItem('rememberMe')) {
-            return localStorage.getItem('userInfo')
-        }
-        else {
-            return sessionStorage.getItem('userInfo')
-        }
-    }
-
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
+            <add-sportsman-dialog></add-sportsman-dialog>
             <header class="left-header">
                 <p>Competition ${this.currentItem?.name}</p>
             </header>
@@ -404,17 +408,11 @@ class MyCompetitionSection1 extends BaseElement {
                     `
                 )}
             </header>
-            <div class="left-layout">
-                ${this.#list}
-            </div>
-            <div class="right-layout">
-                ${this.#page()}
-            </div>
-            <footer class="left-footer">
-                ${this.#task}
-            </footer>
+            <div class="left-layout" page=${(this.currentPage === 2 ? this.currentPage : '') || nothing}>${this.#list}</div>
+            <div class="right-layout">${this.#page()}</div>
+            <footer class="left-footer">${this.#task}</footer>
             <footer class="right-footer">
-                ${ this.isModified ? html`
+                ${ this.isModified || this.currentPage === 2 ? html`
                     <nav class='save'>
                         <simple-button label="Сохранить" @click=${this.saveItem}></simple-button>
                         <simple-button label="Отменить" @click=${this.cancelItem}></simple-button>
@@ -449,8 +447,16 @@ class MyCompetitionSection1 extends BaseElement {
         return await this.renderRoot.querySelector('confirm-dialog').show(message);
     }
 
+    async addSportsmanDialogShow(message) {
+        return await this.renderRoot.querySelector('add-sportsman-dialog').show(message);
+    }
+
     async saveItem() {
-        if ('_id' in this.currentItem) {
+        if (this.currentPage === 2) {
+            const modalResult = await this.addSportsmanDialogShow('Вы действительно хотите отменить все изменения?')
+            await SportsmenDataSet.addItem(modalResult, this.currentItem._id);
+        }
+        else if ('_id' in this.currentItem) {
             await this.dataSource.saveItem(this.currentItem);
         } else {
             await this.dataSource.addItem(this.currentItem);

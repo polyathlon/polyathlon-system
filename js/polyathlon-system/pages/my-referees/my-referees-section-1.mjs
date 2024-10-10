@@ -179,6 +179,7 @@ class MyRefereesSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
+            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
@@ -404,6 +405,12 @@ class MyRefereesSection1 extends BaseElement {
 
     prevPage() {
         this.currentPage--;
+    }
+
+    async getQRCode() {
+        const dataURI = await DataSet.getQRCode(this.currentItem._id)
+        const blob = await (await fetch(dataURI)).blob();
+        window.open(URL.createObjectURL(blob))
     }
 
     async confirmDialogShow(message) {

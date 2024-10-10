@@ -197,8 +197,8 @@ export default class DataSet {
         return result.number
     }
 
-    static fetchGetQRCode(token, item) {
-        return fetch(`https://localhost:4500/api/qr-code?data=123`, {
+    static fetchGetQRCode(token, data) {
+        return fetch(`https://localhost:4500/api/qr-code?data=${data}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -207,13 +207,13 @@ export default class DataSet {
         })
     }
 
-    static async getQRCode(item) {
+    static async getQRCode(data) {
         const token = getToken();
-        let response = await DataSet.fetchGetQRCode(token, item)
+        let response = await DataSet.fetchGetQRCode(token, data)
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchGetQRCode(token, item)
+            response = await DataSet.fetchGetQRCode(token, data)
         }
         const result = await response.json()
         if (!response.ok) {

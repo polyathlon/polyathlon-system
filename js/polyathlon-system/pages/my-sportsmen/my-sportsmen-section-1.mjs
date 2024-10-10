@@ -181,7 +181,7 @@ class MySportsmenSection1 extends BaseElement {
             // {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
             // {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
             // {iconName: 'sports-category-solid', page: 'my-sports-categories', title: 'Sports Categories', click: () => this.showPage('my-sports-categories')},
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode},
+            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
             {iconName: 'excel-import-solid', page: 'my-sportsmen', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-sportsmen', title: 'Back', click: () => this.gotoBack()},
         ]
@@ -196,13 +196,14 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     async getQRCode() {
-        const host = this.getRootNode().host
-        const hashNumber = await DataSet.getQRCode({
-            countryCode: host.item?.region?.country?.flag.toUpperCase(),
-            regionCode: host.item?.region?.code,
-            ulid: host.item?.profileUlid,
-        })
-        this.setValue(hashNumber);
+        const dataURI = await DataSet.getQRCode(this.currentItem._id)
+        const blob = await (await fetch(dataURI)).blob();
+        window.open(URL.createObjectURL(blob))
+        // window.open(dataURI)
+        // const image = new Image();
+        // image.src = dataURI;
+        // const w = window.open("");
+        // w.document.write(image.outerHTML);
     }
 
     async getNewFileHandle() {
