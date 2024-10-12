@@ -323,6 +323,7 @@ class MySportsmenSection1 extends BaseElement {
         return result
     }
 
+    // .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'hash-number-solid'} : '' }
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
@@ -330,8 +331,8 @@ class MySportsmenSection1 extends BaseElement {
                         label=${ this.fio(item) }
                         title=${ item._id }
                         icon-name=${ item.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
-                        .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'hash-number-solid'} : '' }
                         ?selected=${ this.currentItem === item }
+                        .status=${{ name: item._id, icon: 'hash-number-solid'} }
                         @click=${() => this.showItem(index, item._id)}
                     >
                     </icon-button>

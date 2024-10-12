@@ -37,8 +37,11 @@ export default class DataSet {
         if (!response.ok) {
             throw new Error(result.error)
         }
+        // const items = result.rows.map(item => {
+        //     return item.doc;
+        // })
         const items = result.rows.map(item => {
-            return item.doc;
+            return {_id: item.id, ...item.value};
         })
         return items
     }
