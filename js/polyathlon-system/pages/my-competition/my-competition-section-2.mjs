@@ -7,12 +7,12 @@ import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
+import '../../../../components/dialogs/add-sportsman-dialog.mjs';
 
-import './my-competition-section-1-page-1.mjs'
-import './my-competition-section-2-page-2.mjs'
-import './my-competition-section-1-page-3.mjs'
+import './my-competition-section-2-page-1.mjs'
+import './my-competition-section-2-list-1.mjs'
 
-import DataSet from './my-competition-dataset.mjs'
+import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
 class MyCompetitionSection2 extends BaseElement {
@@ -22,13 +22,12 @@ class MyCompetitionSection2 extends BaseElement {
             dataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
-            currentItem: { type: Object, default: null },
+            currentItem: { type: Object, default: null, local: true },
             isModified: { type: Boolean, default: "", local: true },
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: { type: BigInt, default: 1},
-            currentSection: { type: BigInt, default: 0, local: true },
+            currentPage: { type: BigInt, default: 0},
             isFirst: { type: Boolean, default: false }
         }
     }
@@ -39,15 +38,14 @@ class MyCompetitionSection2 extends BaseElement {
             css`
                 :host {
                     display: grid;
-                    width: 100%;
                     grid-template-columns: 3fr 9fr;
-                    grid-template-rows: 50px 1fr 50px;
+                    grid-template-rows: 1fr 50px;
                     grid-template-areas:
-                        "header1 header2"
-                        "sidebar content"
-                        "footer1  footer2";
+                    "aside main"
+                    "footer1 footer2";
                     gap: 0 20px;
-                    background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
+                    width: 100%;
+                    height: 100%;
                 }
 
                 header{
@@ -88,7 +86,7 @@ class MyCompetitionSection2 extends BaseElement {
                 }
 
                 .left-layout {
-                    grid-area: sidebar;
+                    grid-area: aside;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
@@ -102,6 +100,11 @@ class MyCompetitionSection2 extends BaseElement {
                         height: 40px;
                         flex: 0 0 40px;
                     }
+                }
+
+                .left-layout[page="2"] {
+                    justify-content: flex-start;
+                    gap: 0px;
                 }
 
                 .avatar {
@@ -121,9 +124,9 @@ class MyCompetitionSection2 extends BaseElement {
                 }
 
                 .right-layout {
+                    grid-area: main;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
@@ -222,13 +225,6 @@ class MyCompetitionSection2 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = [
-            {label: 'User', iconName: 'user'},
-            {label: 'Passport', iconName: 'judge1-solid'},
-            {label: 'Sportsman', iconName: 'user'},
-            {label: 'Competition', iconName: 'competition-solid'},
-        ]
-
         this.currentPage = 0;
         this.oldValues = new Map();
         this.buttons = [
@@ -329,29 +325,9 @@ class MyCompetitionSection2 extends BaseElement {
     // }
 
     #page() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#page1())
-            case 1: return cache(this.#page2())
-            case 2: return cache(this.#page3())
-        }
-    }
-
-    #page1() {
-        return html`
+        return cache(html`
             <my-competition-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-1-page-1>
-        `;
-    }
-
-    #page2() {
-        return html`
-            <my-competition-section-1-page-2 .item=${this.currentItem}></my-competition-section-1-page-2>
-        `;
-    }
-
-    #page3() {
-        return html`
-            <my-competition-section-1-page-3 .item=${this.currentItem}></my-competition-section-1-page-3>
-        `;
+        `);
     }
 
     get #pageName() {
@@ -359,19 +335,9 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     get #list() {
-        return html`
-            <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
-            </div>
-            <div class="label">
-                ${JSON.parse(this.#loginInfo).login}
-            </div>
-            <div class="statistic">
-                <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-            </div>
-        `
+        return cache(html`
+            <my-competition-section-2-list-1 .parent=${this.parent}></my-competition-section-2-list-1>
+        `);
     }
 
     get #task() {
@@ -382,75 +348,41 @@ class MyCompetitionSection2 extends BaseElement {
         `
     }
 
-    get #loginInfo() {
-        if (localStorage.getItem('rememberMe')) {
-            return localStorage.getItem('userInfo')
-        }
-        else {
-            return sessionStorage.getItem('userInfo')
-        }
-    }
-
     render() {
         return html`
             <confirm-dialog></confirm-dialog>
-            <header class="left-header">
-                <p>Competition ${this.currentItem?.name}</p>
-            </header>
-            <header class="right-header">
-                ${this.pageNames.map( (page, index) =>
-                    html `
-                        <icon-button ?active=${index === this.currentPage} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
-                    `
-                )}
-            </header>
-            <div class="left-layout">
-                ${this.#list}
-            </div>
-            <div class="right-layout">
-                ${this.#page()}
-            </div>
-            <footer class="left-footer">
-                ${this.#task}
-            </footer>
+            <add-sportsman-dialog></add-sportsman-dialog>
+            <div class="left-layout">${this.#list}</div>
+            <div class="right-layout">${this.#page()}</div>
+            <footer class="left-footer">${this.#task}</footer>
             <footer class="right-footer">
-                ${ this.isModified ? html`
+                ${ (this.isModified ? html`
                     <nav class='save'>
                         <simple-button label="Сохранить" @click=${this.saveItem}></simple-button>
                         <simple-button label="Отменить" @click=${this.cancelItem}></simple-button>
                     </nav>
                 ` :  html`
-                    <nav>
-                        <simple-icon icon-name="square-arrow-left-sharp-solid" @click=${this.prevPage} ?visible=${this.currentPage === 0} title=${this.pageNames[this.currentPage - 1]}></simple-icon>
-                        <simple-icon icon-name="square-arrow-right-sharp-solid" @click=${this.nextPage} ?visible=${this.currentPage === this.pageNames.length - 1} title=${this.pageNames[this.currentPage + 1]}></simple-icon>
-                    </nav>
-                `
+                    <nav class='save'></nav>`) || nothing
                 }
             </footer>
             <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
-    gotoPage(index) {
-        if (index === 0) {
-            this.currentSection = 0
-        }
-        this.currentPage = index
-    }
-    nextPage() {
-        this.currentPage++;
-    }
-
-    prevPage() {
-        this.currentPage--;
-    }
-
     async confirmDialogShow(message) {
         return await this.renderRoot.querySelector('confirm-dialog').show(message);
     }
 
+    async addSportsmanDialogShow(message) {
+        return await this.renderRoot.querySelector('add-sportsman-dialog').show(message);
+    }
+
     async saveItem() {
-        if ('_id' in this.currentItem) {
+        if (this.currentPage === 2) {
+            const modalResult = await this.addSportsmanDialogShow('Вы действительно хотите отменить все изменения?')
+            await SportsmenDataSet.addItem(modalResult, this.currentItem._id);
+        }
+        else if ('_id' in this.currentItem) {
             await this.dataSource.saveItem(this.currentItem);
         } else {
             await this.dataSource.addItem(this.currentItem);
@@ -470,21 +402,6 @@ class MyCompetitionSection2 extends BaseElement {
         });
         this.oldValues.clear();
         this.isModified = false;
-    }
-
-
-    async firstUpdated() {
-        super.firstUpdated();
-        this.isFirst  = false;
-        let params1 = new URLSearchParams(window.location.search)
-        if (params1.size > 0) {
-            window.history.replaceState(null, '', window.location.pathname + window.location.hash);
-        }
-
-        this.dataSource = new DataSource(this)
-        this.dataSource.getItem()
-        this.avatar = null; // await this.downloadAvatar();
-        this.isFirst = true;
     }
 }
 

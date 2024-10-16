@@ -2,10 +2,12 @@ import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
 export default class DataSet {
     static #dataSet;
+    static #parent;
 
     static async getDataSet(id) {
-        if (!DataSet.#dataSet) {
+        if (!DataSet.#dataSet || DataSet.#parent != id) {
             DataSet.#dataSet = await DataSet.#getItems(id)
+            DataSet.#parent = id
         }
         return DataSet.#dataSet
     }

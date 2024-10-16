@@ -12,8 +12,8 @@ import '../../../../components/dialogs/add-sportsman-dialog.mjs';
 import './my-competition-section-1-page-1.mjs'
 import './my-competition-section-1-list-1.mjs'
 import './my-competition-section-1-page-2.mjs'
-import './my-competition-section-1-page-3.mjs'
-import './my-competition-section-1-list-3.mjs'
+import './my-competition-section-2-page-1.mjs'
+import './my-competition-section-2-list-1.mjs'
 
 import DataSet from './my-competition-dataset.mjs'
 import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
@@ -42,15 +42,14 @@ class MyCompetitionSection1 extends BaseElement {
             css`
                 :host {
                     display: grid;
-                    width: 100%;
                     grid-template-columns: 3fr 9fr;
-                    grid-template-rows: 50px 1fr 50px;
+                    grid-template-rows: 1fr 50px;
                     grid-template-areas:
-                        "header1 header2"
-                        "sidebar content"
-                        "footer1  footer2";
+                    "aside main"
+                    "footer1 footer2";
                     gap: 0 20px;
-                    background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
+                    width: 100%;
+                    height: 100%;
                 }
 
                 header{
@@ -91,7 +90,7 @@ class MyCompetitionSection1 extends BaseElement {
                 }
 
                 .left-layout {
-                    grid-area: sidebar;
+                    grid-area: aside;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
@@ -129,9 +128,9 @@ class MyCompetitionSection1 extends BaseElement {
                 }
 
                 .right-layout {
+                    grid-area: main;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
@@ -230,13 +229,6 @@ class MyCompetitionSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = [
-            {label: 'User', iconName: 'user'},
-            {label: 'Passport', iconName: 'judge1-solid'},
-            {label: 'Sportsman', iconName: 'user'},
-            {label: 'Competition', iconName: 'competition-solid'},
-        ]
-
         this.currentPage = 0;
         this.oldValues = new Map();
         this.buttons = [
@@ -398,31 +390,17 @@ class MyCompetitionSection1 extends BaseElement {
         return html`
             <confirm-dialog></confirm-dialog>
             <add-sportsman-dialog></add-sportsman-dialog>
-            <header class="left-header">
-                <p>Competition ${this.currentItem?.name}</p>
-            </header>
-            <header class="right-header">
-                ${this.pageNames.map( (page, index) =>
-                    html `
-                        <icon-button ?active=${index === this.currentPage} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
-                    `
-                )}
-            </header>
             <div class="left-layout" page=${(this.currentPage === 2 ? this.currentPage : '') || nothing}>${this.#list}</div>
             <div class="right-layout">${this.#page()}</div>
             <footer class="left-footer">${this.#task}</footer>
             <footer class="right-footer">
-                ${ this.isModified || this.currentPage === 2 ? html`
+                ${ (this.isModified ? html`
                     <nav class='save'>
                         <simple-button label="Сохранить" @click=${this.saveItem}></simple-button>
                         <simple-button label="Отменить" @click=${this.cancelItem}></simple-button>
                     </nav>
                 ` :  html`
-                    <nav>
-                        <simple-icon icon-name="square-arrow-left-sharp-solid" @click=${this.prevPage} ?visible=${this.currentPage === 0} title=${this.pageNames[this.currentPage - 1]}></simple-icon>
-                        <simple-icon icon-name="square-arrow-right-sharp-solid" @click=${this.nextPage} ?visible=${this.currentPage === this.pageNames.length - 1} title=${this.pageNames[this.currentPage + 1]}></simple-icon>
-                    </nav>
-                `
+                    <nav class='save'></nav>`) || nothing
                 }
             </footer>
             <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>

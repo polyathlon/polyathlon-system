@@ -10,7 +10,8 @@ customElements.define('confirm-dialog', class ConfirmDialog extends BaseElement 
             version: { type: String, default: '1.0.0', save: true, category: 'settings' },
             message: { type: String, default: 'Модальное окно'},
             opened: { type: Boolean, default: false},
-            animateClose: { type: Boolean, default: false}
+            animateClose: { type: Boolean, default: false},
+            type: {type: String, default: 'confirm'}
         }
     }
 
@@ -30,6 +31,22 @@ customElements.define('confirm-dialog', class ConfirmDialog extends BaseElement 
         this.version = "1.0.0";
     }
 
+    #buttons() {
+        switch (this.type) {
+            case "confirm":
+                return html`
+                    <button type="button" id="ok-button" class="footer-button btn-ok" @click=${()=>this.ok()}>Да</button>
+                    <button type="button" id="button-cancel" class="footer-button button-cancel" @click=${()=>this.close()}>Нет</button>
+                `
+            case "message":
+            case "error":
+                return html`
+                    <button type="button" id="ok-button" class="footer-button btn-ok" @click=${()=>this.ok()}>Я понял</button>
+                `
+            default:
+                break;
+        }
+    }
     render() {
         return html`
             <div id="dialog" class="modal-dialog ${this.opened ? 'show': ''} ${this.animateClose ? 'animate-close': ''}">
@@ -45,8 +62,7 @@ customElements.define('confirm-dialog', class ConfirmDialog extends BaseElement 
 
                     <div class="dialog-footer no-select">
                         <div class="footer-buttons">
-                            <button type="button" id="ok-button" class="footer-button btn-ok" @click=${()=>this.ok()}>Да</button>
-                            <button type="button" id="button-cancel" class="footer-button button-cancel" @click=${()=>this.close()}>Нет</button>
+                            ${this.#buttons}
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
+import '../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
@@ -234,32 +234,44 @@ class MySportsmenSection1 extends BaseElement {
 
     async importFromExcel(e) {
         const file = e.target.files[0];
-        const workbook = XLSX.read(await file.arrayBuffer());
-        const worksheet = workbook.Sheets[workbook.SheetNames[2]];
-        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-        const regionDataset = RegionDataset.default;
-        raw_data.forEach((r, index) => {
-            if(index !== 0){
-                const newItem = {
-                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
-                    firstName: r[1].split(' ')[1],
-                    middleName: r[1].split(' ')[2],
-                    category: {
-                        "_id": "sports-category:01J8MHN8VBXKDFNWT8KA508TPK",
-                        "_rev": "3-c6945ff709aefbf467c95356dff1f470",
-                        "name": "Мастер спорта международного класса",
-                    },
-                    region: regionDataset.find("name", r[3]),
-                    order: {
-                        number: r[4],
-                        link: r[5]
-                    },
-                    link: r[6],
+        const modalResult = await this.showDialog('Вы действительно хотите импортировать эти данные?', 'confirm')
+        if (modalResult === 'Ok') {
+            const workbook = XLSX.read(await file.arrayBuffer());
+            const worksheet = workbook.Sheets[workbook.SheetNames[2]];
+            const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+            const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+            const regionDataset = RegionDataset.default;
+            this.dataSource.lock();
+            const promises = new Array(raw_data.length)
+            raw_data.forEach((r, index) => {
+                if(index !== 0){
+                    const newItem = {
+                        lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
+                        firstName: r[1].split(' ')[1],
+                        middleName: r[1].split(' ')[2],
+                        category: {
+                            "_id": "sports-category:01J8MHN8VBXKDFNWT8KA508TPK",
+                            "_rev": "3-c6945ff709aefbf467c95356dff1f470",
+                            "name": "Мастер спорта международного класса",
+                        },
+                        region: regionDataset.find("name", r[3]),
+                        order: {
+                            number: r[4],
+                            link: r[5]
+                        },
+                        link: r[6],
+                    }
+                    promises[index] = this.dataSource.addItem(newItem);
                 }
-                this.dataSource.addItem(newItem);
+            });
+            try {
+                await Promise.allSettled(promises)
+                await this.showDialog('Все данные были успешно импортированы!')
+            } catch(e) {
+                await this.showDialog('Не все данные успешно импортированы')
             }
-        });
+            this.dataSource.unlock();
+        }
     }
 
     update(changedProps) {
@@ -276,7 +288,7 @@ class MySportsmenSection1 extends BaseElement {
 
     async showItem(index, itemId) {
         if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+            const modalResult = await this.showDialog('Запись была изменена. Сохранить изменения?', 'confirm')
             if (modalResult === 'Ok') {
                 await this.dataSource.saveItem(this.currentItem);
             }
@@ -348,17 +360,18 @@ class MySportsmenSection1 extends BaseElement {
             </nav>
         `
     }
+    // ${this.#page()}
 
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
+            <modal-dialog></modal-dialog>
             <header class="left-header"><p>Sportsmen</p></header>
             <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+
             </div>
             <footer class="left-footer">
                 ${this.#task}
@@ -379,8 +392,10 @@ class MySportsmenSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
     }
 
     async addItem() {
@@ -395,7 +410,7 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.showDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
@@ -417,7 +432,7 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.showDialog('Вы действительно хотите удалить этот проект?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)

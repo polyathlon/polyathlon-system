@@ -2,11 +2,13 @@ import DataSet from "./my-sportsmen-dataset.mjs";
 
 export default class DataSource {
 
+    #lock = false
+
     constructor(component, dataSet) {
         this.component = component;
         this.dataSet = dataSet;
         this.items = this.dataSet.map(item => {
-            return item;
+            return {_id: item.id, ...item.value};
         }).sort( (a, b) => a.lastName.localeCompare(b.lastName) )
         this.component.currentItem = this.getCurrentItem();
     }
@@ -35,7 +37,24 @@ export default class DataSource {
 
     async addItem(item) {
         const newItem = await DataSet.addItem(item)
+        if (this.#lock) {
+            return
+        }
         this.addTo(newItem)
+    }
+
+    lock() {
+        this.#lock = true;
+    }
+
+    unlock() {
+        if (this.#lock) {
+            this.items = this.dataSet.map(item => {
+                return item;
+            }).sort( (a, b) => a.lastName.localeCompare(b.lastName) )
+            this.component.currentItem = this.getCurrentItem();
+            this.#lock = false;
+        }
     }
 
     addTo(item) {
