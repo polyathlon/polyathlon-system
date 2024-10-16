@@ -21,7 +21,7 @@ export function  getToken() {
     return localStorage.getItem('rememberMe') ? localStorage.getItem('accessUserToken') : sessionStorage.getItem('accessUserToken')
 }
 
-function saveToken(token) {
+export function saveToken(token) {
     if (localStorage.getItem('rememberMe')) {
         localStorage.setItem('accessUserToken', token)
     }

@@ -3,6 +3,8 @@ import { BaseElement, html, css } from '../../js/base-element.mjs';
 
 import { formStyles } from './form-css.mjs'
 
+import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refresh-token.mjs";
+
 import '../dialogs/modal-dialog.mjs';
 
 import '../inputs/simple-input.mjs';
@@ -51,8 +53,6 @@ class SignUpForm extends BaseElement {
         return html`
            <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
             <modal-dialog></modal-dialog>
-            <cancel-dialog></cancel-dialog>
-            <close-dialog></close-dialog>
             <form class="form animate" method="post" id="form">
                 <div class="form-header">
                     <div class="form-tabs no-select">
@@ -67,7 +67,7 @@ class SignUpForm extends BaseElement {
                     <div id="db-tab-section" class="form-tab-section selected">
                         <simple-input id="login" icon-name="user" placeholder="Login"></simple-input>
                         <email-input id="email" icon-name="mail" placeholder="EMail" size="28"></email-input>
-                        <password-input id="password" icon-name="lock" placeholder="Password" visible-icon="eye-slash-regular" invisible-icon="eye-regular"></password-input>
+                        <password-input id="password" sign-up="true" icon-name="lock" placeholder="Password" visible-icon="eye-slash-regular" invisible-icon="eye-regular"></password-input>
                         <div class="sign-up-options">
                             <div class="checkbox-remember">
                                 <label for="remember"><b>Remember me</b></label>
@@ -92,46 +92,89 @@ class SignUpForm extends BaseElement {
         }
     }
 
-    sendSimpleUser() {
-        const user = { username: this.#login, password: this.#password, type: 'simple', email: this.#email}
-        console.log(JSON.stringify(user))
-        let response = fetch('https://localhost:4500/api/sign-up', {
-            method: 'POST',
+    static fetchCheckUsername(token, username) {
+        return fetch(`https://localhost:4500/api/sign-up/check-username`, {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json;charset=utf-8'
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
             },
-            credentials: "include",
-            body: JSON.stringify(user)
+            body: { username }
         })
-        .then( response => response.json() )
-        .then(json => {
-            if (json.error) {
-                throw Error(json.error)
-            }
-            this.saveToken(json.token)
-            return json.token
-        })
-        .then(token => this.getSimpleUserInfo(token))
-        // .then( token => this.refreshToken())
-        .catch(err => {console.error(err.message)});
     }
 
-    getSimpleUserInfo(token) {
-        return fetch('https://localhost:4500/api/user', {
+    static async CheckUsername(username) {
+        const token = getToken();
+        let response = await DataSet.fetchAddItem(token, username)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchAddItem(token, username)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
+    static fetchSendSimpleUser(user) {
+        return fetch(`https://localhost:4500/api/sign-up`, {
+            method: "POST",
             headers: {
-              'Authorization': `Bearer ${token}`
-            }
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(user)
         })
-        .then(response => response.json())
-        .then(json => {
-            if (json.error) {
-                throw Error(json.error)
-            }
-            return json.user;
+    }
+
+    async sendSimpleUser() {
+        const user = { username: this.#login, password: this.#password, type: 'simple', email: this.#email}
+
+        let response = await SignUpForm.fetchSendSimpleUser(user)
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+
+        saveToken(result.token)
+
+        await this.getSimpleUserInfo()
+    }
+
+
+    static fetchSimpleUserInfo(token) {
+        return fetch(`https://localhost:4500/api/user`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
         })
-        .then(user => this.saveUserInfo(JSON.stringify(user)))
-        .then(() => this.modalDialogShow())
-        .catch(err => {console.error(err.message)});
+    }
+
+    async getSimpleUserInfo() {
+
+        const token = getToken();
+        let response = await SignUpForm.fetchSimpleUserInfo(token)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await SignUpForm.fetchSimpleUserInfo(token)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+
+        this.saveUserInfo(JSON.stringify(result))
+
+        const modalResult = await this.showDialog("Регистрация прошла успешно")
+        if (modalResult === "Ok") {
+            this.close(modalResult);
+        }
     }
 
     saveUserInfo(userInfo) {
@@ -140,15 +183,6 @@ class SignUpForm extends BaseElement {
         }
         else {
             sessionStorage.setItem('userInfo', userInfo)
-        }
-    }
-
-    async saveToken(token) {
-        if (localStorage.getItem('rememberMe')) {
-            localStorage.setItem('accessUserToken', token)
-        }
-        else {
-            sessionStorage.setItem('accessUserToken', token)
         }
     }
 
@@ -212,12 +246,26 @@ class SignUpForm extends BaseElement {
         }
     }
 
-    async modalDialogShow() {
-        const dialog =  this.renderRoot.querySelector('modal-dialog');
-        let modalResult = await dialog.show("Регистрация прошла успешно");
-        if (modalResult === "Ok") {
-            this.close(modalResult);
+    async loginValidate(e) {
+        const target = e.target
+        if (target.value === '') {
+            await this.errorDialog("Вы забыли задать имя пользователя")
+            target.focus()
         }
+    }
+
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+
+    }
+
+    async errorDialog(message) {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = 'error'
+        modalDialog.Title = 'Ошибка'
+        return modalDialog.show(message);
     }
 }
 

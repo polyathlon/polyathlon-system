@@ -7,6 +7,7 @@ import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
+import { States } from "../../../utils.js"
 
 import './my-sportsmen-section-1-page-1.mjs'
 
@@ -21,6 +22,7 @@ class MySportsmenSection1 extends BaseElement {
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
+            listItem: {type: Object, default: null},
             isModified: {type: Boolean, default: "", local: true},
             isReady: {type: Boolean, default: true},
             // isValidate: {type: Boolean, default: false, local: true},
@@ -241,6 +243,8 @@ class MySportsmenSection1 extends BaseElement {
             const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
             const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
             const regionDataset = RegionDataset.default;
+            const SportsCategoryDataset = await import('../my-sports-categories/my-sports-categories-dataset.mjs');
+            const sportsCategoryDataset = SportsCategoryDataset.default;
             this.dataSource.lock();
             const promises = new Array(raw_data.length)
             raw_data.forEach((r, index) => {
@@ -249,17 +253,15 @@ class MySportsmenSection1 extends BaseElement {
                         lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
                         firstName: r[1].split(' ')[1],
                         middleName: r[1].split(' ')[2],
-                        category: {
-                            "_id": "sports-category:01J8MHN8VBXKDFNWT8KA508TPK",
-                            "_rev": "3-c6945ff709aefbf467c95356dff1f470",
-                            "name": "Мастер спорта международного класса",
-                        },
+                        gender: r[10],
+                        category: sportsCategoryDataset.find("shortName", r[2]),
                         region: regionDataset.find("name", r[3]),
                         order: {
                             number: r[4],
-                            link: r[5]
+                            link: r[6]
                         },
-                        link: r[6],
+                        link: r[5],
+
                     }
                     promises[index] = this.dataSource.addItem(newItem);
                 }
@@ -286,22 +288,33 @@ class MySportsmenSection1 extends BaseElement {
         }
     }
 
-    async showItem(index, itemId) {
+    copyToClipboard(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text)
+        }
+    }
+
+    async showItem(item) {
+        if (this.currentItem?._id === item.id)
+        {
+            this.copyToClipboard(item.value.hashNumber || item.id)
+            return
+        }
         if (this.isModified) {
             const modalResult = await this.showDialog('Запись была изменена. Сохранить изменения?', 'confirm')
             if (modalResult === 'Ok') {
-                await this.dataSource.saveItem(this.currentItem);
+                await this.dataSource.saveItem(this.currentItem, item);
             }
             else {
                 await this.cancelItem()
             }
         }
         else {
-            this.dataSource.setCurrentItem(this.dataSource.items[index])
+            this.dataSource.setCurrentItem(item)
         }
     }
 
-    #page() {
+    get #page() {
         return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
     }
 
@@ -321,35 +334,43 @@ class MySportsmenSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    fio(item) {
-        if (!item) {
-            return item
+    newRecord() {
+        return html `<icon-button
+                label=${ this.listItem.key }
+                title=${ this.listItem.id }
+                icon-name=${ this.listItem.value?.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+                ?selected=${ this.currentItem?._id === this.listItem?.id }
+                .status=${{ name: this.listItem.value?.hashNumber, icon: 'hash-number-solid'} }
+            >
+            </icon-button>
+        `
+    }
+
+    makeList() {
+        if (!this.dataSource?.items || this.dataSource?.items.length === 0)
+            return;
+        const itemTemplates = new Array(this.dataSource.items.length)
+        for( let i = 0; i < this.dataSource.items.length; i++) {
+            const item = this.dataSource?.items[i]
+            itemTemplates[i] =
+                html `<icon-button
+                    label=${ item.key }
+                    title=${ item.id }
+                    icon-name=${ item.value?.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+                    ?selected=${ this.currentItem?._id === item.id }
+                    .status=${{ name: item.value?.hashNumber || item?.id, icon: 'hash-number-solid'} }
+                    @click=${() => this.showItem(item)}
+                >
+                </icon-button>
+            `
         }
-        let result = item.lastName
-        if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
-        }
-        if (item.middleName) {
-            result += `${item.middleName[0]}.`
-        }
-        return result
+        return itemTemplates
     }
 
     // .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'hash-number-solid'} : '' }
     get #list() {
         return html`
-            ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
-                        label=${ this.fio(item) }
-                        title=${ item._id }
-                        icon-name=${ item.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
-                        ?selected=${ this.currentItem === item }
-                        .status=${{ name: item._id, icon: 'hash-number-solid'} }
-                        @click=${() => this.showItem(index, item._id)}
-                    >
-                    </icon-button>
-                `
-            )}
+            ${this.makeList()}
         `
     }
 
@@ -362,26 +383,74 @@ class MySportsmenSection1 extends BaseElement {
     }
     // ${this.#page()}
 
+    get #firstItemFooter() {
+        return html`
+            <simple-button label=${"Сохранить"} @click=${this.saveFirstItem}></simple-button>
+            <simple-button label=${"Отменить"} @click=${this.cancelItem}></simple-button>
+        `
+    }
+
+    get #newItemFooter() {
+        return html`
+            <simple-button label="Сохранить" @click=${this.saveNewItem}></simple-button>
+            <simple-button label="Отменить" @click=${this.cancelNewItem}></simple-button>
+        `
+    }
+    get #itemFooter() {
+        return html`
+            <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
+            <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addNewItem}></simple-button>
+        `
+    }
+
+    get #rightFooter() {
+        if (!this.dataSource?.items)
+            return ''
+        if (this.dataSource.items.length) {
+            if (this.dataSource.state === States.NEW) {
+                return this.#newItemFooter
+            } else {
+                return this.#itemFooter
+            }
+
+        } else  if (this.dataSource.state === States.NEW) {
+            return this.#newItemFooter
+        } else {
+            if (this.isModified) {
+                return this.#firstItemFooter
+            } else {
+                return html`
+                    <simple-button label=${"Добавить"} @click=${this.addNewItem}></simple-button>
+                `
+            }
+        }
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header"><p>Sportsmen</p></header>
             <header class="right-header">${this.#pageName}</header>
             <div class="left-layout">
+                ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
                 ${this.#list}
             </div>
             <div class="right-layout">
-
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
-                <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
+                ${this.#rightFooter}
             </footer>
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
+    }
+
+    addFirstItem() {
+        const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
+        page.startEdit()
     }
 
     nextPage() {
@@ -398,49 +467,80 @@ class MySportsmenSection1 extends BaseElement {
         return modalDialog.show(message);
     }
 
-    async addItem() {
-        const newItem = { name: "Новый спортсмен" }
-        this.dataSource.addItem(newItem);
+    async addNewItem() {
+        this.dataSource.addNewItem(this.currentItem);
+        const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
+        page.startEdit()
     }
 
-    async saveItem() {
-        await this.dataSource.saveItem(this.currentItem);
+    async addItem() {
+        this.dataSource.addItem(this.currentItem);
+    }
+
+    saveFirstItem() {
+        this.dataSource.addItem(this.currentItem);
         this.oldValues?.clear();
         this.isModified = false;
     }
 
-    async cancelItem() {
-        const modalResult = await this.showDialog('Вы действительно хотите отменить все изменения?')
+    async saveNewItem() {
+        this.dataSource.saveNewItem(this.currentItem);
+        this.oldValues?.clear();
+        this.isModified = false;
+    }
+
+    async saveItem() {
+        await this.dataSource.saveItem(this.currentItem, this.listItem);
+        this.oldValues?.clear();
+        this.isModified = false;
+    }
+
+    async cancelNewItem() {
+        const modalResult = await this.showDialog('Вы действительно хотите отменить добавление?', 'confirm')
         if (modalResult !== 'Ok')
             return
-        this.oldValues.forEach( (value, key) => {
-            let id = key.id
-            let currentItem = this.currentItem
-            if (id == "order.number") {
-                id = "number"
-                currentItem = this.currentItem.order
-            }
-            if (id == "order.link") {
-                id = "link"
-                currentItem = this.currentItem.order
-            }
-            currentItem[id] = value;
-            key.value = value;
-        });
+        this.dataSource.cancelNewItem()
         this.oldValues.clear();
         this.isModified = false;
     }
 
+    async cancelItem() {
+        if (this.oldValues.size === 0) {
+            this.isModified = false;
+        } else {
+            const modalResult = await this.showDialog('Вы действительно хотите отменить все изменения?', 'confirm')
+            if (modalResult !== 'Ok')
+                return
+            this.oldValues.forEach( (value, key) => {
+                let id = key.id
+                let currentItem = this.currentItem
+                if (id == "order.number") {
+                    id = "number"
+                    currentItem = this.currentItem.order
+                }
+                if (id == "order.link") {
+                    id = "link"
+                    currentItem = this.currentItem.order
+                }
+                currentItem[id] = value;
+                key.value = value;
+            });
+            this.oldValues.clear();
+            this.isModified = false;
+        }
+    }
+
     async deleteItem() {
-        const modalResult = await this.showDialog('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.showDialog('Вы действительно хотите удалить этого спортсмена?', 'confirm')
         if (modalResult !== 'Ok')
             return;
-        this.dataSource.deleteItem(this.currentItem)
+        this.dataSource.deleteItem(this.currentItem, this.listItem)
     }
 
     async firstUpdated() {
         super.firstUpdated();
         this.dataSource = new DataSource(this, await DataSet.getDataSet())
+        await this.dataSource.init();
     }
 }
 

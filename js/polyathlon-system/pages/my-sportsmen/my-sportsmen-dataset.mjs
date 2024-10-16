@@ -11,6 +11,13 @@ export default class DataSet {
         return DataSet.#dataSet
     }
 
+    static getLast() {
+        if (DataSet.#dataSet || DataSet.#dataSet.length) {
+            return DataSet.#dataSet[0]
+        }
+        return
+    }
+
     static find(name, value) {
         const index = DataSet.#dataSet.findIndex(element =>
             element[name] === value || element[name].toLowerCase() === value
@@ -40,10 +47,10 @@ export default class DataSet {
         // const items = result.rows.map(item => {
         //     return item.doc;
         // })
-        const items = result.rows.map(item => {
-            return {_id: item.id, ...item.value};
-        })
-        return items
+        // const items = result.rows.map(item => {
+        //     return {_id: item.id, ...item.value};
+        // })
+        return result.rows
     }
 
     static fetchAddItem(token, item) {
@@ -69,14 +76,32 @@ export default class DataSet {
         if (!response.ok) {
             throw new Error(result.error)
         }
-
         const newItem = await DataSet.getItem(result.id)
-        DataSet.addToDataset(newItem)
         return newItem
     }
 
-    static addToDataset(item) {
-        DataSet.#dataSet.unshift(item);
+    static createListItem(newItem) {
+        let key = newItem.lastName
+        if (newItem.firstName) {
+            key += ' ' + newItem.firstName[0] + '.'
+        }
+        if (newItem.middleName) {
+            key += newItem.middleName[0] + '.'
+        }
+        return {
+            id: newItem._id,
+            key,
+            value: {
+                hashNumber: newItem.hashNumber,
+                gender: newItem.gender,
+            }
+        }
+    }
+
+    static addToDataset(newItem) {
+        const listItem = DataSet.createListItem(newItem)
+        DataSet.#dataSet.push(listItem)
+        return listItem;
     }
 
     static #fetchGetItem(token, itemId) {
@@ -147,7 +172,7 @@ export default class DataSet {
         })
     }
 
-    static async deleteItem(item) {
+    static async deleteItem(item, listItem) {
         const token = getToken();
 
         let response = await DataSet.#fetchDeleteItem(token, item)
@@ -163,11 +188,11 @@ export default class DataSet {
             throw new Error(result.error)
         }
 
-        DataSet.#deleteFromDS(item)
+        DataSet.#deleteFromDS(listItem)
     }
 
-    static #deleteFromDS(item) {
-        const itemIndex = DataSet.#dataSet.indexOf(item)
+    static #deleteFromDS(listItem) {
+        const itemIndex = DataSet.#dataSet.indexOf(listItem)
         if (itemIndex === -1) {
             return
         }

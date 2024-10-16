@@ -110,6 +110,10 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
         `;
     }
 
+    focus() {
+        this.#input.focus()
+    }
+
     get #input() {
         return this.renderRoot?.querySelector('input') ?? null;
     }
