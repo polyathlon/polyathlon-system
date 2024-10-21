@@ -44,11 +44,11 @@ class MyRefereeSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="right-container">
-                <simple-select id="name" icon-name="type-solid" .iconClick=${() => this.showPage('my-competition-types')} label="Name:" .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
-                <simple-select id="kind" icon-name="category-solid" .iconClick=${() => this.showPage('my-competition-kinds')} label="Name:" .dataSource=${this.competitionKindDataSource} .value=${this.item?.kind} @input=${this.validateInput}></simple-select>
-                <simple-input id="qrCode" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard} .buttonClick=${this.getQRCode} label="Sportsman qr-code:" .value=${this.item?.qrCode} @input=${this.validateInput}></simple-input>
-                <simple-select id="city" icon-name="city-solid" .iconClick=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
-                <simple-input id="hashNumber" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard} .buttonClick=${this.createHashNumber} label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
+                <simple-select id="name" icon-name="type-solid" @icon-click=${() => this.showPage('my-competition-types')} label="Name:" .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
+                <simple-select id="kind" icon-name="category-solid" @icon-click=${() => this.showPage('my-competition-kinds')} label="Name:" .dataSource=${this.competitionKindDataSource} .value=${this.item?.kind} @input=${this.validateInput}></simple-select>
+                <simple-input id="qrCode" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.getQRCode} label="Sportsman qr-code:" .value=${this.item?.qrCode} @input=${this.validateInput}></simple-input>
+                <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-input id="hashNumber" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createHashNumber} label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
                     <div class="name-group">
                         <simple-input type="date" label="Дата начала:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                         <simple-input type="date" label="Дата окончания:" id="endDate" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
@@ -62,25 +62,25 @@ class MyRefereeSection1Page1 extends BaseElement {
 //     <simple-input id="lastName" icon-name="flag-solid" label="Flag name:" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
 // </div>
     async createHashNumber() {
-        const host = this.getRootNode().host
         const hashNumber = await DataSet.createHashNumber({
-            countryCode: host.item?.region?.country?.flag.toUpperCase(),
-            regionCode: host.item?.region?.code,
-            ulid: host.item?.profileUlid,
+            countryCode: this.item?.region?.country?.flag.toUpperCase(),
+            regionCode: this.item?.region?.code,
+            ulid: this.item?.profileUlid,
         })
-        this.setValue(hashNumber);
+        this.target.setValue(hashNumber);
     }
-    copyToClipboard() {
+
+    copyToClipboard(e) {
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(this.value)
+            navigator.clipboard.writeText(e.target.value)
         }
     }
+    
     async getQRCode() {
-        const host = this.getRootNode().host
         const hashNumber = await DataSet.getQRCode({
-            countryCode: host.item?.region?.country?.flag.toUpperCase(),
-            regionCode: host.item?.region?.code,
-            ulid: host.item?.profileUlid,
+            countryCode: this.item?.region?.country?.flag.toUpperCase(),
+            regionCode: this.item?.region?.code,
+            ulid: this.item?.profileUlid,
         })
         this.setValue(hashNumber);
     }

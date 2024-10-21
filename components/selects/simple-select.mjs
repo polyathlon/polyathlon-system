@@ -22,7 +22,6 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             currentItem: {type: Object, default: null},
             iconName: { type: String, default: 'project-avatar-solid', attribute: 'icon-name'},
             imageName: { type: String, default: '', attribute: 'image-name'},
-            iconClick: { type: Function, default: undefined},
         }
     }
 
@@ -101,13 +100,13 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
 
     get #icon() {
         return html`
-            <simple-icon class="icon" icon-name=${this.iconName} @click=${this.iconClick || nothing}></simple-icon>
+            <simple-icon class="icon" icon-name=${this.iconName} @click=${() => this.fire("icon-click")}></simple-icon>
         `
     }
 
     get #image() {
         return html`
-            <img src=${this.imageName} alt="" @click=${this.iconClick || nothing}/>
+            <img src=${this.imageName} alt="" @click=${() => this.fire("icon-click")}/>
         `
     }
     // get value() {
@@ -197,7 +196,6 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
     }
 
     selectItem(index, item) {
-
         this.isFocus = false;
         this.isListFocus = false;
         this.value = item;

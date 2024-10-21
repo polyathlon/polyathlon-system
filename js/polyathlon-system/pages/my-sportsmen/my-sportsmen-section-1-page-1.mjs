@@ -61,44 +61,42 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <simple-input id="middleName" icon-name="users-solid" label="MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 <birthday-input id="birthday" label="Data of Birth:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
                 <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="region" icon-name="region-solid" .iconClick=${() => this.showPage('my-regions')} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="club" icon-name="club-solid" .iconClick=${() => this.showPage('my-clubs')} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
-                <simple-input id="profileUlid" icon-name="card-id-solid" .iconClick=${this.copyToClipboard} label="Sportsman ulid:" .value=${this.item?._id} @input=${this.validateInput}></simple-input>
-                <simple-input id="hashNumber" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard} .buttonClick=${this.createHashNumber} label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
-                <simple-input id="qrCode" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard} .buttonClick=${this.getQRCode} label="Sportsman qr-code:" .value=${this.item?.qrCode} @input=${this.validateInput}></simple-input>
-                <simple-select id="category" icon-name="sports-category-solid" .iconClick=${() => this.showPage('my-sports-categories')} label="Category name:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="club" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+                <simple-input id="profileUlid" icon-name="card-id-solid" @icon-click=${this.copyToClipboard} label="Sportsman ulid:" .value=${this.item?._id} @input=${this.validateInput}></simple-input>
+                <simple-input id="hashNumber" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createHashNumber} label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
+                <simple-input id="qrCode" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.getQRCode} label="Sportsman qr-code:" .value=${this.item?.qrCode} @input=${this.validateInput}></simple-input>
+                <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="Category name:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
-                    <simple-input id="order.number" icon-name="order-number-solid" .iconClick=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
-                    <simple-input id="order.link" icon-name="link-solid" .iconClick=${this.linkClick} label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.number" icon-name="order-number-solid" @icon-click=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.link" icon-name="link-solid" @icon-click=${this.linkClick} label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="personLink" icon-name="user-link" .iconClick=${this.linkClick} label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
+                <simple-input id="personLink" icon-name="user-link" @icon-click=${this.linkClick} label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
     async createHashNumber() {
-        const host = this.getRootNode().host
         const hashNumber = await DataSet.createHashNumber({
-            countryCode: host.item?.region?.country?.flag.toUpperCase(),
-            regionCode: host.item?.region?.code,
-            ulid: host.item?.profileUlid,
+            countryCode: this.item?.region?.country?.flag.toUpperCase(),
+            regionCode: this.item?.region?.code,
+            ulid: this.item?.profileUlid,
         })
-        this.setValue(hashNumber);
+        e.target.setValue(hashNumber);
     }
 
     async getQRCode() {
-        const host = this.getRootNode().host
         const hashNumber = await DataSet.getQRCode({
-            countryCode: host.item?.region?.country?.flag.toUpperCase(),
-            regionCode: host.item?.region?.code,
-            ulid: host.item?.profileUlid,
+            countryCode: this.item?.region?.country?.flag.toUpperCase(),
+            regionCode: this.item?.region?.code,
+            ulid: this.item?.profileUlid,
         })
-        this.setValue(hashNumber);
+        e.target.setValue(hashNumber);
     }
 
-    copyToClipboard() {
+    copyToClipboard(e) {
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(this.value)
+            navigator.clipboard.writeText(e.target.value)
         }
     }
 
@@ -107,11 +105,11 @@ class MySportsmenSection1Page1 extends BaseElement {
     }
 
     linkClick(e) {
-        window.open(this.value);
+        window.open(e.target.value);
     }
 
     numberClick(e) {
-        window.open(this.getRootNode().host.$id('order.link').value);
+        window.open(this.$id('order.link').value);
     }
 
     validateInput(e) {
@@ -156,7 +154,7 @@ class MySportsmenSection1Page1 extends BaseElement {
         input.focus()
         this.isModified = true
     }
-    
+
     async firstUpdated() {
         super.firstUpdated();
         this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())

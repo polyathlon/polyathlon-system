@@ -82,7 +82,7 @@ customElements.define("password-input", class PasswordInput extends BaseElement 
 
     get #button() {
         return html`
-            <simple-icon class="button" icon-name=${this.type==="password" ? this.visibleIcon : this.invisibleIcon} @mouseenter=${this.changeType} @mouseleave=${this.changeType}></simple-icon>
+            <simple-icon class="button" icon-name=${this.type==="password" ? this.visibleIcon : this.invisibleIcon} @mouseenter=${this.changeType} @mouseleave=${this.changeType} @click=${this.$fire("button-click")}></simple-icon>
         `
     }
 
@@ -141,12 +141,6 @@ customElements.define("password-input", class PasswordInput extends BaseElement 
         `;
     }
 
-    copyToClipboard() {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(this.value)
-        }
-    }
-
     generatePassword() {
         const passwordOptions = {
             num: "1234567890",
@@ -181,7 +175,7 @@ customElements.define("password-input", class PasswordInput extends BaseElement 
             [password[i], password[swapIndex]] = [password[swapIndex], password[i]];
         };
         this.setValue(password.join(""))
-        this.copyToClipboard()
+        this.fire('generate')
     }
 
     randomInteger(min, max) {

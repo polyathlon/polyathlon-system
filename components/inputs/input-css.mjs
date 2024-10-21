@@ -47,6 +47,11 @@ input[type="date"] {
     color: var(--form-input-color, gray);
 }
 
+input:-internal-autofill-selected {
+    color: var(--form-input-color, gray) !important;
+    background-color: red !important;
+}
+
 input[type="date"] {
     padding-right: 10px;
     &::-webkit-calendar-picker-indicator {
@@ -112,6 +117,7 @@ select:focus > option:hover {
     position: absolute;
     cursor: pointer;
     right: 10px;
+    color: var(--input-button-color, inherit);
 }
 `;
 

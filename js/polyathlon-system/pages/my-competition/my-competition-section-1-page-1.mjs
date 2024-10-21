@@ -44,9 +44,9 @@ class MyCompetitionSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="right-container">
-                <simple-select id="name" icon-name="type-solid" .iconClick=${() => this.showPage('my-competition-types')} label="Name:" .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
-                <simple-select id="kind" icon-name="category-solid" .iconClick=${() => this.showPage('my-competition-kinds')} label="Name:" .dataSource=${this.competitionKindDataSource} .value=${this.item?.kind} @input=${this.validateInput}></simple-select>
-                <simple-select id="city" icon-name="city-solid" .iconClick=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-select id="name" icon-name="type-solid" @icon-click=${() => this.showPage('my-competition-types')} label="Name:" .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
+                <simple-select id="kind" icon-name="category-solid" @icon-click=${() => this.showPage('my-competition-kinds')} label="Name:" .dataSource=${this.competitionKindDataSource} .value=${this.item?.kind} @input=${this.validateInput}></simple-select>
+                <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                     <div class="name-group">
                         <simple-input type="date" label="Дата начала:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                         <simple-input type="date" label="Дата окончания:" id="endDate" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>

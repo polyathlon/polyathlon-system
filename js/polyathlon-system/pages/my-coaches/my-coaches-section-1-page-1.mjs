@@ -52,36 +52,35 @@ class MyCoachesSection1Page1 extends BaseElement {
                     <simple-input id="firstName" icon-name="user-group-solid" label="Coach FistName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="middleName" icon-name="users-solid" label="Coach MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <simple-select id="category" icon-name="referee-category-solid" .iconClick=${() => this.showPage('my-coach-categories')} label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-select id="region" icon-name="region-solid" label="Region name:" .iconClick=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-input id="id" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard}  .buttonClick=${this.createHashNumber} label="Coach ID:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
+                <simple-select id="category" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-coach-categories')} label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" icon-name="region-solid" label="Region name:" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-input id="id" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} label="Coach ID:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="order.number" icon-name="order-number-solid" .iconClick=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
-                    <simple-input id="order.link" icon-name="link-solid" .iconClick=${this.linkClick} label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.number" icon-name="order-number-solid" @icon-click=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.link" icon-name="link-solid" @icon-click=${this.linkClick} label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="personLink" icon-name="user-link" .iconClick=${this.linkClick} label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
+                <simple-input id="personLink" icon-name="user-link" @icon-click=${this.linkClick} label="Person link:" .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
-    async createHashNumber() {
-        const host = this.getRootNode().host
+    async createHashNumber(e) {
         const hashNumber = await DataSet.createHashNumber({
-            countryCode: host.item?.region?.country?.flag.toUpperCase(),
-            regionCode: host.item?.region?.code,
-            ulid: host.item?.profileUlid,
+            countryCode: this.item?.region?.country?.flag.toUpperCase(),
+            regionCode: this.item?.region?.code,
+            ulid: this.item?.profileUlid,
         })
-        this.setValue(hashNumber)
+        this.target.setValue(hashNumber)
     }
 
-    copyToClipboard() {
+    copyToClipboard(e) {
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(this.value)
+            navigator.clipboard.writeText(e.target.value)
         }
     }
 
     linkClick(e) {
-        window.open(this.value);
+        window.open(e.target.value);
     }
 
     showPage(page) {
@@ -89,7 +88,7 @@ class MyCoachesSection1Page1 extends BaseElement {
     }
 
     numberClick(e) {
-        window.open(this.getRootNode().host.$id('order.link').value);
+        window.open(this.$id('order.link').value);
     }
 
     validateInput(e) {

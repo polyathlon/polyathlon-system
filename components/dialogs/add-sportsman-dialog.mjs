@@ -47,8 +47,8 @@ customElements.define('add-sportsman-dialog', class AddSportsmanDialog extends B
                     </div>
 
                     <div class="dialog-body">
-                        <simple-select id="name" icon-name="club-solid" .iconClick=${this.find} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
-                        <simple-input id="hash" icon-name="hash-number-solid" button-name="add-solid" .iconClick=${this.copyToClipboard}  .buttonClick=${this.find} label="Sportsman number:" .value=${this.item?.hash} @input=${this.validateInput}></simple-input>
+                        <simple-select id="name" icon-name="club-solid" @icon-click=${this.find} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
+                        <simple-input id="hash" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.find} label="Sportsman number:" .value=${this.item?.hash} @input=${this.validateInput}></simple-input>
                     </div>
 
                     <div class="dialog-footer no-select">
@@ -65,10 +65,9 @@ customElements.define('add-sportsman-dialog', class AddSportsmanDialog extends B
         super.firstUpdated();
     }
 
-    async find() {
-        let item = await DataSet.getItem(this.value)
-        const host = this.getRootNode().host
-        host.findItem = item
+    async find(e) {
+        let item = await DataSet.getItem(e.target.value)
+        this.findItem = item
     }
 
     validateInput(e) {

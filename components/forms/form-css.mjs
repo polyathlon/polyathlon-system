@@ -193,6 +193,10 @@ button {
     cursor: pointer;
 }
 
+button:not(.active) {
+    background-color: lightgray;
+}
+
 .button-king {
     width: 150px;
     height: 150px;
@@ -232,7 +236,7 @@ button {
 }
 
 
-button:hover {
+button.active:hover {
     opacity: 0.8;
 }
 
@@ -305,6 +309,7 @@ button:hover {
 
 .sign-up-options {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     margin: 8px 0;
 }
@@ -541,6 +546,7 @@ span.psw {
     display: flex;
     justify-content: center;
     margin: 8px 0;
+    height: 40px;
 }
 
 .close-button:hover,

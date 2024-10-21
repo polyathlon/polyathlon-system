@@ -173,7 +173,7 @@ class MyProfileSection1 extends BaseElement {
                         <label for="surname">Surname:</label>
                         <simple-input type="text" id="surname" icon-name="user" .value="${this.surname}" @input="${(e) => this.surname = e.target.value}"></simple-input>
 
-                        <label for="email">EMail:</label>
+                        <label for="email">E-mail:</label>
                         <simple-input type="text" id="email" icon-name="mail" .value="${this.email}" @input="${(e) => this.email = e.target.value}"></simple-input>
 
                         <fieldset class="fieldset">

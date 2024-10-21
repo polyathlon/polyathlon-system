@@ -43,7 +43,7 @@ class MyCitiesSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="user" label="City name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="region" .iconClick=${() => this.showPage('my-regions')} icon-name="region-solid" label="Region:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" @icon-click=${() => this.showPage('my-regions')} icon-name="region-solid" label="Region:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
             </div>
         `;
     }

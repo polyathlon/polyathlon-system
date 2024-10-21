@@ -13,10 +13,10 @@ customElements.define("date-input", class DateInput extends BaseElement {
             label: { type: String, default: '' },
             iconName: { type: String, default: '', attribute: 'icon-name'},
             imageName: { type: String, default: '', attribute: 'image-name'},
-            iconClick: { type: Function, default: undefined},
+
             errorImage: { type: String, default: 'error-image', attribute: 'error-image'},
             buttonName: { type: String, default: '', attribute: 'button-name' },
-            buttonClick: { type: Function, default: undefined},
+
             placeholder: { type: String, default: '' },
             value: { type: String, default: ''},
             oldValue: { type: String, default: ''},
@@ -64,7 +64,7 @@ customElements.define("date-input", class DateInput extends BaseElement {
             return ''
         }
         return html`
-            <simple-icon class="icon" icon-name=${this.iconName} @click=${this.iconClick || nothing}></simple-icon>
+            <simple-icon class="icon" icon-name=${this.iconName} @click=${() => this.$fire("icon-click")}></simple-icon>
         `
     }
 
@@ -73,7 +73,7 @@ customElements.define("date-input", class DateInput extends BaseElement {
             return this.#icon
         }
         return html`
-            <img src=${this.imageName} alt="" title=${this.title || nothing} @error=${this.defaultImage} @click=${this.iconClick || nothing}/>
+            <img src=${this.imageName} alt="" title=${this.title || nothing} @error=${this.defaultImage} @click=${() => this.$fire("icon-click")}/>
         `
     }
 
@@ -84,7 +84,7 @@ customElements.define("date-input", class DateInput extends BaseElement {
 
     get #button() {
         return html`
-            <simple-icon class="button" icon-name=${this.buttonName || nothing} @click=${this.buttonClick || nothing}></simple-icon>
+            <simple-icon class="button" icon-name=${this.buttonName || nothing} @click=${this.$fire("button-click")}></simple-icon>
         `
     }
 

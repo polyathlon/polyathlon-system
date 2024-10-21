@@ -4,7 +4,7 @@ import '../icon/icon.mjs'
 
 import styles from './input-css.mjs'
 
-customElements.define("email-input", class EMailInput extends BaseElement {
+customElements.define("email-input", class EmailInput extends BaseElement {
     static get properties() {
         return {
             type: { type: String, default: 'text'},
@@ -103,4 +103,3 @@ customElements.define("email-input", class EMailInput extends BaseElement {
         this.dispatchEvent(new CustomEvent('value-changed', options));
     }
 });
-

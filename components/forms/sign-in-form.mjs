@@ -89,7 +89,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                     </div>
 
                     <div class="form-footer">
-                        <a class="sign-up-link" @click=${this.signUpClick}>New user? Sign up!</a>
+                        <a class="sign-up-link" @click=${this.signUpClick}>Don’t have an account? Sign up!</a>
                     </div>
                 </form>
             </div>

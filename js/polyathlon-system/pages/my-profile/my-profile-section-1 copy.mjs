@@ -24,7 +24,7 @@ class MyProfileSection1 extends BaseElement {
                         padding-bottom: 50px;
                         gap: 20px;
                         background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
-                        justify-content: space-around;                    
+                        justify-content: space-around;
                     }
 
                     * {
@@ -64,7 +64,7 @@ class MyProfileSection1 extends BaseElement {
                     a:hover {
                         background-color: var(--button-hover-color);
                     }
-                    
+
                     .avatar-placeholder {
                         width: 150px;
                         height: 150px;
@@ -82,7 +82,7 @@ class MyProfileSection1 extends BaseElement {
                         cursor: pointer;
                         font-weight: 600;
                     }
-    
+
                     button:hover {
                         background-color: var(--button-hover-color);
                     }
@@ -99,7 +99,7 @@ class MyProfileSection1 extends BaseElement {
                         flex-direction: column;
                         display: block;
                     }
-    
+
                     img {
                         width: 100px;
                         height: 100px;
@@ -154,7 +154,7 @@ class MyProfileSection1 extends BaseElement {
                 <div class="right-layout">
                     <div>
                         <h1>Personal data</h1>
-                    
+
                         <label for="name">Name:</label>
                         <simple-input type="text" id="name" icon-name="user" .value="${this.name}" @input="${(e) => this.name = e.target.value}"></simple-input>
 
@@ -164,7 +164,7 @@ class MyProfileSection1 extends BaseElement {
                         <label for="middlename">Middle name:</label>
                         <simple-input type="text" id="middlename" icon-name="user" .value="${this.middlename}" @input="${(e) => this.middlename = e.target.value}"></simple-input>
 
-                        <label for="email">EMail:</label>
+                        <label for="email">E-mail:</label>
                         <simple-input type="text" id="email" .value="${this.email}" @input="${(e) => this.email = e.target.value}"></simple-input>
                     </div>
                     <div>
@@ -179,8 +179,8 @@ class MyProfileSection1 extends BaseElement {
                         <label for="confirm-password">Confirm Password:</label>
                         <simple-input type="password" id="confirm-password"></simple-input>
 
-                        <div class="button-container">                            
-                            <button @click="${this.handleSave}">Save</button></button>                       
+                        <div class="button-container">
+                            <button @click="${this.handleSave}">Save</button></button>
                             <button @click="${this.handleCancel}">Cancel</button>
                         </div>
                     </div>
@@ -191,7 +191,7 @@ class MyProfileSection1 extends BaseElement {
         handleAvatarChange(event) {
             const fileInput = event.target;
             const file = fileInput.files[0];
-    
+
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -205,7 +205,7 @@ class MyProfileSection1 extends BaseElement {
         handleSave() {
             console.log('Saving data:', this.name, this.surname, this.middlename, this.email, this.phone, this.avatar);
         }
-    
+
         handleCancel() {
             console.log('Canceling changes');
         }
