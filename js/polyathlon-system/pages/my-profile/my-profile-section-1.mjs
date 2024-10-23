@@ -462,11 +462,12 @@ class MyProfileSection1 extends BaseElement {
     }
 
 
+
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;
         this.dataSource = new DataSource(this, await DataSet.getDataSet())
-        this.avatar = null; // await this.downloadAvatar();
+        //this.avatar = await this.downloadAvatar();
         this.isFirst = true;
     }
 }

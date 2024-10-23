@@ -34,6 +34,7 @@ customElements.define("simple-informer", class SimpleInformer extends BaseElemen
                 }
                 simple-icon {
                     width: 16px;
+                    line-height: 1em;
                 }
             `
         ]

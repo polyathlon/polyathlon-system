@@ -169,7 +169,7 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    fetchAvatarFile(token, formData) {
+    fetchUploadAvatar(token, formData) {
         return fetch(`https://localhost:4500/api/upload/avatar`, {
             method: "POST",
             headers: {
@@ -179,19 +179,47 @@ export default class DataSet {
         })
     }
 
-    async uploadAvatarFile() {
+    async uploadAvatar(avatar) {
         const token = this.getToken();
         const formData = new FormData();
-        formData.append("file", this.avatarFile);
-        let response = await this.fetchAvatarFile(token, formData)
+        formData.append("file", avatar);
+        let response = await this.fetchUploadAvatar(token, formData)
         if (response.status === 419) {
             const token = await this.refreshToken()
-            response = await this.fetchAvatarFile(token, formData)
+            response = await this.fetchUploadAvatar(token, formData)
         }
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)
         }
         return result
+    }
+
+    fetchDownloadAvatar(token) {
+        return fetch(`https://localhost:4500/api/upload/avatar`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData
+        })
+    }
+
+    async downloadAvatar() {
+        const token = this.getToken();
+        let response = await this.fetchDownloadAvatar(token)
+        if (response.status === 419) {
+            const token = await this.refreshToken()
+            response = await this.fetchDownloadAvatar(token)
+        }
+
+        if (!response.ok) {
+            const result = await response.json()
+            throw new Error(result.error)
+        }
+
+        const blob = await response.blob()
+
+        return blob ? window.URL.createObjectURL(blob) : blob;
     }
 }

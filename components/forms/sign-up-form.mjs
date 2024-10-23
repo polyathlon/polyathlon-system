@@ -360,10 +360,11 @@ class SignUpForm extends BaseElement {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
+            credentials: "include",
             body: JSON.stringify(user)
         })
     }
-
+    
     async sendSimpleUser() {
         const user = { username: this.#login, password: this.#password, type: 'simple', email: this.#email}
 

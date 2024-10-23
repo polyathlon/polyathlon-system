@@ -82,7 +82,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                                 <a href="http://localhost/forgot" class="forgot-password" title="Forgot password?">Forgot password?</a>
                             </div>
 
-                            <button type="button" @click=${()=>this.sendSimpleUser()}>Login</button>
+                            <button type="button" class="active" @click=${()=>this.sendSimpleUser()}>Login</button>
                             <div id="google"></div>
                             <vk-button></vk-button>
                         </div>
