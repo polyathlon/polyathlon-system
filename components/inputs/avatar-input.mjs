@@ -99,10 +99,10 @@ customElements.define("avatar-input", class AvatarInput extends BaseElement {
 
     #showImage() {
         // if (this.src) {
-        //     window.URL.revokeObjectURL(this.src)
+        //      window.URL.revokeObjectURL(this.src)
         // }
         // this.src = window.URL.createObjectURL(this.value);
-        // let reader = new FileReader();
+        //let reader = new FileReader();
         // reader.readAsDataURL(this.value);
         return html`
             <img src=${this.avatar} @click=${this.clickButton}>

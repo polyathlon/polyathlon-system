@@ -461,13 +461,30 @@ class MyProfileSection1 extends BaseElement {
         this.isModified = false;
     }
 
-
+    validateAvatar(e) {
+        this.oldValues ??= new Map();
+        if (!this.oldValues.has(e.target)) {
+            this.oldValues.set(e.target, e.target.avatar)
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        else if (this.oldValues.get(e.target) === e.target.avatar) {
+            this.oldValues.delete(e.target.id)
+            this.avatarFile = null;
+        } else {
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        this.isModified = this.oldValues.size !== 0;
+    }
 
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;
         this.dataSource = new DataSource(this, await DataSet.getDataSet())
-        //this.avatar = await this.downloadAvatar();
+        this.avatar = await DataSet.downloadAvatar();
         this.isFirst = true;
     }
 }

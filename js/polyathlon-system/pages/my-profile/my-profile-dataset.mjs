@@ -169,7 +169,7 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    fetchUploadAvatar(token, formData) {
+    static fetchUploadAvatar(token, formData) {
         return fetch(`https://localhost:4500/api/upload/avatar`, {
             method: "POST",
             headers: {
@@ -179,14 +179,14 @@ export default class DataSet {
         })
     }
 
-    async uploadAvatar(avatar) {
-        const token = this.getToken();
+    static async uploadAvatar(avatar) {
+        const token = getToken();
         const formData = new FormData();
         formData.append("file", avatar);
-        let response = await this.fetchUploadAvatar(token, formData)
+        let response = await DataSet.fetchUploadAvatar(token, formData)
         if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchUploadAvatar(token, formData)
+            const token = await refreshToken()
+            response = await DataSet.fetchUploadAvatar(token, formData)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -195,27 +195,27 @@ export default class DataSet {
         return result
     }
 
-    fetchDownloadAvatar(token) {
+    static fetchDownloadAvatar(token) {
         return fetch(`https://localhost:4500/api/upload/avatar`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
-            body: formData
         })
     }
 
-    async downloadAvatar() {
-        const token = this.getToken();
-        let response = await this.fetchDownloadAvatar(token)
+    static async downloadAvatar() {
+        const token = getToken();
+        let response = await DataSet.fetchDownloadAvatar(token)
         if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchDownloadAvatar(token)
+            const token = await refreshToken()
+            response = await DataSet.fetchDownloadAvatar(token)
         }
 
         if (!response.ok) {
-            const result = await response.json()
-            throw new Error(result.error)
+            // const result = await response.json()
+            // throw new Error(result.error)
+            return null
         }
 
         const blob = await response.blob()
