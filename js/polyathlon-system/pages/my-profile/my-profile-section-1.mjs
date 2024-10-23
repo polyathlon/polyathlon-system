@@ -1,6 +1,6 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
+import '../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
@@ -314,7 +314,7 @@ class MyProfileSection1 extends BaseElement {
 
     async showItem(index, itemId) {
         if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
                 await this.dataSource.saveItem(this.currentItem);
             }
@@ -392,7 +392,7 @@ class MyProfileSection1 extends BaseElement {
 
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
+            <modal-dialog></modal-dialog>
             <header class="left-header">
                 <p>Profile ${this.currentItem?.name}</p>
             </header>
@@ -438,24 +438,31 @@ class MyProfileSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
-    }
-
     async saveItem() {
+        if (this.avatarFile) {
+            let result = await DataSet.uploadAvatar(this.avatarFile);
+            if (!result) return;
+        }
         await this.dataSource.saveItem(this.currentItem);
+        this.avatarFile = null;
         this.oldValues?.clear();
         this.isModified = false;
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            const currentItem = key.currentObject ?? this.currentItem
-            currentItem[key.id] = value;
-            key.value = value;
+            if (key.id === 'avatar') {
+                window.URL.revokeObjectURL(value);
+                this.avatar = value;
+                this.avatarFile = null;
+            } else {
+                const currentItem = key.currentObject ?? this.currentItem
+                currentItem[key.id] = value;
+                key.value = value;
+            }
         });
         this.oldValues.clear();
         this.isModified = false;
@@ -478,6 +485,16 @@ class MyProfileSection1 extends BaseElement {
             this.requestUpdate();
         }
         this.isModified = this.oldValues.size !== 0;
+    }
+
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
     }
 
     async firstUpdated() {
