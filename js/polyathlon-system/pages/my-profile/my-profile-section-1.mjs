@@ -7,6 +7,7 @@ import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
+import '../../../../components/buttons/simple-button.mjs';
 
 import './my-profile-section-1-page-1.mjs'
 import './my-profile-section-1-page-2.mjs'
@@ -101,6 +102,9 @@ class MyProfileSection1 extends BaseElement {
                         height: 40px;
                         flex: 0 0 40px;
                     }
+                    .label {
+                        text-align: center;
+                    }
                 }
 
                 .avatar {
@@ -131,6 +135,7 @@ class MyProfileSection1 extends BaseElement {
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
                     gap: 10px;
+
                 }
 
                 p {
@@ -178,10 +183,7 @@ class MyProfileSection1 extends BaseElement {
                             justify-content: flex-end;
                         }
                         simple-button {
-                            height: 36px;
-                            &:hover {
-                                background-color: red;
-                            }
+                            height: 100%;
                         }
                     }
                 }
@@ -415,8 +417,8 @@ class MyProfileSection1 extends BaseElement {
             <footer class="right-footer">
                 ${ this.isModified ? html`
                     <nav class='save'>
-                        <simple-button label="Сохранить" @click=${this.saveItem}></simple-button>
-                        <simple-button label="Отменить" @click=${this.cancelItem}></simple-button>
+                        <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                        <simple-button @click=${this.cancelItem}>Отменить</simple-button>
                     </nav>
                 ` :  html`
                     <nav>

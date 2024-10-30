@@ -186,10 +186,7 @@ class MyCompetitionSection1 extends BaseElement {
                             justify-content: flex-end;
                         }
                         simple-button {
-                            height: 36px;
-                            &:hover {
-                                background-color: red;
-                            }
+                            height: 100%;
                         }
                     }
                 }
@@ -396,8 +393,8 @@ class MyCompetitionSection1 extends BaseElement {
             <footer class="right-footer">
                 ${ (this.isModified ? html`
                     <nav class='save'>
-                        <simple-button label="Сохранить" @click=${this.saveItem}></simple-button>
-                        <simple-button label="Отменить" @click=${this.cancelItem}></simple-button>
+                        <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                        <simple-button @click=${this.cancelItem}>Отменить</simple-button>
                     </nav>
                 ` :  html`
                     <nav class='save'></nav>`) || nothing

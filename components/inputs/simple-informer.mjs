@@ -27,7 +27,7 @@ customElements.define("simple-informer", class SimpleInformer extends BaseElemen
                     /* color: var(--form-input-color, gray); */
                     color: gray;
                     overflow: hidden;
-                    word-break: break-all;
+                    word-break: break-word;
                     gap: 10px;
                     font-size: 14px;
                     margin: auto;

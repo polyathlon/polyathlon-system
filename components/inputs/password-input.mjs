@@ -114,7 +114,7 @@ customElements.define("password-input", class PasswordInput extends BaseElement 
     testPasswordStrength(value) {
 		let strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-])(?=.{8,})/
 
-		let mediumRegex = /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*\d))|((?=.*[A-Z])(?=.*\d)))(?=.{6,})/;
+		let mediumRegex = /^(?=.{8,})/;
 
 		if (strongRegex.test(value)) {
 			return 2;
@@ -138,6 +138,7 @@ customElements.define("password-input", class PasswordInput extends BaseElement 
                 ${this.visibleIcon || this.invisibleIcon ? this.#button : ''}
                 ${(this.isSignUp ? this.strengthLines : '') || nothing}
             </div>
+            <slot name="informer"></slot>
         `;
     }
 
@@ -187,10 +188,16 @@ customElements.define("password-input", class PasswordInput extends BaseElement 
     changeValue(e) {
         this.value = e.target.value;
         if (e.target.value === '') {
-            this.strength = -1
-        }
-        else {
-            this.strength = this.testPasswordStrength(e.target.value)
+            if (this.strength !== -1) {
+                this.fire("strength-change", {strength: this.strength})
+                this.strength = -1
+            }
+        } else {
+            const currentStrength = this.testPasswordStrength(e.target.value)
+            if (currentStrength !== this.strength) {
+                this.strength = currentStrength
+                this.fire("strength-change", {strength: currentStrength})
+            }
         }
     }
 });

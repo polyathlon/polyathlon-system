@@ -131,14 +131,27 @@ class MySportsmenSection1 extends BaseElement {
                     display: flex;
                     align-items: center;
                     justify-content: end;
-                    margin-right: 20px;
                     gap: 10px;
+                    nav {
+                        background-color: rgba(255, 255, 255, 0.1);
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 0 10px;
+                        /* padding-right: 10px; */
+                        gap: 1vw;
+                        &.save {
+                            justify-content: flex-end;
+                        }
+                        simple-button {
+                            height: 100%;
+                        }
+                    }
 
                     simple-button {
-                        height: 36px;
-                        &:hover {
-                            background-color: red;
-                }
+                        height: 100%;
                     }
                 }
 
@@ -385,21 +398,27 @@ class MySportsmenSection1 extends BaseElement {
 
     get #firstItemFooter() {
         return html`
-            <simple-button label=${"Сохранить"} @click=${this.saveFirstItem}></simple-button>
-            <simple-button label=${"Отменить"} @click=${this.cancelItem}></simple-button>
+            <nav class='save'>
+                <simple-button @click=${this.saveFirstItem}>Сохранить</simple-button>
+                <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+            </nav>
         `
     }
 
     get #newItemFooter() {
         return html`
-            <simple-button label="Сохранить" @click=${this.saveNewItem}></simple-button>
-            <simple-button label="Отменить" @click=${this.cancelNewItem}></simple-button>
+            <nav class='save'>
+                <simple-button @click=${this.saveNewItem}>Сохранить</simple-button>
+                <simple-button @click=${this.cancelNewItem}>Отменить</simple-button>
+            </nav>
         `
     }
     get #itemFooter() {
         return html`
-            <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
-            <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addNewItem}></simple-button>
+            <nav class='save'>
+                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.addNewItem}>${this.isModified ? "Отменить": "Добавить"}</simple-button>
+            </nav>
         `
     }
 
@@ -420,7 +439,7 @@ class MySportsmenSection1 extends BaseElement {
                 return this.#firstItemFooter
             } else {
                 return html`
-                    <simple-button label=${"Добавить"} @click=${this.addNewItem}></simple-button>
+                    <simple-button @click=${this.addNewItem}>Добавить</simple-button>
                 `
             }
         }

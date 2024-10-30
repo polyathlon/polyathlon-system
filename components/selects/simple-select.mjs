@@ -1,7 +1,6 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
-import '../buttons/simple-button.mjs'
 import '../buttons/country-button.mjs'
 
 import styles from '../inputs/input-css.mjs'

@@ -2,7 +2,7 @@ import { BaseElement, html, css } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
 
-customElements.define('simple-button', class SimpleButton extends BaseElement {
+customElements.define('form-button', class FormButton extends BaseElement {
     // static get properties() {
     //     return {
     //         title: { type: String, default: '' },
@@ -17,28 +17,28 @@ customElements.define('simple-button', class SimpleButton extends BaseElement {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    padding: 0px 10px 1px;
+                    width: 100%;
+                    padding: 11px 20px 13px;
                     cursor: pointer;
                     background-color: lightgray;
-                    border: 1px solid gray;
-                    border-radius: 2px;
+                    border: none;
+                    border-radius: 10px;
                     overflow: hidden;
-                    color: gray;
-                    font-weight: 600;
+                    color: white;
+                    font-weight: 700;
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     line-height: 1em;
                     transition: transform ease-in 0.1s;
                 }
                 :host(:not([disable])) {
-                    background-color: #fdfdfd;
+                    background-color: var(--background-green);
                 }
                 :host(:not([disable]):active) {
                     transform: scale(.97);
                 }
                 :host(:not([disable]):hover) {
                     background-color: var(--active-form-button, red);
-                    color: white;
                 }
 
                 /* :host(:active) {

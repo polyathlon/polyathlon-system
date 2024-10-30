@@ -424,6 +424,7 @@ span.psw {
 .forgot-password:hover {
     font-weight: bold;
     color: var(--link-hover-color);
+    outline: none;
 }
 
 
@@ -530,6 +531,7 @@ span.psw {
 .sign-up-link {
     text-decoration: underline;
     color: #444;
+    outline: none;
     cursor: pointer;
 }
 

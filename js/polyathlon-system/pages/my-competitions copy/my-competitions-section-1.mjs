@@ -140,10 +140,7 @@ class MyCompetitionsSection1 extends BaseElement {
 
                 .right-footer {
                     simple-button {
-                        height: 36px;
-                        &:hover {
-                            background-color: red;
-                        }
+                        height: 100%;
                     }
                 }
 
@@ -339,8 +336,8 @@ class MyCompetitionsSection1 extends BaseElement {
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveItem: this.deleteItem}></simple-button>
-                <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelItem: this.addItem}></simple-button>
+                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>${this.isModified ? "Отменить": "Добавить"}</simple-button>
             </footer>
         `;
     }

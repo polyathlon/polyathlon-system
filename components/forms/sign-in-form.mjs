@@ -1,4 +1,4 @@
-import { BaseElement, html, css } from '../../js/base-element.mjs';
+import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import { formStyles } from './form-css.mjs'
 
@@ -9,17 +9,30 @@ import './sign-up-form.mjs';
 
 import '../inputs/simple-input.mjs';
 import '../inputs/password-input.mjs';
+import '../inputs/simple-informer.mjs';
 import '../buttons/close-button.mjs';
 import '../buttons/vk-button.mjs';
+import '../buttons/form-button.mjs';
 import '../auth/vk-auth.mjs';
+
+import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refresh-token.mjs";
 
 customElements.define("sign-in-form", class SignInForm extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true, category: 'settings' },
-            opened: { type: Boolean, default: false, category: 'settings' },
+            version: { type: String, default: '1.0.0'},
             login: { type: String, default: ''},
+            opened: { type: Boolean, default: false},
             password: {type: String, default: ''},
+            isPasswordError: { type: Boolean, default: false},
+            isPasswordMessage: { type: Boolean, default: false},
+            isPasswordValid: { type: Boolean, default: false},
+            passwordErrorMessage: { type: String, default: ''},
+            passwordInfoMessage: { type: String, default: ''},
+            isLoginError: { type: Boolean, default: false},
+            isLoginMessage: { type: Boolean, default: false},
+            loginErrorMessage: { type: String, default: ''},
+            loginInfoMessage: { type: String, default: ''},
         }
     }
 
@@ -56,8 +69,6 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         return html`
             <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
                 <modal-dialog></modal-dialog>
-                <cancel-dialog></cancel-dialog>
-                <close-dialog></close-dialog>
                 <sign-up-form></sign-up-form>
                 <form class="form animate" method="post" id="form">
                     <div class="form-header">
@@ -71,8 +82,20 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
                     <div class="form-body">
                         <div id="db-tab-section" class="form-tab-section selected">
-                            <simple-input id="login" type="text" icon-name="user" placeholder="Login" size="20"></simple-input>
-                            <password-input id="password" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular" @keydown=${this.enterDown}></password-input>
+                            <simple-input id="login" type="text" icon-name="user" placeholder="Login" size="20"  @keydown=${this.loginKeyDown} @input=${this.loginInput} @blur=${this.loginValidation}>
+                            ${ this.isLoginError || this.isLoginMessage ?
+                                    html`
+                                        <simple-informer slot="informer" info-message=${this.loginErrorMessage} error-message=${this.loginInfoMessage}></simple-informer>
+                                    `
+                                : ''}
+                            </simple-input>
+                            <password-input id="password" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular" @keydown=${this.passwordKeyDown} @input=${this.passwordInput} @blur=${this.passwordValidation}>
+                                ${ this.isPasswordError || this.isPasswordMessage ?
+                                    html`
+                                        <simple-informer slot="informer" info-message=${this.passwordErrorMessage} error-message=${this.passwordInfoMessage} ></simple-informer>
+                                    `
+                                : ''}
+                            </password-input>
 
                             <div class="login-options">
                                 <div class="checkbox-remember">
@@ -82,69 +105,93 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                                 <a href="http://localhost/forgot" class="forgot-password" title="Forgot password?">Forgot password?</a>
                             </div>
 
-                            <button type="button" class="active" @click=${()=>this.sendSimpleUser()}>Login</button>
+                            <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>Login</form-button>
                             <div id="google"></div>
                             <vk-button></vk-button>
                         </div>
                     </div>
 
                     <div class="form-footer">
-                        <a class="sign-up-link" @click=${this.signUpClick}>Don’t have an account? Sign up!</a>
+                        <a class="sign-up-link" @click=${this.signUpClick}>New user? Sign up!</a>
                     </div>
                 </form>
             </div>
         `;
     }
 
-    async getVKToken(res) {
-        // let o = window.VKIDSDK.Config.get()
-        // let params1 = new URLSearchParams(window.location.search)
-        // let code = params1.get("code")
-        // let device_id = params1.get("device_id")
-        // let params = new URLSearchParams()
-        // params.append("grant_type", "authorization_code")
-        // params.append("redirect_uri", "https://polyathlon.github.io/polyathlon-system")
-        // params.append("client_id", "52051268")
-        // params.append("code_verifier", "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE")
-        // params.append("device_id", device_id)
-        // //params.append("code", code)
-        // params.append("state", "dj29fnsadjsd85")
+    isEnable() {
+        return this.isLoginValid && this.isPasswordValid
+    }
+    // async getVKToken(res) {
+    //     // let o = window.VKIDSDK.Config.get()
+    //     // let params1 = new URLSearchParams(window.location.search)
+    //     // let code = params1.get("code")
+    //     // let device_id = params1.get("device_id")
+    //     // let params = new URLSearchParams()
+    //     // params.append("grant_type", "authorization_code")
+    //     // params.append("redirect_uri", "https://polyathlon.github.io/polyathlon-system")
+    //     // params.append("client_id", "52051268")
+    //     // params.append("code_verifier", "h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE")
+    //     // params.append("device_id", device_id)
+    //     // //params.append("code", code)
+    //     // params.append("state", "dj29fnsadjsd85")
 
-        // //window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
-        // let uri = "https://id.vk.com/oauth2/auth?".concat(params.toString())
-        // // redirect_uri=https%3A%2F%2Fpolyathlon.github.io%2Fpolyathlon-system&
-        // // client_id=52051268&
-        // // code_verifier=h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE&
-        // // state=dj29fnsadjsd85&
-        // // device_id=Ljab4hFntNWyWCdLl0BVHFEDswZqk7KoqxesOFMH0nHgk4CM2b4NGrxbicmIKE9J44rALREG8_6fqfHb_jZhPQ
+    //     // //window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
+    //     // let uri = "https://id.vk.com/oauth2/auth?".concat(params.toString())
+    //     // // redirect_uri=https%3A%2F%2Fpolyathlon.github.io%2Fpolyathlon-system&
+    //     // // client_id=52051268&
+    //     // // code_verifier=h3YlUL7y_YI2xd3M2uAasDANHfQZdpbkFW5lQeiKAVE&
+    //     // // state=dj29fnsadjsd85&
+    //     // // device_id=Ljab4hFntNWyWCdLl0BVHFEDswZqk7KoqxesOFMH0nHgk4CM2b4NGrxbicmIKE9J44rALREG8_6fqfHb_jZhPQ
 
-        // fetch(uri, {
-        //     method: 'POST',
-        //     mode: 'cors',
-        //     // headers: {
-        //     //   'Content-Type': 'application/json;charset=utf-8'
-        //     // },
-        //     body: new URLSearchParams({
-        //         code
-        //     })
-        //   })
-        // .then(response => response.json())
-        // .then(json => {
-        //     if ("error" in json) {
-        //         throw Error(json)
-        //     }
-        //     return json.token
-        // })
+    //     // fetch(uri, {
+    //     //     method: 'POST',
+    //     //     mode: 'cors',
+    //     //     // headers: {
+    //     //     //   'Content-Type': 'application/json;charset=utf-8'
+    //     //     // },
+    //     //     body: new URLSearchParams({
+    //     //         code
+    //     //     })
+    //     //   })
+    //     // .then(response => response.json())
+    //     // .then(json => {
+    //     //     if ("error" in json) {
+    //     //         throw Error(json)
+    //     //     }
+    //     //     return json.token
+    //     // })
 
 
-        // const params = new URLSearchParams(window.location.search)
-        // const result = {
-        //     code: params.get("code"),
-        //     device_id: params.get("device_id"),
-        //     state: params.get("state"),
-        // }
+    //     // const params = new URLSearchParams(window.location.search)
+    //     // const result = {
+    //     //     code: params.get("code"),
+    //     //     device_id: params.get("device_id"),
+    //     //     state: params.get("state"),
+    //     // }
 
-        const response = await fetch("https://localhost:4500/api/sign-in-vk", {
+    //     const response = await fetch("https://localhost:4500/api/sign-in-vk", {
+    //         method: 'POST',
+    //         mode: 'cors',
+    //         headers: {
+    //           'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+    //         },
+    //         credentials: "include",
+    //         body: new URLSearchParams(window.location.search)
+    //     })
+    //     const result = await response.json()
+    //     if (Object.hasOwn(result, "error")) {
+    //         throw Error(result.error)
+    //     }
+    //     return result?.token
+    //   }
+
+
+ // //window.VKIDSDK.Auth.exchangeCode(code, device_id).then(d => console.log(d))
+
+
+    static fetchGetVKToken() {
+        return fetch("https://localhost:4500/api/sign-in-vk", {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -153,16 +200,34 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             credentials: "include",
             body: new URLSearchParams(window.location.search)
         })
-        const result = await response.json()
-        if (Object.hasOwn(result, "error")) {
-            throw Error(result.error)
+    }
+
+    async getVKToken(res) {
+        let response
+        try {
+            response = await SignInForm.fetchGetVKToken()
+        } catch(e) {
+            await this.showDialog("Ошибка подключения к серверу")
+            return
         }
-        return result?.token
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            await this.showDialog(result.error)
+            return
+        }
+
+        window.history.replaceState(null, '', window.location.pathname);
+
+        saveToken(result.token)
+
+        await this.getSimpleUserInfo()
       }
 
-    sendGoogleToken(res) {
-        const token = { token: res.credential, type: 'google'}
-        fetch('https://localhost:4500/api/sign-in-google', {
+
+    static fetchSendGoogleToken(token) {
+        return fetch('https://localhost:4500/api/sign-in-google', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -170,17 +235,29 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             credentials: "include",
             body: JSON.stringify(token)
           })
-        .then(response => response.json())
-        .then(json => {
-            if (json.error) {
-                throw Error(json.error)
-            }
-            this.saveToken(json.token)
-            return json.token
-        })
-        .then(token => this.getSimpleUserInfo(token))
-        .catch(err => {console.error(err.message)});
-      }
+    }
+
+    async sendGoogleToken(res) {
+        const token = { token: res.credential, type: 'google'}
+        let response
+        try {
+            response = await SignInForm.fetchSendGoogleToken(token)
+        } catch(e) {
+            await this.showDialog("Ошибка подключения к серверу")
+            return
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            await this.showDialog(result.error)
+            return
+        }
+
+        saveToken(result.token)
+
+        await this.getSimpleUserInfo()
+    }
 
     createGoogleButton() {
         google.accounts.id.initialize({
@@ -242,6 +319,14 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         this.#login = ''
         this.#password = ''
         this.#rememberMe = ''
+        this.isLoginError = false
+        this.isLoginMessage = false
+        this.isLoginValid = false
+
+        this.isPasswordError = false
+        this.isPasswordMessage = false
+        this.isPasswordValid = false
+
         if (modalResult == 'Ok')
             this.resolveForm(modalResult)
         else
@@ -251,7 +336,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     signUpClick() {
         this.opened = false;
         this.#signUpForm.open().then(modalResult => {
-            if (modalResult == "SINGIN") {
+            if (modalResult == "SIGNIN") {
                 this.opened = false;
             }
             else {
@@ -293,26 +378,37 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         }
     }
 
-    sendSimpleUser() {
-        const user = { username: this.#login, password: this.#password, type: 'simple'}
-        fetch('https://localhost:4500/api/sign-in', {
+    static fetchSendSimpleUser(user) {
+        return fetch('https://localhost:4500/api/sign-in', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json;charset=utf-8'
+                'Content-Type': 'application/json;charset=utf-8'
             },
             credentials: "include",
             body: JSON.stringify(user)
         })
-        .then( response => response.json() )
-        .then(json => {
-            if (json.error) {
-                throw Error(json.error)
-            }
-            this.saveToken(json.token)
-            return json.token
-        })
-        .then(token => this.getSimpleUserInfo(token))
-        .catch(err => {console.error(err.message)});
+    }
+
+    async sendSimpleUser() {
+        const user = { username: this.#login, password: this.#password, type: 'simple'}
+        let response
+        try {
+            response = await SignInForm.fetchSendSimpleUser(user)
+        } catch(e) {
+            await this.showDialog("Ошибка подключения к серверу")
+            return
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            await this.showDialog(result.error)
+            return
+        }
+
+        saveToken(result.token)
+
+        await this.getSimpleUserInfo()
     }
 
     async saveToken(token) {
@@ -324,26 +420,45 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         }
     }
 
-    getSimpleUserInfo(token) {
-        return fetch('https://localhost:4500/api/user', {
+    static fetchSimpleUserInfo(token) {
+        return fetch(`https://localhost:4500/api/user`, {
             headers: {
-              'Authorization': `Bearer ${token}`
-            }
+                'Authorization': `Bearer ${token}`
+            },
         })
-        .then(response => response.json())
-        .then(json => {
-            if (json.error) {
-                throw Error(json.error)
-            }
-            return json;
-        })
-        .then(user => this.saveUserInfo(JSON.stringify(user)))
-        .then(() => this.modalDialogShow())
-        .catch(err => {console.error(err.message)});
+    }
+
+    async getSimpleUserInfo() {
+
+        const token = getToken();
+        let response = await SignInForm.fetchSimpleUserInfo(token)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await SignInForm.fetchSimpleUserInfo(token)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+
+        this.saveUserInfo(JSON.stringify(result))
+
+        const modalResult = await this.showDialog("Подключение прошло успешно")
+        if (modalResult === "Ok") {
+            this.close(modalResult);
+        }
     }
 
     saveUserInfo(userInfo) {
-        sessionStorage.setItem('userInfo', userInfo)
+        if (localStorage.getItem('rememberMe')) {
+            localStorage.setItem('userInfo', userInfo)
+        }
+        else {
+            sessionStorage.setItem('userInfo', userInfo)
+        }
     }
 
     rememberMe(){
@@ -355,16 +470,195 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         }
     }
 
-    async modalDialogShow() {
-        const dialog =  this.renderRoot.querySelector('modal-dialog');
-        let modalResult = await dialog.show("Подключение прошло успешно");
-        if (modalResult === "Ok") {
-            this.close(modalResult);
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    passwordKeyDown(e) {
+        if (this.isPasswordError) {
+            return
+        }
+        if (e.key === 'Enter' && this.isPasswordValid) {
+            this.sendSimpleUser()
+            return
+        }
+        let capsLockOn = e.getModifierState?.('CapsLock');
+        this.isPasswordMessage = false
+        if (capsLockOn) {
+            this.isPasswordMessage = true
+            this.passwordErrorMessage = "Вы включили Caps Lock"
+            this.passwordInfoMessage = "Выключите Caps Lock"
         }
     }
 
-    enterDown(e) {
-        if (e.key === 'Enter')
-            this.sendSimpleUser()
+    passwordInput(e) {
+
+        if (!e.target.value) {
+            this.isPasswordError = true
+            this.isPasswordMessage = false
+            this.isPasswordValid = false
+            this.passwordErrorMessage = "Не задан пароль"
+            this.passwordInfoMessage = "Пароль не может быть пустым"
+            return
+        }
+
+        let regexp=/^.*(?=[А-яЁё])/
+        if (regexp.test(e.data)) {
+            this.isPasswordError = true
+            this.isPasswordMessage = false
+            this.isPasswordValid = false
+            this.passwordErrorMessage = "Вы набираете на русской раскладке"
+            this.passwordInfoMessage = "Переключитесь на английский язык"
+            return
+        }
+
+        if (regexp.test(e.target.value)) {
+            this.isPasswordError = true
+            this.isPasswordMessage = false
+            this.isPasswordValid = false
+            this.passwordErrorMessage = "У Вас в пароле русские буквы"
+            this.passwordInfoMessage = "Исправьте пароль"
+            return
+        }
+
+        regexp = /[a-zA-Z\d!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-]/
+
+        if (!regexp.test(e.data)) {
+            this.isPasswordError = true
+            this.isPasswordMessage = false
+            this.isPasswordValid = false
+            this.passwordErrorMessage = `Недопустимый символ ${e.data}`
+            this.passwordInfoMessage = `Использовать символ ${e.data} в пароле запрещено`
+		}
+
+        if (!regexp.test(e.target.value)) {
+            this.isPasswordError = true
+            this.isPasswordMessage = false
+            this.isPasswordValid = false
+            this.passwordErrorMessage = "Неправильный пароль"
+            this.passwordInfoMessage = "Разрешены только символы [a-z], [A-Z], [0-9] и [~!@#$%^&*()_+]"
+            return
+        }
+
+        regexp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-])(?=.{8,})/
+        if (regexp.test(e.target.value)) {
+            this.isPasswordValid = true
+        }
+        else {
+            this.isPasswordValid = false
+        }
+        this.isPasswordError = false
+    }
+
+    passwordValidation(e) {
+        if (this.isPasswordError) {
+            return
+        }
+        if (!e.target.value) {
+            this.isPasswordError = true
+            this.isPasswordMessage = false
+            this.isPasswordValid = false
+            this.passwordErrorMessage = "Не задан пароль"
+            this.passwordInfoMessage = "Пароль не может быть пустым"
+            return
+        }
+        const regexp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&'()*+,^./\\:;<=>?[\]_`"{~}|-])(?=.{8,})/
+        if (!regexp.test(e.target.value)) {
+            this.isPasswordError = true
+            this.isPasswordMessage = false
+            this.isPasswordValid = false
+            this.passwordErrorMessage = "Неправильный пароль"
+            this.passwordInfoMessage = "Должно быть не менее 8 символов [a-z], [A-Z], [0-9] и [~!@#$%^&*()-=`_+,./\\:;<>?[]_'{}\"|-]"
+            return
+        }
+        this.isPasswordError = false
+        this.isPasswordMessage = false
+        this.isPasswordValid = true
+
+    }
+
+    loginKeyDown(e) {
+        let capsLockOn = e.getModifierState?.('CapsLock');
+        this.isLoginMessage = false
+        if (capsLockOn) {
+            this.isLoginMessage= true
+            this.loginErrorMessage = "Вы включили Caps Lock"
+            this.loginInfoMessage = "Выключите Caps Lock"
+        }
+    }
+
+    loginInput(e) {
+        if (!e.target.value) {
+            this.isLoginError = true
+            this.isLoginMessage = false
+            this.isLoginValid = false
+            this.loginErrorMessage = "Не задано имя пользователя"
+            this.loginInfoMessage = "Имя пользователя не может быть пустым"
+            return
+        }
+
+        let regexp=/^.*(?=[А-яЁё])/
+        if (regexp.test(e.data)) {
+            this.isLoginError = true
+            this.isLoginMessage = false
+            this.isLoginValid = false
+            this.loginErrorMessage = "Вы набираете на русской раскладке"
+            this.loginInfoMessage = "Переключитесь на английский язык"
+            return
+        }
+
+        if (regexp.test(e.target.value)) {
+            this.isLoginError = true
+            this.isLoginMessage = false
+            this.isLoginValid = false
+            this.loginErrorMessage = "У Вас в имени пользователя русские буквы"
+            this.loginInfoMessage = "Исправьте пароль"
+            return
+        }
+
+        regexp = /^[A-Za-z\d]+([A-Za-z\d]*|[._-]?[A-Za-z\d]+)*$|^.+@.+\..+$/;
+        if (!regexp.test(e.target.value)) {
+            this.loginErrorMessage = "Неправильное имя пользователя"
+            this.isLoginMessage = false
+            this.isLoginValid = false
+            this.loginInfoMessage = "Должно быть от 4 до 16 символов [a-Z], [0-9] и [._-] или E-mail"
+            this.isLoginError = true
+            return
+        }
+        regexp = /(?=^.{4,60}$)^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$|^.+@.+\..+$/
+        if (regexp.test(e.target.value)) {
+            this.isLoginValid = true
+        } else {
+            this.isLoginValid = false
+        }
+        this.isLoginError = false
+    }
+
+    loginValidation(e) {
+        if (this.isLoginError) {
+            return
+        }
+
+        if (!e.target.value) {
+            this.isLoginError = true
+            this.isLoginValid = false
+            this.loginErrorMessage = "Не задано имя пользователя"
+            this.loginInfoMessage = "Имя пользователя не может быть пустым"
+            return
+        }
+
+        const regexp = /(?=^.{4,60}$)^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$|^.+@.+\..+$/;
+        if (!regexp.test(e.target.value)) {
+            this.loginErrorMessage = "Неправильное имя пользователя"
+            this.loginInfoMessage = "от 4 до 16 символов [a-Z] [0-9] [._-] или E-mail"
+            this.isLoginError = true
+            this.isLoginValid = false
+            return
+        }
+        this.isLoginMessage = false
+        this.isLoginError = false
+        this.isLoginValid = true
     }
 })

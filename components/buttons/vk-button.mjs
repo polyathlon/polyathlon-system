@@ -3,12 +3,8 @@ import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 customElements.define('vk-button', class VKButton extends BaseElement {
     static get properties() {
         return {
-            _useInfo: { type: Boolean, default: true },
             iconName: { type: String, default: '', attribute: 'icon-name'},
             size: { type: Number, default: 24 },
-            blink: {type: Boolean, default: false},
-            my: { type: String, default: '', local: true},
-            myGlobal: { type: String, default: '', global: true},
         }
     }
 
@@ -16,9 +12,7 @@ customElements.define('vk-button', class VKButton extends BaseElement {
         return css`
             :host {
                 display: block;
-                vertical-align: middle;
                 margin: 1px;
-                user-select: none;
             }
 
             .reset {
@@ -33,13 +27,12 @@ customElements.define('vk-button', class VKButton extends BaseElement {
               line-height: normal;
               -webkit-font-smoothing: inherit;
               -moz-osx-font-smoothing: inherit;
-              -webkit-appearance: none;
             }
 
             .button {
-              border-radius: 8px;
+              border-radius: 10px;
               width: 100%;
-              min-height: 44px;
+              min-height: 40px;
               background: #0077ff;
               cursor: pointer;
               transition: all .1s ease-out;
@@ -57,7 +50,10 @@ customElements.define('vk-button', class VKButton extends BaseElement {
                 padding: 6px 10px;
               }
               .icon + .text {
-               margin-left: -28px;
+                margin-left: -28px;
+              }
+              .icon {
+                line-height: 0;
               }
               .text {
                 display: flex;

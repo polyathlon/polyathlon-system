@@ -137,10 +137,7 @@ class MyCompetitionsSection1 extends BaseElement {
                     margin-right: 20px;
                     gap: 10px;
                     simple-button {
-                        height: 36px;
-                        &:hover {
-                            background-color: red;
-                        }
+                        height: 100%;
                     }
                 }
 
@@ -502,7 +499,7 @@ class MyCompetitionsSection1 extends BaseElement {
                 ${this.#list}
             </div>
             <footer class="right-footer">
-                <simple-button label="Добавить" @click=${() => this.showPage('my-competition', 'new')}></simple-button>
+                <simple-button @click=${() => this.showPage('my-competition', 'new')}>Добавить</simple-button>
             </footer>
             `;
     }

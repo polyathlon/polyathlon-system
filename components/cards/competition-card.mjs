@@ -144,9 +144,9 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
                 </div>
             </main>
             <footer>
-                <simple-button label="Регламент" @click=${this.saveItem}></simple-button>
-                <simple-button label="Протоколы" @click=${this.saveItem}></simple-button>
-                <simple-button label="Подробнее" @click=${this.saveItem}></simple-button>
+                <simple-button @click=${this.saveItem}>Регламент</simple-button>
+                <simple-button @click=${this.saveItem}>Протоколы</simple-button>
+                <simple-button "Подробнее" @click=${this.saveItem}>Подробнее</simple-button>
             </footer>
         `;
     }

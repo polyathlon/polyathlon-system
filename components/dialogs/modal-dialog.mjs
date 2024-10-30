@@ -19,6 +19,7 @@ customElements.define('modal-dialog', class ModalDialog extends BaseElement {
     static get styles() {
         return [
             formStyles,
+            BaseElement.styles,
             css`
                 :host {
                     color: var(--form-color);

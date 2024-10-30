@@ -19,7 +19,8 @@ export class BaseElement extends LitElement {
 
     static get styles() {
         return css`
-            * {
+            *,
+            :host {
                 box-sizing: border-box;
                 -webkit-touch-callout: none;
                 -webkit-user-select: none;

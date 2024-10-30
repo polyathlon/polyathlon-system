@@ -1,7 +1,6 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
-import '../buttons/simple-button.mjs'
 
 import styles from './input-css.mjs'
 
@@ -17,7 +16,6 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             buttonName: { type: String, default: '', attribute: 'button-name' },
             placeholder: { type: String, default: '' },
             value: { type: String, default: ''},
-            oldValue: { type: String, default: ''},
             currentObject: { type: Object, default: undefined},
             lang: { type: String, default: ''},
         }
@@ -46,11 +44,6 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
 
             `
         ]
-    }
-
-    firstUpdated(setPath = false) {
-        super.firstUpdated();
-        this.oldValue ??= this.value;
     }
 
     get #label() {

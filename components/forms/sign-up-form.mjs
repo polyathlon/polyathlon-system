@@ -111,7 +111,7 @@ class SignUpForm extends BaseElement {
                                 <input type="checkbox" id="remember" name="remember" @click=${this.RememberMe}>
                             </div>
                         </div>
-                        <button type="button" class=${(this.isActive() ? "active" : "" ) || nothing} @click=${()=>this.sendSimpleUser()}>Sign Up</button>
+                        <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>Sign Up</form-button>
                     </div>
                 </div>
             </div>
@@ -120,9 +120,10 @@ class SignUpForm extends BaseElement {
         `;
     }
 
-    isActive () {
+    isEnable () {
         return this.isLoginValid && this.isEmailValid && this.isPasswordValid
     }
+
     RememberMe(){
         if (this.#rememberMe) {
             localStorage.setItem('rememberMe', this.#rememberMe)
@@ -272,6 +273,9 @@ class SignUpForm extends BaseElement {
             this.isEmailError = false
             this.isEmailValid = true
         } catch (e) {
+            if (e instanceof TypeError) {
+                e.message = "Нет доступа к серверу"
+            }
             this.emailErrorMessage = e.message
             if (e.message === 'Вы ошиблись в имени сервера электронной почты') {
                 this.emailInfoMessage = "Задайте правильное имя сервера"
@@ -364,7 +368,7 @@ class SignUpForm extends BaseElement {
             body: JSON.stringify(user)
         })
     }
-    
+
     async sendSimpleUser() {
         const user = { username: this.#login, password: this.#password, type: 'simple', email: this.#email}
 

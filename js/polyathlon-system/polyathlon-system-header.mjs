@@ -202,11 +202,11 @@ class PolyathlonSystemHeader extends BaseElement {
         return this.isHorizontal ? this.horizontalHeader() : this.verticalHeader();
     }
 
-    login() {
+    async login() {
         if (!this.isHorizontal)
             this.showMenu();
-        import( '../../components/forms/sign-in-form.mjs')
-            .then(() => this.renderRoot.querySelector("sign-in-form").open().then(() => this.showUserAccount()).catch(() => ''));
+        await import( '../../components/forms/sign-in-form.mjs')
+        this.renderRoot.querySelector("sign-in-form").open().then(() => this.showUserAccount()).catch(() => '');
     }
 
     clearStorage(){
@@ -299,17 +299,20 @@ class PolyathlonSystemHeader extends BaseElement {
         this.isShow = !this.isShow;
     }
 
-    firstUpdated() {
+    async firstUpdated() {
         super.firstUpdated();
         const md = window.matchMedia( "(min-width: 920px)" );
         this.isHorizontal = md.matches;
-        const params = new URLSearchParams(window.location.search);
-        let param1 = params.get('code');
-        let param2 = params.get('device_id');
-        if (param1 && param2) {
-            this.login();
-        }
         md.addEventListener('change', () => this.matchMediaChange, false);
+        if (window.location.search) {
+            const params = new URLSearchParams(window.location.search);
+            let param1 = params.get('code');
+            let param2 = params.get('device_id');
+            if (param1 && param2) {
+                await import( '../../components/forms/sign-in-form.mjs')
+                this.renderRoot.querySelector("sign-in-form").open().then(() => this.showUserAccount()).catch(() => '');
+            }
+        }
     }
 }
 
