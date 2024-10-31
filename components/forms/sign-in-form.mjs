@@ -102,7 +102,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                                     <label for="remember">Remember me</label>
                                     <input type="checkbox" id="remember" name="remember" @click=${this.rememberMe}>
                                 </div>
-                                <a href="http://localhost/forgot" class="forgot-password" title="Forgot password?">Forgot password?</a>
+                                <a class="forgot-password" @click=${this.forgotClick}>Forgot password?</a>
                             </div>
 
                             <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>Login</form-button>
@@ -344,7 +344,20 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             }
         }, modalResult => this.close(modalResult));
     }
-
+    forgotClick() {
+        this.opened = false;
+        this.#recoverPasswordForm.open().then(modalResult => {
+            if (modalResult == "SIGNIN") {
+                this.opened = false;
+            }
+            else {
+                this.close(modalResult)
+            }
+        }, modalResult => this.close(modalResult));
+    }
+    get #recoverPasswordForm() {
+        return this.parentElement.querySelector('recover-password-form') ?? null;
+    }
     get #signUpForm() {
         return this.parentElement.querySelector('sign-up-form') ?? null;
     }
