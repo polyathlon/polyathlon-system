@@ -155,6 +155,7 @@ class PolyathlonSystemHeader extends BaseElement {
             </div>
             <sign-in-form></sign-in-form>
             <sign-up-form></sign-up-form>
+            <recover-password-form></recover-password-form>
         `
     }
 

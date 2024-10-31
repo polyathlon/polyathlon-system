@@ -6,6 +6,7 @@ import { formStyles } from './form-css.mjs'
 
 import '../dialogs/modal-dialog.mjs';
 import './sign-up-form.mjs';
+import './recover-password-form.mjs';
 
 import '../inputs/simple-input.mjs';
 import '../inputs/password-input.mjs';
@@ -13,7 +14,9 @@ import '../inputs/simple-informer.mjs';
 import '../buttons/close-button.mjs';
 import '../buttons/vk-button.mjs';
 import '../buttons/form-button.mjs';
+import '../buttons/link-button.mjs';
 import '../auth/vk-auth.mjs';
+
 
 import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refresh-token.mjs";
 
@@ -69,7 +72,6 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         return html`
             <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
                 <modal-dialog></modal-dialog>
-                <sign-up-form></sign-up-form>
                 <form class="form animate" method="post" id="form">
                     <div class="form-header">
                         <div class="form-tabs no-select">
@@ -102,7 +104,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                                     <label for="remember">Remember me</label>
                                     <input type="checkbox" id="remember" name="remember" @click=${this.rememberMe}>
                                 </div>
-                                <a class="forgot-password" @click=${this.forgotClick}>Forgot password?</a>
+                                <link-button @click=${this.forgotClick}>Forgot password?</link-button>
                             </div>
 
                             <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>Login</form-button>
@@ -347,12 +349,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     forgotClick() {
         this.opened = false;
         this.#recoverPasswordForm.open().then(modalResult => {
-            if (modalResult == "SIGNIN") {
-                this.opened = false;
-            }
-            else {
                 this.close(modalResult)
-            }
         }, modalResult => this.close(modalResult));
     }
     get #recoverPasswordForm() {
