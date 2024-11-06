@@ -172,7 +172,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Property']
+        this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
             // {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},

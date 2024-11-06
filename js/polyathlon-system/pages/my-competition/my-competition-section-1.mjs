@@ -1,22 +1,22 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
+import '../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
-import '../../../../components/dialogs/add-sportsman-dialog.mjs';
+import '../../../../components/buttons/simple-button.mjs';
 
 import './my-competition-section-1-page-1.mjs'
 import './my-competition-section-1-list-1.mjs'
-import './my-competition-section-1-page-2.mjs'
-import './my-competition-section-2-page-1.mjs'
-import './my-competition-section-2-list-1.mjs'
+//import './my-competition-section-1-page-2.mjs'
+// import './my-competition-section-2-page-1.mjs'
+// import './my-competition-section-2-list-1.mjs'
 
 import DataSet from './my-competition-dataset.mjs'
-import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
+//import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
 class MyCompetitionSection1 extends BaseElement {
@@ -31,7 +31,7 @@ class MyCompetitionSection1 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: { type: BigInt, default: 0},
+            currentPage: { type: BigInt, default: 0 },
             isFirst: { type: Boolean, default: false }
         }
     }
@@ -104,6 +104,9 @@ class MyCompetitionSection1 extends BaseElement {
                         height: 40px;
                         flex: 0 0 40px;
                     }
+                    .label {
+                        text-align: center;
+                    }
                 }
 
                 .left-layout[page="2"] {
@@ -173,7 +176,7 @@ class MyCompetitionSection1 extends BaseElement {
                     justify-content: end;
                     gap: 10px;
                     nav {
-                        background-color: rgba(255, 255, 255, 0.1);
+                       // background-color: rgba(255, 255, 255, 0.1);
                         width: 100%;
                         height: 70%;
                         display: flex;
@@ -357,7 +360,7 @@ class MyCompetitionSection1 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-1-list-1></my-competition-section-1-list-1>
+            <my-competition-section-1-list-1 .avatar=${this.avatar} .item=${this}></my-competition-section-1-list-1>
         `;
     }
 
@@ -383,22 +386,33 @@ class MyCompetitionSection1 extends BaseElement {
         `
     }
 
+    get #rightFooter() {
+        if (this.isModified) {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+            </nav>
+        `
+        }
+        else return ''
+    }
+
+
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
-            <add-sportsman-dialog></add-sportsman-dialog>
-            <div class="left-layout" page=${(this.currentPage === 2 ? this.currentPage : '') || nothing}>${this.#list}</div>
-            <div class="right-layout">${this.#page()}</div>
-            <footer class="left-footer">${this.#task}</footer>
+            <modal-dialog></modal-dialog>
+            <div class="left-layout">
+                ${this.#list}
+            </div>
+            <div class="right-layout">
+                ${this.#page()}
+            </div>
+            <footer class="left-footer">
+                ${this.#task}
+            </footer>
             <footer class="right-footer">
-                ${ (this.isModified ? html`
-                    <nav class='save'>
-                        <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                        <simple-button @click=${this.cancelItem}>Отменить</simple-button>
-                    </nav>
-                ` :  html`
-                    <nav class='save'></nav>`) || nothing
-                }
+                ${this.#rightFooter}
             </footer>
             <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
@@ -418,53 +432,77 @@ class MyCompetitionSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
-    }
-
-    async addSportsmanDialogShow(message) {
-        return await this.renderRoot.querySelector('add-sportsman-dialog').show(message);
-    }
-
     async saveItem() {
-        if (this.currentPage === 2) {
-            const modalResult = await this.addSportsmanDialogShow('Вы действительно хотите отменить все изменения?')
-            await SportsmenDataSet.addItem(modalResult, this.currentItem._id);
-        }
-        else if ('_id' in this.currentItem) {
+        if ('_id' in this.currentItem) {
             await this.dataSource.saveItem(this.currentItem);
         } else {
             await this.dataSource.addItem(this.currentItem);
         }
+        if (this.avatarFile) {
+            let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
+            if (!result) return;
+        }
+        this.avatarFile = null;
         this.oldValues?.clear();
         this.isModified = false;
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            const currentItem = key.currentObject ?? this.currentItem
-            currentItem[key.id] = value;
-            key.value = value;
+            if (key.id === 'avatar') {
+                window.URL.revokeObjectURL(value);
+                this.avatar = value;
+                this.avatarFile = null;
+            } else {
+                const currentItem = key.currentObject ?? this.currentItem
+                currentItem[key.id] = value;
+                key.value = value;
+            }
         });
         this.oldValues.clear();
         this.isModified = false;
     }
 
+    validateAvatar(e) {
+        this.oldValues ??= new Map();
+        if (!this.oldValues.has(e.target)) {
+            this.oldValues.set(e.target, e.target.avatar)
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        else if (this.oldValues.get(e.target) === e.target.avatar) {
+            this.oldValues.delete(e.target.id)
+            this.avatarFile = null;
+        } else {
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        this.isModified = this.oldValues.size !== 0;
+    }
+
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
+    }
 
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;
-        let params1 = new URLSearchParams(window.location.search)
-        if (params1.size > 0) {
-            window.history.replaceState(null, '', window.location.pathname + window.location.hash);
-        }
-
         this.dataSource = new DataSource(this)
-        this.dataSource.getItem()
-        this.avatar = null; // await this.downloadAvatar();
+        await this.dataSource.getItem()
+        if (this.currentItem._id) {
+            this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
+        }
         this.isFirst = true;
     }
 }

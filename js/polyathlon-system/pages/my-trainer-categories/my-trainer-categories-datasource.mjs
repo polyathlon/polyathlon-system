@@ -1,4 +1,4 @@
-import DataSet from "./my-sportsmen-dataset.mjs";
+import DataSet from "./my-trainer-categories-dataset.mjs";
 
 export default class DataSource {
 
@@ -7,30 +7,30 @@ export default class DataSource {
         this.dataSet = dataSet;
         this.items = this.dataSet.map(item => {
             return item;
-        }).sort( (a, b) => a.lastName.localeCompare(b.lastName) )
+        }).sort( (a, b) => a.name.localeCompare(b.name) )
         this.component.currentItem = this.getCurrentItem();
     }
 
     filter(value) {
         this.items = this.dataSet.filter(item => {
-            return item?.country?.name === value?.name;
+            return item?.region?.name === value?.name;
         }).sort( (a, b) => a.name.localeCompare(b.name) )
     }
 
     getCurrentItem(){
-        const item = sessionStorage.getItem('currentSportsman')
+        const item = sessionStorage.getItem('currentTrainerCategories')
         if (item) {
             return this.items.find(p => p._id === item)
         }
         else {
-            sessionStorage.setItem('currentSportsman', this.items[0]?._id)
+            sessionStorage.setItem('currentTrainerCategories', this.items[0]?._id)
             return this.items?.[0]
         }
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentSportsman', item._id)
-        this.component.currentItem = item
+        sessionStorage.setItem('currentTrainerCategories', item._id)
+        this.component.currentItem = item;
     }
 
     async addItem(item) {

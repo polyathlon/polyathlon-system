@@ -2,17 +2,11 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
 
-import '../../../../components/selects/simple-select.mjs'
-
-import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
-import RegionDataset from '../my-regions/my-regions-dataset.mjs'
-
-class MyCitiesSection1Page1 extends BaseElement {
+class MyTrainerCategoriesSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
-            regionDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
         }
@@ -33,10 +27,6 @@ class MyCitiesSection1Page1 extends BaseElement {
                     min-width: min(600px, 50vw);
                     max-width: 600px;
                 }
-                #region {
-                    --icon-height: 90%;
-                    --image-height: 90%
-                }
             `
         ]
     }
@@ -44,8 +34,8 @@ class MyCitiesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="city-solid" label="City name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="region" @icon-click=${() => this.showPage('my-regions')} icon-name="region-solid" label="Region:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-input id="name" icon-name="referee-category-solid" label="Trainer category:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="shortName" icon-name="short-referee-category-solid" label="Short name:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -66,14 +56,11 @@ class MyCitiesSection1Page1 extends BaseElement {
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
+
             this.isModified = this.oldValues.size !== 0;
         }
     }
 
-    async firstUpdated() {
-        super.firstUpdated();
-        this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
-    }
 }
 
-customElements.define("my-cities-section-1-page-1", MyCitiesSection1Page1);
+customElements.define("my-trainer-categories-section-1-page-1", MyTrainerCategoriesSection1Page1);

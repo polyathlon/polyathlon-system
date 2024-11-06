@@ -12,7 +12,6 @@ customElements.define('modal-dialog', class ModalDialog extends BaseElement {
             opened: { type: Boolean, default: false},
             animateClose: { type: Boolean, default: false},
             type: {type: String, default: 'message'},
-
         }
     }
 
@@ -37,13 +36,13 @@ customElements.define('modal-dialog', class ModalDialog extends BaseElement {
         switch (this.type) {
             case "confirm":
                 return html`
-                    <button type="button" id="ok-button" class="footer-button btn-ok" @click=${()=>this.ok()}>Да</button>
-                    <button type="button" id="button-cancel" class="footer-button button-cancel" @click=${()=>this.close()}>Нет</button>
+                    <button class="footer-button" @click=${this.ok}>Да</button>
+                    <button class="footer-button" @click=${this.close}>Нет</button>
                 `
             case "message":
             case "error":
                 return html`
-                    <button type="button" id="ok-button" class="footer-button btn-ok" @click=${()=>this.ok()}>Ок</button>
+                    <button class="footer-button" @click=${this.ok}>Ок</button>
                 `
             default:
                 break;
@@ -51,29 +50,25 @@ customElements.define('modal-dialog', class ModalDialog extends BaseElement {
     }
     render() {
         return html`
-            <div id="dialog" class="modal-dialog ${this.opened ? 'show': ''} ${this.animateClose ? 'animate-close': ''}">
-                <div class="modal-dialog-content animate" id="modal-dialog">
-                    <div class="dialog-header">
+            <div class="modal-dialog ${this.opened ? 'show': ''} ${this.animateClose ? 'animate-close': ''}">
+                <div class="modal-dialog-content animate">
+                    <header>
                         <span id="dialog-title" class="dialog-title no-select">${this.title}</span>
                         <close-button class="close-button no-select" name="times" @click=${()=>this.close('CANCEL')}></close-button>
-                    </div>
+                    </header>
 
-                    <div class="dialog-body">
+                    <main>
                         <span id="message" class="no-select">${this.message}</span>
-                    </div>
+                    </main>
 
-                    <div class="dialog-footer no-select">
+                    <footer>
                         <div class="footer-buttons">
                             ${this.#buttons()}
                         </div>
-                    </div>
+                    </footer>
                 </div>
             </div>
         `;
-    }
-
-    firstUpdated() {
-        super.firstUpdated();
     }
 
     show(message) {

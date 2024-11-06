@@ -24,6 +24,7 @@ class MyRefereeCategoriesSection1Page1 extends BaseElement {
                     gap: 10px;
                 }
                 .container {
+                    min-width: min(600px, 50vw);
                     max-width: 600px;
                 }
             `

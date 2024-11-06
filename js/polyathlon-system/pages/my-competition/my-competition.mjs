@@ -1,17 +1,14 @@
 import { BaseElement, html, css, cache } from '../../../base-element.mjs'
 
 import './my-competition-section-1.mjs';
-import './my-competition-section-2.mjs';
+// import './my-competition-section-2.mjs';
 
 import '../../../../components/buttons/icon-button.mjs'
-
-import DataSource from './my-competition-datasource.mjs'
 
 class MyCompetition extends BaseElement {
     static get properties() {
         return {
             currentSection: { type: BigInt, default: 0},
-            parent: { type: Object, default: null, local: true },
             version: { type: String, default: '1.0.0', save: true },
         }
     }
@@ -51,6 +48,7 @@ class MyCompetition extends BaseElement {
                 }
                 .right-header {
                     grid-area: header2;
+                    overflow: hidden;
                     justify-content: flex-start;
                     icon-button {
                         height: 100%;
@@ -83,16 +81,16 @@ class MyCompetition extends BaseElement {
 
     get #section1() {
         return html`
-            <my-competition-section-1 .parent=${this.parent}></my-competition-section-1>
+            <my-competition-section-1></my-competition-section-1>
         `;
     }
 
     get #section2() {
         return html`
-            <my-competition-section-2 .parent=${this.parent}></my-competition-section-2>
+            <my-competition-section-1></my-competition-section-1>
         `;
     }
-   
+
     get #section() {
         switch(this.currentSection) {
             case 0: return cache(this.#section1)
@@ -130,8 +128,6 @@ class MyCompetition extends BaseElement {
             localStorage.setItem('currentCompetition', params.get('competition'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
-        this.dataSource = new DataSource(this)
-        this.parent = await this.dataSource.getItem()
     }
 }
 

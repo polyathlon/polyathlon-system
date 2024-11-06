@@ -20,7 +20,7 @@ customElements.define('simple-button', class SimpleButton extends BaseElement {
                     padding: 0px 10px 1px;
                     cursor: pointer;
                     background-color: lightgray;
-                    border: 1px solid gray;
+                    /* border: 1px solid gray; */
                     border-radius: 2px;
                     overflow: hidden;
                     color: gray;
@@ -35,6 +35,8 @@ customElements.define('simple-button', class SimpleButton extends BaseElement {
                 }
                 :host(:not([disable]):active) {
                     transform: scale(.97);
+                    /* box-shadow: 0px 0px 5px 2px rgba(255,255,255,0.5); */
+                    /* box-shadow: 0px 0px 2px 2px rgba(255,255,255,0.8); */
                 }
                 :host(:not([disable]):hover) {
                     background-color: var(--active-form-button, red);

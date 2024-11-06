@@ -19,9 +19,13 @@ class MyCompetitionTypesSection1Page1 extends BaseElement {
                 :host {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    overflow: hidden;
+                    align-items: safe center;
+                    height: 100%;
                     gap: 10px;
+                }
+                .container {
+                    min-width: min(600px, 50vw);
+                    max-width: 600px;
                 }
             `
         ]
@@ -29,8 +33,8 @@ class MyCompetitionTypesSection1Page1 extends BaseElement {
 
     render() {
         return html`
-            <div>
-                <simple-input id="name" icon-name="user" label="Competition Type name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+            <div class="container">
+                <simple-input id="name" icon-name="competition-solid" label="Competition name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -51,6 +55,7 @@ class MyCompetitionTypesSection1Page1 extends BaseElement {
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
+
             this.isModified = this.oldValues.size !== 0;
         }
     }

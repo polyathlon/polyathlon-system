@@ -146,8 +146,8 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    fetchAvatarFile(token, formData) {
-        return fetch(`https://localhost:4500/api/upload/avatar`, {
+    static fetchUploadAvatar(token, formData, competitionId) {
+        return fetch(`https://localhost:4500/api/upload/competition/avatar/${competitionId}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -156,19 +156,45 @@ export default class DataSet {
         })
     }
 
-    async uploadAvatarFile() {
-        const token = this.getToken();
+    static async uploadAvatar(avatar, competitionId) {
+        const token = getToken();
         const formData = new FormData();
-        formData.append("file", this.avatarFile);
-        let response = await this.fetchAvatarFile(token, formData)
+        formData.append("file", avatar);
+        let response = await DataSet.fetchUploadAvatar(token, formData, competitionId)
         if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchAvatarFile(token, formData)
+            const token = await refreshToken()
+            response = await DataSet.fetchUploadAvatar(token, formData, competitionId)
         }
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)
         }
         return result
+    }
+
+    static fetchDownloadAvatar(token, competitionId) {
+        return fetch(`https://localhost:4500/api/upload/competition/avatar/${competitionId}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+    }
+
+    static async downloadAvatar(competitionId) {
+        const token = getToken();
+        let response = await DataSet.fetchDownloadAvatar(token, competitionId)
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchDownloadAvatar(token, competitionId)
+        }
+
+        if (!response.ok) {
+            return null
+        }
+
+        const blob = await response.blob()
+
+        return blob ? window.URL.createObjectURL(blob) : blob;
     }
 }

@@ -1,12 +1,10 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
 import '../../../../components/dialogs/modal-dialog.mjs'
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/inputs/upload-input.mjs'
-import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/icon-button.mjs'
-import '../../../../components/inputs/avatar-input.mjs'
-import '../../../../components/buttons/aside-button.mjs';
+import '../../../../components/buttons/aside-button.mjs'
+import '../../../../components/buttons/simple-button.mjs'
+
 import { States } from "../../../utils.js"
 
 import './my-sportsmen-section-1-page-1.mjs'
@@ -60,12 +58,12 @@ class MySportsmenSection1 extends BaseElement {
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     p {
-                    width: 100%;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    font-size: 1rem;
-                    margin: 0;
+                        width: 100%;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        font-size: 1rem;
+                        margin: 0;
                     }
                 }
 
@@ -82,8 +80,8 @@ class MySportsmenSection1 extends BaseElement {
                     overflow-x: hidden;
                     background: var(--layout-background-color);
                     icon-button {
-                    width: 100%;
-                    height: 40px;
+                        width: 100%;
+                        height: 40px;
                         flex: 0 0 40px;
                     }
                 }
@@ -100,12 +98,6 @@ class MySportsmenSection1 extends BaseElement {
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
                     gap: 10px;
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
                 }
 
                 .left-footer {
@@ -133,14 +125,12 @@ class MySportsmenSection1 extends BaseElement {
                     justify-content: end;
                     gap: 10px;
                     nav {
-                        background-color: rgba(255, 255, 255, 0.1);
                         width: 100%;
                         height: 70%;
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
                         padding: 0 10px;
-                        /* padding-right: 10px; */
                         gap: 1vw;
                         &.save {
                             justify-content: flex-end;
@@ -148,10 +138,6 @@ class MySportsmenSection1 extends BaseElement {
                         simple-button {
                             height: 100%;
                         }
-                    }
-
-                    simple-button {
-                        height: 100%;
                     }
                 }
 
@@ -163,8 +149,8 @@ class MySportsmenSection1 extends BaseElement {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                 /* width */
-                 ::-webkit-scrollbar {
+                /* width */
+                ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -190,12 +176,9 @@ class MySportsmenSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Property']
+        this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
-            // {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
-            // {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
-            // {iconName: 'sports-category-solid', page: 'my-sports-categories', title: 'Sports Categories', click: () => this.showPage('my-sports-categories')},
             {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
             {iconName: 'excel-import-solid', page: 'my-sportsmen', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-sportsmen', title: 'Back', click: () => this.gotoBack()},
@@ -308,8 +291,7 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     async showItem(item) {
-        if (this.currentItem?._id === item.id)
-        {
+        if (this.currentItem?._id === item.id) {
             this.copyToClipboard(item.value.hashNumber || item.id)
             return
         }
@@ -359,6 +341,7 @@ class MySportsmenSection1 extends BaseElement {
         `
     }
 
+    //icon-name=${ item.value?.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
     makeList() {
         if (!this.dataSource?.items || this.dataSource?.items.length === 0)
             return;
@@ -369,7 +352,7 @@ class MySportsmenSection1 extends BaseElement {
                 html `<icon-button
                     label=${ item.key }
                     title=${ item.id }
-                    icon-name=${ item.value?.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+                    image-name=${ item.value?.gender == 0 ? "../../../../images/sportsman-boy-solid.svg" : "../../../../images/sportsman-girl-solid.svg" }
                     ?selected=${ this.currentItem?._id === item.id }
                     .status=${{ name: item.value?.hashNumber || item?.id, icon: 'hash-number-solid'} }
                     @click=${() => this.showItem(item)}
@@ -394,7 +377,6 @@ class MySportsmenSection1 extends BaseElement {
             </nav>
         `
     }
-    // ${this.#page()}
 
     get #firstItemFooter() {
         return html`

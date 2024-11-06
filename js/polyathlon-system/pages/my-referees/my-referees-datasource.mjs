@@ -11,6 +11,12 @@ export default class DataSource {
         this.component.currentItem = this.getCurrentItem();
     }
 
+    filter(value) {
+        this.items = this.dataSet.filter(item => {
+            return item?.country?.name === value?.name;
+        }).sort( (a, b) => a.name.localeCompare(b.name) )
+    }
+
     getCurrentItem(){
         const item = sessionStorage.getItem('currentReferee')
         if (item) {
@@ -24,7 +30,7 @@ export default class DataSource {
 
     setCurrentItem(item) {
         sessionStorage.setItem('currentReferee', item._id)
-        this.component.currentItem = item;
+        this.component.currentItem = item
     }
 
     async addItem(item) {

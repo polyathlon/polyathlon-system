@@ -11,13 +11,18 @@ export default class DataSet {
         return DataSet.#dataSet
     }
 
+    static find(name, value) {
+        const index = DataSet.#dataSet.findIndex(element =>
+            element[name] === value || element[name].toLowerCase() === value
+        )
+        return index === -1 ? null : DataSet.#dataSet[index]
+    }
+
     static #fetchGetItems(token) {
         return fetch('https://localhost:4500/api/referees', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
-        }).catch(e => {
-            throw new Error(`Ошибка доступа к серверу: ${e.message}`);
         })
     }
 
@@ -165,6 +170,7 @@ export default class DataSet {
         }
         DataSet.#dataSet.splice(itemIndex, 1)
     }
+
     static fetchCreateHashNumber(token, item) {
         return fetch(`https://localhost:4500/api/referee-id`, {
             method: "POST",
@@ -190,6 +196,7 @@ export default class DataSet {
         }
         return result.number
     }
+    
     static fetchGetQRCode(token, data) {
         return fetch(`https://localhost:4500/api/qr-code?data=${data}`, {
             method: "GET",

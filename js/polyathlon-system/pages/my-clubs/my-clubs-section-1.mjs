@@ -1,12 +1,9 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/inputs/upload-input.mjs'
-import '../../../../components/inputs/download-input.mjs'
+import '../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../components/buttons/icon-button.mjs'
-import '../../../../components/inputs/avatar-input.mjs'
-import '../../../../components/buttons/aside-button.mjs';
+import '../../../../components/buttons/aside-button.mjs'
+import '../../../../components/buttons/simple-button.mjs'
 
 import './my-clubs-section-1-page-1.mjs'
 
@@ -46,28 +43,24 @@ class MyClubsSection1 extends BaseElement {
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                .left-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     p {
-                    width: 100%;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    font-size: 1rem;
-                    margin: 0;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        margin: 0;
                     }
                 }
 
-                .right-header{
+                .right-header {
                     grid-area: header2;
                 }
 
@@ -93,17 +86,10 @@ class MyClubsSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: center;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    /* overflow: hidden; */
                     gap: 10px;
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
                 }
 
                 .left-footer {
@@ -129,10 +115,18 @@ class MyClubsSection1 extends BaseElement {
                     display: flex;
                     align-items: center;
                     justify-content: end;
-                    margin-right: 20px;
                     gap: 10px;
-                    simple-button {
-                        height: 100%;
+                    nav {
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        padding: 0 10px;
+                        gap: 1vw;
+                        simple-button {
+                            height: 100%;
+                        }
                     }
                 }
 
@@ -171,7 +165,7 @@ class MyClubsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Property']
+        this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
@@ -257,7 +251,7 @@ class MyClubsSection1 extends BaseElement {
 
     async showItem(index, itemId) {
         if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
                 await this.dataSource.saveItem(this.currentItem);
             }
@@ -270,7 +264,7 @@ class MyClubsSection1 extends BaseElement {
         }
     }
 
-    #page() {
+    get #page() {
         return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
     }
 
@@ -292,15 +286,15 @@ class MyClubsSection1 extends BaseElement {
 
     get #list() {
         return html`
-                ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
-                                label=${item.name}
-                                title=${item._id}
-                                icon-name="club-solid"
-                                ?selected=${this.currentItem === item}
-                                @click=${() => this.showItem(index, item._id)}
-                            >
-                    </icon-button>
+            ${this.dataSource?.items?.map((item, index) =>
+                html `
+                    <icon-button
+                        label=${item.name}
+                        title=${item._id}
+                        icon-name="club-solid"
+                        ?selected=${this.currentItem === item}
+                        @click=${() => this.showItem(index, item._id)}
+                    ></icon-button>
                 `
             )}
         `
@@ -314,23 +308,43 @@ class MyClubsSection1 extends BaseElement {
         `
     }
 
+    get #rightFooter() {
+        if (this.isModified) {
+            return html`
+                <nav>
+                    <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                    <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                </nav>
+            `
+        } else {
+            return html`
+                <nav>
+                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
+                    <simple-button @click=${this.addItem}>Добавить</simple-button>
+                </nav>
+            `
+        }
+
+    }
+
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
+            <modal-dialog></modal-dialog>
             <header class="left-header"><p>Club</p></header>
-            <header class="right-header">${this.#pageName}</header>
+            <header class="right-header">
+                ${this.#pageName}
+            </header>
             <div class="left-layout">
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
-                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>${this.isModified ? "Отменить": "Добавить"}</simple-button>
+                ${this.#rightFooter}
             </footer>
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
@@ -344,8 +358,14 @@ class MyClubsSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
     }
 
     async addItem() {
@@ -360,7 +380,7 @@ class MyClubsSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
@@ -373,7 +393,7 @@ class MyClubsSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этот клуб?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)

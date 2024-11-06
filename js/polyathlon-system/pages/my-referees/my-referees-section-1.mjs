@@ -1,12 +1,9 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/inputs/upload-input.mjs'
-import '../../../../components/inputs/download-input.mjs'
+import '../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../components/buttons/icon-button.mjs'
-import '../../../../components/inputs/avatar-input.mjs'
-import '../../../../components/buttons/aside-button.mjs';
+import '../../../../components/buttons/aside-button.mjs'
+import '../../../../components/buttons/simple-button.mjs'
 
 import './my-referees-section-1-page-1.mjs'
 
@@ -17,15 +14,15 @@ class MyRefereesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Object, default: null},
-            statusDataSet: {type: Map, default: null },
-            oldValues: {type: Map, default: null },
-            currentItem: {type: Object, default: null},
-            isModified: {type: Boolean, default: "", local: true},
-            isReady: {type: Boolean, default: true},
+            dataSource: { type: Object, default: null },
+            statusDataSet: { type: Map, default: null },
+            oldValues: { type: Map, default: null },
+            currentItem: { type: Object, default: null },
+            isModified: { type: Boolean, default: "", local: true },
+            isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: {type: BigInt, default: 0},
+            currentPage: { type: BigInt, default: 0 },
         }
     }
 
@@ -46,28 +43,24 @@ class MyRefereesSection1 extends BaseElement {
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                .left-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     p {
-                        width: 100%;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        font-size: 1rem;
                         margin: 0;
                     }
                 }
 
-                .right-header{
+                .right-header {
                     grid-area: header2;
                 }
 
@@ -93,17 +86,11 @@ class MyRefereesSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: flex-start;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
                     gap: 10px;
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
                 }
 
                 .left-footer {
@@ -129,11 +116,18 @@ class MyRefereesSection1 extends BaseElement {
                     display: flex;
                     align-items: center;
                     justify-content: end;
-                    margin-right: 20px;
                     gap: 10px;
-
-                    simple-button {
-                        height: 100%;
+                    nav {
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        padding: 0 10px;
+                        gap: 1vw;
+                        simple-button {
+                            height: 100%;
+                        }
                     }
                 }
 
@@ -172,7 +166,7 @@ class MyRefereesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Property']
+        this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
@@ -300,7 +294,17 @@ class MyRefereesSection1 extends BaseElement {
         }
     }
 
-    async showItem(index, itemId) {
+    copyToClipboard(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text)
+        }
+    }
+
+    async showItem(item) {
+        if (this.currentItem?._id === item._id) {
+            this.copyToClipboard(item.id || item._id)
+            return
+        }
         if (this.isModified) {
             const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
@@ -311,11 +315,11 @@ class MyRefereesSection1 extends BaseElement {
             }
         }
         else {
-            this.dataSource.setCurrentItem(this.dataSource.items[index])
+            this.dataSource.setCurrentItem(item)
         }
     }
 
-    #page() {
+    get #page() {
         return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
     }
 
@@ -349,18 +353,18 @@ class MyRefereesSection1 extends BaseElement {
         return result
     }
 
+    //                        icon-name="judge1-solid"
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
                 html `<icon-button
                         label=${this.fio(item)}
                         title=${item._id}
-                        icon-name="judge1-solid"
-                        .status=${item.category}
+                        image-name="../../../../images/referee-solid.svg"
                         ?selected=${this.currentItem === item}
-                        @click=${() => this.showItem(index, item._id)}
-                    >
-                    </icon-button>
+                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
+                        @click=${() => this.showItem(item)}
+                    ></icon-button>
                 `
             )}
         `
@@ -374,23 +378,43 @@ class MyRefereesSection1 extends BaseElement {
         `
     }
 
+    get #rightFooter() {
+        if (this.isModified) {
+            return html`
+                <nav>
+                    <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                    <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                </nav>
+            `
+        } else {
+            return html`
+                <nav>
+                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
+                    <simple-button @click=${this.addItem}>Добавить</simple-button>
+                </nav>
+            `
+        }
+
+    }
+
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
-            <header class="left-header"><p>Referee</p></header>
-            <header class="right-header">${this.#pageName}</header>
+            <modal-dialog></modal-dialog>
+            <header class="left-header"><p>Referees<p></header>
+            <header class="right-header">
+                ${this.#pageName}
+            </header>
             <div class="left-layout">
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
-                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>${this.isModified ? "Отменить": "Добавить"}</simple-button>
+                ${this.#rightFooter}
             </footer>
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
@@ -410,8 +434,14 @@ class MyRefereesSection1 extends BaseElement {
         window.open(URL.createObjectURL(blob))
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
     }
 
     async addItem() {
@@ -426,7 +456,7 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
@@ -448,7 +478,7 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого судью?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)

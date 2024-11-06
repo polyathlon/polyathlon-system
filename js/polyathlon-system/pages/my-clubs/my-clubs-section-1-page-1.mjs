@@ -35,11 +35,8 @@ class MyClubsSection1Page1 extends BaseElement {
                     gap: 10px;
                 }
                 .container {
+                    min-width: min(600px, 50vw);
                     max-width: 600px;
-                }
-                #country {
-                    --icon-height: 90%;
-                    --image-height: 90%
                 }
             `
         ]
@@ -54,10 +51,6 @@ class MyClubsSection1Page1 extends BaseElement {
                 <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
             </div>
         `;
-    }
-
-    showPage(page) {
-        location.hash = page;
     }
 
     validateInput(e) {
@@ -76,9 +69,7 @@ class MyClubsSection1Page1 extends BaseElement {
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
-            if (e.target.id === 'city') {
-                this.requestUpdate()
-            }
+
             this.isModified = this.oldValues.size !== 0;
         }
     }

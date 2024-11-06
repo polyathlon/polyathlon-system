@@ -64,18 +64,30 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.close-button:hover,
+.close-button:focus,
+#form.dark .close-button:hover,
+#form.dark .close-button:focus {
+    color: var(--link-hover-color);
+    cursor: pointer;
+}
+
+/* button:hover {
     transition: .3s;
     filter: brightness(110%);
-}
+} */
 
-button:active {
+/* button:active {
     transition: .3s;
     filter: brightness(90%);
+} */
+
+.footer-button:hover {
+    background-color: var(--link-hover-color);
 }
 
-.btn-ok:hover {
-    background-color: var(--link-hover-color);
+.footer-button:active {
+    transform: scale(.97);
 }
 
 .footer-button {
@@ -84,6 +96,7 @@ button:active {
     margin: 4px;
     padding: 10px 18px;
     background-color:  var(--background-green);
+    transition: transform ease-in 0.1s;
 }
 
 .footer-buttons {
@@ -100,7 +113,7 @@ button:active {
 }
 
 /* Center the image and position the close button */
-.dialog-header {
+header {
     display: flex;
     align-items: center;
     padding: 8px 16px 8px 20px;
@@ -144,26 +157,25 @@ button:active {
     color: red;
 }
 
-.dialog-body {
+main {
     margin: 0 16px;
     padding: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
+    span {
+        font-size: 25px;
+        font-weight: bold;
+    }
 }
 
-.dialog-body > span {
-    font-size: 25px;
-    font-weight: bold;
-}
-
-.dialog-footer {
+footer {
     padding: 8px 16px 8px 20px;
     border-radius: 0 0 10px 10px;
     overflow: hidden;
     background-color: var(--form-header-background-color);
 }
 
-#dialog.dark .dialog-footer {
+#dialog.dark footer {
     background-color: var(--dark-header-color);
     color: var(--dark-color);
 }
@@ -172,26 +184,23 @@ button:active {
     color: white;
 }
 
-/* The Modal (background) */
 .modal-dialog {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 10000; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 10000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0); /* Fallback color */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
     padding-top: 60px;
 }
 
 .show {
-    display: block; /* Hidden by default */
+    display: block;
 }
 
-/* Modal Content/Box */
 .modal-dialog-content {
     background-color: #fefefe;
     margin: 15% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
@@ -215,9 +224,6 @@ button:active {
     user-select: none;
 }
 
-
-
-/* Add Zoom Animation */
 .animate {
     -webkit-animation: animatezoom 0.6s;
     animation: animatezoom 0.6s;
@@ -268,13 +274,10 @@ button:active {
     }
 }
 
-/* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
     .footer-button {
         width: 100%;
     }
 }
 }
-`;
-
-
+`

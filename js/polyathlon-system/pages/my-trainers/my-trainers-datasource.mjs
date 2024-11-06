@@ -1,4 +1,4 @@
-import DataSet from "./my-coaches-dataset.mjs";
+import DataSet from "./my-trainers-dataset.mjs";
 
 export default class DataSource {
 
@@ -7,23 +7,29 @@ export default class DataSource {
         this.dataSet = dataSet;
         this.items = this.dataSet.map(item => {
             return item;
-        }).sort( (a, b) => a.lastName.localeCompare(b.lastName) )
+        }).sort( (a, b) => a.name.localeCompare(b.name) )
         this.component.currentItem = this.getCurrentItem();
     }
 
+    filter(value) {
+        this.items = this.dataSet.filter(item => {
+            return item?.country?.name === value?.name;
+        }).sort( (a, b) => a.name.localeCompare(b.name) )
+    }
+
     getCurrentItem(){
-        const item = sessionStorage.getItem('currentCoach')
+        const item = sessionStorage.getItem('currentTrainer')
         if (item) {
             return this.items.find(p => p._id === item)
         }
         else {
-            sessionStorage.setItem('currentCoach', this.items[0]?._id)
+            sessionStorage.setItem('currentTrainer', this.items[0]?._id)
             return this.items?.[0]
         }
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentCoach', item._id)
+        sessionStorage.setItem('currentTrainer', item._id)
         this.component.currentItem = item;
     }
 

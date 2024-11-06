@@ -1,6 +1,6 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
-import '../../../../components/buttons/link-button.mjs'
+import '../../../../components/buttons/fashion-button.mjs'
 
 class HomeSection1 extends BaseElement {
     static get properties() {
@@ -93,7 +93,7 @@ class HomeSection1 extends BaseElement {
                     <h2>The future is already here</h2>
                     <h1>Polyathlon<br>competition<br>system</h1>
                     <p>From the GTO badge to the Olympic medal!</p>
-                    <link-button href="#my-pride">Learn more</link-button>
+                    <fashion-button href="#my-pride">Learn more</fashion-button>
                 </div>
             </div>
         `;

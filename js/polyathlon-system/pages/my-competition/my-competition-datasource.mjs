@@ -21,7 +21,7 @@ export default class DataSource {
     }
 
     setCurrentItem(item) {
-        localStorage.setItem('currentCountry', item._id)
+        localStorage.setItem('currentCompetition', item._id)
         this.component.currentItem = item;
     }
 

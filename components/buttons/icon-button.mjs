@@ -73,9 +73,9 @@ customElements.define('icon-button', class IconButton extends BaseElement {
                 img {
                     display: block;
                     line-height: 0;
-                    border-radius: 50%;
+                    border-radius: var(--border-radius, 0);
                     position: relative;
-                    height: var(--image-height, 100%);
+                    height: var(--image-height, 80%);
                     aspect-ratio: 1 / 1;
                 }
                 simple-icon {

@@ -1,15 +1,14 @@
-import { BaseElement, html, css, cache } from '../../../base-element.mjs'
+import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/inputs/upload-input.mjs'
-import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/country-button.mjs'
-import '../../../../components/inputs/avatar-input.mjs'
+import '../../../../components/dialogs/modal-dialog.mjs'
+import '../../../../components/buttons/icon-button.mjs'
+import '../../../../components/buttons/aside-button.mjs'
+import '../../../../components/buttons/simple-button.mjs'
+
 import './my-age-groups-section-1-page-1.mjs'
+
 import DataSet from './my-age-groups-dataset.mjs'
 import DataSource from './my-age-groups-datasource.mjs'
-// import './my-competitions-section-1-page-2.mjs'
 
 class MyAgeGroupsSection1 extends BaseElement {
     static get properties() {
@@ -39,34 +38,29 @@ class MyAgeGroupsSection1 extends BaseElement {
                     grid-template-areas:
                         "header1 header2"
                         "sidebar content"
-                        "footer  footer";
+                        "footer1  footer2";
                     gap: 0 20px;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                #competition-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
+                    p {
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        margin: 0;
+                    }
                 }
 
-                #competition-header p {
-                    width: 100%;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    font-size: 1rem;
-                    margin: 0;
-                }
-
-                #property-header{
+                .right-header {
                     grid-area: header2;
                 }
 
@@ -78,50 +72,92 @@ class MyAgeGroupsSection1 extends BaseElement {
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
-                }
-
-                .left-layout country-button {
-                    width: 100%;
-                    height: 40px;
+                    icon-button {
+                        width: 100%;
+                        height: 40px;
+                        flex: 0 0 40px;
+                    }
                 }
 
                 .right-layout {
+                    overflow-y: auto;
+                    overflow-x: hidden;
                     grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: center;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    overflow: hidden;
+                    /* overflow: hidden; */
                     gap: 10px;
                 }
 
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
-                }
-
-                footer {
-                    grid-area: footer;
+                .left-footer {
+                    grid-area: footer1;
                     display: flex;
                     align-items: center;
                     justify-content: end;
-                    margin-right: 20px;
                     gap: 10px;
+                    nav {
+                        background-color: rgba(255, 255, 255, 0.1);
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        /* padding-right: 10px; */
+                        gap: 1vw;
+                    }
                 }
 
-                footer simple-button {
-                    height: 40px;
+                .right-footer {
+                    grid-area: footer2;
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    gap: 10px;
+                    nav {
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        padding: 0 10px;
+                        gap: 1vw;
+                        simple-button {
+                            height: 100%;
+                        }
+                    }
                 }
 
-                country-button[selected] {
+                icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                country-button:hover {
+                icon-button:hover {
                     background: rgba(255, 255, 255, 0.1)
+                }
+
+                /* width */
+                ::-webkit-scrollbar {
+                    width: 10px;
+                }
+
+                /* Track */
+                ::-webkit-scrollbar-track {
+                    box-shadow: inset 0 0 5px grey;
+                    border-radius: 5px;
+                }
+
+                /* Handle */
+                ::-webkit-scrollbar-thumb {
+                    background: red;
+                    border-radius: 5px;
+                }
+
+                #fileInput {
+                    display: none;
                 }
             `
         ]
@@ -130,8 +166,67 @@ class MyAgeGroupsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Age Groups property']
+        this.pageNames = ['Information']
         this.oldValues = new Map();
+        this.buttons = [
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
+    }
+
+    showPage(page) {
+        location.hash = page;
+    }
+
+    gotoBack(page) {
+        history.back();
+    }
+
+    async getNewFileHandle() {
+        const options = {
+          types: [
+            {
+              description: 'Excel files',
+              accept: {
+                'application/octet-stream': ['.xslx'],
+              },
+            },
+            {
+              description: 'Neural Models',
+              accept: {
+                'application/octet-stream': ['.pkl'],
+              },
+            },
+
+          ],
+        };
+        const handle = await window.showSaveFilePicker(options);
+        return handle;
+    }
+
+    ExcelFile() {
+        this.renderRoot.getElementById("fileInput").click();
+    }
+
+    async importFromExcel(e) {
+        const file = e.target.files[0];
+        const workbook = XLSX.read(await file.arrayBuffer());
+        const worksheet = workbook.Sheets[workbook.SheetNames[2]];
+        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+        const CountryDataset = await import('../my-countries/my-countries-dataset.mjs');
+        const countryDataset = CountryDataset.default
+        raw_data.forEach( (r, index) => {
+            if (index !== 0) {
+                const newItem = {
+                    number: r[0],
+                    name: r[1],
+                    country: countryDataset.find('name', r[2]),
+                    link: r[3],
+                    code: r[4] < 10 ? "0" + r[4] : r[4].toString()
+                }
+                this.dataSource.addItem(newItem);
+            }
+        });
     }
 
     update(changedProps) {
@@ -148,7 +243,7 @@ class MyAgeGroupsSection1 extends BaseElement {
 
     async showItem(index, itemId) {
         if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
                 await this.dataSource.saveItem(this.currentItem);
             }
@@ -161,7 +256,7 @@ class MyAgeGroupsSection1 extends BaseElement {
         }
     }
 
-    #page() {
+    get #page() {
         return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
     }
 
@@ -181,47 +276,92 @@ class MyAgeGroupsSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
+    get #list() {
+        return html`
+            ${this.dataSource?.items?.map((item, index) =>
+                html `<icon-button
+                        label=${item.name}
+                        title=${item._id}
+                        icon-name="region-solid"
+                        ?selected=${this.currentItem === item}
+                        @click=${() => this.showItem(index, item._id)}
+                    ></icon-button>
+                `
+            )}
+        `
+    }
+
+    get #task() {
+        return html`
+            <nav>${this.buttons.map((button, index) =>
+                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
+            </nav>
+        `
+    }
+
+    get #rightFooter() {
+        if (this.isModified) {
+            return html`
+                <nav>
+                    <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                    <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                </nav>
+            `
+        } else {
+            return html`
+                <nav>
+                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
+                    <simple-button @click=${this.addItem}>Добавить</simple-button>
+                </nav>
+            `
+        }
+
+    }
+
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
-            <header id="competition-header"><p>Gender Ages ${this.currentItem?.name}</p></header>
-            <header id="property-header">${this.#pageName}</header>
+            <modal-dialog></modal-dialog>
+            <header class="left-header"><p>Age groups</p></header>
+            <header class="right-header">
+                ${this.#pageName}
+            </header>
             <div class="left-layout">
-                ${this.dataSource?.items?.map((item, index) =>
-                    html `<country-button
-                                label=${item.name}
-                                title=${item._id}
-                                .logotype=${item.flag && 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' }
-                                .status=${this.statusDataSet.get(item._id)}
-                                ?selected=${this.currentItem === item}
-                                @click=${() => this.showItem(index, item._id)}
-                            >
-                            </country-button>
-                `)}
+                ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+                ${this.#page}
             </div>
-            <footer>
-                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
-                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>label=${this.isModified ? "Отменить": "Добавить"} </simple-button>
+            <footer class="left-footer">
+                ${this.#task}
             </footer>
+            <footer class="right-footer">
+                ${this.#rightFooter}
+            </footer>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
     nextPage() {
         this.currentPage++;
     }
+
     prevPage() {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
     }
 
     async addItem() {
-        this.dataSource.addItem();
+        const newItem = { name: "Новый регион" }
+        this.dataSource.addItem(newItem);
     }
 
     async saveItem() {
@@ -231,7 +371,7 @@ class MyAgeGroupsSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
@@ -244,7 +384,7 @@ class MyAgeGroupsSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить эту возрастную группу?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)

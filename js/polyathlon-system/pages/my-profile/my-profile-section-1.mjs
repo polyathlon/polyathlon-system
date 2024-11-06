@@ -1,13 +1,10 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
 import '../../../../components/dialogs/modal-dialog.mjs'
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/inputs/upload-input.mjs'
-import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/icon-button.mjs'
+import '../../../../components/buttons/aside-button.mjs'
+import '../../../../components/buttons/simple-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
-import '../../../../components/buttons/aside-button.mjs';
-import '../../../../components/buttons/simple-button.mjs';
 
 import './my-profile-section-1-page-1.mjs'
 import './my-profile-section-1-page-2.mjs'
@@ -20,16 +17,16 @@ class MyProfileSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Object, default: null},
-            statusDataSet: {type: Map, default: null },
-            oldValues: {type: Map, default: null },
-            currentItem: {type: Object, default: null},
-            isModified: {type: Boolean, default: "", local: true},
-            isReady: {type: Boolean, default: true},
+            dataSource: { type: Object, default: null },
+            statusDataSet: { type: Map, default: null },
+            oldValues: { type: Map, default: null },
+            currentItem: { type: Object, default: null },
+            isModified: { type: Boolean, default: "", local: true },
+            isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: {type: BigInt, default: 0},
-            isFirst: {type: Boolean, default: false}
+            currentPage: { type: BigInt, default: 0 },
+            isFirst: { type: Boolean, default: false }
         }
     }
 
@@ -44,34 +41,30 @@ class MyProfileSection1 extends BaseElement {
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
                         "header1 header2"
-                        "sidebar content"
+                        "aside main"
                         "footer1  footer2";
                     gap: 0 20px;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                .left-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     p {
-                        width: 100%;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        font-size: 1rem;
                         margin: 0;
                     }
                 }
 
-                .right-header{
+                .right-header {
                     grid-area: header2;
                     justify-content: flex-start;
                     icon-button {
@@ -88,7 +81,7 @@ class MyProfileSection1 extends BaseElement {
                 }
 
                 .left-layout {
-                    grid-area: sidebar;
+                    grid-area: aside;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
@@ -124,24 +117,17 @@ class MyProfileSection1 extends BaseElement {
                 }
 
                 .right-layout {
+                    grid-area: main;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: flex-start;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
                     gap: 10px;
-
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
                 }
 
                 .left-footer {
@@ -160,7 +146,6 @@ class MyProfileSection1 extends BaseElement {
                         /* padding-right: 10px; */
                         gap: 1vw;
                     }
-
                 }
 
                 .right-footer {
@@ -170,18 +155,13 @@ class MyProfileSection1 extends BaseElement {
                     justify-content: end;
                     gap: 10px;
                     nav {
-                        background-color: rgba(255, 255, 255, 0.1);
                         width: 100%;
                         height: 70%;
                         display: flex;
                         align-items: center;
-                        justify-content: space-between;
+                        justify-content: flex-end;
                         padding: 0 10px;
-                        /* padding-right: 10px; */
                         gap: 1vw;
-                        &.save {
-                            justify-content: flex-end;
-                        }
                         simple-button {
                             height: 100%;
                         }
@@ -196,8 +176,8 @@ class MyProfileSection1 extends BaseElement {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                 /* width */
-                 ::-webkit-scrollbar {
+                /* width */
+                ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -309,7 +289,7 @@ class MyProfileSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCountryItem')) {
+        if (changedProps.has('currentProfileItem')) {
             this.currentPage = 0;
         }
     }
@@ -329,7 +309,7 @@ class MyProfileSection1 extends BaseElement {
         }
     }
 
-    #page() {
+    get #page() {
         switch(this.currentPage) {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
@@ -392,6 +372,25 @@ class MyProfileSection1 extends BaseElement {
         }
     }
 
+    get #rightFooter() {
+        if (this.isModified) {
+            return html`
+                <nav>
+                    <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                    <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                </nav>
+            `
+        } else {
+            return html`
+                <nav>
+                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
+                    <simple-button @click=${this.addItem}>Добавить</simple-button>
+                </nav>
+            `
+        }
+
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
@@ -409,26 +408,15 @@ class MyProfileSection1 extends BaseElement {
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                ${ this.isModified ? html`
-                    <nav class='save'>
-                        <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                        <simple-button @click=${this.cancelItem}>Отменить</simple-button>
-                    </nav>
-                ` :  html`
-                    <nav>
-                        <simple-icon icon-name="square-arrow-left-sharp-solid" @click=${this.prevPage} ?visible=${this.currentPage === 0} title=${this.pageNames[this.currentPage - 1]}></simple-icon>
-                        <simple-icon icon-name="square-arrow-right-sharp-solid" @click=${this.nextPage} ?visible=${this.currentPage === this.pageNames.length - 1} title=${this.pageNames[this.currentPage + 1]}></simple-icon>
-                    </nav>
-                `
-                }
+                ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
@@ -438,6 +426,21 @@ class MyProfileSection1 extends BaseElement {
 
     prevPage() {
         this.currentPage--;
+    }
+
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
+    }
+
+    async addItem() {
+        const newItem = { name: "Новый регион" }
+        this.dataSource.addItem(newItem);
     }
 
     async saveItem() {
@@ -487,16 +490,6 @@ class MyProfileSection1 extends BaseElement {
             this.requestUpdate();
         }
         this.isModified = this.oldValues.size !== 0;
-    }
-
-    async showDialog(message, type='message') {
-        const modalDialog = this.renderRoot.querySelector('modal-dialog')
-        modalDialog.type = type
-        return modalDialog.show(message);
-    }
-
-    async confirmDialog(message) {
-        return this.showDialog(message, 'confirm')
     }
 
     async firstUpdated() {

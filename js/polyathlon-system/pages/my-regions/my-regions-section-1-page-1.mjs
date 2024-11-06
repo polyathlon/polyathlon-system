@@ -29,6 +29,7 @@ class MyRegionsSection1Page1 extends BaseElement {
                     gap: 10px;
                 }
                 .container {
+                    min-width: min(600px, 50vw);
                     max-width: 600px;
                 }
                 #country {
@@ -69,6 +70,7 @@ class MyRegionsSection1Page1 extends BaseElement {
             else if (this.oldValues.get(e.target) === e.target.value) {
                     this.oldValues.delete(e.target)
             }
+
             currentItem[e.target.id] = e.target.value
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
@@ -79,6 +81,7 @@ class MyRegionsSection1Page1 extends BaseElement {
             this.isModified = this.oldValues.size !== 0;
         }
     }
+
     async firstUpdated() {
         super.firstUpdated();
         this.countryDataSource = new CountryDataSource(this, await CountryDataset.getDataSet())

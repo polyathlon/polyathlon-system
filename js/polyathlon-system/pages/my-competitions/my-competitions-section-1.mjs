@@ -136,8 +136,21 @@ class MyCompetitionsSection1 extends BaseElement {
                     justify-content: end;
                     margin-right: 20px;
                     gap: 10px;
-                    simple-button {
-                        height: 100%;
+                    nav {
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 0 10px;
+                        /* padding-right: 10px; */
+                        gap: 1vw;
+                        &.save {
+                            justify-content: flex-end;
+                        }
+                        simple-button {
+                            height: 100%;
+                        }
                     }
                 }
 
@@ -299,7 +312,7 @@ class MyCompetitionsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Property']
+        this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
@@ -313,6 +326,7 @@ class MyCompetitionsSection1 extends BaseElement {
     showPage(hash, param) {
         localStorage.setItem('currentCompetition', param)
         location.hash = hash;
+        location.search = `?competition=${param}`;
     }
 
     gotoBack(page) {
@@ -499,7 +513,9 @@ class MyCompetitionsSection1 extends BaseElement {
                 ${this.#list}
             </div>
             <footer class="right-footer">
-                <simple-button @click=${() => this.showPage('my-competition', 'new')}>Добавить</simple-button>
+                <nav class='save'>
+                    <simple-button @click=${() => this.showPage('my-competition', 'new')}>Добавить</simple-button>
+                </nav>
             </footer>
             `;
     }

@@ -64,8 +64,7 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
                 <simple-input id="profileUlid" icon-name="card-id-solid" @icon-click=${this.copyToClipboard} label="Sportsman ulid:" .value=${this.item?._id} @input=${this.validateInput}></simple-input>
-                <simple-input id="hashNumber" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createHashNumber} label="Sportsman number:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
-                <simple-input id="qrCode" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.getQRCode} label="Sportsman qr-code:" .value=${this.item?.qrCode} @input=${this.validateInput}></simple-input>
+                <simple-input id="sportsmanId" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createHashNumber} label="Sportsman ID:" .value=${this.item?.sportsmanId} @input=${this.validateInput}></simple-input>
                 <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="Category name:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input id="order.number" icon-name="order-number-solid" @icon-click=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
@@ -76,13 +75,14 @@ class MySportsmenSection1Page1 extends BaseElement {
         `;
     }
 
-    async createHashNumber() {
-        const hashNumber = await DataSet.createHashNumber({
+    async createHashNumber(e) {
+        const target = e.target
+        const id = await DataSet.createHashNumber({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code,
             ulid: this.item?.profileUlid,
         })
-        e.target.setValue(hashNumber);
+        target.setValue(id);
     }
 
     async getQRCode() {

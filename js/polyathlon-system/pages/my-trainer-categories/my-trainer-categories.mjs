@@ -1,8 +1,8 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
-import './my-regions-section-1.mjs';
+import './my-trainer-categories-section-1.mjs';
 
-class MyRegions extends BaseElement {
+class MyTrainerCategories extends BaseElement {
     static get styles() {
         return [
             BaseElement.styles,
@@ -28,9 +28,9 @@ class MyRegions extends BaseElement {
 
     render() {
         return html`
-            <my-regions-section-1></my-regions-section-1>
+            <my-trainer-categories-section-1></my-trainer-categories-section-1>
         `;
     }
 }
 
-customElements.define("my-regions", MyRegions);
+customElements.define("my-trainer-categories", MyTrainerCategories);

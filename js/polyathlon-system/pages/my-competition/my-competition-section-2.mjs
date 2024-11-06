@@ -12,7 +12,7 @@ import '../../../../components/dialogs/add-sportsman-dialog.mjs';
 import './my-competition-section-2-page-1.mjs'
 import './my-competition-section-2-list-1.mjs'
 
-import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
+//import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
 class MyCompetitionSection2 extends BaseElement {

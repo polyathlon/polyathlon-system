@@ -1,14 +1,13 @@
-import refreshToken, {getToken} from "../../../refresh-token.mjs";
+import refreshToken, {getToken} from "../../refresh-token.mjs";
 
 export default class DataSet {
     static #dataSet;
-    static #parent;
 
-    static async getDataSet(id) {
-        if (!DataSet.#dataSet || DataSet.#parent != id) {
-            DataSet.#dataSet = await DataSet.#getItems(id)
-            DataSet.#parent = id
+    static async getDataSet() {
+        if (DataSet.#dataSet) {
+            return DataSet.#dataSet
         }
+        DataSet.#dataSet = await DataSet.#getItems()
         return DataSet.#dataSet
     }
 
@@ -19,20 +18,20 @@ export default class DataSet {
         return index === -1 ? null : DataSet.#dataSet[index]
     }
 
-    static #fetchGetItems(token, id) {
-        return fetch(`https://localhost:4500/api/competition-sportsmen/${id}`, {
+    static #fetchGetItems(token) {
+        return fetch('https://localhost:4500/api/trainer-categories', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
     }
 
-    static async #getItems(id) {
+    static async #getItems() {
         const token = getToken()
-        let response = await DataSet.#fetchGetItems(token, id)
+        let response = await DataSet.#fetchGetItems(token)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.#fetchGetItems(token, id)
+            response = await DataSet.#fetchGetItems(token)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -44,9 +43,8 @@ export default class DataSet {
         return items
     }
 
-    static fetchAddItem(token, item, id) {
-
-        return fetch(`https://localhost:4500/api/competition-sportsman/${id}`, {
+    static fetchAddItem(token, item) {
+        return fetch(`https://localhost:4500/api/trainer-category`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -56,15 +54,13 @@ export default class DataSet {
         })
     }
 
-    static async addItem(item, competition) {
+    static async addItem(item) {
         const token = getToken();
-        const id = `${competition.split(':')[1]}:${item._id}`
-        delete item._id
-        delete item._rev
-        let response = await DataSet.fetchAddItem(token, item, id)
+        let response = await DataSet.fetchAddItem(token, item)
+
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchAddItem(token, item, id)
+            response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -81,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/competition-sportsman/${itemId}`, {
+        return fetch(`https://localhost:4500/api/trainer-category/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -107,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition-sportsman/${item._id}`, {
+        return fetch(`https://localhost:4500/api/trainer-category/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -140,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition-sportsman/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/trainer-category/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -173,30 +169,5 @@ export default class DataSet {
             return
         }
         DataSet.#dataSet.splice(itemIndex, 1)
-    }
-
-    static fetchGetQRCode(token, item) {
-        return fetch(`https://localhost:4500/api/qr-code?data=123`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-        })
-    }
-
-    static async getQRCode(item) {
-        const token = getToken();
-        let response = await DataSet.fetchGetQRCode(token, item)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchGetQRCode(token, item)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result.qr
     }
 }

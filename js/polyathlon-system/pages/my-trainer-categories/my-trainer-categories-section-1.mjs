@@ -1,19 +1,16 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/inputs/upload-input.mjs'
-import '../../../../components/inputs/download-input.mjs'
+import '../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../components/buttons/icon-button.mjs'
-import '../../../../components/inputs/avatar-input.mjs'
-import '../../../../components/buttons/aside-button.mjs';
+import '../../../../components/buttons/aside-button.mjs'
+import '../../../../components/buttons/simple-button.mjs'
 
-import './my-coaches-section-1-page-1.mjs'
+import './my-trainer-categories-section-1-page-1.mjs'
 
-import DataSet from './my-coaches-dataset.mjs'
-import DataSource from './my-coaches-datasource.mjs'
+import DataSet from './my-trainer-categories-dataset.mjs'
+import DataSource from './my-trainer-categories-datasource.mjs'
 
-class MyCoachesSection1 extends BaseElement {
+class MyTrainerCategoriesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -46,28 +43,24 @@ class MyCoachesSection1 extends BaseElement {
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                .left-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     p {
-                        width: 100%;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        font-size: 1rem;
                         margin: 0;
                     }
                 }
 
-                .right-header{
+                .right-header {
                     grid-area: header2;
                 }
 
@@ -93,17 +86,10 @@ class MyCoachesSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: flex-start;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    /* overflow: hidden; */
                     gap: 10px;
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
                 }
 
                 .left-footer {
@@ -129,11 +115,18 @@ class MyCoachesSection1 extends BaseElement {
                     display: flex;
                     align-items: center;
                     justify-content: end;
-                    margin-right: 20px;
                     gap: 10px;
-
-                    simple-button {
-                        height: 100%;
+                    nav {
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        padding: 0 10px;
+                        gap: 1vw;
+                        simple-button {
+                            height: 100%;
+                        }
                     }
                 }
 
@@ -172,56 +165,13 @@ class MyCoachesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Property']
+        this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'referee-solid', page: 'my-coach-positions', title: 'Referee Positions', click: () => this.showPage('my-coach-positions')},
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'pdf-make',  page: 'my-coach-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-trainer-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-trainer-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
-
-    pdfMethod() {
-
-        var docInfo = {
-
-            info: {
-                title:'Referees',
-                author:'Polyathlon systems',
-            },
-
-            pageSize:'A4',
-            pageOrientation:'landscape',//'portrait'
-            pageMargins:[50,50,30,60],
-
-            header:function(currentPage,pageCount) {
-                return {
-                    text: currentPage.toString() + 'из' + pageCount,
-                    alignment:'right',
-                    margin:[0,30,10,50]
-                }
-            },
-
-            content: [
-
-                {
-                    text:'Дмитрий',
-                    fontSize:20,
-                    margin:[150, 80, 30,0]
-                    //pageBreak:'after'
-                },
-
-                {
-                    text:'Гуськов',
-                    style:'header'
-                    //pageBreak:'before'
-                }
-            ]
-        }
-        pdfMake.createPdf(docInfo).open();
-
-        }
 
     showPage(page) {
         location.hash = page;
@@ -263,7 +213,7 @@ class MyCoachesSection1 extends BaseElement {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
         const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-        const regionDataset = RegionDataset.default
+        const regionDataset = await RegionDataset.RegionDataset()
         raw_data.forEach((r, index) => {
             if(index !== 0){
                 const newItem = {
@@ -275,7 +225,7 @@ class MyCoachesSection1 extends BaseElement {
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
                         "name": "Судья всероссийской категории",
                     },
-                    region: regionDataset.find("name", r[3]),
+                    region: regionDataset.find("name", r[4]),
                     order: {
                         number: r[5],
                         link: r[6]
@@ -294,7 +244,7 @@ class MyCoachesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRefereeItem')) {
+        if (changedProps.has('currentTrainerCategoryItem')) {
             this.currentPage = 0;
         }
     }
@@ -314,19 +264,19 @@ class MyCoachesSection1 extends BaseElement {
         }
     }
 
-    #page() {
+    get #page() {
         return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
     }
 
     #page1() {
         return html`
-            <my-coaches-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-coaches-section-1-page-1>
+            <my-trainer-categories-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-Trainer-categories-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-coaches-section-1-page-2 .item=${this.currentItem}></my-coaches-section-1-page-2>
+            <my-trainer-categories-section-1-page-2 .item=${this.currentItem}></my-trainer-categories-section-1-page-2>
         `;
     }
 
@@ -334,32 +284,17 @@ class MyCoachesSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    fio(item) {
-        if (!item) {
-            return item
-        }
-        let result = item.lastName
-        if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
-        }
-        if (item.middleName) {
-            result += `${item.middleName[0]}.`
-        }
-        return result
-    }
-
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
-                        label=${this.fio(item)}
+                html `
+                    <icon-button
+                        label=${item.name}
                         title=${item._id}
-                        icon-name="coach-solid"
-                        .status=${item.category}
+                        icon-name="referee-category-solid"
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
-                    >
-                    </icon-button>
+                    ></icon-button>
                 `
             )}
         `
@@ -373,23 +308,43 @@ class MyCoachesSection1 extends BaseElement {
         `
     }
 
+    get #rightFooter() {
+        if (this.isModified) {
+            return html`
+                <nav>
+                    <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                    <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                </nav>
+            `
+        } else {
+            return html`
+                <nav>
+                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
+                    <simple-button @click=${this.addItem}>Добавить</simple-button>
+                </nav>
+            `
+        }
+
+    }
+
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
-            <header class="left-header"><p>Referee</p></header>
-            <header class="right-header">${this.#pageName}</header>
+            <modal-dialog></modal-dialog>
+            <header class="left-header"><p>Trainer categories</p></header>
+            <header class="right-header">
+                ${this.#pageName}
+            </header>
             <div class="left-layout">
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
-                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>${this.isModified ? "Отменить": "Добавить"}</simple-button>
+                ${this.#rightFooter}
             </footer>
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
@@ -403,12 +358,18 @@ class MyCoachesSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
     }
 
     async addItem() {
-        const newItem = { name: "Новый регион" }
+        const newItem = { name: "Новая категория" }
         this.dataSource.addItem(newItem);
     }
 
@@ -419,21 +380,12 @@ class MyCoachesSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            let id = key.id
-            let currentItem = this.currentItem
-            if (id == "order.number") {
-                id = "number"
-                currentItem = this.currentItem.order
-            }
-            if (id == "order.link") {
-                id = "link"
-                currentItem = this.currentItem.order
-            }
-            currentItem[id] = value;
+            const currentItem = key.currentObject ?? this.currentItem
+            currentItem[key.id] = value;
             key.value = value;
         });
         this.oldValues.clear();
@@ -441,7 +393,7 @@ class MyCoachesSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить эту категорию?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)
@@ -453,4 +405,4 @@ class MyCoachesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-coaches-section-1", MyCoachesSection1)
+customElements.define("my-trainer-categories-section-1", MyTrainerCategoriesSection1);

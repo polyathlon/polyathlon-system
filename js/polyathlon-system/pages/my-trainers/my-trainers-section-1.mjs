@@ -1,21 +1,16 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/inputs/upload-input.mjs'
-import '../../../../components/inputs/download-input.mjs'
+import '../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../components/buttons/icon-button.mjs'
-import '../../../../components/inputs/avatar-input.mjs'
-import '../../../../components/buttons/aside-button.mjs';
+import '../../../../components/buttons/aside-button.mjs'
+import '../../../../components/buttons/simple-button.mjs'
 
-import './my-coach-section-1-page-1.mjs'
-import './my-coach-section-1-page-2.mjs'
-import './my-coach-section-1-page-3.mjs'
+import './my-trainers-section-1-page-1.mjs'
 
-import DataSet from './my-coach-dataset.mjs'
-import DataSource from './my-coach-datasource.mjs'
+import DataSet from './my-trainers-dataset.mjs'
+import DataSource from './my-trainers-datasource.mjs'
 
-class MyRefereeSection1 extends BaseElement {
+class MyTrainersSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -28,7 +23,6 @@ class MyRefereeSection1 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: {type: BigInt, default: 0},
-            isFirst: {type: Boolean, default: false}
         }
     }
 
@@ -49,74 +43,40 @@ class MyRefereeSection1 extends BaseElement {
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                .left-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     p {
-                        width: 100%;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        font-size: 1rem;
                         margin: 0;
                     }
                 }
 
-                .right-header{
+                .right-header {
                     grid-area: header2;
-                    justify-content: flex-start;
-                    icon-button {
-                        height: 100%;
-                        padding: 0 1vw;
-                        &[active] {
-                            background-color: var(--layout-background-color);
-                        }
-                        &hover {
-                            background-color: var(--layout-background-color);
-                        }
-                    }
-
                 }
 
                 .left-layout {
                     grid-area: sidebar;
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
                     align-items: center;
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
-                    gap: 10px;
                     icon-button {
                         width: 100%;
                         height: 40px;
                         flex: 0 0 40px;
                     }
-                }
-
-                .avatar {
-                    width: 100%
-                }
-
-                avatar-input {
-                    width: 80%;
-                    margin: auto;
-                    aspect-ratio: 1 / 1;
-                    overflow: hidden;
-                    border-radius: 50%;
-                }
-
-                img {
-                    width: 100%;
                 }
 
                 .right-layout {
@@ -126,17 +86,11 @@ class MyRefereeSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: flex-start;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
                     gap: 10px;
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
                 }
 
                 .left-footer {
@@ -155,7 +109,6 @@ class MyRefereeSection1 extends BaseElement {
                         /* padding-right: 10px; */
                         gap: 1vw;
                     }
-
                 }
 
                 .right-footer {
@@ -165,18 +118,13 @@ class MyRefereeSection1 extends BaseElement {
                     justify-content: end;
                     gap: 10px;
                     nav {
-                        background-color: rgba(255, 255, 255, 0.1);
                         width: 100%;
                         height: 70%;
                         display: flex;
                         align-items: center;
-                        justify-content: space-between;
+                        justify-content: flex-end;
                         padding: 0 10px;
-                        /* padding-right: 10px; */
                         gap: 1vw;
-                        &.save {
-                            justify-content: flex-end;
-                        }
                         simple-button {
                             height: 100%;
                         }
@@ -191,8 +139,8 @@ class MyRefereeSection1 extends BaseElement {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                 /* width */
-                 ::-webkit-scrollbar {
+                /* width */
+                ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -218,21 +166,55 @@ class MyRefereeSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = [
-            {label: 'User', iconName: 'user'},
-            {label: 'Passport', iconName: 'judge1-solid'},
-            {label: 'Sportsman', iconName: 'user'},
-            {label: 'Competition', iconName: 'competition-solid'},
-        ]
-
-        this.currentPage = 0;
+        this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'qrcode-solid', page: 'my-coach-categories', title: 'qrcode', click: () => this.getQRCode},
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-trainer-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'pdf-make',  page: 'my-trainer-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
+            {iconName: 'arrow-left-solid', page: 'my-trainer-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
+
+    pdfMethod() {
+
+        var docInfo = {
+
+            info: {
+                title:'Referees',
+                author:'Polyathlon systems',
+            },
+
+            pageSize:'A4',
+            pageOrientation:'landscape',//'portrait'
+            pageMargins:[50,50,30,60],
+
+            header:function(currentPage,pageCount) {
+                return {
+                    text: currentPage.toString() + 'из' + pageCount,
+                    alignment:'right',
+                    margin:[0,30,10,50]
+                }
+            },
+
+            content: [
+
+                {
+                    text:'Дмитрий',
+                    fontSize:20,
+                    margin:[150, 80, 30,0]
+                    //pageBreak:'after'
+                },
+
+                {
+                    text:'Гуськов',
+                    style:'header'
+                    //pageBreak:'before'
+                }
+            ]
+        }
+        pdfMake.createPdf(docInfo).open();
+
+        }
 
     showPage(page) {
         location.hash = page;
@@ -240,16 +222,6 @@ class MyRefereeSection1 extends BaseElement {
 
     gotoBack(page) {
         history.back();
-    }
-
-    async getQRCode() {
-        const host = this.getRootNode().host
-        const hashNumber = await DataSet.getQRCode({
-            countryCode: host.item?.region?.country?.flag.toUpperCase(),
-            regionCode: host.item?.region?.code,
-            ulid: host.item?.profileUlid,
-        })
-        this.setValue(hashNumber);
     }
 
     async getNewFileHandle() {
@@ -296,7 +268,7 @@ class MyRefereeSection1 extends BaseElement {
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
                         "name": "Судья всероссийской категории",
                     },
-                    region: regionDataset.find("name", r[4]),
+                    region: regionDataset.find("name", r[3]),
                     order: {
                         number: r[5],
                         link: r[6]
@@ -315,49 +287,49 @@ class MyRefereeSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCountryItem')) {
+        if (changedProps.has('currentTrainerItem')) {
             this.currentPage = 0;
         }
     }
 
-    // async showItem(index, itemId) {
-    //     if (this.isModified) {
-    //         const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
-    //         if (modalResult === 'Ok') {
-    //             await this.dataSource.saveItem(this.currentItem);
-    //         }
-    //         else {
-    //             await this.cancelItem()
-    //         }
-    //     }
-    //     else {
-    //         this.dataSource.setCurrentItem(this.dataSource.items[index])
-    //     }
-    // }
-
-    #page() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#page1())
-            case 1: return cache(this.#page2())
-            case 2: return cache(this.#page3())
+    copyToClipboard(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text)
         }
+    }
+
+    async showItem(item) {
+        if (this.currentItem?._id === item._id) {
+            this.copyToClipboard(item.id || item._id)
+            return
+        }
+        if (this.isModified) {
+            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
+            if (modalResult === 'Ok') {
+                await this.dataSource.saveItem(this.currentItem);
+            }
+            else {
+                await this.cancelItem()
+            }
+        }
+        else {
+            this.dataSource.setCurrentItem(item)
+        }
+    }
+
+    get #page() {
+        return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
     }
 
     #page1() {
         return html`
-            <my-coach-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-coach-section-1-page-1>
+            <my-trainers-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-trainers-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-coach-section-1-page-2 .item=${this.currentItem}></my-coach-section-1-page-2>
-        `;
-    }
-
-    #page3() {
-        return html`
-            <my-coach-section-1-page-3 .item=${this.currentItem}></my-coach-section-1-page-3>
+            <my-trainers-section-1-page-2 .item=${this.currentItem}></my-trainers-section-1-page-2>
         `;
     }
 
@@ -365,19 +337,33 @@ class MyRefereeSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
+    fio(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName[0]}.`
+        }
+        if (item.middleName) {
+            result += `${item.middleName[0]}.`
+        }
+        return result
+    }
+
     get #list() {
         return html`
-            <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
-            </div>
-            <div class="label">
-                ${JSON.parse(this.#loginInfo).login}
-            </div>
-            <div class="statistic">
-                <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-            </div>
+            ${this.dataSource?.items?.map((item, index) =>
+                html `<icon-button
+                        label=${this.fio(item)}
+                        title=${item._id}
+                        image-name=${ item.gender == 0 ? "../../../../images/trainer-boy-solid.svg" : "../../../../images/trainer-girl-solid.svg" }
+                        ?selected=${this.currentItem === item}
+                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
+                        @click=${() => this.showItem(item)}
+                    ></icon-button>
+                `
+            )}
         `
     }
 
@@ -389,52 +375,45 @@ class MyRefereeSection1 extends BaseElement {
         `
     }
 
-    get #loginInfo() {
-        if (localStorage.getItem('rememberMe')) {
-            return localStorage.getItem('userInfo')
+    get #rightFooter() {
+        if (this.isModified) {
+            return html`
+                <nav>
+                    <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                    <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                </nav>
+            `
+        } else {
+            return html`
+                <nav>
+                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
+                    <simple-button @click=${this.addItem}>Добавить</simple-button>
+                </nav>
+            `
         }
-        else {
-            return sessionStorage.getItem('userInfo')
-        }
+
     }
 
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
-            <header class="left-header">
-                <p>Competition ${this.currentItem?.name}</p>
-            </header>
+            <modal-dialog></modal-dialog>
+            <header class="left-header"><p>Trainers<p></header>
             <header class="right-header">
-                ${this.pageNames.map( (page, index) =>
-                    html `
-                        <icon-button ?active=${index === this.currentPage} icon-name=${page.iconName} label=${page.label} @click=${() => this.currentPage = index}></icon-button>
-                    `
-                )}
+                ${this.#pageName}
             </header>
             <div class="left-layout">
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                ${ this.isModified ? html`
-                    <nav class='save'>
-                        <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                        <simple-button @click=${this.cancelItem}>Отменить</simple-button>
-                    </nav>
-                ` :  html`
-                    <nav>
-                        <simple-icon icon-name="square-arrow-left-sharp-solid" @click=${this.prevPage} ?visible=${this.currentPage === 0} title=${this.pageNames[this.currentPage - 1]}></simple-icon>
-                        <simple-icon icon-name="square-arrow-right-sharp-solid" @click=${this.nextPage} ?visible=${this.currentPage === this.pageNames.length - 1} title=${this.pageNames[this.currentPage + 1]}></simple-icon>
-                    </nav>
-                `
-                }
+                ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
@@ -446,47 +425,59 @@ class MyRefereeSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
+    }
+
+    async addItem() {
+        const newItem = { name: "Новый регион" }
+        this.dataSource.addItem(newItem);
     }
 
     async saveItem() {
-        if ('_id' in this.currentItem) {
-            await this.dataSource.saveItem(this.currentItem);
-        } else {
-            await this.dataSource.addItem(this.currentItem);
-        }
+        await this.dataSource.saveItem(this.currentItem);
         this.oldValues?.clear();
         this.isModified = false;
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            const currentItem = key.currentObject ?? this.currentItem
-            currentItem[key.id] = value;
+            let id = key.id
+            let currentItem = this.currentItem
+            if (id == "order.number") {
+                id = "number"
+                currentItem = this.currentItem.order
+            }
+            if (id == "order.link") {
+                id = "link"
+                currentItem = this.currentItem.order
+            }
+            currentItem[id] = value;
             key.value = value;
         });
         this.oldValues.clear();
         this.isModified = false;
     }
 
+    async deleteItem() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этот регион?')
+        if (modalResult !== 'Ok')
+            return;
+        this.dataSource.deleteItem(this.currentItem)
+    }
 
     async firstUpdated() {
         super.firstUpdated();
-        this.isFirst  = false;
-        let params1 = new URLSearchParams(window.location.search)
-        if (params1.size > 0) {
-            window.history.replaceState(null, '', window.location.pathname + window.location.hash);
-        }
-
-        this.dataSource = new DataSource(this)
-        this.dataSource.getItem()
-        this.avatar = null; // await this.downloadAvatar();
-        this.isFirst = true;
+        this.dataSource = new DataSource(this, await DataSet.getDataSet())
     }
 }
-
-customElements.define("my-coach-section-1",MyRefereeSection1);
+customElements.define("my-trainers-section-1", MyTrainersSection1)

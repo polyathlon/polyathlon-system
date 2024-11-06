@@ -1,6 +1,7 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
+import '../../../../components/selects/simple-select.mjs'
 
 import CompetitionTypeDataSource from '../my-competition-types/my-competition-types-datasource.mjs'
 import CompetitionTypeDataset from '../my-competition-types/my-competition-types-dataset.mjs'
@@ -33,9 +34,12 @@ class MyCompetitionSection1Page1 extends BaseElement {
                     height: 100%;
                     gap: 10px;
                 }
-
-                .right-container {
+                .container {
                     max-width: 600px;
+                }
+                .name-group {
+                    display: flex;
+                    gap: 10px;
                 }
             `
         ]
@@ -43,16 +47,20 @@ class MyCompetitionSection1Page1 extends BaseElement {
 
     render() {
         return html`
-            <div class="right-container">
-                <simple-select id="name" icon-name="type-solid" @icon-click=${() => this.showPage('my-competition-types')} label="Name:" .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
+            <div class="container">
+                <simple-select id="name" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} label="Name:" .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
                 <simple-select id="kind" icon-name="category-solid" @icon-click=${() => this.showPage('my-competition-kinds')} label="Name:" .dataSource=${this.competitionKindDataSource} .value=${this.item?.kind} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
-                    <div class="name-group">
-                        <simple-input type="date" label="Дата начала:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
-                        <simple-input type="date" label="Дата окончания:" id="endDate" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
-                    </div>
+                <div class="name-group">
+                    <simple-input type="date" label="Дата начала:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input type="date" label="Дата окончания:" id="endDate" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 </div>
+            </div>
         `;
+    }
+
+    showPage(page) {
+        location.hash = page;
     }
 
 //     <div>

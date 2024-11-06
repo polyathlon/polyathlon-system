@@ -19,8 +19,16 @@ class MyAgeGroupsSection1Page1 extends BaseElement {
                 :host {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    overflow: hidden;
+                    align-items: safe center;
+                    height: 100%;
+                    gap: 10px;
+                }
+                .container {
+                    min-width: min(600px, 50vw);
+                    max-width: 600px;
+                }
+                .name-group {
+                    display: flex;
                     gap: 10px;
                 }
             `
@@ -29,12 +37,22 @@ class MyAgeGroupsSection1Page1 extends BaseElement {
 
     render() {
         return html`
-            <div>
+            <div class="container">
                 <simple-input id="name" icon-name="age-group-solid" label="Age group:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="minAge" icon-name="age-group-min" label="Min Age:" .value=${this.item?.minAge} @input=${this.validateInput}></simple-input>
-                <simple-input id="maxAge" icon-name="max-age-solid" label="Max Age:" .value=${this.item?.maxAge} @input=${this.validateInput}></simple-input>
+                <div class="name-group">
+                    <simple-input id="minAge" icon-name="age-group-min" label="Min Age:" .value=${this.item?.minAge} @input=${this.validateInput}></simple-input>
+                    <simple-input id="maxAge" icon-name="max-age-solid" label="Max Age:" .value=${this.item?.maxAge} @input=${this.validateInput}></simple-input>
+                </div>
             </div>
         `;
+    }
+
+    showPage(page) {
+        location.hash = page;
+    }
+
+    linkClick(e) {
+        window.open(e.target.value);
     }
 
     validateInput(e) {

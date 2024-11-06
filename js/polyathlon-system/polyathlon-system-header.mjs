@@ -171,9 +171,9 @@ class PolyathlonSystemHeader extends BaseElement {
                 <nav class="horizontal">
                     <ul>
                         <li><a href="#my-competitions" ?active=${this.activePage==="my-competitions" || this.activePage==="home-page"}>Competitions</a></li>
-                        <li><a href="#my-referees" ?active=${this.activePage==="my-referees"}>Referees</a></li>
                         <li><a href="#my-sportsmen" ?active=${this.activePage==="my-courses"}>Sportsmen</a></li>
-                        <li><a href="#about-me" ?active=${this.activePage=="my-stack"}>About</a></li>
+                        <li><a href="#my-trainers" ?active=${this.activePage==="my-trainers"}>Trainers</a></li>
+                        <li><a href="#my-referees" ?active=${this.activePage==="my-referees"}>Referees</a></li>
                         ${this.userAccount()}
                     </ul>
                 </nav>
@@ -189,10 +189,10 @@ class PolyathlonSystemHeader extends BaseElement {
             </header>
             <nav class="vertical${this.isShow ? ' show' : ''}">
                 <ul>
-                    <li><a href="#my-pride" ?active=${this.activePage==="my-pride" || this.activePage==="home-page"}>My pride</a></li>
-                    <li><a href="#about-me" ?active=${this.activePage==="about-me"}>About me</a></li>
-                    <li><a href="#my-courses" ?active=${this.activePage=="my-courses"}>My courses</a></li>
-                    <li><a href="#my-stack" ?active=${this.activePage=="my-stack"}>My stack</a></li>
+                    <li><a href="#my-competitions" ?active=${this.activePage==="my-competitions" || this.activePage==="home-page"}>Competitions</a></li>
+                    <li><a href="#my-sportsmen" ?active=${this.activePage==="my-courses"}>Sportsmen</a></li>
+                    <li><a href="#my-trainers" ?active=${this.activePage==="my-trainers"}>Trainers</a></li>
+                    <li><a href="#my-referees" ?active=${this.activePage==="my-referees"}>Referees</a></li>
                     ${this.userAccount()}
                 </ul>
             </nav>

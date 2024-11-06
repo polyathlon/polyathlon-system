@@ -2,21 +2,22 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/selects/simple-select.mjs'
+import '../../../../components/inputs/gender-input.mjs'
 
-import DataSet from './my-coaches-dataset.mjs'
+import DataSet from './my-trainers-dataset.mjs'
 
-import CoachCategoryDataSource from '../my-coaches/my-coaches-datasource.mjs'
-import CoachCategoryDataset from '../my-coaches/my-coaches-dataset.mjs'
+import TrainerCategoryDataSource from '../my-trainer-categories/my-trainer-categories-datasource.mjs'
+import TrainerCategoryDataset from '../my-trainer-categories/my-trainer-categories-dataset.mjs'
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 
-class MyCoachesSection1Page1 extends BaseElement {
+class MyTrainersSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            coachCategorySource: {type: Object, default: null},
-            regionDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
+            trainerCategoryDataSource: {type: Object, default: null},
+            regionDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
         }
@@ -34,6 +35,7 @@ class MyCoachesSection1Page1 extends BaseElement {
                     gap: 10px;
                 }
                 .container {
+                    min-width: min(600px, 50vw);
                     max-width: 600px;
                 }
                 .name-group {
@@ -48,13 +50,15 @@ class MyCoachesSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="lastName" icon-name="user" label="Coach LastName:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="firstName" icon-name="user-group-solid" label="Coach FistName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="lastName" icon-name="user" label="LastName:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" icon-name="user-group-solid" label="FistName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="middleName" icon-name="users-solid" label="Coach MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <simple-select id="category" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-coach-categories')} label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="middleName" icon-name="users-solid" label="MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
+                <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
+                <simple-select id="category" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} label="Category name:" .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" icon-name="region-solid" label="Region name:" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-input id="id" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} label="Coach ID:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
+                <simple-input id="trainerId" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} label="Trainer ID:" .value=${this.item?.trainerId} @input=${this.validateInput}></simple-input>
+
                 <div class="name-group">
                     <simple-input id="order.number" icon-name="order-number-solid" @icon-click=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" icon-name="link-solid" @icon-click=${this.linkClick} label="Order link:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
@@ -65,12 +69,13 @@ class MyCoachesSection1Page1 extends BaseElement {
     }
 
     async createHashNumber(e) {
-        const hashNumber = await DataSet.createHashNumber({
+        const target = e.target
+        const id = await DataSet.createHashNumber({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code,
             ulid: this.item?.profileUlid,
         })
-        this.target.setValue(hashNumber)
+        target.setValue(id)
     }
 
     copyToClipboard(e) {
@@ -130,9 +135,9 @@ class MyCoachesSection1Page1 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.coachCategoryDataSource = new CoachCategoryDataSource(this, await CoachCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
+        this.trainerCategoryDataSource = new TrainerCategoryDataSource(this, await TrainerCategoryDataset.getDataSet())
     }
 }
 
-customElements.define("my-coaches-section-1-page-1", MyCoachesSection1Page1);
+customElements.define("my-trainers-section-1-page-1", MyTrainersSection1Page1);
