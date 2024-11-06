@@ -5,8 +5,10 @@ import '../../../../components/selects/simple-select.mjs'
 
 import CompetitionTypeDataSource from '../my-competition-types/my-competition-types-datasource.mjs'
 import CompetitionTypeDataset from '../my-competition-types/my-competition-types-dataset.mjs'
-import CompetitionKindDataSource from '../my-competition-kinds/my-competition-kinds-datasource.mjs'
-import CompetitionKindDataset from '../my-competition-kinds/my-competition-kinds-dataset.mjs'
+import CompetitionStageDataset from '../my-competition-stages/my-competition-stages-dataset.mjs'
+import CompetitionStageDataSource from '../my-competition-stages/my-competition-stages-datasource.mjs'
+import SportsDisciplineDataset from '../my-sports-disciplines/my-sports-disciplines-dataset.mjs'
+import SportsDisciplineDataSource from '../my-sports-disciplines/my-sports-disciplines-datasource.mjs'
 import CityDataSource from '../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../my-cities/my-cities-dataset.mjs'
 
@@ -15,7 +17,8 @@ class MyCompetitionSection1Page1 extends BaseElement {
         return {
             version: { type: String, default: '1.0.0', save: true },
             competitionTypeDataSource: {type: Object, default: null},
-            competitionKindDataSource: {type: Object, default: null},
+            competitionStageDataSource: {type: Object, default: null},
+            sportsDisciplineDataSource: {type: Object, default: null},
             cityDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
@@ -35,6 +38,7 @@ class MyCompetitionSection1Page1 extends BaseElement {
                     gap: 10px;
                 }
                 .container {
+                    min-width: min(600px, 50vw);
                     max-width: 600px;
                 }
                 .name-group {
@@ -49,7 +53,9 @@ class MyCompetitionSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-select id="name" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} label="Name:" .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
-                <simple-select id="kind" icon-name="category-solid" @icon-click=${() => this.showPage('my-competition-kinds')} label="Name:" .dataSource=${this.competitionKindDataSource} .value=${this.item?.kind} @input=${this.validateInput}></simple-select>
+                <simple-select id="stage" icon-name="order-number-solid" @icon-click=${() => this.showPage('my-competition-stages')} label="Stage:" .dataSource=${this.competitionStageDataSource} .value=${this.item?.stage} @input=${this.validateInput}></simple-select>
+                <simple-select id="sportsDiscipline1" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 1:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline1} @input=${this.validateInput}></simple-select>
+                <simple-select id="sportsDiscipline2" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 2:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input type="date" label="Дата начала:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
@@ -63,10 +69,6 @@ class MyCompetitionSection1Page1 extends BaseElement {
         location.hash = page;
     }
 
-//     <div>
-//     <simple-input id="firstName" icon-name="user" label="Country name:" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
-//     <simple-input id="lastName" icon-name="flag-solid" label="Flag name:" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
-// </div>
     validateInput(e) {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? this.item
@@ -90,7 +92,8 @@ class MyCompetitionSection1Page1 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.competitionTypeDataSource = new CompetitionTypeDataSource(this, await CompetitionTypeDataset.getDataSet())
-        this.competitionKindDataSource = new CompetitionKindDataSource(this, await CompetitionKindDataset.getDataSet())
+        this.sportsDisciplineDataSource = new SportsDisciplineDataSource(this, await SportsDisciplineDataset.getDataSet())
+        this.competitionStageDataSource = new CompetitionStageDataSource(this, await CompetitionStageDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }
 

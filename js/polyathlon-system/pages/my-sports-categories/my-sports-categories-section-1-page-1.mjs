@@ -24,6 +24,7 @@ class MySportsCategoriesSection1Page1 extends BaseElement {
                     gap: 10px;
                 }
                 .container {
+                    min-width: min(600px, 50vw);
                     max-width: 600px;
                 }
             `
@@ -56,9 +57,7 @@ class MySportsCategoriesSection1Page1 extends BaseElement {
             if (e.target.id === 'name' || e.target.id === 'flag') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
-            if (e.target.id === 'flag') {
-                this.requestUpdate()
-            }
+        
             this.isModified = this.oldValues.size !== 0;
         }
     }

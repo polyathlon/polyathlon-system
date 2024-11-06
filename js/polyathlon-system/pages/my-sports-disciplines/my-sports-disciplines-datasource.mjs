@@ -1,4 +1,4 @@
-import DataSet from "./my-discipline-names-dataset.mjs";
+import DataSet from "./my-sports-disciplines-dataset.mjs";
 
 export default class DataSource {
 
@@ -12,19 +12,19 @@ export default class DataSource {
     }
 
     getCurrentItem(){
-        const item = sessionStorage.getItem('currentDisciplineName')
+        const item = sessionStorage.getItem('currentSportsDiscipline')
         if (item) {
             return this.items.find(p => p._id === item)
         }
         else {
-            sessionStorage.setItem('currentDisciplineName', this.items[0]?._id)
+            sessionStorage.setItem('currentSportsDiscipline', this.items[0]?._id)
             return this.items?.[0]
         }
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentDisciplineName', item._id)
-        this.component.currentItem = item
+        sessionStorage.setItem('currentSportsDiscipline', item._id)
+        this.component.currentItem = item;
     }
 
     async addItem(item) {

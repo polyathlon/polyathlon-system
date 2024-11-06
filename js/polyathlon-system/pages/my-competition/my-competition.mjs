@@ -19,7 +19,7 @@ class MyCompetition extends BaseElement {
                 :host {
                     display: grid;
                     grid-template-columns: 3fr 9fr;
-                    grid-template-rows: 50px 1fr;
+                    grid-template-rows: 50px calc(100% - 50px);
                     grid-template-areas:
                         "header1 header2"
                         "main main";

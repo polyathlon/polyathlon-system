@@ -279,7 +279,8 @@ class MyRegionsSection1 extends BaseElement {
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
+                html `
+                    <icon-button
                         label=${item.name}
                         title=${item._id}
                         icon-name="region-solid"
@@ -310,8 +311,8 @@ class MyRegionsSection1 extends BaseElement {
         } else {
             return html`
                 <nav>
-                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
                     <simple-button @click=${this.addItem}>Добавить</simple-button>
+                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
                 </nav>
             `
         }

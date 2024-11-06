@@ -389,8 +389,8 @@ class MyRefereesSection1 extends BaseElement {
         } else {
             return html`
                 <nav>
-                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
                     <simple-button @click=${this.addItem}>Добавить</simple-button>
+                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
                 </nav>
             `
         }

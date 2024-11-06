@@ -101,7 +101,7 @@ class MyProfileSection1 extends BaseElement {
                 }
 
                 .avatar {
-                    width: 100%
+                    width: 100%;
                 }
 
                 avatar-input {
@@ -383,8 +383,8 @@ class MyProfileSection1 extends BaseElement {
         } else {
             return html`
                 <nav>
-                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
                     <simple-button @click=${this.addItem}>Добавить</simple-button>
+                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
                 </nav>
             `
         }

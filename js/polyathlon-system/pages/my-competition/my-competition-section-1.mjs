@@ -52,28 +52,24 @@ class MyCompetitionSection1 extends BaseElement {
                     height: 100%;
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                .left-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     p {
-                        width: 100%;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        font-size: 1rem;
                         margin: 0;
                     }
                 }
 
-                .right-header{
+                .right-header {
                     grid-area: header2;
                     justify-content: flex-start;
                     icon-button {
@@ -109,13 +105,8 @@ class MyCompetitionSection1 extends BaseElement {
                     }
                 }
 
-                .left-layout[page="2"] {
-                    justify-content: flex-start;
-                    gap: 0px;
-                }
-
                 .avatar {
-                    width: 100%
+                    width: 100%;
                 }
 
                 avatar-input {
@@ -137,17 +128,11 @@ class MyCompetitionSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: flex-start;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
                     gap: 10px;
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
                 }
 
                 .left-footer {
@@ -166,7 +151,6 @@ class MyCompetitionSection1 extends BaseElement {
                         /* padding-right: 10px; */
                         gap: 1vw;
                     }
-
                 }
 
                 .right-footer {
@@ -176,18 +160,13 @@ class MyCompetitionSection1 extends BaseElement {
                     justify-content: end;
                     gap: 10px;
                     nav {
-                       // background-color: rgba(255, 255, 255, 0.1);
                         width: 100%;
                         height: 70%;
                         display: flex;
                         align-items: center;
-                        justify-content: space-between;
+                        justify-content: flex-end;
                         padding: 0 10px;
-                        /* padding-right: 10px; */
                         gap: 1vw;
-                        &.save {
-                            justify-content: flex-end;
-                        }
                         simple-button {
                             height: 100%;
                         }
@@ -202,8 +181,8 @@ class MyCompetitionSection1 extends BaseElement {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                 /* width */
-                 ::-webkit-scrollbar {
+                /* width */
+                ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -328,7 +307,7 @@ class MyCompetitionSection1 extends BaseElement {
     //     }
     // }
 
-    #page() {
+    get #page() {
         switch(this.currentPage) {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
@@ -398,7 +377,6 @@ class MyCompetitionSection1 extends BaseElement {
         else return ''
     }
 
-
     render() {
         return html`
             <modal-dialog></modal-dialog>
@@ -406,7 +384,7 @@ class MyCompetitionSection1 extends BaseElement {
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
@@ -414,7 +392,7 @@ class MyCompetitionSection1 extends BaseElement {
             <footer class="right-footer">
                 ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
@@ -424,6 +402,7 @@ class MyCompetitionSection1 extends BaseElement {
         }
         this.currentPage = index
     }
+
     nextPage() {
         this.currentPage++;
     }
@@ -431,6 +410,17 @@ class MyCompetitionSection1 extends BaseElement {
     prevPage() {
         this.currentPage--;
     }
+
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
+    }
+
 
     async saveItem() {
         if ('_id' in this.currentItem) {
@@ -483,16 +473,6 @@ class MyCompetitionSection1 extends BaseElement {
             this.requestUpdate();
         }
         this.isModified = this.oldValues.size !== 0;
-    }
-
-    async showDialog(message, type='message') {
-        const modalDialog = this.renderRoot.querySelector('modal-dialog')
-        modalDialog.type = type
-        return modalDialog.show(message);
-    }
-
-    async confirmDialog(message) {
-        return this.showDialog(message, 'confirm')
     }
 
     async firstUpdated() {

@@ -5,12 +5,12 @@ import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/buttons/aside-button.mjs'
 import '../../../../components/buttons/simple-button.mjs'
 
-import './my-referee-positions-section-1-page-1.mjs'
+import './my-sports-disciplines-section-1-page-1.mjs'
 
-import DataSet from './my-referee-positions-dataset.mjs'
-import DataSource from './my-referee-positions-datasource.mjs'
+import DataSet from './my-sports-disciplines-dataset.mjs'
+import DataSource from './my-sports-disciplines-datasource.mjs'
 
-class MyRefereePositionsSection1 extends BaseElement {
+class MySportsDisciplinesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -60,7 +60,7 @@ class MyRefereePositionsSection1 extends BaseElement {
                     }
                 }
 
-                .right-header {
+                .right-header{
                     grid-area: header2;
                 }
 
@@ -244,7 +244,7 @@ class MyRefereePositionsSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRefereePositionsItem')) {
+        if (changedProps.has('currentSportsDisciplinesItem')) {
             this.currentPage = 0;
         }
     }
@@ -270,13 +270,13 @@ class MyRefereePositionsSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-referee-positions-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-referee-positions-section-1-page-1>
+            <my-sports-disciplines-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-sports-disciplines-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-referee-positions-section-1-page-2 .item=${this.currentItem}></my-referee-positions-section-1-page-2>
+            <my-sports-disciplines-section-1-page-2 .item=${this.currentItem}></my-sports-disciplines-section-1-page-2>
         `;
     }
 
@@ -291,7 +291,7 @@ class MyRefereePositionsSection1 extends BaseElement {
                     <icon-button
                         label=${item.name}
                         title=${item._id}
-                        icon-name="referee-solid"
+                        icon-name="category-solid"
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
                     ></icon-button>
@@ -330,7 +330,7 @@ class MyRefereePositionsSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Referee positions</p></header>
+            <header class="left-header"><p>Sports disciplines</p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>
@@ -369,7 +369,7 @@ class MyRefereePositionsSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новая должность судьи" }
+        const newItem = { name: "Новый вид соревнования" }
         this.dataSource.addItem(newItem);
     }
 
@@ -380,7 +380,7 @@ class MyRefereePositionsSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
@@ -393,7 +393,7 @@ class MyRefereePositionsSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить это название?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)
@@ -405,4 +405,4 @@ class MyRefereePositionsSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-referee-positions-section-1", MyRefereePositionsSection1);
+customElements.define("my-sports-disciplines-section-1", MySportsDisciplinesSection1);

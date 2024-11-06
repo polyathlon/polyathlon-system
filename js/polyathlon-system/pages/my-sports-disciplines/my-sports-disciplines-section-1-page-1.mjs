@@ -2,7 +2,7 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
 
-class MyDisciplineNamesSection1Page1 extends BaseElement {
+class MySportsDisciplinesSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -34,7 +34,7 @@ class MyDisciplineNamesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="country-solid" image-name=${this.item?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.flag + '.svg' } error-image="country-red-solid" label="Country name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="category-solid" label="Sports discipline:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -52,12 +52,8 @@ class MyDisciplineNamesSection1Page1 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
-
-            if (e.target.id === 'name' || e.target.id === 'flag') {
+            if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
-            }
-            if (e.target.id === 'flag') {
-                this.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;
         }
@@ -65,4 +61,4 @@ class MyDisciplineNamesSection1Page1 extends BaseElement {
 
 }
 
-customElements.define("my-discipline-names-section-1-page-1", MyDisciplineNamesSection1Page1);
+customElements.define("my-sports-disciplines-section-1-page-1", MySportsDisciplinesSection1Page1);
