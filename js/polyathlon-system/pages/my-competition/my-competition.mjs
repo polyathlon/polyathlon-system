@@ -1,7 +1,7 @@
 import { BaseElement, html, css, cache } from '../../../base-element.mjs'
 
 import './section-1/my-competition-section-1.mjs';
-import './section-2/my-competition-section-2.mjs';
+// import './section-2/my-competition-section-2.mjs';
 
 import '../../../../components/buttons/icon-button.mjs'
 
@@ -43,6 +43,7 @@ class MyCompetition extends BaseElement {
     }
 
     get #section2() {
+        import('./section-2/my-competition-section-2.mjs');
         return html`
             <my-competition-section-2 .sectionNames=${this.sectionNames}></my-competition-section-2>
         `;
