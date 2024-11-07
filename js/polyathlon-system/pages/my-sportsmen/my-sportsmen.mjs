@@ -1,20 +1,15 @@
 import { BaseElement, html, css} from '../../../base-element.mjs'
 
 import './my-sportsmen-section-1.mjs';
-import '../../../../components/buttons/aside-button.mjs';
 
 class MySportsmen extends BaseElement {
     static get styles() {
         return [
+            BaseElement.styles,
             css`
                 :host {
                     display: flex;
-                    box-sizing: border-box;
                     height: 100%
-                }
-                aside {
-                    display: flex;
-                    flex-direction: column;
                 }
             `
         ]
@@ -22,7 +17,7 @@ class MySportsmen extends BaseElement {
 
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
         }
     }
 

@@ -16,16 +16,16 @@ class MySportsmenSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Object, default: null},
-            statusDataSet: {type: Map, default: null },
-            oldValues: {type: Map, default: null },
-            currentItem: {type: Object, default: null},
-            listItem: {type: Object, default: null},
-            isModified: {type: Boolean, default: "", local: true},
-            isReady: {type: Boolean, default: true},
+            dataSource: { type: Object, default: null },
+            statusDataSet: { type: Map, default: null },
+            oldValues: { type: Map, default: null },
+            currentItem: { type: Object, default: null },
+            listItem: { type: Object, default: null },
+            isModified: { type: Boolean, default: "", local: true },
+            isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: {type: BigInt, default: 0},
+            currentPage: { type: BigInt, default: 0 },
         }
     }
 
@@ -46,28 +46,24 @@ class MySportsmenSection1 extends BaseElement {
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                .left-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     p {
-                        width: 100%;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        font-size: 1rem;
                         margin: 0;
                     }
                 }
 
-                .right-header{
+                .right-header {
                     grid-area: header2;
                 }
 
@@ -93,7 +89,7 @@ class MySportsmenSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: center;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
@@ -129,12 +125,9 @@ class MySportsmenSection1 extends BaseElement {
                         height: 70%;
                         display: flex;
                         align-items: center;
-                        justify-content: space-between;
+                        justify-content: flex-end;
                         padding: 0 10px;
                         gap: 1vw;
-                        &.save {
-                            justify-content: flex-end;
-                        }
                         simple-button {
                             height: 100%;
                         }
@@ -296,7 +289,7 @@ class MySportsmenSection1 extends BaseElement {
             return
         }
         if (this.isModified) {
-            const modalResult = await this.showDialog('Запись была изменена. Сохранить изменения?', 'confirm')
+            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
                 await this.dataSource.saveItem(this.currentItem, item);
             }
@@ -431,7 +424,9 @@ class MySportsmenSection1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header"><p>Sportsmen</p></header>
-            <header class="right-header">${this.#pageName}</header>
+            <header class="right-header">
+                ${this.#pageName}
+            </header>
             <div class="left-layout">
                 ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
                 ${this.#list}
@@ -497,7 +492,7 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     async cancelNewItem() {
-        const modalResult = await this.showDialog('Вы действительно хотите отменить добавление?', 'confirm')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить добавление?')
         if (modalResult !== 'Ok')
             return
         this.dataSource.cancelNewItem()
@@ -532,7 +527,7 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.showDialog('Вы действительно хотите удалить этого спортсмена?', 'confirm')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого спортсмена?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem, this.listItem)

@@ -30,6 +30,9 @@ customElements.define('close-button', class CloseButton extends BaseElement {
                     transition: .1s;
                     filter: brightness(85%);
                 }
+                &:focus {
+                    outline: none;
+                }
             }
         `;
     }

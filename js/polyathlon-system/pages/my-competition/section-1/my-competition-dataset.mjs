@@ -1,22 +1,15 @@
-import refreshToken, {getToken} from "../../refresh-token.mjs";
+import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
 export default class DataSet {
     static #dataSet;
 
-    static async getDataSet() {
-        if (DataSet.#dataSet) {
-            return DataSet.#dataSet
-        }
-        DataSet.#dataSet = await DataSet.#getItems()
-        return DataSet.#dataSet
-    }
-
-    static getLast() {
-        if (DataSet.#dataSet || DataSet.#dataSet.length) {
-            return DataSet.#dataSet[0]
-        }
-        return
-    }
+    // static async getDataSet() {
+    //     if (DataSet.#dataSet) {
+    //         return DataSet.#dataSet
+    //     }
+    //     DataSet.#dataSet = await DataSet.#getItems()
+    //     return DataSet.#dataSet
+    // }
 
     static find(name, value) {
         const index = DataSet.#dataSet.findIndex(element =>
@@ -25,36 +18,8 @@ export default class DataSet {
         return index === -1 ? null : DataSet.#dataSet[index]
     }
 
-    static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/sportsmen', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    static async #getItems() {
-        const token = getToken()
-        let response = await DataSet.#fetchGetItems(token)
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.#fetchGetItems(token)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        // const items = result.rows.map(item => {
-        //     return item.doc;
-        // })
-        // const items = result.rows.map(item => {
-        //     return {_id: item.id, ...item.value};
-        // })
-        return result.rows
-    }
-
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman`, {
+        return fetch(`https://localhost:4500/api/competition`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -78,35 +43,16 @@ export default class DataSet {
         }
 
         const newItem = await DataSet.getItem(result.id)
+        // DataSet.addToDataset(newItem)
         return newItem
     }
 
-    static createListItem(newItem) {
-        let key = newItem.lastName
-        if (newItem.firstName) {
-            key += ' ' + newItem.firstName[0] + '.'
-        }
-        if (newItem.middleName) {
-            key += newItem.middleName[0] + '.'
-        }
-        return {
-            id: newItem._id,
-            key,
-            value: {
-                hashNumber: newItem.hashNumber,
-                gender: newItem.gender,
-            }
-        }
-    }
-
-    static addToDataset(newItem) {
-        const listItem = DataSet.createListItem(newItem)
-        DataSet.#dataSet.push(listItem)
-        return listItem;
+    static addToDataset(item) {
+        DataSet.#dataSet.unshift(item);
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/sportsman/${itemId}`, {
+        return fetch(`https://localhost:4500/api/competition/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -132,7 +78,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman/${item._id}`, {
+        return fetch(`https://localhost:4500/api/competition`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -165,7 +111,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/my-competition//${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -173,7 +119,7 @@ export default class DataSet {
         })
     }
 
-    static async deleteItem(item, listItem) {
+    static async deleteItem(item) {
         const token = getToken();
 
         let response = await DataSet.#fetchDeleteItem(token, item)
@@ -189,65 +135,66 @@ export default class DataSet {
             throw new Error(result.error)
         }
 
-        DataSet.#deleteFromDS(listItem)
+        DataSet.#deleteFromDS(item)
     }
 
-    static #deleteFromDS(listItem) {
-        const itemIndex = DataSet.#dataSet.indexOf(listItem)
+    static #deleteFromDS(item) {
+        const itemIndex = DataSet.#dataSet.indexOf(item)
         if (itemIndex === -1) {
             return
         }
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchCreateHashNumber(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman-id`, {
+    static fetchUploadAvatar(token, formData, competitionId) {
+        return fetch(`https://localhost:4500/api/upload/competition/avatar/${competitionId}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
             },
-            body: JSON.stringify(item)
+            body: formData
         })
     }
 
-    static async createHashNumber(item) {
+    static async uploadAvatar(avatar, competitionId) {
         const token = getToken();
-        let response = await DataSet.fetchCreateHashNumber(token, item)
-
+        const formData = new FormData();
+        formData.append("file", avatar);
+        let response = await DataSet.fetchUploadAvatar(token, formData, competitionId)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchCreateHashNumber(token, item)
+            response = await DataSet.fetchUploadAvatar(token, formData, competitionId)
         }
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)
         }
-        return result.number
+        return result
     }
 
-    static fetchGetQRCode(token, data) {
-        return fetch(`https://localhost:4500/api/qr-code?data=${data}`, {
+    static fetchDownloadAvatar(token, competitionId) {
+        return fetch(`https://localhost:4500/api/upload/competition/avatar/${competitionId}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
             },
         })
     }
 
-    static async getQRCode(data) {
+    static async downloadAvatar(competitionId) {
         const token = getToken();
-        let response = await DataSet.fetchGetQRCode(token, data)
-
+        let response = await DataSet.fetchDownloadAvatar(token, competitionId)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchGetQRCode(token, data)
+            response = await DataSet.fetchDownloadAvatar(token, competitionId)
         }
-        const result = await response.json()
+
         if (!response.ok) {
-            throw new Error(result.error)
+            return null
         }
-        return result.qr
+
+        const blob = await response.blob()
+
+        return blob ? window.URL.createObjectURL(blob) : blob;
     }
 }

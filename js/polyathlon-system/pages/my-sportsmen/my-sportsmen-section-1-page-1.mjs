@@ -41,6 +41,7 @@ class MySportsmenSection1Page1 extends BaseElement {
                     gap: 10px;
                 }
                 .container {
+                    min-width: min(600px, 50vw);
                     max-width: 600px;
                 }
                 .name-group {
@@ -142,7 +143,7 @@ class MySportsmenSection1Page1 extends BaseElement {
 
             currentItem[id] = e.target.value
 
-            if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender' ) {
+            if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;

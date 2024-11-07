@@ -82,7 +82,8 @@ button {
     filter: brightness(90%);
 } */
 
-.footer-button:hover {
+.footer-button:hover,
+.footer-button:focus {
     background-color: var(--link-hover-color);
 }
 

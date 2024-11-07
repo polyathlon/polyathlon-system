@@ -1,19 +1,25 @@
-import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
+import { BaseElement, html, css, cache, nothing } from '../../../../base-element.mjs'
 
-import '../../../../components/dialogs/modal-dialog.mjs'
-import '../../../../components/buttons/icon-button.mjs'
-import '../../../../components/buttons/aside-button.mjs'
-import '../../../../components/buttons/simple-button.mjs'
+import '../../../../../components/dialogs/modal-dialog.mjs'
+import '../../../../../components/inputs/simple-input.mjs'
+import '../../../../../components/inputs/upload-input.mjs'
+import '../../../../../components/inputs/download-input.mjs'
+import '../../../../../components/buttons/icon-button.mjs'
+import '../../../../../components/inputs/avatar-input.mjs'
+import '../../../../../components/buttons/aside-button.mjs';
+import '../../../../../components/buttons/simple-button.mjs';
 
-import './my-referees-section-1-page-1.mjs'
+import './my-competition-section-2-page-1.mjs'
+import './my-competition-section-2-list-1.mjs'
 
-import DataSet from './my-referees-dataset.mjs'
-import DataSource from './my-referees-datasource.mjs'
+import DataSet from './my-competition-dataset.mjs'
+//import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
+import DataSource from './my-competition-datasource.mjs'
 
-class MyRefereesSection1 extends BaseElement {
+class MyCompetitionSection2 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             dataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
@@ -23,6 +29,8 @@ class MyRefereesSection1 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
+            isFirst: { type: Boolean, default: false },
+            currentSection: { type: BigInt, default: 1, local: true},
         }
     }
 
@@ -32,15 +40,15 @@ class MyRefereesSection1 extends BaseElement {
             css`
                 :host {
                     display: grid;
-                    width: 100%;
                     grid-template-columns: 3fr 9fr;
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
-                        "header1 header2"
-                        "sidebar content"
-                        "footer1  footer2";
+                    "header1 header2"
+                    "aside main"
+                    "footer1 footer2";
                     gap: 0 20px;
-                    background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
+                    width: 100%;
+                    height: 100%;
                 }
 
                 header {
@@ -62,27 +70,60 @@ class MyRefereesSection1 extends BaseElement {
 
                 .right-header {
                     grid-area: header2;
+                    justify-content: flex-start;
+                    icon-button {
+                        height: 100%;
+                        padding: 0 1vw;
+                        &[active] {
+                            background-color: var(--layout-background-color);
+                        }
+                        &hover {
+                            background-color: var(--layout-background-color);
+                        }
+                    }
+
                 }
 
                 .left-layout {
-                    grid-area: sidebar;
+                    grid-area: aside;
                     display: flex;
                     flex-direction: column;
+                    justify-content: center;
                     align-items: center;
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
+                    gap: 10px;
                     icon-button {
                         width: 100%;
                         height: 40px;
                         flex: 0 0 40px;
                     }
+                    .label {
+                        text-align: center;
+                    }
+                }
+
+                .avatar {
+                    width: 100%;
+                }
+
+                avatar-input {
+                    width: 80%;
+                    margin: auto;
+                    aspect-ratio: 1 / 1;
+                    overflow: hidden;
+                    border-radius: 50%;
+                }
+
+                img {
+                    width: 100%;
                 }
 
                 .right-layout {
+                    grid-area: main;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
@@ -166,57 +207,13 @@ class MyRefereesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Information']
+        this.currentPage = 0;
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
-            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
-            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
-
-    pdfMethod() {
-
-        var docInfo = {
-
-            info: {
-                title:'Referees',
-                author:'Polyathlon systems',
-            },
-
-            pageSize:'A4',
-            pageOrientation:'landscape',//'portrait'
-            pageMargins:[50,50,30,60],
-
-            header:function(currentPage,pageCount) {
-                return {
-                    text: currentPage.toString() + 'из' + pageCount,
-                    alignment:'right',
-                    margin:[0,30,10,50]
-                }
-            },
-
-            content: [
-
-                {
-                    text:'Дмитрий',
-                    fontSize:20,
-                    margin:[150, 80, 30,0]
-                    //pageBreak:'after'
-                },
-
-                {
-                    text:'Гуськов',
-                    style:'header'
-                    //pageBreak:'before'
-                }
-            ]
-        }
-        pdfMake.createPdf(docInfo).open();
-
-        }
 
     showPage(page) {
         location.hash = page;
@@ -257,7 +254,7 @@ class MyRefereesSection1 extends BaseElement {
         const workbook = XLSX.read(await file.arrayBuffer());
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const RegionDataset = await import('../../my-regions/my-regions-dataset.mjs');
         const regionDataset = RegionDataset.default
         raw_data.forEach((r, index) => {
             if(index !== 0){
@@ -270,7 +267,7 @@ class MyRefereesSection1 extends BaseElement {
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
                         "name": "Судья всероссийской категории",
                     },
-                    region: regionDataset.find("name", r[3]),
+                    region: regionDataset.find("name", r[4]),
                     order: {
                         number: r[5],
                         link: r[6]
@@ -289,49 +286,49 @@ class MyRefereesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRefereeItem')) {
+        if (changedProps.has('currentCountryItem')) {
             this.currentPage = 0;
         }
     }
 
-    copyToClipboard(text) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text)
-        }
-    }
-
-    async showItem(item) {
-        if (this.currentItem?._id === item._id) {
-            this.copyToClipboard(item.id || item._id)
-            return
-        }
-        if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
-            if (modalResult === 'Ok') {
-                await this.dataSource.saveItem(this.currentItem);
-            }
-            else {
-                await this.cancelItem()
-            }
-        }
-        else {
-            this.dataSource.setCurrentItem(item)
-        }
-    }
+    // async showItem(index, itemId) {
+    //     if (this.isModified) {
+    //         const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+    //         if (modalResult === 'Ok') {
+    //             await this.dataSource.saveItem(this.currentItem);
+    //         }
+    //         else {
+    //             await this.cancelItem()
+    //         }
+    //     }
+    //     else {
+    //         this.dataSource.setCurrentItem(this.dataSource.items[index])
+    //     }
+    // }
 
     get #page() {
-        return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
+        switch(this.currentPage) {
+            case 0: return cache(this.#page1())
+            case 1: return cache(this.#page2())
+            case 2: return cache(this.#page3())
+        }
     }
 
     #page1() {
         return html`
-            <my-referees-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-referees-section-1-page-1>
+            <my-competition-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-referees-section-1-page-2 .item=${this.currentItem}></my-referees-section-1-page-2>
+            <my-competition-section-1-page-2 .item=${this.currentItem}></my-competition-section-1-page-2>
+        `;
+    }
+
+    #page3() {
+        return html`
+            <my-competition-section-1-page-3 .item=${this.currentItem}></my-competition-section-1-page-3>
         `;
     }
 
@@ -339,35 +336,24 @@ class MyRefereesSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    fio(item) {
-        if (!item) {
-            return item
-        }
-        let result = item.lastName
-        if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
-        }
-        if (item.middleName) {
-            result += `${item.middleName[0]}.`
-        }
-        return result
+    #list1() {
+        return html`
+            <my-competition-section-1-list-1 .avatar=${this.avatar} .item=${this}></my-competition-section-1-list-1>
+        `;
     }
 
-    //                        icon-name="judge1-solid"
-    get #list() {
+    #list3() {
         return html`
-            ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
-                        label=${this.fio(item)}
-                        title=${item._id}
-                        image-name=${item.gender == 0 ? "../../../../images/referee-man-solid.svg" : "../../../../images/referee-woman-solid.svg"}
-                        ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
-                        @click=${() => this.showItem(item)}
-                    ></icon-button>
-                `
-            )}
-        `
+            <my-competition-section-1-list-3 .parent=${this.currentItem}></my-competition-section-1-list-3>
+        `;
+    }
+
+    get #list() {
+        switch(this.currentPage) {
+            case 0: return cache(this.#list1())
+            case 1: return cache(this.#list1())
+            case 2: return cache(this.#list3())
+        }
     }
 
     get #task() {
@@ -380,29 +366,28 @@ class MyRefereesSection1 extends BaseElement {
 
     get #rightFooter() {
         if (this.isModified) {
-            return html`
-                <nav>
-                    <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                    <simple-button @click=${this.cancelItem}>Отменить</simple-button>
-                </nav>
-            `
-        } else {
-            return html`
-                <nav>
-                    <simple-button @click=${this.addItem}>Добавить</simple-button>
-                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
-                </nav>
-            `
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+            </nav>
+        `
         }
-
+        else return ''
     }
 
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Referees<p></header>
+            <header class="left-header">
+                <p>Competition ${this.parent?.name}</p>
+            </header>
             <header class="right-header">
-                ${this.#pageName}
+                ${this.sectionNames.map( (page, index) =>
+                    html `
+                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
+                    `
+                )}
             </header>
             <div class="left-layout">
                 ${this.#list}
@@ -420,18 +405,16 @@ class MyRefereesSection1 extends BaseElement {
         `;
     }
 
+    gotoPage(index) {
+        this.currentSection = index
+    }
+
     nextPage() {
         this.currentPage++;
     }
 
     prevPage() {
         this.currentPage--;
-    }
-
-    async getQRCode() {
-        const dataURI = await DataSet.getQRCode(this.currentItem._id)
-        const blob = await (await fetch(dataURI)).blob();
-        window.open(URL.createObjectURL(blob))
     }
 
     async showDialog(message, type='message') {
@@ -444,13 +427,18 @@ class MyRefereesSection1 extends BaseElement {
         return this.showDialog(message, 'confirm')
     }
 
-    async addItem() {
-        const newItem = { name: "Новый регион" }
-        this.dataSource.addItem(newItem);
-    }
 
     async saveItem() {
-        await this.dataSource.saveItem(this.currentItem);
+        if ('_id' in this.currentItem) {
+            await this.dataSource.saveItem(this.currentItem);
+        } else {
+            await this.dataSource.addItem(this.currentItem);
+        }
+        if (this.avatarFile) {
+            let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
+            if (!result) return;
+        }
+        this.avatarFile = null;
         this.oldValues?.clear();
         this.isModified = false;
     }
@@ -460,34 +448,49 @@ class MyRefereesSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            let id = key.id
-            let currentItem = this.currentItem
-            if (id == "order.number") {
-                id = "number"
-                currentItem = this.currentItem.order
+            if (key.id === 'avatar') {
+                window.URL.revokeObjectURL(value);
+                this.avatar = value;
+                this.avatarFile = null;
+            } else {
+                const currentItem = key.currentObject ?? this.currentItem
+                currentItem[key.id] = value;
+                key.value = value;
             }
-            if (id == "order.link") {
-                id = "link"
-                currentItem = this.currentItem.order
-            }
-            currentItem[id] = value;
-            key.value = value;
         });
         this.oldValues.clear();
         this.isModified = false;
     }
 
-    async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого судью?')
-        if (modalResult !== 'Ok')
-            return;
-        this.dataSource.deleteItem(this.currentItem)
+    validateAvatar(e) {
+        this.oldValues ??= new Map();
+        if (!this.oldValues.has(e.target)) {
+            this.oldValues.set(e.target, e.target.avatar)
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        else if (this.oldValues.get(e.target) === e.target.avatar) {
+            this.oldValues.delete(e.target.id)
+            this.avatarFile = null;
+        } else {
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        this.isModified = this.oldValues.size !== 0;
     }
 
     async firstUpdated() {
         super.firstUpdated();
-        this.dataSource = new DataSource(this, await DataSet.getDataSet())
+        this.isFirst  = false;
+        this.dataSource = new DataSource(this)
+        await this.dataSource.getItem()
+        if (this.currentItem._id) {
+            this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
+        }
+        this.isFirst = true;
     }
 }
 
-customElements.define("my-referees-section-1", MyRefereesSection1)
+customElements.define("my-competition-section-2", MyCompetitionSection2);

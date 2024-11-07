@@ -23,6 +23,9 @@ customElements.define('modal-dialog', class ModalDialog extends BaseElement {
                 :host {
                     color: var(--form-color);
                 }
+                button:focus {
+                    outline: none;
+                }
             `
         ]
     }
@@ -50,7 +53,7 @@ customElements.define('modal-dialog', class ModalDialog extends BaseElement {
     }
     render() {
         return html`
-            <div class="modal-dialog ${this.opened ? 'show': ''} ${this.animateClose ? 'animate-close': ''}">
+            <div id="a1" class="modal-dialog ${this.opened ? 'show': ''} ${this.animateClose ? 'animate-close': ''}" tabindex="0" @keydown=${this.keyDown}>
                 <div class="modal-dialog-content animate">
                     <header>
                         <span id="dialog-title" class="dialog-title no-select">${this.title}</span>
@@ -79,6 +82,10 @@ customElements.define('modal-dialog', class ModalDialog extends BaseElement {
         })
     }
 
+    updated(changedProps) {
+        this.$id("a1").focus()
+    }
+
     ok() {
         this.opened = false;
         this.modalResult('Ok');
@@ -87,5 +94,18 @@ customElements.define('modal-dialog', class ModalDialog extends BaseElement {
     close() {
         this.opened = false;
         this.modalResult('Close');
+    }
+
+    keyDown(e) {
+        switch (e.key) {
+            case "Enter":
+              this.ok()
+              break;
+            case "Escape":
+              this.close()
+              break;
+            default:
+              return;
+        }
     }
 });
