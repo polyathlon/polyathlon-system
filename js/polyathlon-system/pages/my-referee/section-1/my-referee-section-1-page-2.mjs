@@ -1,8 +1,8 @@
-import { BaseElement, html, css } from '../../../base-element.mjs'
+import { BaseElement, html, css } from '../../../../base-element.mjs'
 
-import '../../../../components/inputs/simple-input.mjs'
+import '../../../../../components/inputs/simple-input.mjs'
 
-class MyRefereeSection1Page2 extends BaseElement {
+class MyrefereeSection1Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
