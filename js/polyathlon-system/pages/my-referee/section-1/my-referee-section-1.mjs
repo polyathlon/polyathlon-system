@@ -1,34 +1,39 @@
-import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
+import { BaseElement, html, css, cache, nothing } from '../../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/inputs/upload-input.mjs'
-import '../../../../components/inputs/download-input.mjs'
-import '../../../../components/buttons/icon-button.mjs'
-import '../../../../components/inputs/avatar-input.mjs'
-import '../../../../components/buttons/aside-button.mjs';
+import '../../../../../components/dialogs/modal-dialog.mjs'
+import '../../../../../components/inputs/simple-input.mjs'
+import '../../../../../components/inputs/upload-input.mjs'
+import '../../../../../components/inputs/download-input.mjs'
+import '../../../../../components/buttons/icon-button.mjs'
+import '../../../../../components/inputs/avatar-input.mjs'
+import '../../../../../components/buttons/aside-button.mjs';
+import '../../../../../components/buttons/simple-button.mjs';
 
 import './my-referee-section-1-page-1.mjs'
-import './my-referee-section-1-page-2.mjs'
-import './my-referee-section-1-page-3.mjs'
+import './my-referee-section-1-list-1.mjs'
+//import './my-competition-section-1-page-2.mjs'
+// import './my-competition-section-2-page-1.mjs'
+// import './my-competition-section-2-list-1.mjs'
 
 import DataSet from './my-referee-dataset.mjs'
+//import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-referee-datasource.mjs'
 
 class MyRefereeSection1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Object, default: null},
-            statusDataSet: {type: Map, default: null },
-            oldValues: {type: Map, default: null },
-            currentItem: {type: Object, default: null},
-            isModified: {type: Boolean, default: "", local: true},
-            isReady: {type: Boolean, default: true},
+            version: { type: String, default: '1.0.0' },
+            dataSource: { type: Object, default: null },
+            statusDataSet: { type: Map, default: null },
+            oldValues: { type: Map, default: null },
+            currentItem: { type: Object, default: null },
+            isModified: { type: Boolean, default: "", local: true },
+            isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: {type: BigInt, default: 0},
-            isFirst: {type: Boolean, default: false}
+            currentPage: { type: BigInt, default: 0 },
+            isFirst: { type: Boolean, default: false },
+            currentSection: { type: BigInt, default: 0, local: true},
         }
     }
 
@@ -38,39 +43,35 @@ class MyRefereeSection1 extends BaseElement {
             css`
                 :host {
                     display: grid;
-                    width: 100%;
                     grid-template-columns: 3fr 9fr;
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
-                        "header1 header2"
-                        "sidebar content"
-                        "footer1  footer2";
+                    "header1 header2"
+                    "aside main"
+                    "footer1 footer2";
                     gap: 0 20px;
-                    background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
+                    width: 100%;
+                    height: 100%;
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                .left-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     p {
-                        width: 100%;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        font-size: 1rem;
                         margin: 0;
                     }
                 }
 
-                .right-header{
+                .right-header {
                     grid-area: header2;
                     justify-content: flex-start;
                     icon-button {
@@ -87,7 +88,7 @@ class MyRefereeSection1 extends BaseElement {
                 }
 
                 .left-layout {
-                    grid-area: sidebar;
+                    grid-area: aside;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
@@ -101,10 +102,13 @@ class MyRefereeSection1 extends BaseElement {
                         height: 40px;
                         flex: 0 0 40px;
                     }
+                    .label {
+                        text-align: center;
+                    }
                 }
 
                 .avatar {
-                    width: 100%
+                    width: 100%;
                 }
 
                 avatar-input {
@@ -120,23 +124,17 @@ class MyRefereeSection1 extends BaseElement {
                 }
 
                 .right-layout {
+                    grid-area: main;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: flex-start;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
                     gap: 10px;
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
                 }
 
                 .left-footer {
@@ -155,7 +153,6 @@ class MyRefereeSection1 extends BaseElement {
                         /* padding-right: 10px; */
                         gap: 1vw;
                     }
-
                 }
 
                 .right-footer {
@@ -165,18 +162,13 @@ class MyRefereeSection1 extends BaseElement {
                     justify-content: end;
                     gap: 10px;
                     nav {
-                        background-color: rgba(255, 255, 255, 0.1);
                         width: 100%;
                         height: 70%;
                         display: flex;
                         align-items: center;
-                        justify-content: space-between;
+                        justify-content: flex-end;
                         padding: 0 10px;
-                        /* padding-right: 10px; */
                         gap: 1vw;
-                        &.save {
-                            justify-content: flex-end;
-                        }
                         simple-button {
                             height: 100%;
                         }
@@ -191,8 +183,8 @@ class MyRefereeSection1 extends BaseElement {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                 /* width */
-                 ::-webkit-scrollbar {
+                /* width */
+                ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -218,19 +210,11 @@ class MyRefereeSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = [
-            {label: 'User', iconName: 'user'},
-            {label: 'Passport', iconName: 'judge1-solid'},
-            {label: 'Sportsman', iconName: 'user'},
-            {label: 'Competition', iconName: 'competition-solid'},
-        ]
-
         this.currentPage = 0;
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'qrcode-solid', page: 'my-referee-categories', title: 'qrcode', click: () => this.getQRCode},
-            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
 
@@ -240,16 +224,6 @@ class MyRefereeSection1 extends BaseElement {
 
     gotoBack(page) {
         history.back();
-    }
-
-    async getQRCode() {
-        const host = this.getRootNode().host
-        const hashNumber = await DataSet.getQRCode({
-            countryCode: host.item?.region?.country?.flag.toUpperCase(),
-            regionCode: host.item?.region?.code,
-            ulid: host.item?.profileUlid,
-        })
-        this.setValue(hashNumber);
     }
 
     async getNewFileHandle() {
@@ -283,7 +257,7 @@ class MyRefereeSection1 extends BaseElement {
         const workbook = XLSX.read(await file.arrayBuffer());
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const RegionDataset = await import('../../my-regions/my-regions-dataset.mjs');
         const regionDataset = RegionDataset.default
         raw_data.forEach((r, index) => {
             if(index !== 0){
@@ -335,7 +309,7 @@ class MyRefereeSection1 extends BaseElement {
     //     }
     // }
 
-    #page() {
+    get #page() {
         switch(this.currentPage) {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
@@ -365,20 +339,24 @@ class MyRefereeSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    get #list() {
+    #list1() {
         return html`
-            <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
-            </div>
-            <div class="label">
-                ${JSON.parse(this.#loginInfo).login}
-            </div>
-            <div class="statistic">
-                <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-            </div>
-        `
+            <my-referee-section-1-list-1 .avatar=${this.avatar} .item=${this}></my-referee-section-1-list-1>
+        `;
+    }
+
+    #list3() {
+        return html`
+            <my-referee-section-1-list-3 .parent=${this.currentItem}></my-referee-section-1-list-3>
+        `;
+    }
+
+    get #list() {
+        switch(this.currentPage) {
+            case 0: return cache(this.#list1())
+            case 1: return cache(this.#list1())
+            case 2: return cache(this.#list3())
+        }
     }
 
     get #task() {
@@ -389,25 +367,28 @@ class MyRefereeSection1 extends BaseElement {
         `
     }
 
-    get #loginInfo() {
-        if (localStorage.getItem('rememberMe')) {
-            return localStorage.getItem('userInfo')
+    get #rightFooter() {
+        if (this.isModified) {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+                <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+            </nav>
+        `
         }
-        else {
-            return sessionStorage.getItem('userInfo')
-        }
+        else return ''
     }
 
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
+            <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>Competition ${this.currentItem?.name}</p>
+                <p>Referee ${this.parent?.name}</p>
             </header>
             <header class="right-header">
-                ${this.pageNames.map( (page, index) =>
+                ${this.sectionNames.map( (page, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentPage} icon-name=${page.iconName} label=${page.label} @click=${() => this.currentPage = index}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
                     `
                 )}
             </header>
@@ -415,27 +396,20 @@ class MyRefereeSection1 extends BaseElement {
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                ${ this.isModified ? html`
-                    <nav class='save'>
-                        <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                        <simple-button @click=${this.cancelItem}>Отменить</simple-button>
-                    </nav>
-                ` :  html`
-                    <nav>
-                        <simple-icon icon-name="square-arrow-left-sharp-solid" @click=${this.prevPage} ?visible=${this.currentPage === 0} title=${this.pageNames[this.currentPage - 1]}></simple-icon>
-                        <simple-icon icon-name="square-arrow-right-sharp-solid" @click=${this.nextPage} ?visible=${this.currentPage === this.pageNames.length - 1} title=${this.pageNames[this.currentPage + 1]}></simple-icon>
-                    </nav>
-                `
-                }
+                ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
+    }
+
+    gotoPage(index) {
+        this.currentSection = index
     }
 
     nextPage() {
@@ -446,9 +420,16 @@ class MyRefereeSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
     }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
+    }
+
 
     async saveItem() {
         if ('_id' in this.currentItem) {
@@ -456,37 +437,63 @@ class MyRefereeSection1 extends BaseElement {
         } else {
             await this.dataSource.addItem(this.currentItem);
         }
+        if (this.avatarFile) {
+            let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
+            if (!result) return;
+        }
+        this.avatarFile = null;
         this.oldValues?.clear();
         this.isModified = false;
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            const currentItem = key.currentObject ?? this.currentItem
-            currentItem[key.id] = value;
-            key.value = value;
+            if (key.id === 'avatar') {
+                window.URL.revokeObjectURL(value);
+                this.avatar = value;
+                this.avatarFile = null;
+            } else {
+                const currentItem = key.currentObject ?? this.currentItem
+                currentItem[key.id] = value;
+                key.value = value;
+            }
         });
         this.oldValues.clear();
         this.isModified = false;
     }
 
+    validateAvatar(e) {
+        this.oldValues ??= new Map();
+        if (!this.oldValues.has(e.target)) {
+            this.oldValues.set(e.target, e.target.avatar)
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        else if (this.oldValues.get(e.target) === e.target.avatar) {
+            this.oldValues.delete(e.target.id)
+            this.avatarFile = null;
+        } else {
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        this.isModified = this.oldValues.size !== 0;
+    }
 
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;
-        let params1 = new URLSearchParams(window.location.search)
-        if (params1.size > 0) {
-            window.history.replaceState(null, '', window.location.pathname + window.location.hash);
-        }
-
         this.dataSource = new DataSource(this)
-        this.dataSource.getItem()
-        this.avatar = null; // await this.downloadAvatar();
+        await this.dataSource.getItem()
+        if (this.currentItem._id) {
+            this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
+        }
         this.isFirst = true;
     }
 }
 
-customElements.define("my-referee-section-1",MyRefereeSection1);
+customElements.define("my-referee-section-1", MyRefereeSection1);

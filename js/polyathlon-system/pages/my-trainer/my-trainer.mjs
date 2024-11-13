@@ -1,11 +1,11 @@
 import { BaseElement, html, css, cache } from '../../../base-element.mjs'
 
-import './section-1/my-referee-section-1.mjs';
-// import './section-2/my-referee-section-2.mjs';
+import './section-1/my-trainer-section-1.mjs';
+// import './section-2/my-trainer-section-2.mjs';
 
 import '../../../../components/buttons/icon-button.mjs'
 
-class MyReferee extends BaseElement {
+class MyCompetition extends BaseElement {
     static get properties() {
         return {
             currentSection: { type: BigInt, default: 0, local: true},
@@ -29,7 +29,7 @@ class MyReferee extends BaseElement {
         super()
         this.version = "1.0.0"
         this.sectionNames = [
-            {label: 'Referee', iconName: 'referee-solid'},
+            {label: 'Competition', iconName: 'competition-solid'},
             {label: 'Sportsman', iconName: 'user'},
             {label: 'Referee', iconName: 'judge1-solid'},
             {label: 'Statistic', iconName: 'statistic-solid'},
@@ -38,14 +38,14 @@ class MyReferee extends BaseElement {
 
     get #section1() {
         return html`
-            <my-referee-section-1 .sectionNames=${this.sectionNames}></my-referee-section-1>
+            <my-trainer-section-1 .sectionNames=${this.sectionNames}></my-trainer-section-1>
         `;
     }
 
     get #section2() {
-        import('./section-2/my-referee-section-2.mjs');
+        import('./section-2/my-trainer-section-2.mjs');
         return html`
-            <my-referee-section-2 .sectionNames=${this.sectionNames}></my-referee-section-2>
+            <my-trainer-section-2 .sectionNames=${this.sectionNames}></my-trainer-section-2>
         `;
     }
 
@@ -66,11 +66,11 @@ class MyReferee extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         let params = new URLSearchParams(window.location.search)
-        if (params.has('referee')) {
-            localStorage.setItem('currentReferee', params.get('referee'))
+        if (params.has('competition')) {
+            localStorage.setItem('currentCompetition', params.get('competition'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
     }
 }
 
-customElements.define("my-referee", MyReferee)
+customElements.define("my-trainer", MyCompetition)

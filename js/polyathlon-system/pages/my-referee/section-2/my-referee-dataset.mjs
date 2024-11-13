@@ -1,4 +1,4 @@
-import refreshToken, {getToken} from "../../refresh-token.mjs";
+import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -146,8 +146,8 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    fetchAvatarFile(token, formData) {
-        return fetch(`https://localhost:4500/api/upload/avatar`, {
+    static fetchUploadAvatar(token, formData, refereeId) {
+        return fetch(`https://localhost:4500/api/upload/referee/avatar/${refereeId}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -156,14 +156,14 @@ export default class DataSet {
         })
     }
 
-    async uploadAvatarFile() {
-        const token = this.getToken();
+    static async uploadAvatar(avatar, refereeId) {
+        const token = getToken();
         const formData = new FormData();
-        formData.append("file", this.avatarFile);
-        let response = await this.fetchAvatarFile(token, formData)
+        formData.append("file", avatar);
+        let response = await DataSet.fetchUploadAvatar(token, formData, refereeId)
         if (response.status === 419) {
-            const token = await this.refreshToken()
-            response = await this.fetchAvatarFile(token, formData)
+            const token = await refreshToken()
+            response = await DataSet.fetchUploadAvatar(token, formData, refereeId)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -172,28 +172,29 @@ export default class DataSet {
         return result
     }
 
-    static fetchGetQRCode(token, data) {
-        return fetch(`https://localhost:4500/api/qr-code?${data}`, {
+    static fetchDownloadAvatar(token, refereeId) {
+        return fetch(`https://localhost:4500/api/upload/referee/avatar/${refereeId}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
             },
         })
     }
 
-    static async getQRCode(data) {
+    static async downloadAvatar(refereeId) {
         const token = getToken();
-        let response = await DataSet.fetchGetQRCode(token, data)
-
+        let response = await DataSet.fetchDownloadAvatar(token, refereeId)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchGetQRCode(token, data)
+            response = await DataSet.fetchDownloadAvatar(token, refereeId)
         }
-        const result = await response.json()
+
         if (!response.ok) {
-            throw new Error(result.error)
+            return null
         }
-        return result.qr
+
+        const blob = await response.blob()
+
+        return blob ? window.URL.createObjectURL(blob) : blob;
     }
 }
