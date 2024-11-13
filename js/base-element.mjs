@@ -4,13 +4,23 @@
 // export * from 'https://unpkg.com/lit@2.0.0/index.js?module';
 // export { cache } from 'https://unpkg.com/lit@2.8.0/directives/cache.js?module';
 
-import { LitElement, css } from 'https://unpkg.com/lit@2.8.0/index.js?module';
-export * from 'https://unpkg.com/lit@2.8.0/index.js?module';
-export { styleMap } from 'https://unpkg.com/lit@2.8.0/directives/style-map.js?module';
-export { unsafeHTML } from 'https://unpkg.com/lit@2.8.0/directives/unsafe-html.js?module';
-export { cache } from 'https://unpkg.com/lit@2.8.0/directives/cache.js?module';
+import { LitElement, css } from 'https://cdn.jsdelivr.net/npm/lit@3.2.0/+esm'
+export * from 'https://cdn.jsdelivr.net/npm/lit@3.0.0/+esm'
+export { cache } from 'https://cdn.jsdelivr.net/npm/lit-html@3.2.0/directives/cache.js';
+
+
+// export { cache, styleMap } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
+// export { cache } from 'https://cdn.jsdelivr.net/npm/lit@3.2.1//directives/class-map.js/+esmpolyfill-support.min.js';
+// export * from 'https://cdn.jsdelivr.net/npm/lit@3.0.0/+esm'
+
+// import { LitElement, css } from 'https://unpkg.com/lit@2.8.0/index.js?module';
+// export * from 'https://unpkg.com/lit@2.8.0/index.js?module';
+// export { styleMap } from 'https://unpkg.com/lit@2.8.0/directives/style-map.js?module';
+// export { unsafeHTML } from 'https://unpkg.com/lit@2.8.0/directives/unsafe-html.js?module';
+// export { cache } from 'https://unpkg.com/lit@2.8.0/directives/cache.js?module';
 
 import { ulid, decodeTime } from './utils.js';
+
 import './icaro.js';
 
 const urlBASE = import.meta.url;
