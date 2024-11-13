@@ -388,6 +388,7 @@ class MySportsmenSection1 extends BaseElement {
             </nav>
         `
     }
+
     get #itemFooter() {
         return html`
             <nav class='save'>
@@ -409,15 +410,14 @@ class MySportsmenSection1 extends BaseElement {
 
         } else  if (this.dataSource.state === States.NEW) {
             return this.#newItemFooter
+        } else if (this.isModified) {
+            return this.#firstItemFooter
         } else {
-            if (this.isModified) {
-                return this.#firstItemFooter
-            } else {
-                return html`
-                    <simple-button @click=${this.addNewItem}>Добавить</simple-button>
-                `
-            }
+            return html`
+                <simple-button @click=${this.addNewItem}>Добавить</simple-button>
+            `
         }
+
     }
 
     render() {
@@ -463,6 +463,9 @@ class MySportsmenSection1 extends BaseElement {
         return modalDialog.show(message);
     }
 
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
+    }
     async addNewItem() {
         this.dataSource.addNewItem(this.currentItem);
         const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')

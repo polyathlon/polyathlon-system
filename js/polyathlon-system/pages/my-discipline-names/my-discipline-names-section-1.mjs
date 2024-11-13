@@ -346,7 +346,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
             <footer class="right-footer">
                 ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 

@@ -63,6 +63,7 @@ class MyCitiesSection1Page1 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
+
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
@@ -70,6 +71,10 @@ class MyCitiesSection1Page1 extends BaseElement {
         }
     }
 
+    showPage(page) {
+        location.hash = page;
+    }
+    
     async firstUpdated() {
         super.firstUpdated();
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())

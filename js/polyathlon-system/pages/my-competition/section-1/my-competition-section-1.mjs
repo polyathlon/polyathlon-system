@@ -34,6 +34,7 @@ class MyCompetitionSection1 extends BaseElement {
             currentPage: { type: BigInt, default: 0 },
             isFirst: { type: Boolean, default: false },
             currentSection: { type: BigInt, default: 0, local: true},
+            currentList: { type: BigInt, default: 0, local: true},
         }
     }
 
@@ -63,11 +64,23 @@ class MyCompetitionSection1 extends BaseElement {
                 .left-header {
                     grid-area: header1;
                     overflow: hidden;
+                    justify-content: flex-start;
                     p {
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         margin: 0;
+                    }
+                    icon-button {
+                        height: 100%;
+                        padding: 0 1vw;
+                        font-weight: 400;
+                        &:not(:only-child):active {
+                            background-color: var(--layout-background-color);
+                        }
+                        &:not(:only-child):hover {
+                            background-color: var(--layout-background-color);
+                        }
                     }
                 }
 
@@ -79,8 +92,9 @@ class MyCompetitionSection1 extends BaseElement {
                         padding: 0 1vw;
                         &[active] {
                             background-color: var(--layout-background-color);
+                            font-weight: bold;
                         }
-                        &hover {
+                        &:hover {
                             background-color: var(--layout-background-color);
                         }
                     }
@@ -175,13 +189,13 @@ class MyCompetitionSection1 extends BaseElement {
                     }
                 }
 
-                icon-button[selected] {
+                /* icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
                 icon-button:hover {
                     background: rgba(255, 255, 255, 0.1)
-                }
+                } */
 
                 /* width */
                 ::-webkit-scrollbar {
@@ -211,6 +225,9 @@ class MyCompetitionSection1 extends BaseElement {
         super();
         this.statusDataSet = new Map()
         this.currentPage = 0;
+        this.listNames = [
+            {label: 'Competition', iconName: ''},
+        ]
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
@@ -341,21 +358,21 @@ class MyCompetitionSection1 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-1-list-1 .avatar=${this.avatar} .item=${this}></my-competition-section-1-list-1>
+            <my-competition-section-1-list-1 .avatar=${this.avatar} .name=${this.currentItem?.name} .startDate=${this.currentItem?.startDate} .endDate=${this.currentItem?.endDate} .stage=${this.currentItem?.stage}></my-competition-section-1-list-1>
         `;
     }
 
-    #list3() {
+    #list2() {
         return html`
-            <my-competition-section-1-list-3 .parent=${this.currentItem}></my-competition-section-1-list-3>
+            <my-competition-section-1-list-2 .avatar=${this.avatar} .item=${this}></my-competition-section-1-list-2>
         `;
     }
 
     get #list() {
-        switch(this.currentPage) {
+        switch(this.currentList) {
             case 0: return cache(this.#list1())
-            case 1: return cache(this.#list1())
-            case 2: return cache(this.#list3())
+            case 1: return cache(this.#list2())
+            default: return cache(this.#list1())
         }
     }
 
@@ -383,12 +400,16 @@ class MyCompetitionSection1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>Competition ${this.parent?.name}</p>
+                ${this.listNames.map( (list, index) =>
+                    html `
+                        <icon-button ?active=${index === this.currentList} icon-name=${list.iconName || nothing} label=${list.label} @click=${() => this.gotoList(index)}></icon-button>
+                    `
+                )}
             </header>
             <header class="right-header">
-                ${this.sectionNames.map( (page, index) =>
+                ${this.sectionNames.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoPage(index)}></icon-button>
                     `
                 )}
             </header>
@@ -410,6 +431,10 @@ class MyCompetitionSection1 extends BaseElement {
 
     gotoPage(index) {
         this.currentSection = index
+    }
+
+    gotoList(index) {
+        this.currentList = index
     }
 
     nextPage() {

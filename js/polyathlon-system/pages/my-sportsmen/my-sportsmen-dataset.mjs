@@ -15,7 +15,6 @@ export default class DataSet {
         if (DataSet.#dataSet || DataSet.#dataSet.length) {
             return DataSet.#dataSet[0]
         }
-        return
     }
 
     static find(name, value) {
@@ -121,6 +120,58 @@ export default class DataSet {
         if (response.status === 419) {
             const token = await refreshToken()
             response = await DataSet.#fetchGetItem(token, itemId)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
+    static #fetchGetItemBySportsmanId(token, itemId) {
+        return fetch(`https://localhost:4500/api/sportsman-id/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getItemBySportsmanId(itemId) {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetItemBySportsmanId(token, itemId)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetItemBySportsmanId(token, itemId)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
+    static #fetchGetItemByLastName(token, itemId) {
+        return fetch(`https://localhost:4500/api/sportsman/last-name/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getItemByLastName(itemId) {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetItemByLastName(token, itemId)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetItemByLastName(token, itemId)
         }
 
         const result = await response.json()

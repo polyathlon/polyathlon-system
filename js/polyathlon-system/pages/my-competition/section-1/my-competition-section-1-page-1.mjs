@@ -12,6 +12,8 @@ import SportsDisciplineDataSource from '../../my-sports-disciplines/my-sports-di
 import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 
+import DataSet from './my-competition-dataset.mjs'
+
 class MyCompetitionSection1Page1 extends BaseElement {
     static get properties() {
         return {
@@ -57,12 +59,35 @@ class MyCompetitionSection1Page1 extends BaseElement {
                 <simple-select id="sportsDiscipline1" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 1:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline1} @input=${this.validateInput}></simple-select>
                 <simple-select id="sportsDiscipline2" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 2:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-input id="competitionId" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionId} label="Competition ID:" .value=${this.item?.competitionId} @input=${this.validateInput}></simple-input>
+                <simple-input id="ekpNumber" icon-name="square-list-sharp-solid" @icon-click=${this.copyToClipboard} label="EKP Number:" .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input type="date" label="Дата начала:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                     <simple-input type="date" label="Дата окончания:" id="endDate" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 </div>
+                <div class="name-group">
+                    <simple-input type="date" label="Начало регистрации:" id="startRegistration" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input type="date" label="Окончание регистрации:" id="endRegistration" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                </div>
             </div>
         `;
+    }
+
+    copyToClipboard(e) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(e.target.value)
+        }
+    }
+
+    async createCompetitionId(e) {
+        const target = e.target
+        const year = this.item.startDate.split("-")[0]
+        const id = await DataSet.createCompetitionId({
+            countryCode: this.item?.city?.region?.country?.flag.toUpperCase(),
+            regionCode: this.item?.city?.region?.code,
+            year,
+        })
+        target.setValue(id);
     }
 
     showPage(page) {
@@ -82,7 +107,7 @@ class MyCompetitionSection1Page1 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
+            if (e.target.id === 'name' || e.target.id === 'startDate' || e.target.id === 'endDate' || e.target.id === 'stage') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;

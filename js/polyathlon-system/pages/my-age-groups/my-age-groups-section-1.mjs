@@ -276,13 +276,17 @@ class MyAgeGroupsSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
+    ageName(item) {
+        return `${item.name} (${item.minAge}-${item.maxAge} лет)`
+    }
+
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
                 html `<icon-button
                         label=${item.name}
                         title=${item._id}
-                        icon-name="region-solid"
+                        icon-name="age-group-solid"
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
                     ></icon-button>
@@ -379,6 +383,7 @@ class MyAgeGroupsSection1 extends BaseElement {
             currentItem[key.id] = value;
             key.value = value;
         });
+        this.currentItem.name = `${this.currentItem.category} (${this.currentItem.minAge}-${this.currentItem.maxAge} лет)`
         this.oldValues.clear();
         this.isModified = false;
     }

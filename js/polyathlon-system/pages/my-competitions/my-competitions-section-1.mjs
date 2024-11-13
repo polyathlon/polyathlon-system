@@ -565,7 +565,7 @@ class MyCompetitionsSection1 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.dataSource = new DataSource(this, await DataSet.getDataSet())
+        this.dataSource = new DataSource(this, await DataSet.getDataSetByYear(2024))
     }
 }
 

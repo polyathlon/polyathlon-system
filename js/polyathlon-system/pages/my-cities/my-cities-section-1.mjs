@@ -14,15 +14,15 @@ class MyCitiesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Object, default: null},
-            statusDataSet: {type: Map, default: null },
-            oldValues: {type: Map, default: null },
-            currentItem: {type: Object, default: null},
-            isModified: {type: Boolean, default: "", local: true},
-            isReady: {type: Boolean, default: true},
+            dataSource: { type: Object, default: null },
+            statusDataSet: { type: Map, default: null },
+            oldValues: { type: Map, default: null },
+            currentItem: { type: Object, default: null },
+            isModified: { type: Boolean, default: "", local: true },
+            isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: {type: BigInt, default: 0},
+            currentPage: { type: BigInt, default: 0 },
         }
     }
 

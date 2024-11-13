@@ -7,7 +7,7 @@ export default class DataSource {
         this.dataSet = dataSet;
         this.items = this.dataSet.map(item => {
             return item;
-        }).sort( (a, b) => a.name.localeCompare(b.name) )
+        }).sort((a, b) => +(a.sortOrder) - +(b.sortOrder))
         this.component.currentItem = this.getCurrentItem();
     }
 

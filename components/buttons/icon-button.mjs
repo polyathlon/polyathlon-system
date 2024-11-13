@@ -23,7 +23,7 @@ customElements.define('icon-button', class IconButton extends BaseElement {
                     display: inline-block;
                     vertical-align: middle;
                     height: 60px;
-                    user-select: none;
+                    max-width: 100%;
                 }
                 .container {
                     display: flex;
@@ -38,7 +38,7 @@ customElements.define('icon-button', class IconButton extends BaseElement {
                     flex-direction: column;
 
                 }
-                .icon {
+                .picture {
                     position: relative;
                     display: flex;
                     align-items: center;
@@ -61,6 +61,15 @@ customElements.define('icon-button', class IconButton extends BaseElement {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     font-size: 1rem;
+                    font-weight: inherit;
+                    &::before {
+                        display: block;
+                        content: attr(data-label);
+                        font-weight: bold;
+                        height: 0;
+                        overflow: hidden;
+                        visibility: hidden;
+                    }
                 }
                 h2 {
                     margin: 0;
@@ -128,13 +137,17 @@ customElements.define('icon-button', class IconButton extends BaseElement {
 
     get #icon() {
         return html`
-            <simple-icon class="icon" icon-name=${this.iconName}></simple-icon>
+            <div class="picture">
+                <simple-icon class="icon" icon-name=${this.iconName}></simple-icon>
+            </div>
         `
     }
 
     get #image() {
         return html`
-            <img src=${this.imageName} alt="" title=${this.title || nothing} @error=${this.defaultImage} />
+            <div class="picture">
+                <img src=${this.imageName} alt="" title=${this.title || nothing} @error=${this.defaultImage} />
+            </div>
         `
     }
 
@@ -158,14 +171,22 @@ customElements.define('icon-button', class IconButton extends BaseElement {
         `
     }
 
+    get #picture() {
+        if (this.iconName) {
+            return  this.#icon
+        }
+        if (this.imageName) {
+            return this.#image
+        }
+        return ''
+    }
+
     render() {
         return html`
             <div class="container">
-                <div class="icon">
-                    ${this.imageName ? this.#image : this.#icon}
-                </div>
+                ${this.#picture}
                 <div class="content">
-                    <h1>${this.label}</h1>
+                    <h1 data-label="${this.label}">${this.label}</h1>
                     ${this.status ? this.#status : ''}
                 </div>
             </div>

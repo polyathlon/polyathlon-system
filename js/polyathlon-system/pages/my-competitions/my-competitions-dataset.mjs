@@ -11,6 +11,14 @@ export default class DataSet {
         return DataSet.#dataSet
     }
 
+    static async getDataSetByYear(year) {
+        if (DataSet.#dataSet) {
+            return DataSet.#dataSet
+        }
+        DataSet.#dataSet = await DataSet.getItemsByYear(year)
+        return DataSet.#dataSet
+    }
+
     static find(name, value) {
         const index = DataSet.#dataSet.findIndex(element =>
             element[name] === value || element[name].toLowerCase() === value
@@ -32,6 +40,31 @@ export default class DataSet {
         if (response.status === 419) {
             const token = await refreshToken()
             response = await DataSet.#fetchGetItems(token)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        const items = result.rows.map(item => {
+            return item.doc;
+        })
+        return items
+    }
+
+    static #fetchGetItemsByYear(token, year) {
+        return fetch(`https://localhost:4500/api/competitions/by-year/${year}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getItemsByYear(year) {
+        const token = getToken()
+        let response = await DataSet.#fetchGetItemsByYear(token, year)
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetItemsByYear(token, year)
         }
         const result = await response.json()
         if (!response.ok) {

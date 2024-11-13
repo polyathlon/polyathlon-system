@@ -21,6 +21,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             currentItem: {type: Object, default: null},
             iconName: { type: String, default: 'project-avatar-solid', attribute: 'icon-name'},
             imageName: { type: String, default: '', attribute: 'image-name'},
+            listLabel: { type: Function, default: null, attribute: 'list-name'},
         }
     }
 
@@ -131,8 +132,13 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
 
     get #button() {
         return html`
-            <simple-icon class="button" icon-name=${this.buttonName || nothing}></simple-icon>
+            <simple-icon class="button" icon-name=${this.buttonName} @click=${() => this.fire("button-click")}></simple-icon>
         `
+    }
+
+    setValue(value) {
+        this.value = value;
+        this.fire('input')
     }
 
     render() {
@@ -160,7 +166,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             ${this.dataSource?.items?.map((item, index) =>
                 html `
                     <icon-button
-                        label=${item.name}
+                        label=${this.listLabel ? this.listLabel(item) : item.name}
                         title=${item._id}
                         icon-name=${this.iconName}
                         image-name=${item.flag ? 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' : ''}

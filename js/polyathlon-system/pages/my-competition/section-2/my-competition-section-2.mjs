@@ -1,20 +1,18 @@
 import { BaseElement, html, css, cache, nothing } from '../../../../base-element.mjs'
 
 import '../../../../../components/dialogs/modal-dialog.mjs'
-import '../../../../../components/inputs/simple-input.mjs'
-import '../../../../../components/inputs/upload-input.mjs'
-import '../../../../../components/inputs/download-input.mjs'
 import '../../../../../components/buttons/icon-button.mjs'
-import '../../../../../components/inputs/avatar-input.mjs'
+
 import '../../../../../components/buttons/aside-button.mjs';
 import '../../../../../components/buttons/simple-button.mjs';
+
+import { States } from "../../../../utils.js"
 
 import './my-competition-section-2-page-1.mjs'
 import './my-competition-section-2-list-1.mjs'
 
-import DataSet from './my-competition-dataset.mjs'
-//import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
-import DataSource from './my-competition-datasource.mjs'
+import DataSet from './my-competition-section-2-dataset.mjs'
+import DataSource from './my-competition-section-2-datasource.mjs'
 
 class MyCompetitionSection2 extends BaseElement {
     static get properties() {
@@ -25,11 +23,9 @@ class MyCompetitionSection2 extends BaseElement {
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null },
             isModified: { type: Boolean, default: "", local: true },
-            isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
-            isFirst: { type: Boolean, default: false },
             currentSection: { type: BigInt, default: 1, local: true},
         }
     }
@@ -74,10 +70,12 @@ class MyCompetitionSection2 extends BaseElement {
                     icon-button {
                         height: 100%;
                         padding: 0 1vw;
+
                         &[active] {
                             background-color: var(--layout-background-color);
+                            font-weight: bold;
                         }
-                        &hover {
+                        &:hover {
                             background-color: var(--layout-background-color);
                         }
                     }
@@ -102,22 +100,6 @@ class MyCompetitionSection2 extends BaseElement {
                     .label {
                         text-align: center;
                     }
-                }
-
-                .avatar {
-                    width: 100%;
-                }
-
-                avatar-input {
-                    width: 80%;
-                    margin: auto;
-                    aspect-ratio: 1 / 1;
-                    overflow: hidden;
-                    border-radius: 50%;
-                }
-
-                img {
-                    width: 100%;
                 }
 
                 .right-layout {
@@ -310,13 +292,13 @@ class MyCompetitionSection2 extends BaseElement {
         switch(this.currentPage) {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
-            case 2: return cache(this.#page3())
+            default: return cache(this.#page1())
         }
     }
 
     #page1() {
         return html`
-            <my-competition-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-1-page-1>
+            <my-competition-section-2-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-1>
         `;
     }
 
@@ -326,25 +308,30 @@ class MyCompetitionSection2 extends BaseElement {
         `;
     }
 
-    #page3() {
-        return html`
-            <my-competition-section-1-page-3 .item=${this.currentItem}></my-competition-section-1-page-3>
-        `;
-    }
-
     get #pageName() {
         return this.pageNames[this.currentPage];
+    }
+    newRecord() {
+        return html `<icon-button
+                label=${ this.listItem.key }
+                title=${ this.listItem.id }
+                icon-name=${ this.listItem.value?.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+                ?selected=${ this.currentItem?._id === this.listItem?.id }
+                .status=${{ name: this.listItem.value?.hashNumber, icon: 'hash-number-solid'} }
+            >
+            </icon-button>
+        `
     }
 
     #list1() {
         return html`
-            <my-competition-section-1-list-1 .avatar=${this.avatar} .item=${this}></my-competition-section-1-list-1>
+            <my-competition-section-2-list-1 .item=${this}></my-competition-section-2-list-1>
         `;
     }
 
     #list3() {
         return html`
-            <my-competition-section-1-list-3 .parent=${this.currentItem}></my-competition-section-1-list-3>
+            <my-competition-section-2-list-1 .parent=${this.currentItem}></my-competition-section-2-list-3>
         `;
     }
 
@@ -352,7 +339,7 @@ class MyCompetitionSection2 extends BaseElement {
         switch(this.currentPage) {
             case 0: return cache(this.#list1())
             case 1: return cache(this.#list1())
-            case 2: return cache(this.#list3())
+            default: return cache(this.#list3())
         }
     }
 
@@ -364,23 +351,56 @@ class MyCompetitionSection2 extends BaseElement {
         `
     }
 
-    get #rightFooter() {
-        if (this.isModified) {
+    get #firstItemFooter() {
         return html`
-            <nav class='save'>
-                <simple-button @click=${this.saveItem}>Сохранить</simple-button>
+            <nav>
+                <simple-button @click=${this.saveFirstItem}>Сохранить</simple-button>
                 <simple-button @click=${this.cancelItem}>Отменить</simple-button>
             </nav>
         `
+    }
+
+    get #newItemFooter() {
+        return html`
+            <nav>
+                <simple-button @click=${this.saveNewItem}>Сохранить</simple-button>
+                <simple-button @click=${this.cancelNewItem}>Отменить</simple-button>
+            </nav>
+        `
+    }
+
+    get #itemFooter() {
+        return html`
+            <nav>
+                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.addNewItem}>${this.isModified ? "Отменить": "Добавить"}</simple-button>
+            </nav>
+        `
+    }
+
+    get #rightFooter() {
+        if (!this.dataSource?.items)
+            return ''
+        if (this.dataSource.items.length) {
+            if (this.dataSource.state === States.NEW) {
+                return this.#newItemFooter
+            }
+            return this.#itemFooter
         }
-        else return ''
+        if (this.dataSource.state === States.NEW) {
+            return this.#newItemFooter
+        }
+        if (this.isModified) {
+            return this.#firstItemFooter
+        }
+        return ''
     }
 
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>Competition ${this.parent?.name}</p>
+                <p>Sportsmen</p>
             </header>
             <header class="right-header">
                 ${this.sectionNames.map( (page, index) =>
@@ -390,6 +410,7 @@ class MyCompetitionSection2 extends BaseElement {
                 )}
             </header>
             <div class="left-layout">
+                ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
                 ${this.#list}
             </div>
             <div class="right-layout">
@@ -403,6 +424,11 @@ class MyCompetitionSection2 extends BaseElement {
             </footer>
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
+    }
+
+    addFirstItem() {
+        const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
+        page.startEdit()
     }
 
     gotoPage(index) {
@@ -427,6 +453,28 @@ class MyCompetitionSection2 extends BaseElement {
         return this.showDialog(message, 'confirm')
     }
 
+    async addNewItem() {
+        this.dataSource.addNewItem(this.currentItem);
+        const page = this.renderRoot.querySelector('my-sportsmen-section-2-page-1')
+        page.startEdit()
+    }
+
+
+    async addItem() {
+        this.dataSource.addItem(this.currentItem);
+    }
+
+    saveFirstItem() {
+        this.dataSource.addItem(this.currentItem);
+        this.oldValues?.clear();
+        this.isModified = false;
+    }
+
+    async saveNewItem() {
+        this.dataSource.saveNewItem(this.currentItem);
+        this.oldValues?.clear();
+        this.isModified = false;
+    }
 
     async saveItem() {
         if ('_id' in this.currentItem) {
@@ -483,13 +531,8 @@ class MyCompetitionSection2 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.isFirst  = false;
-        this.dataSource = new DataSource(this)
-        await this.dataSource.getItem()
-        if (this.currentItem._id) {
-            this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
-        }
-        this.isFirst = true;
+        const parentId = localStorage.getItem('currentCompetition').split(':')[1]
+        this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))
     }
 }
 

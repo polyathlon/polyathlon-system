@@ -1,17 +1,14 @@
 import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
-import '../../../../../components/inputs/avatar-input.mjs'
 
 class MyCompetitionSection2List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
-            avatar: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
-            isFirst: { type: Boolean, default: false }
         }
     }
 
@@ -33,66 +30,54 @@ class MyCompetitionSection2List1 extends BaseElement {
                     }
 
                 }
-                .avatar {
-                    width: 100%
-                }
-
-                avatar-input {
-                    width: 80%;
-                    margin: auto;
-                    aspect-ratio: 1 / 1;
-                    overflow: hidden;
-                    border-radius: 50%;
-                }
-
             `
         ]
     }
 
-    get #loginInfo() {
-        if (localStorage.getItem('rememberMe')) {
-            return localStorage.getItem('userInfo')
+    sportsmanName(item) {
+        if (!item) {
+            return item
         }
-        else {
-            return sessionStorage.getItem('userInfo')
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName[0]}.`
         }
+        return result
     }
 
     render() {
         return html`
-            <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
-            </div>
-            <div class="label">
-                ${JSON.parse(this.#loginInfo).login}
-            </div>
+            ${this.item.dataSource?.items?.map((item, index) =>
+                html `<icon-button
+                        label=${this.sportsmanName(item)}
+                        title=${item._id}
+                        image-name=${item.gender == 0 ? "../../../../images/sportsman-boy-solid.svg" : "../../../../images/sportsman-girl-solid.svg"}
+                        ?selected=${this.currentItem === item}
+                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
+                        @click=${() => this.showItem(item)}
+                    ></icon-button>                `
+
+            )}
         `
     }
 
-    validateAvatar(e) {
-        this.oldValues ??= new Map();
-        if (!this.oldValues.has(e.target)) {
-            this.oldValues.set(e.target, e.target.avatar)
-            this.item.avatar = window.URL.createObjectURL(e.target.value);
-            this.item.avatarFile = e.target.value;
-            this.requestUpdate();
+    async showItem(item) {
+        if (this.isModified) {
+            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+            if (modalResult === 'Ok') {
+                await this.item.dataSource.saveItem(this.currentItem);
+            }
+            else {
+                await this.cancelItem()
+            }
         }
-        else if (this.oldValues.get(e.target) === e.target.avatar) {
-            this.oldValues.delete(e.target.id)
-            this.item.avatarFile = null;
-        } else {
-            this.item.avatar = window.URL.createObjectURL(e.target.value);
-            this.item.avatarFile = e.target.value;
-            this.requestUpdate();
+        else {
+            this.item.dataSource.setCurrentItem(item)
         }
-        this.isModified = this.oldValues.size !== 0;
     }
 
     async firstUpdated() {
         super.firstUpdated();
-        this.isFirst  = false;
-        this.avatar = null; // await this.downloadAvatar();
-        this.isFirst = true;
     }
 }
 

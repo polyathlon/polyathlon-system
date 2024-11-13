@@ -11,9 +11,9 @@ export default class DataSet {
         return DataSet.#dataSet
     }
 
-    static find(name, value) {
+    static findAge(gender, age) {
         const index = DataSet.#dataSet.findIndex(element =>
-            element[name] === value || element[name].toLowerCase() === value
+            element['gender'] === gender && element[minAge] <= age && age <= element[maxAge]
         )
         return index === -1 ? null : DataSet.#dataSet[index]
     }

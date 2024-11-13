@@ -1,6 +1,7 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
+import '../../../../components/inputs/gender-input.mjs'
 
 class MyAgeGroupsSection1Page1 extends BaseElement {
     static get properties() {
@@ -38,11 +39,13 @@ class MyAgeGroupsSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="age-group-solid" label="Age group:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="category" icon-name="age-group-solid" label="Age group:" .value=${this.item?.category} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="minAge" icon-name="age-group-min" label="Min Age:" .value=${this.item?.minAge} @input=${this.validateInput}></simple-input>
-                    <simple-input id="maxAge" icon-name="max-age-solid" label="Max Age:" .value=${this.item?.maxAge} @input=${this.validateInput}></simple-input>
+                    <simple-input id="minAge" icon-name="age-min-group-solid" label="Min Age:" .value=${this.item?.minAge} @input=${this.validateInput}></simple-input>
+                    <simple-input id="maxAge" icon-name="age-max-group-solid" label="Max Age:" .value=${this.item?.maxAge} @input=${this.validateInput}></simple-input>
                 </div>
+                <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
+                <simple-input id="sortOrder" icon-name="order-number-solid" label="Sort Order:" .value=${this.item?.sortOrder} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -53,6 +56,10 @@ class MyAgeGroupsSection1Page1 extends BaseElement {
 
     linkClick(e) {
         window.open(e.target.value);
+    }
+
+    ageGroupName() {
+        return `${this.item.category} (${this.item.minAge}-${this.item.maxAge} лет)`
     }
 
     validateInput(e) {
@@ -68,7 +75,8 @@ class MyAgeGroupsSection1Page1 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
+            if (e.target.id === "category" || e.target.id === "minAge" || e.target.id === "maxAge") {
+                currentItem['name'] = this.ageGroupName()
                 this.parentNode.parentNode.host.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;

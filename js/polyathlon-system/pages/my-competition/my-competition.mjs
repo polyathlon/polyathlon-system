@@ -30,7 +30,7 @@ class MyCompetition extends BaseElement {
         this.version = "1.0.0"
         this.sectionNames = [
             {label: 'Competition', iconName: 'competition-solid'},
-            {label: 'Sportsman', iconName: 'user'},
+            {label: 'Sportsmen', iconName: 'sportsmen-solid'},
             {label: 'Referee', iconName: 'judge1-solid'},
             {label: 'Statistic', iconName: 'statistic-solid'},
         ]

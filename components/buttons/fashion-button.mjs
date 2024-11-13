@@ -33,6 +33,9 @@ customElements.define('fashion-button', class FashionButton extends BaseElement 
                     line-height: 1em;
                     color: var(--native-color, white);
                     transition: transform ease-in 0.1s;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    max-width: 100%;
                 }
                 :host(:hover) {
                     box-shadow: 0px 0px 2px 2px rgba(255,255,255,0.8);

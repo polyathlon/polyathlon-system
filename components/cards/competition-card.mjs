@@ -113,26 +113,67 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
         ]
     }
 
+    get #competitionName() {
+        if (!this.item.name) {
+            return ''
+        }
+        if (this.item.stage) {
+            return `${this.item.name.name} ${this.item.stage?.name}`
+        }
+        return this.name.name
+    }
+
+    static monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+
+    get #competitionDate() {
+        if (this.item.startDate) {
+            const start = this.item.startDate.split("-")
+            const end = this.item.endDate.split("-")
+            if (start[2] === end[2] && start[1] === end[1]) {
+                return `${start[2]} ${MyCompetitionSection1List1.monthNames[start[1] - 1]}`
+            }
+            if (start[1] === end[1]) {
+                return `${start[2]}-${end[2]} ${MyCompetitionSection1List1.monthNames[start[1] - 1]}`
+            }
+            return `${start[2]} ${MyCompetitionSection1List1.monthNames[start[1]-1]} - ${end[2]} ${MyCompetitionSection1List1.monthNames[end[1] - 1]}`
+        }
+        return ''
+    }
+
+    get #competitionPlace() {
+        if (this.item.city) {
+            return `${this.item.city.name}, ${this.item.city.region.name}, ${this.item.city.region.country.name}`
+        }
+        return ''
+    }
+
+    get #competitionDisciplines() {
+        if (this.item.sportsDiscipline2) {
+            return `${this.item.sportsDiscipline1.name}, ${this.item.sportsDiscipline2.name}`
+        }
+        return this.item.sportsDiscipline1.name
+    }
+
     render() {
         return html`
             <header>
-                <div class="competition-number">26484</div>
-                <div class="competition-name">Кубок России 1 этап</div>
+                <div class="competition-number">${this.item.ekp || this.item.competitionId}</div>
+                <div class="competition-name">${this.#competitionName}</div>
             </header>
             <aside>
                 <div class="dates">
-                    12-15 января
+                    ${this.#competitionName}
                 </div>
                 <div class="image">
-                    <img src="https://polyathlon.ru/wp-content/uploads/2023/02/Kovrov-240x300.png">
+                    <img src="/images/no-avatar.svg">
                 </div>
                 <div class="place">
-                    Ковров, Владимирская область, Россия
+                    ${this.#competitionPlace}
                 </div>
             </aside>
             <main>
                 <div class="title">
-                    3-борье с лыжной гонкой, командные соревнования
+                    ${this.#competitionDisciplines}
                 </div>
                 <div class="age-groups">
                     <div class="age-group">

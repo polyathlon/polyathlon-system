@@ -197,4 +197,30 @@ export default class DataSet {
 
         return blob ? window.URL.createObjectURL(blob) : blob;
     }
+
+    static fetchCreateCompetitionId(token, item) {
+        return fetch(`https://localhost:4500/api/competition-id`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(item)
+        })
+    }
+
+    static async createCompetitionId(item) {
+        const token = getToken();
+        let response = await DataSet.fetchCreateCompetitionId(token, item)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchCreateCompetitionId(token, item)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result.number
+    }
 }
