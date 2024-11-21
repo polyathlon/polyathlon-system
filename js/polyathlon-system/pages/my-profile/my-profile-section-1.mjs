@@ -4,6 +4,7 @@ import '../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/buttons/aside-button.mjs'
 import '../../../../components/buttons/simple-button.mjs'
+import '../../../../components/buttons/fashion-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 
 import './my-profile-section-1-page-1.mjs'
@@ -97,6 +98,11 @@ class MyProfileSection1 extends BaseElement {
                     }
                     .label {
                         text-align: center;
+                    }
+                    fashion-button {
+                        margin-top: 10px;
+                        border-radius: 8px;
+                        padding: 10px 10px;
                     }
                 }
 
@@ -347,6 +353,7 @@ class MyProfileSection1 extends BaseElement {
             <div class="label">
                 ${JSON.parse(this.#loginInfo).login}
             </div>
+            <fashion-button>Telegram Bot</fashion-button>
             <div class="statistic">
                 <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
                 <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>

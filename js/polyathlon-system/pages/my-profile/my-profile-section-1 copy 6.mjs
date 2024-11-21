@@ -454,7 +454,7 @@ class MyProfileSection1 extends BaseElement {
 
         async getUserProfile() {
             const token = await this.getToken();
-            return fetch('https://localhost:4500/api/user-profile', {
+            return fetch('https://localhost:4500/api/profile', {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -463,7 +463,7 @@ class MyProfileSection1 extends BaseElement {
             .then(response => {
                 if (response.status === 419){
                     return this.refreshToken().then( token =>
-                        fetch('https://localhost:4500/api/user-profile', {
+                        fetch('https://localhost:4500/api/profile', {
                             headers: {
                             'Authorization': `Bearer ${token}`
                             }
@@ -525,7 +525,7 @@ class MyProfileSection1 extends BaseElement {
                 if (!result) return;
             }
 
-            return fetch(`https://localhost:4500/api/user-profile`, {
+            return fetch(`https://localhost:4500/api/profile`, {
                 method: "PUT",
                 headers: {
                   'Authorization': `Bearer ${token}`,

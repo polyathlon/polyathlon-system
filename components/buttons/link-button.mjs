@@ -25,6 +25,7 @@ customElements.define('link-button', class LinkButton extends BaseElement {
                     line-height: 1em;
                     outline: none;
                     transition: transform ease-in 0.1s;
+                   
                 }
                 :host(:hover) {
                     font-weight:  bold;

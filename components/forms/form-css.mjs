@@ -311,7 +311,7 @@ button.active:hover {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin: 8px 0;
+    /* margin: 8px 0; */
 }
 
 .checkbox-remember {
@@ -319,11 +319,10 @@ button.active:hover {
     align-items: center;
 }
 
-.checkbox-remember input[type=checkbox]
-{
+.checkbox-remember input[type=checkbox] {
     width: 20px;
     height: 20px;
-    accent-color: var(--checkbox-accent-color);
+    accent-color: var(--checkbox-accent-color1, red);
 }
 
 .checkbox-remember label {
@@ -396,20 +395,25 @@ span.psw {
 }
 
 .form-tab {
-    position: relative;
-    display: flex;
-    width: 85px;
-    justify-content: center;
     bottom: auto;
     margin-top: 3px;
     overflow: hidden;
     line-height: 36px;
+    padding: 0 10px;
     font-weight: normal;
     color: var(--tab-color);
     border: solid var(--form-header-border-color);
     border-width: 1px 1px 0px;
     border-radius: 5px 5px 0 0;
     background: var(--form-background-color);
+    &::before {
+        display: block;
+        content: attr(data-label);
+        font-weight: bold;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+    }
 }
 
 #form.dark .form-tab {

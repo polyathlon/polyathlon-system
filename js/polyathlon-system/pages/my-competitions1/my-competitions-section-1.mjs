@@ -395,15 +395,15 @@ class MyCompetitionsSection1 extends BaseElement {
 
         validateAvatar(e) {
             this.oldValues ??= new Map();
-            const userProfile = this
+            const profile = this
             if (!this.oldValues.has(e.target))
-                this.oldValues.set(e.target, userProfile[e.target.id])
+                this.oldValues.set(e.target, profile[e.target.id])
             else {
                 if (this.oldValues.get(e.target) === e.target.value) {
                     this.oldValues.delete(e.target)
                 }
             }
-            userProfile[e.target.id] = e.target.value
+            profile[e.target.id] = e.target.value
             this.isModified = this.oldValues.size !== 0;
         }
 

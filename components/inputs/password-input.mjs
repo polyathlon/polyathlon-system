@@ -100,15 +100,11 @@ customElements.define("password-input", class PasswordInput extends BaseElement 
     get strengthLines() {
         return html`
             <div class="strength-lines">
-                <div class=${(this.strength > -1 ? 'bg-' + this.strength : '') || nothing } title="Минимум 6 символов [a-z] [A-Z] [0-9]"></div>
-                <div class=${(this.strength > 0  ? 'bg-' + this.strength : '') || nothing } title="Минимум 8 символов [a-z] [A-Z] [0-9] [~!@#$%^&*()_+]"></div>
-                <div class=${(this.strength > 1  ? 'bg-' + this.strength : '') || nothing } title="Сильный пароль"></div>
+                <div class=${(this.strength > -1 ? 'bg-' + this.strength : '') || nothing } title="6 символов a-z, A-Z, 0-9 или !@#$%&'()*+,^./\\:;<=>?[]_\`{~}|-"></div>
+                <div class=${(this.strength > 0  ? 'bg-' + this.strength : '') || nothing } title="8 символов a-z, A-Z, 0-9 или !@#$%&'()*+,^./\\:;<=>?[]_\`{~}|-"></div>
+                <div class=${(this.strength > 1  ? 'bg-' + this.strength : '') || nothing } title="8 символов a-z, A-Z, 0-9 и !@#$%&'()*+,^./\\:;<=>?[]_\`{~}|-""></div>
             </div>
         `
-    }
-
-    get #input() {
-        return this.renderRoot?.querySelector('input') ?? null;
     }
 
     testPasswordStrength(value) {

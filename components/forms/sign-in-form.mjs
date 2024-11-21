@@ -6,7 +6,7 @@ import { formStyles } from './form-css.mjs'
 
 import '../dialogs/modal-dialog.mjs';
 import './sign-up-form.mjs';
-import './recover-password-form.mjs';
+import './password-recovery-form.mjs';
 
 import '../inputs/simple-input.mjs';
 import '../inputs/password-input.mjs';
@@ -25,6 +25,10 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         return {
             version: { type: String, default: '1.0.0'},
             login: { type: String, default: ''},
+            isLoginError: { type: Boolean, default: false},
+            isLoginMessage: { type: Boolean, default: false},
+            loginErrorMessage: { type: String, default: ''},
+            loginInfoMessage: { type: String, default: ''},
             opened: { type: Boolean, default: false},
             password: {type: String, default: ''},
             isPasswordError: { type: Boolean, default: false},
@@ -32,10 +36,6 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             isPasswordValid: { type: Boolean, default: false},
             passwordErrorMessage: { type: String, default: ''},
             passwordInfoMessage: { type: String, default: ''},
-            isLoginError: { type: Boolean, default: false},
-            isLoginMessage: { type: Boolean, default: false},
-            loginErrorMessage: { type: String, default: ''},
-            loginInfoMessage: { type: String, default: ''},
         }
     }
 
@@ -70,24 +70,22 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     // <span id="close" class="close-button no-select" title="Закрыть"  @click=${()=>this.close('CANCEL')}>&times;</span>
     render() {
         return html`
-            <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
+            <div id="form-background" class="form-background" style=${this.opened ? 'display: block' : ''}>
                 <modal-dialog></modal-dialog>
                 <form class="form animate" method="post" id="form">
                     <div class="form-header">
                         <div class="form-tabs no-select">
-                            <div class="form-tab" selected>
-                                Sign in
-                            </div>
+                            <div class="form-tab" selected data-label="Sign in">Sign in</div>
                         </div>
                         <close-button class="close-button no-select" name="times" @click=${()=>this.close('CANCEL')}></close-button>
                     </div>
 
                     <div class="form-body">
                         <div id="db-tab-section" class="form-tab-section selected">
-                            <simple-input id="login" type="text" icon-name="user" placeholder="Login" size="20"  @keydown=${this.loginKeyDown} @input=${this.loginInput} @blur=${this.loginValidation}>
-                            ${ this.isLoginError || this.isLoginMessage ?
+                            <simple-input id="login" icon-name="user" placeholder="Login" size="20"  @keydown=${this.loginKeyDown} @input=${this.loginInput} @blur=${this.loginValidation}>
+                                ${ this.isLoginError || this.isLoginMessage ?
                                     html`
-                                        <simple-informer slot="informer" info-message=${this.loginErrorMessage} error-message=${this.loginInfoMessage}></simple-informer>
+                                        <simple-informer slot="informer" info-message=${this.loginErrorMessage} error-message=${this.loginInfoMessage} ></simple-informer>
                                     `
                                 : ''}
                             </simple-input>
@@ -114,12 +112,13 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                     </div>
 
                     <div class="form-footer">
-                        <a class="sign-up-link" @click=${this.signUpClick}>New user? Sign up!</a>
+                        <link-button @click=${this.signUpClick}>New user? Sign up!</link-button>
                     </div>
                 </form>
             </div>
-        `;
+            `;
     }
+    // <a class="sign-up-link" @click=${this.signUpClick}>New user? Sign up!</a>
 
     isEnable() {
         return this.isLoginValid && this.isPasswordValid
@@ -348,12 +347,15 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
     forgotClick() {
         this.opened = false;
+        // this.#recoverPasswordForm.open().then(modalResult => {
+        //         this.close(modalResult)
+        // }, modalResult => this.close(modalResult));
         this.#recoverPasswordForm.open().then(modalResult => {
-                this.close(modalResult)
+
         }, modalResult => this.close(modalResult));
     }
     get #recoverPasswordForm() {
-        return this.parentElement.querySelector('recover-password-form') ?? null;
+        return this.parentElement.querySelector('password-recovery-form') ?? null;
     }
     get #signUpForm() {
         return this.parentElement.querySelector('sign-up-form') ?? null;
@@ -628,16 +630,22 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             return
         }
 
+        if (e.target.value.length < 6 && !this.isLoginError) {
+            return
+        }
+
+        regexp = /(?=^.{6,60}$)^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$|^.+@.+\..+$/;
+
         regexp = /^[A-Za-z\d]+([A-Za-z\d]*|[._-]?[A-Za-z\d]+)*$|^.+@.+\..+$/;
         if (!regexp.test(e.target.value)) {
             this.loginErrorMessage = "Неправильное имя пользователя"
             this.isLoginMessage = false
             this.isLoginValid = false
-            this.loginInfoMessage = "Должно быть от 4 до 16 символов [a-Z], [0-9] и [._-] или E-mail"
+            this.loginInfoMessage = "Должно быть от 6 до 16 символов [a-Z], [0-9] и [._-] или E-mail"
             this.isLoginError = true
             return
         }
-        regexp = /(?=^.{4,60}$)^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$|^.+@.+\..+$/
+        regexp = /(?=^.{6,60}$)^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$|^.+@.+\..+$/
         if (regexp.test(e.target.value)) {
             this.isLoginValid = true
         } else {

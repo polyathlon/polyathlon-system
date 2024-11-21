@@ -12,12 +12,13 @@ import '../inputs/password-input.mjs';
 import '../inputs/simple-informer.mjs';
 import '../buttons/close-button.mjs';
 
-class SignUpForm extends BaseElement {
+class PasswordRecoveryForm extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
             opened: { type: Boolean, default: false },
             isLoginError: { type: Boolean, default: false },
+            isShowCode: { type: Boolean, default: false },
             isLoginValid: { type: Boolean, default: false },
             loginErrorMessage: { type: String, default: '' },
             loginInfoMessage: { type: String, default: '' },
@@ -33,6 +34,10 @@ class SignUpForm extends BaseElement {
             isConfirmPasswordValid: { type: Boolean, default: false },
             confirmPasswordErrorMessage: { type: String, default: '' },
             confirmPasswordInfoMessage: { type: String, default: '' },
+            isCodeError: { type: Boolean, default: false },
+            isCodeValid: { type: Boolean, default: false },
+            codeErrorMessage: { type: String, default: '' },
+            codeInfoMessage: { type: String, default: '' },
         }
     }
 
@@ -57,21 +62,13 @@ class SignUpForm extends BaseElement {
                 }
                 #login,
                 #email,
-                #confirm {
+                #confirm,
+                #code {
                     --input-button-color: var(--background-green);
                 }
                 form-button {
                     margin: 8px 0;
                 }
-                .checkbox-remember input[type=checkbox] {
-                   width: 20px;
-                    height: 20px;
-                    accent-color: var(--background-green);
-                    outline-color: var(--background-green);
-                }
-                /* input[type=checkbox]:hover {
-                    accent-color: red;
-                } */
             `
         ]
     }
@@ -81,6 +78,53 @@ class SignUpForm extends BaseElement {
         this.version = "1.0.0";
     }
 
+    get #page1() {
+        return html`
+            <simple-input id="login" icon-name="user" placeholder="Login" @blur=${this.loginValidation} button-name=${this.isLoginValid ? "circle-check-sharp-regular" : ''} @input=${this.loginInput}>
+                ${ this.isLoginError || this.isLoginMessage ?
+                    html`
+                        <simple-informer slot="informer" info-message=${this.loginErrorMessage} error-message=${this.loginInfoMessage} ></simple-informer>
+                    `
+                : ''}
+            </simple-input>
+            <simple-input id="email" type="mail" icon-name="mail" placeholder="E-mail" @blur=${this.emailValidation} @input=${this.emailInput} button-name=${this.isEmailValid ? "circle-check-sharp-regular" : ''}>
+                ${ this.isEmailError ?
+                    html`
+                        <simple-informer slot="informer" info-message=${this.emailErrorMessage} error-message=${this.emailInfoMessage} ></simple-informer>
+                    `
+                : ''}
+            </simple-input>
+            <password-input id="password" sign-up="true" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular"  @generate=${this.generatePassword} @keydown=${this.passwordKeyDown} @input=${this.passwordInput} @blur=${this.passwordValidation}>
+                ${ this.isPasswordError || this.isPasswordMessage ?
+                    html`
+                        <simple-informer slot="informer" info-message=${this.passwordErrorMessage} error-message=${this.passwordInfoMessage} ></simple-informer>
+                    `
+                : ''}
+            </password-input>
+            <simple-input id="confirm" type="password" icon-name="lock-confirm" placeholder="Confirm" button-name=${this.isConfirmPasswordValid ? "copy-to-clipboard-solid" : ''} @keydown=${this.confirmPasswordKeyDown} @input=${this.confirmPassword} @button-click=${this.copyToClipboard}>
+                ${ this.isConfirmPasswordError || this.isConfirmPasswordMessage ?
+                    html`
+                        <simple-informer slot="informer" info-message=${this.confirmPasswordErrorMessage} error-message=${this.confirmPasswordInfoMessage}></simple-informer>
+                    `
+                : ''}
+            </simple-input>
+            <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.passwordRecoveryRequest : nothing}>Send Email</form-button>
+        `
+    }
+
+    get #page2() {
+        return html`
+            <simple-input id="code" icon-name="order-number-solid" placeholder="Recovery code" button-name=${this.isCodeValid && "circle-check-sharp-regular" || nothing} @input=${this.codeInput}>
+                ${ this.isCodeError || this.isCodeMessage ?
+                    html`
+                        <simple-informer slot="informer" info-message=${this.codeErrorMessage} error-message=${this.codeInfoMessage} ></simple-informer>
+                    `
+                : ''}
+            </simple-input>
+            <form-button ?disable=${!this.isCodeEnable()} @click=${this.isCodeEnable() ? this.passwordRecovery : nothing}>Recover Password</form-button>
+        `
+    }
+
     render() {
         return html`
             <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
@@ -88,59 +132,40 @@ class SignUpForm extends BaseElement {
                 <form class="form animate" method="post" id="form">
                     <div class="form-header">
                         <div class="form-tabs no-select">
-                            <div class="form-tab" selected data-label="Sign Up">Sign Up</div>
+                            <div class="form-tab" selected data-label="Password recovery">Password recovery</div>
                         </div>
                         <close-button class="close-button no-select" name="times" @click=${()=>this.close('CANCEL')}></close-button>
                     </div>
 
                     <div class="form-body">
                         <div id="db-tab-section" class="form-tab-section selected">
-                            <simple-input id="login" icon-name="user" placeholder="Login" @blur=${this.loginValidation} button-name=${this.isLoginValid ? "circle-check-sharp-regular" : ''} @input=${this.loginInput}>
-                                ${ this.isLoginError || this.isLoginMessage ?
-                                    html`
-                                        <simple-informer slot="informer" info-message=${this.loginErrorMessage} error-message=${this.loginInfoMessage} ></simple-informer>
-                                    `
-                                : ''}
-                            </simple-input>
-                        <simple-input id="email" type="mail" icon-name="mail" placeholder="E-mail" @blur=${this.emailValidation} @input=${this.emailInput} button-name=${this.isEmailValid ? "circle-check-sharp-regular" : ''}>
-                            ${ this.isEmailError ?
-                                html`
-                                    <simple-informer slot="informer" info-message=${this.emailErrorMessage} error-message=${this.emailInfoMessage} ></simple-informer>
-                                `
-                            : ''}
-                        </simple-input>
-                        <password-input id="password" sign-up="true" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular"  @generate=${this.generatePassword} @keydown=${this.passwordKeyDown} @input=${this.passwordInput} @blur=${this.passwordValidation}>
-                                ${ this.isPasswordError || this.isPasswordMessage ?
-                                    html`
-                                        <simple-informer slot="informer" info-message=${this.passwordErrorMessage} error-message=${this.passwordInfoMessage} ></simple-informer>
-                                    `
-                                : ''}
-                            </password-input>
-                        <!-- <password-input id="password" sign-up="true" icon-name="lock" placeholder="Password" visible-icon="eye-slash-regular" invisible-icon="eye-regular" @generate=${this.generatePassword} @input=${this.passwordChange}></password-input> -->
-                        <simple-input id="confirm" type="password" icon-name="lock-confirm" placeholder="Confirm" button-name=${this.isConfirmPasswordValid ? "copy-to-clipboard-solid" : ''} @keydown=${this.confirmPasswordKeyDown} @input=${this.confirmPassword} @button-click=${this.copyToClipboard}>
-                            ${ this.isConfirmPasswordError || this.isConfirmPasswordMessage ?
-                                html`
-                                    <simple-informer slot="informer" info-message=${this.confirmPasswordErrorMessage} error-message=${this.confirmPasswordInfoMessage}></simple-informer>
-                                `
-                            : ''}
-                        </simple-input>
-                        <div class="sign-up-options">
-                            <div class="checkbox-remember">
-                                <label for="remember"><b>Remember me</b></label>
-                                <input type="checkbox" id="remember" name="remember" @click=${this.RememberMe}>
-                            </div>
+                            ${!this.isShowCode ? this.#page1 : this.#page2}
                         </div>
-                        <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>Sign Up</form-button>
                     </div>
-                </div>
+                </form>
             </div>
-            </form>
-        </div>
         `;
     }
 
     isEnable () {
         return this.isLoginValid && this.isEmailValid && this.isPasswordValid && this.isConfirmPasswordValid
+    }
+
+    isCodeEnable () {
+        return this.#code
+    }
+
+    codeInput(e) {
+        if (e.target.value) {
+            this.isCodeValid = true
+            this.isCodeError = false
+            this.isCodeMessage = false
+        }
+        else {
+            this.isCodeValid = false
+            this.isCodeError = false
+            this.isCodeMessage = true
+        }
     }
 
     RememberMe(){
@@ -157,7 +182,7 @@ class SignUpForm extends BaseElement {
             return
         }
         if (e.key === 'Enter' && this.isEnable()) {
-            this.sendSimpleUser()
+            this.recoverPassword()
             return
         }
         let capsLockOn = e.getModifierState?.('CapsLock');
@@ -174,7 +199,7 @@ class SignUpForm extends BaseElement {
             return
         }
         if (e.key === 'Enter' && this.isEnable()) {
-            this.sendSimpleUser()
+            this.recoverPassword()
             return
         }
         let capsLockOn = e.getModifierState?.('CapsLock');
@@ -399,14 +424,17 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        const user = { username: e.target.value}
+        // const user = { username: e.target.value}
         try {
-            await SignUpForm.checkUsername(user)
+            const { email } = await PasswordRecoveryForm.checkUsername(e.target.value)
+            this.loginErrorMessage = "Ваш e-mail: " + email
+            this.loginInfoMessage = "Задайте эту почту"
             this.isLoginError = false
+            this.isLoginMessage = true
             this.isLoginValid = true
         } catch (e) {
-            this.loginErrorMessage = "Пользователь с таким именем уже существует"
-            this.loginInfoMessage = "Придумайте другое имя"
+            this.loginErrorMessage = e.message
+            this.loginInfoMessage = "Исправьте ошибку"
             this.isLoginError = true
             this.isLoginValid = false
         }
@@ -452,9 +480,12 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        const user = { email: e.target.value}
+        const user = {
+            user: 11,
+            email: e.target.value
+        }
         try {
-            await SignUpForm.checkEmail(user)
+            //await PasswordRecoveryForm.checkEmail(user)
             this.isEmailError = false
             this.isEmailValid = true
         } catch (e) {
@@ -601,27 +632,26 @@ class SignUpForm extends BaseElement {
     }
 
     static fetchCheckUsername(user) {
-        return fetch(`https://localhost:4500/api/sign-up/check-username`, {
-            method: "POST",
+        return fetch(`https://localhost:4500/api/verify-email/email/${user}`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(user)
+            }
         })
     }
 
     static async checkUsername(user) {
-        const response = await SignUpForm.fetchCheckUsername(user)
+        const response = await PasswordRecoveryForm.fetchCheckUsername(user)
 
         const result = await response.json()
 
         if (!response.ok) {
             throw new Error(result.error)
         }
+        return result;
     }
 
     static fetchCheckEmail(user) {
-        return fetch(`https://localhost:4500/api/sign-up/check-email`, {
+        return fetch(`https://localhost:4500/api/verify-email/check-email`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -631,7 +661,7 @@ class SignUpForm extends BaseElement {
     }
 
     static async checkEmail(user) {
-        const response = await SignUpForm.fetchCheckEmail(user)
+        const response = await PasswordRecoveryForm.fetchCheckEmail(user)
 
         const result = await response.json()
 
@@ -640,72 +670,90 @@ class SignUpForm extends BaseElement {
         }
     }
 
-    static fetchSendSimpleUser(user) {
-        return fetch(`https://localhost:4500/api/sign-up`, {
+    static fetchPasswordRecoveryRequest(user) {
+        return fetch(`https://localhost:4500/api/password-recovery/request`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
-            credentials: "include",
             body: JSON.stringify(user)
         })
     }
 
-    async sendSimpleUser() {
-        const user = { username: this.#login, password: this.#password, type: 'simple', email: this.#email}
+    async passwordRecoveryRequest() {
+        const user = { login: this.#login, password: this.#password, email: this.#email}
 
-        let response = await SignUpForm.fetchSendSimpleUser(user)
+        let response = await PasswordRecoveryForm.fetchPasswordRecoveryRequest(user)
 
         const result = await response.json()
 
         if (!response.ok) {
             throw new Error(result.error)
         }
-
-        saveToken(result.token)
-
-        await this.getSimpleUserInfo()
+        this.token = result.token
+        const modalResult = await this.showDialog("На Вашу электронную почту отправлено письмо с кодом для восстановления пароля.")
+        // if (modalResult === "Ok") {
+        //     this.close(modalResult);
+        // }
+        if (modalResult === "Ok") {
+            this.#login = ""
+            this.#password = ""
+            this.#email = ""
+            this.#confirm = ""
+            this.isLoginError = false
+            this.isLoginMessage = false
+            this.isLoginValid = false
+            this.isEmailError = false
+            this.isEmailValid = false
+            this.isPasswordError = false
+            this.isPasswordMessage = false
+            this.isPasswordValid = false
+            this.isConfirmPasswordError = false
+            this.isConfirmPasswordMessage = false
+            this.isConfirmPasswordValid = false
+            this.$id('password').strength = -1
+            this.isShowCode = true;
+            this.codeErrorMessage = "Введите код для восстановления пароля из письма",
+            this.codeInfoMessage = "Зайдите на Вашу почту и скопируйте код восстановления",
+            this.isCodeError = false
+            this.isCodeMessage = true
+        }
     }
 
 
-    static fetchSimpleUserInfo(token) {
-        return fetch(`https://localhost:4500/api/user`, {
+    static fetchPasswordRecovery(code, token) {
+        return fetch(`https://localhost:4500/api/password-recovery`, {
+            method: "POST",
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
             },
+            body: JSON.stringify(code)
         })
     }
 
-    async getSimpleUserInfo() {
+    async passwordRecovery() {
+        const code = this.#code
 
-        const token = getToken();
-        let response = await SignUpForm.fetchSimpleUserInfo(token)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await SignUpForm.fetchSimpleUserInfo(token)
-        }
+        let response = await PasswordRecoveryForm.fetchPasswordRecovery({ code }, this.token )
 
         const result = await response.json()
 
         if (!response.ok) {
-            throw new Error(result.error)
+            const modalResult = await this.errorDialog(result.error)
+            if (modalResult === "Ok") {
+                this.close(modalResult);
+                return
+            }
+            // throw new Error(result.error)
         }
 
-        this.saveUserInfo(JSON.stringify(result))
+        this.token = result.token
 
-        const modalResult = await this.showDialog("Регистрация прошла успешно")
+        const modalResult = await this.showDialog("Ваш пароль успешно восстановлен. Можете использовать его")
+
         if (modalResult === "Ok") {
             this.close(modalResult);
-        }
-    }
-
-    saveUserInfo(userInfo) {
-        if (localStorage.getItem('rememberMe')) {
-            localStorage.setItem('userInfo', userInfo)
-        }
-        else {
-            sessionStorage.setItem('userInfo', userInfo)
         }
     }
 
@@ -719,18 +767,31 @@ class SignUpForm extends BaseElement {
 
     close(modalResult) {
         this.opened = false
-        this.#login = ""
-        this.#password = ""
-        this.#email = ""
-        this.#confirm = ""
-        this.#rememberMe = ""
-        this.isLoginError = false
-        this.isLoginValid = false
-        this.isEmailError = false
-        this.isEmailValid = false
-        this.isPasswordError = false
-        this.isPasswordValid = false
-        this.$id('password').strength = -1
+        if (!this.isShowCode) {
+            this.#login = ""
+            this.#password = ""
+            this.#email = ""
+            this.#confirm = ""
+            this.isLoginError = false
+            this.isLoginMessage = false
+            this.isLoginValid = false
+            this.isEmailError = false
+            this.isEmailValid = false
+            this.isPasswordError = false
+            this.isPasswordMessage = false
+            this.isPasswordValid = false
+            this.isConfirmPasswordError = false
+            this.isConfirmPasswordMessage = false
+            this.isConfirmPasswordValid = false
+            this.$id('password').strength = -1
+        } else {
+            this.isShowCode = false
+            this.isCodeError = false
+            this.isCodeValid = false
+            this.isCodeMessage = false
+            this.#code = ""
+            this.token = {}
+        }
         this.resolve(modalResult)
     }
 
@@ -761,6 +822,16 @@ class SignUpForm extends BaseElement {
     set #email(value) {
         if (this.renderRoot?.querySelector('#email')) {
             this.renderRoot.querySelector('#email').value = value;
+        }
+    }
+
+    get #code() {
+        return this.renderRoot?.querySelector('#code')?.value ?? null;
+    }
+
+    set #code(value) {
+        if (this.renderRoot?.querySelector('#code')) {
+            this.renderRoot.querySelector('#code').value = value;
         }
     }
 
@@ -799,4 +870,4 @@ class SignUpForm extends BaseElement {
     }
 }
 
-customElements.define("sign-up-form", SignUpForm);
+customElements.define("password-recovery-form", PasswordRecoveryForm);

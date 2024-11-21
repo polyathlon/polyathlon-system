@@ -5,7 +5,7 @@
 // export { cache } from 'https://unpkg.com/lit@2.8.0/directives/cache.js?module';
 
 import { LitElement, css } from 'https://cdn.jsdelivr.net/npm/lit@3.2.0/+esm'
-export * from 'https://cdn.jsdelivr.net/npm/lit@3.0.0/+esm'
+export * from 'https://cdn.jsdelivr.net/npm/lit@3.2.0/+esm'
 export { cache } from 'https://cdn.jsdelivr.net/npm/lit-html@3.2.0/directives/cache.js';
 
 

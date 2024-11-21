@@ -19,7 +19,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/user-profile', {
+        return fetch('https://localhost:4500/api/profile', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -75,7 +75,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/user-profile`, {
+        return fetch(`https://localhost:4500/api/profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -101,7 +101,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/user-profile`, {
+        return fetch(`https://localhost:4500/api/profile`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -134,7 +134,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/user-profile/?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/profile/?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`

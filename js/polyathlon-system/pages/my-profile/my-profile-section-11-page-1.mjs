@@ -178,7 +178,7 @@ class MyProfileSection1Page1 extends BaseElement {
     //             </div>
     //         </div>
     // <simple-input label="NickName:" id="nickName" icon-name="user-alien-solid" .value=${this.item?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
-    // <simple-input label="Email:" id="email" icon-name="envelope1" .value="${this.item?.personalInfo?.email}" @input=${this.validateInput}></simple-input>
+    // <simple-input label="Email:" id="email" icon-name="envelope-regular" .value="${this.item?.personalInfo?.email}" @input=${this.validateInput}></simple-input>
     // <gender-input label="Gender:" id="gender" icon-name="gender" .value="${this.item?.personalInfo?.gender}" @input=${this.validateInput}></gender-input>
     // <birthday-input label="Data of Birth:" id="birthday" .value="${this.item?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
                 // <div>

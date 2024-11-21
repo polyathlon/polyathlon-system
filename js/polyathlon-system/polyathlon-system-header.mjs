@@ -155,7 +155,7 @@ class PolyathlonSystemHeader extends BaseElement {
             </div>
             <sign-in-form></sign-in-form>
             <sign-up-form></sign-up-form>
-            <recover-password-form></recover-password-form>
+            <password-recovery-form></password-recovery-form>
         `
     }
 
@@ -170,10 +170,10 @@ class PolyathlonSystemHeader extends BaseElement {
                 ${this.logo()}
                 <nav class="horizontal">
                     <ul>
-                        <li><a href="#my-competitions" ?active=${this.activePage==="my-competitions" || this.activePage==="home-page"}>Competitions</a></li>
-                        <li><a href="#my-sportsmen" ?active=${this.activePage==="my-courses"}>Sportsmen</a></li>
-                        <li><a href="#my-trainers" ?active=${this.activePage==="my-trainers"}>Trainers</a></li>
-                        <li><a href="#my-referees" ?active=${this.activePage==="my-referees"}>Referees</a></li>
+                        <li><a @click=${() => this.showPage("my-competitions")} ?active=${this.activePage==="my-competitions"}>Competitions</a></li>
+                        <li><a @click=${() => this.showPage("my-sportsmen")} ?active=${this.activePage==="my-courses"}>Sportsmen</a></li>
+                        <li><a @click=${() => this.showPage("my-trainers")} ?active=${this.activePage==="my-trainers"}>Trainers</a></li>
+                        <li><a @click=${() => this.showPage("my-referees")} ?active=${this.activePage==="my-referees"}>Referees</a></li>
                         ${this.userAccount()}
                     </ul>
                 </nav>
@@ -189,10 +189,10 @@ class PolyathlonSystemHeader extends BaseElement {
             </header>
             <nav class="vertical${this.isShow ? ' show' : ''}">
                 <ul>
-                    <li><a href="#my-competitions" ?active=${this.activePage==="my-competitions" || this.activePage==="home-page"}>Competitions</a></li>
-                    <li><a href="#my-sportsmen" ?active=${this.activePage==="my-courses"}>Sportsmen</a></li>
-                    <li><a href="#my-trainers" ?active=${this.activePage==="my-trainers"}>Trainers</a></li>
-                    <li><a href="#my-referees" ?active=${this.activePage==="my-referees"}>Referees</a></li>
+                    <li><a @click=${() => this.showPage("my-competitions")} ?active=${this.activePage==="my-competitions"}>Competitions</a></li>
+                    <li><a @click=${() => this.showPage("my-sportsmen")} ?active=${this.activePage==="my-courses"}>Sportsmen</a></li>
+                    <li><a @click=${() => this.showPage("my-trainers")} ?active=${this.activePage==="my-trainers"}>Trainers</a></li>
+                    <li><a @click=${() => this.showPage("my-referees")} ?active=${this.activePage==="my-referees"}>Referees</a></li>
                     ${this.userAccount()}
                 </ul>
             </nav>
@@ -201,6 +201,12 @@ class PolyathlonSystemHeader extends BaseElement {
 
     render() {
         return this.isHorizontal ? this.horizontalHeader() : this.verticalHeader();
+    }
+
+    showPage(page) {
+        location.hash = page;
+        if (!this.isHorizontal)
+            this.showMenu();
     }
 
     async login() {
@@ -213,14 +219,14 @@ class PolyathlonSystemHeader extends BaseElement {
     clearStorage(){
         if (localStorage.getItem('rememberMe')) {
             localStorage.removeItem('userInfo');
-            localStorage.removeItem('userProfile');
+            localStorage.removeItem('profile');
             localStorage.removeItem('rememberMe');
             localStorage.removeItem('accessUserToken');
             localStorage.removeItem('refreshUserToken');
         }
         else {
             sessionStorage.removeItem('userInfo');
-            sessionStorage.removeItem('userProfile');
+            sessionStorage.removeItem('profile');
             sessionStorage.removeItem('rememberMe');
             sessionStorage.removeItem('accessUserToken');
             sessionStorage.removeItem('refreshUserToken');
@@ -312,6 +318,16 @@ class PolyathlonSystemHeader extends BaseElement {
             if (param1 && param2) {
                 await import( '../../components/forms/sign-in-form.mjs')
                 this.renderRoot.querySelector("sign-in-form").open().then(() => this.showUserAccount()).catch(() => '');
+            }
+            param1 = params.get('password-recovery');
+            if (param1) {
+                await import( '../../components/dialogs/password-recovery-dialog.mjs')
+                this.renderRoot.querySelector("password-recovery-dialog").show(param1).then(() => this.showUserAccount()).catch(() => '');
+            }
+            param1 = params.get('verify-email');
+            if (param1) {
+                await import( '../../components/forms/verify-email-form.mjs')
+                this.renderRoot.querySelector("verify-email-form").open().then(() => this.showUserAccount()).catch(() => '');
             }
         }
     }

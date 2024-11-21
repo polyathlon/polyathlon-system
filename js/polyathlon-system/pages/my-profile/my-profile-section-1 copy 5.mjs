@@ -253,7 +253,7 @@ class MyProfileSection1 extends BaseElement {
                             <simple-input label="Last Name:" id="lastName" icon-name="user-group-solid" .value=${this.dataSet?.lastName} @input=${this.validateInput}></simple-input>
                         </div>
                         <simple-input label="NickName:" id="nickName" icon-name="user-alien-solid" .value=${this.dataSet?.nickName} @input=${this.validateInput}></simple-input>
-                        <simple-input label="Email:" id="email" icon-name="envelope1" .value="${this.dataSet?.email}" @input=${this.validateInput}></simple-input>
+                        <simple-input label="Email:" id="email" icon-name="envelope-regular" .value="${this.dataSet?.email}" @input=${this.validateInput}></simple-input>
                         <gender-input label="Gender:" id="gender" icon-name="gender" .value="${this.dataSet?.gender}" @input=${this.validateInput}></gender-input>
                         <birthday-input label="Data of Birth:" id="birthday" .value="${this.dataSet?.birthday}" @input=${this.validateInput}></birthday-input>
                     </div>
@@ -426,7 +426,7 @@ class MyProfileSection1 extends BaseElement {
 
         async getUserProfile() {
             const token = await this.getToken();
-            return fetch('https://localhost:4500/api/user-profile', {
+            return fetch('https://localhost:4500/api/profile', {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -435,7 +435,7 @@ class MyProfileSection1 extends BaseElement {
             .then(response => {
                 if (response.status === 419){
                     return this.refreshToken().then( token =>
-                        fetch('https://localhost:4500/api/user-profile', {
+                        fetch('https://localhost:4500/api/profile', {
                             headers: {
                             'Authorization': `Bearer ${token}`
                             }
@@ -497,7 +497,7 @@ class MyProfileSection1 extends BaseElement {
                 if (!result) return;
             }
 
-            return fetch(`https://localhost:4500/api/user-profile`, {
+            return fetch(`https://localhost:4500/api/profile`, {
                 method: "PUT",
                 headers: {
                   'Authorization': `Bearer ${token}`,
