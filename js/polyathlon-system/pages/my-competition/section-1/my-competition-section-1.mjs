@@ -467,6 +467,10 @@ class MyCompetitionSection1 extends BaseElement {
             if (!result) return;
         }
         this.avatarFile = null;
+        this.oldValues.forEach( (value, key) => {
+            if (key.oldValue)
+                key.oldValue = null;
+        })
         this.oldValues?.clear();
         this.isModified = false;
     }
@@ -483,6 +487,7 @@ class MyCompetitionSection1 extends BaseElement {
             } else {
                 const currentItem = key.currentObject ?? this.currentItem
                 currentItem[key.id] = value;
+                key.oldValue = null;
                 key.value = value;
             }
         });
