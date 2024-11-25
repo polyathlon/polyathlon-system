@@ -1,6 +1,7 @@
 import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
+import '../../../../../components/inputs/checkbox-group-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
 import CompetitionTypeDataSource from '../../my-competition-types/my-competition-types-datasource.mjs'
@@ -11,6 +12,8 @@ import SportsDisciplineDataset from '../../my-sports-disciplines/my-sports-disci
 import SportsDisciplineDataSource from '../../my-sports-disciplines/my-sports-disciplines-datasource.mjs'
 import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
+import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs'
+import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
 
 import DataSet from './my-competition-dataset.mjs'
 
@@ -22,6 +25,7 @@ class MyCompetitionSection1Page1 extends BaseElement {
             competitionStageDataSource: {type: Object, default: null},
             sportsDisciplineDataSource: {type: Object, default: null},
             cityDataSource: {type: Object, default: null},
+            ageGroupDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
@@ -69,6 +73,7 @@ class MyCompetitionSection1Page1 extends BaseElement {
                     <simple-input type="date" label="Начало регистрации:" id="startRegistration" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                     <simple-input type="date" label="Окончание регистрации:" id="endRegistration" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 </div>
+                <checkbox-group-input label="Age groups:" id="ageGroups" .value=${this.item?.ageGroups || []} .dataSet=${this.ageGroupDataSource} @input=${this.validateInput}></checkbox-group-input>
             </div>
         `;
     }
@@ -98,15 +103,28 @@ class MyCompetitionSection1Page1 extends BaseElement {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? this.item
             if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
+                if (Array.isArray(e.target.value)) {
+                    this.oldValues.set(e.target, e.target.oldValue)
+                } else {
+                    this.oldValues.set(e.target, e.target.value)
                 }
             }
-            else if (this.oldValues.get(e.target) === e.target.value) {
+            else {
+                const oldValue = this.oldValues.get(e.target)
+                if (Array.isArray(oldValue) && oldValue.length === e.target.value.length) {
+                    if (e.target.value.every(item1 => oldValue.some( item2 =>
+                        item1.name ===  item2.name &&
+                        item1.gender ===  item2.gender
+                    ))) {
+                        this.oldValues.delete(e.target)
+                    }
+                } else if (oldValue === e.target.value) {
                     this.oldValues.delete(e.target)
+                }
             }
 
             currentItem[e.target.id] = e.target.value
+
             if (e.target.id === 'name' || e.target.id === 'startDate' || e.target.id === 'endDate' || e.target.id === 'stage') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
@@ -120,8 +138,8 @@ class MyCompetitionSection1Page1 extends BaseElement {
         this.sportsDisciplineDataSource = new SportsDisciplineDataSource(this, await SportsDisciplineDataset.getDataSet())
         this.competitionStageDataSource = new CompetitionStageDataSource(this, await CompetitionStageDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
+        this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
     }
-
 }
 
 customElements.define("my-competition-section-1-page-1", MyCompetitionSection1Page1);

@@ -319,7 +319,7 @@ class MyProfileSection1 extends BaseElement {
         switch(this.currentPage) {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
-            case 2: return cache(this.#page3())
+            default: return cache(this.#page3())
         }
     }
 
