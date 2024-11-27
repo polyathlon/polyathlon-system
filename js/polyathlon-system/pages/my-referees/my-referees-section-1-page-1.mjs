@@ -12,12 +12,16 @@ import RefereeCategoryDataset from '../my-referee-categories/my-referee-categori
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 
+import CityDataSource from '../my-cities/my-cities-datasource.mjs'
+import CityDataset from '../my-cities/my-cities-dataset.mjs'
+
 class MyRefereesSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             refereeCategorySource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
+            cityDataSource: {type: Object, default: null},
             item: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
             oldValues: { type: Map, default: null, attribute: "old-values" },
@@ -58,6 +62,7 @@ class MyRefereesSection1Page1 extends BaseElement {
                 <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="category" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-referee-categories')} label="Category name:" .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" icon-name="region-solid" label="Region name:" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-input id="refereeId" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} label="Referee ID:" .value=${this.item?.refereeId} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input id="order.number" icon-name="order-number-solid" @icon-click=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
@@ -137,6 +142,7 @@ class MyRefereesSection1Page1 extends BaseElement {
         super.firstUpdated();
         this.refereeCategoryDataSource = new RefereeCategoryDataSource(this, await RefereeCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
+        this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }
 }
 

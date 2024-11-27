@@ -54,7 +54,7 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
                     transition: .3s easy-in;
                 }
                 input:checked {
-                    border-width: 4px;
+                    border-width: 8px;
                 }
             `
         ]
@@ -68,6 +68,11 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
         return html`<legend>${this.label}</legend>`;
     }
 
+    setValue(value) {
+        this.value = value;
+        this.fire('input')
+    }
+
     setChecked(gender) {
         const input = this.renderRoot.getElementById(gender);
         if (!input) {
@@ -76,6 +81,7 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
         input.checked = this.value == gender
         return input.checked;
     }
+
     render() {
         return html`
             <fieldset class="fieldset">

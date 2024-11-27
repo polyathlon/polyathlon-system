@@ -102,6 +102,58 @@ export default class DataSet {
         return result
     }
 
+    static #fetchGetItemByRefereeId(token, itemId) {
+        return fetch(`https://localhost:4500/api/referee-id/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getItemByRefereeId(itemId) {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetItemByRefereeId(token, itemId)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetItemByRefereeId(token, itemId)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
+    static #fetchGetItemByLastName(token, itemId) {
+        return fetch(`https://localhost:4500/api/referee/last-name/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getItemByLastName(itemId) {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetItemByLastName(token, itemId)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetItemByLastName(token, itemId)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
     static #fetchSaveItem(token, item) {
         return fetch(`https://localhost:4500/api/referee/${item._id}`, {
             method: "PUT",
@@ -196,7 +248,7 @@ export default class DataSet {
         }
         return result.number
     }
-    
+
     static fetchGetQRCode(token, data) {
         return fetch(`https://localhost:4500/api/qr-code?data=${data}`, {
             method: "GET",

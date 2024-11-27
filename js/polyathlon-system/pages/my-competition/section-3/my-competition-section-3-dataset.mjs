@@ -20,7 +20,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token, id) {
-        return fetch(`https://localhost:4500/api/competition-sportsmen/${id}`, {
+        return fetch(`https://localhost:4500/api/competition-referees/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -45,7 +45,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item, id) {
-        return fetch(`https://localhost:4500/api/competition-sportsman/${id}`, {
+        return fetch(`https://localhost:4500/api/competition-referee/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -77,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/competition-sportsman/${itemId}`, {
+        return fetch(`https://localhost:4500/api/competition-referee/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -103,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition-sportsman/${item._id}`, {
+        return fetch(`https://localhost:4500/api/competition-referee/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -136,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition-sportsman/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/competition-referee/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -4,16 +4,20 @@ import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/checkbox-group-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
-import CompetitionTypeDataSource from '../../my-competition-types/my-competition-types-datasource.mjs'
 import CompetitionTypeDataset from '../../my-competition-types/my-competition-types-dataset.mjs'
+import CompetitionTypeDataSource from '../../my-competition-types/my-competition-types-datasource.mjs'
+
 import CompetitionStageDataset from '../../my-competition-stages/my-competition-stages-dataset.mjs'
 import CompetitionStageDataSource from '../../my-competition-stages/my-competition-stages-datasource.mjs'
+
 import SportsDisciplineDataset from '../../my-sports-disciplines/my-sports-disciplines-dataset.mjs'
 import SportsDisciplineDataSource from '../../my-sports-disciplines/my-sports-disciplines-datasource.mjs'
-import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
+
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
-import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs'
+import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
+
 import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
+import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs'
 
 import DataSet from './my-competition-dataset.mjs'
 

@@ -114,6 +114,11 @@ customElements.define("birthday-input", class BirthdayInput extends BaseElement 
         year.value = +date[2];
     }
 
+    setValue(value) {
+        this.value = value;
+        this.fire('input')
+    }
+
     get #button() {
         return html`
             <simple-icon class="button" icon-name=${this.buttonName || nothing} @click=${this.updateLoginValue}></simple-icon>

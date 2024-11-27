@@ -8,15 +8,15 @@ import '../../../../../components/buttons/simple-button.mjs';
 
 import { States } from "../../../../utils.js"
 
-import './my-competition-section-2-page-1.mjs'
-import './my-competition-section-2-list-1.mjs'
+import './my-competition-section-3-page-1.mjs'
+import './my-competition-section-3-list-1.mjs'
 
-import DataSet from './my-competition-section-2-dataset.mjs'
-import DataSource from './my-competition-section-2-datasource.mjs'
+import DataSet from './my-competition-section-3-dataset.mjs'
+import DataSource from './my-competition-section-3-datasource.mjs'
 
 import CompetitionDataSource from '../section-1/my-competition-datasource.mjs'
 
-class MyCompetitionSection2 extends BaseElement {
+class MyCompetitionSection3 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -300,13 +300,13 @@ class MyCompetitionSection2 extends BaseElement {
 
     #page1() {
         return html`
-            <my-competition-section-2-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-1>
+            <my-competition-section-3-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-3-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-competition-section-1-page-2 .item=${this.currentItem}></my-competition-section-1-page-2>
+            <my-competition-section-3-page-1 .item=${this.currentItem}></my-competition-section-3-page-1>
         `;
     }
 
@@ -330,9 +330,9 @@ class MyCompetitionSection2 extends BaseElement {
 
     newRecord() {
         return html `<icon-button
-                label=${ this.fio(this.currentItem) || "Новый спортсмен" }
+                label=${ this.fio(this.currentItem) || "Новый судья" }
                 title=''
-                icon-name=${ this.currentItem?.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+                icon-name=${ this.currentItem?.gender == 0 ? "referee-man-solid" : "referee-woman-solid" }
                 ?selected=${ true }
                 .status=${{ name: this.currentItem?.refereeId || this.currentItem?.refereeUlid || "referee:new", icon: 'hash-number-solid'} }
             >
@@ -342,13 +342,13 @@ class MyCompetitionSection2 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-2-list-1 .item=${this}></my-competition-section-2-list-1>
+            <my-competition-section-3-list-1 .item=${this}></my-competition-section-3-list-1>
         `;
     }
 
     #list3() {
         return html`
-            <my-competition-section-2-list-1 .parent=${this.currentItem}></my-competition-section-2-list-3>
+            <my-competition-section-3-list-1 .parent=${this.currentItem}></my-competition-section-3-list-3>
         `;
     }
 
@@ -389,24 +389,8 @@ class MyCompetitionSection2 extends BaseElement {
     get #itemFooter() {
         return html`
             <nav>
-                <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                <simple-button @click=${this.deleteItem}>Отменить</simple-button>
-            </nav>
-        `
-    }
-
-    get #addItemFooter() {
-        return html`
-            <nav>
-                <div class="nav-aside-buttons">
-                    ${this.buttons.map( (button, index) =>
-                        html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)
-                    }
-                </div>
-                <div class="nav-add-buttons">
-                    <simple-button @click=${this.addNewItem}>Добавить</simple-button>
-                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
-                </div>
+                <simple-button @click=${this.isModified ? this.saveItem: this.addNewItem}>${this.isModified ? "Сохранить": "Добавить"}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.deleteItem}>${this.isModified ? "Отменить": "Удалить"}</simple-button>
             </nav>
         `
     }
@@ -418,10 +402,7 @@ class MyCompetitionSection2 extends BaseElement {
             if (this.dataSource.state === States.NEW) {
                 return this.#newItemFooter
             }
-            if (this.isModified) {
-                return this.#itemFooter
-            }
-            return this.#addItemFooter
+            return this.#itemFooter
         }
         if (this.dataSource.state === States.NEW) {
             return this.#newItemFooter
@@ -436,7 +417,7 @@ class MyCompetitionSection2 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>Sportsmen</p>
+                <p>Referees</p>
             </header>
             <header class="right-header">
                 ${this.sectionNames.map( (page, index) =>
@@ -463,7 +444,7 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     addFirstItem() {
-        const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
+        const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
         page.startEdit()
     }
 
@@ -491,7 +472,7 @@ class MyCompetitionSection2 extends BaseElement {
 
     async addNewItem() {
         this.dataSource.addNewItem(this.currentItem);
-        // const page = this.renderRoot.querySelector('my-sportsmen-section-2-page-1')
+        // const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
         // page.startEdit()
     }
 
@@ -590,4 +571,4 @@ class MyCompetitionSection2 extends BaseElement {
     }
 }
 
-customElements.define("my-competition-section-2", MyCompetitionSection2);
+customElements.define("my-competition-section-3", MyCompetitionSection3);

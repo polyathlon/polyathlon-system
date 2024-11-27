@@ -2,7 +2,7 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
 
-class MyCompetitionSection2List1 extends BaseElement {
+class MyCompetitionSection3List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -37,13 +37,16 @@ class MyCompetitionSection2List1 extends BaseElement {
         ]
     }
 
-    sportsmanName(item) {
+    fio(item) {
         if (!item) {
             return item
         }
         let result = item.lastName
         if (item.firstName) {
-            result += ` ${item.firstName}`
+            result += ` ${item.firstName[0]}.`
+        }
+        if (item.middleName) {
+            result += `${item.middleName[0]}.`
         }
         return result
     }
@@ -52,9 +55,9 @@ class MyCompetitionSection2List1 extends BaseElement {
         return html`
             ${this.item.dataSource?.items?.map((item, index) =>
                 html `<icon-button
-                        label=${this.sportsmanName(item)}
+                        label=${this.fio(item)}
                         title=${item._id}
-                        image-name=${item.gender == 0 ? "../../../../images/sportsman-boy-solid.svg" : "../../../../images/sportsman-girl-solid.svg"}
+                        image-name=${item.gender == 0 ? "../../../../images/referee-man-solid.svg" : "../../../../images/referee-man-solid.svg"}
                         ?selected=${this.currentItem === item}
                         .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
                         @click=${() => this.showItem(item)}
@@ -84,4 +87,4 @@ class MyCompetitionSection2List1 extends BaseElement {
     // }
 }
 
-customElements.define("my-competition-section-2-list-1", MyCompetitionSection2List1);
+customElements.define("my-competition-section-3-list-1", MyCompetitionSection3List1);
