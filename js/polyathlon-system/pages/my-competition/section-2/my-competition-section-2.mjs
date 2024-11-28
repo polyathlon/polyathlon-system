@@ -156,7 +156,12 @@ class MyCompetitionSection2 extends BaseElement {
                         simple-button {
                             height: 100%;
                         }
+                        &.buttons {
+                            justify-content: center;
+                        }
                     }
+
+
                 }
                 icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
@@ -208,7 +213,9 @@ class MyCompetitionSection2 extends BaseElement {
             {iconName: 'swimming-solid', page: 5, title: 'Swimming', click: () => this.gotoPage(5)},
             {iconName: 'skiing-solid', page: 6, title: 'Skiing', click: () => this.gotoPage(6)},
             {iconName: 'throwing-solid', page: 7, title: 'Throwing', click: () => this.gotoPage(7)},
-            {iconName: 'add-solid', page: 8, title: 'Back', click: () => this.agotoPage(7)},
+            {iconName: 'circle-plus-sharp-solid', page: 8, title: 'Back', click: () => this.gotoPage(7)},
+            {iconName: 'circle-trash-sharp-solid', page: 9, title: 'Back', click: () => this.gotoPage(7)},
+            {iconName: 'circle-mark-sharp-solid', page: 10, title: 'Back', click: () => this.gotoPage(7)},
         ]
     }
 
@@ -410,16 +417,10 @@ class MyCompetitionSection2 extends BaseElement {
 
     get #addItemFooter() {
         return html`
-            <nav>
-                <div class="nav-aside-buttons">
-                    ${this.pages.map( (button, index) =>
-                        html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
-                    }
-                </div>
-                <div class="nav-add-buttons">
-                    <simple-button @click=${this.addNewItem}>${lang`Add`}</simple-button>
-                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
-                </div>
+            <nav class="buttons">
+                ${this.pages.map( (button, index) =>
+                    html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                }
             </nav>
         `
     }
