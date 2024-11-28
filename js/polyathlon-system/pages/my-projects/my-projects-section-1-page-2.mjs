@@ -710,7 +710,7 @@ class MyProjectsSection1Page2 extends BaseElement {
 
 
         async deleteProject() {
-            const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+            const modalResult = await this.confirmDialogShow('Вы действительно хотите lang`Delete` этот проект?')
             if (modalResult !== 'Ok')
                 return;
             const token = await this.getToken();
