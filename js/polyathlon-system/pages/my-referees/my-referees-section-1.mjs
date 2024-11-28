@@ -180,44 +180,177 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     pdfMethod() {
-
         var docInfo = {
+          info: {
+            title: "Referees",
+            author: "Polyathlon systems",
+          },
 
-            info: {
-                title:'Referees',
-                author:'Polyathlon systems',
+          pageSize: "A4",
+          pageOrientation: 'portrait',
+          pageMargins: [50, 50, 30, 60],
+
+          content: [
+            {
+              text: "Министерство спорта Российской федерации",
+              fontSize: 14,
+              alignment: "center",
+              //margin: [0, 0, 0, 0], //левый, верхний, правый, нижний
             },
-
-            pageSize:'A4',
-            pageOrientation:'landscape',//'portrait'
-            pageMargins:[50,50,30,60],
-
-            header:function(currentPage,pageCount) {
-                return {
-                    text: currentPage.toString() + 'из' + pageCount,
-                    alignment:'right',
-                    margin:[0,30,10,50]
-                }
+            {
+                text: "Всероссийская федерация Полиатлона",
+                fontSize: 14,
+                alignment: "center",
+              },
+            {
+                text: "I-ый этап КУБКА РОССИИ — 2023",
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+                margin: [0, 15, 0, 0],
             },
+            {
+                text: "по полиатлону в спортивной дисциплине",
+                fontSize: 18,
+                alignment: "center",
+            },
+            {
+                text: "3-борье с лыжной гонкой",
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+            },
+              {
+                  columns: [
+                        
+                      {
+                          width: 'auto',
+                          text: '12-15 января 2023 года',
+                          margin: [0, 15, 0, 0],
+                          fontSize: 12,
+                      },
+                      {
+                          width: '*',
+                          text: 'г.Ковров, Владимирская обл.',
+                          alignment: "right",
+                          margin: [0, 15, 0, 0],
+                          fontSize: 12,
+                      },
+                  ],
+                  columnGap: 20
+              },
 
-            content: [
-
-                {
-                    text:'Дмитрий',
-                    fontSize:20,
-                    margin:[150, 80, 30,0]
-                    //pageBreak:'after'
+            {
+                text: "СПРАВКА О СОСТАВЕ И КВАЛИФИКАЦИИ",
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+                margin: [0, 30, 0, 0],
+            },
+            {
+                text: "ГЛАВНОЙ СУДЕЙСКОЙ КОЛЛЕГИИ",
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+                margin: [0, 0, 0, 15],
+            },
+            {
+                table:{
+                    widths:['auto','*'],
+                    
+                    body:[
+                        ['Первая ячейка первой строки','Вторая ячейка первой строки'],
+                        ['Первая ячейка второй строки','Вторая ячейка второй строки'],
+                        [{text:'текстовое содержимое',bold:true},'Текст']
+                    ],
+                    headerRows:1
                 },
+            },
+            {
+                columns: [
+                      
+                    {
+                        width: 300,
+                        text: 'Главный судья,',
+                        margin: [20, 40, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: 'Д.В.Ерёмкин',
+                        alignment: "left",
+                        margin: [0, 40, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                columns: [
+                      
+                    {
+                        width: 300,
+                        text: 'судья всероссийской категории',
+                        margin: [20, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: '(г.Ковров, Владимирская обл.)',
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                columns: [
+                      
+                    {
+                        width: 300,
+                        text: 'Главный секретарь,',
+                        margin: [20, 50, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: 'Е.В.Ерёмкина',
+                        alignment: "left",
+                        margin: [0, 50, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                columns: [
+                      
+                    {
+                        width: 300,
+                        text: 'судья всероссийской категории',
+                        margin: [20, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: '(г.Ковров, Владимирская обл.)',
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+          ],
+          
+          styles: {
+            header0:{
+            }
+          }
+        };
 
-                {
-                    text:'Гуськов',
-                    style:'header'
-                    //pageBreak:'before'
-                }
-            ]
-        }
         pdfMake.createPdf(docInfo).open();
-
         }
 
     showPage(page) {
