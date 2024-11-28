@@ -136,20 +136,18 @@ class MyCompetitionsSection1 extends BaseElement {
                     display: flex;
                     align-items: center;
                     justify-content: end;
-                    margin-right: 20px;
+                    /* margin-right: 20px; */
                     gap: 10px;
                     nav {
                         width: 100%;
                         height: 70%;
                         display: flex;
                         align-items: center;
-                        justify-content: space-between;
+                        justify-content: flex-end;
                         padding: 0 10px;
                         /* padding-right: 10px; */
                         gap: 1vw;
-                        &.save {
-                            justify-content: flex-end;
-                        }
+
                         simple-button {
                             height: 100%;
                         }
