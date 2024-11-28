@@ -260,8 +260,8 @@ class MyProfileSection1 extends BaseElement {
             </div>
             <footer>
                 ${ this.isModified ? html`
-                        <simple-button label="Сохранить" @click=${this.saveProfile}></simple-button>
-                        <simple-button label="Отменить" @click=${this.cancelProfile}></simple-button>
+                        <simple-button label=lang`Save` @click=${this.saveProfile}></simple-button>
+                        <simple-button label=lang`Cancel` @click=${this.cancelProfile}></simple-button>
                     ` : ''
                 }
             </footer>

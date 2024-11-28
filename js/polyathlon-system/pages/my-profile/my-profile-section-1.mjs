@@ -7,7 +7,7 @@ import '../../../../components/buttons/simple-button.mjs'
 import '../../../../components/buttons/fashion-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 
-import lang from './polyathlon-dictionary.mjs';
+import lang from '../../polyathlon-dictionary.mjs';
 
 import './my-profile-section-1-page-1.mjs'
 import './my-profile-section-1-page-2.mjs'
@@ -385,15 +385,15 @@ class MyProfileSection1 extends BaseElement {
         if (this.isModified) {
             return html`
                 <nav>
-                    <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                    <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
                 </nav>
             `
         } else {
             return html`
                 <nav>
-                    <simple-button @click=${this.addItem}>Добавить</simple-button>
-                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
+                    <simple-button @click=${this.addItem}>${lang`Add`}</simple-button>
+                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
                 </nav>
             `
         }

@@ -423,8 +423,8 @@ class MyProfileSection1 extends BaseElement {
             <footer class="right-footer">
                 ${ this.isModified ? html`
                     <nav class='save'>
-                        <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                        <simple-button-1 label=${"Отменить"} @click=${this.cancelItem}></simple-button-1>
+                        <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                        <simple-button-1 label=${lang`Cancel`} @click=${this.cancelItem}></simple-button-1>
                     </nav>
                 ` :  html`
                     <nav>

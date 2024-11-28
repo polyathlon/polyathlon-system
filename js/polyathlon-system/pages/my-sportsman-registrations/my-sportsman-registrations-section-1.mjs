@@ -8,6 +8,8 @@ import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 import './my-sportsman-registrations-section-1-page-1.mjs'
 
 import DataSet from './my-sportsman-registrations-dataset.mjs'
@@ -349,8 +351,8 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
-                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>${this.isModified ? "Отменить": "Добавить"}</simple-button>
+                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? lang`Save`: lang`Delete`}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>${this.isModified ? lang`Cancel`: lang`Add`}</simple-button>
             </footer>
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;

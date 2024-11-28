@@ -17,6 +17,7 @@ import '../buttons/form-button.mjs';
 import '../buttons/link-button.mjs';
 import '../auth/vk-auth.mjs';
 
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
 
 import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refresh-token.mjs";
 
@@ -75,14 +76,14 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                 <form class="form animate" method="post" id="form">
                     <div class="form-header">
                         <div class="form-tabs no-select">
-                            <div class="form-tab" selected data-label="Sign in">Sign in</div>
+                            <div class="form-tab" selected data-label=${lang`Sign in`}>${lang`Sign in`}</div>
                         </div>
                         <close-button class="close-button no-select" name="times" @click=${()=>this.close('CANCEL')}></close-button>
                     </div>
 
                     <div class="form-body">
                         <div id="db-tab-section" class="form-tab-section selected">
-                            <simple-input id="login" icon-name="user" placeholder="Login" size="20"  @keydown=${this.loginKeyDown} @input=${this.loginInput} @blur=${this.loginValidation}>
+                            <simple-input id="login" icon-name="user" placeholder=${lang`Login`} size="20"  @keydown=${this.loginKeyDown} @input=${this.loginInput} @blur=${this.loginValidation}>
                                 ${ this.isLoginError || this.isLoginMessage ?
                                     html`
                                         <simple-informer slot="informer" info-message=${this.loginErrorMessage} error-message=${this.loginInfoMessage} ></simple-informer>
@@ -105,7 +106,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                                 <link-button @click=${this.forgotClick}>Forgot password?</link-button>
                             </div>
 
-                            <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>Login</form-button>
+                            <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>${lang`Sign in`}</form-button>
                             <div id="google"></div>
                             <vk-button></vk-button>
                         </div>

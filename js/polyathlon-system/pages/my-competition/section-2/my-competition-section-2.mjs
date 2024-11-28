@@ -6,7 +6,7 @@ import '../../../../../components/buttons/icon-button.mjs'
 import '../../../../../components/buttons/aside-button.mjs';
 import '../../../../../components/buttons/simple-button.mjs';
 
-import lang from '../../polyathlon-dictionary.mjs'
+import lang from '../../../polyathlon-dictionary.mjs'
 
 import { States } from "../../../../utils.js"
 
@@ -384,8 +384,8 @@ class MyCompetitionSection2 extends BaseElement {
     get #firstItemFooter() {
         return html`
             <nav>
-                <simple-button @click=${this.saveFirstItem}>Сохранить</simple-button>
-                <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                <simple-button @click=${this.saveFirstItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
     }
@@ -393,8 +393,8 @@ class MyCompetitionSection2 extends BaseElement {
     get #newItemFooter() {
         return html`
             <nav>
-                <simple-button @click=${this.saveNewItem}>Сохранить</simple-button>
-                <simple-button @click=${this.cancelNewItem}>Отменить</simple-button>
+                <simple-button @click=${this.saveNewItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelNewItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
     }
@@ -402,8 +402,8 @@ class MyCompetitionSection2 extends BaseElement {
     get #itemFooter() {
         return html`
             <nav>
-                <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                <simple-button @click=${this.deleteItem}>Отменить</simple-button>
+                <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.deleteItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
     }
@@ -417,8 +417,8 @@ class MyCompetitionSection2 extends BaseElement {
                     }
                 </div>
                 <div class="nav-add-buttons">
-                    <simple-button @click=${this.addNewItem}>Добавить</simple-button>
-                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
+                    <simple-button @click=${this.addNewItem}>${lang`Add`}</simple-button>
+                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
                 </div>
             </nav>
         `

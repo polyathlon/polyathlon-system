@@ -5,6 +5,8 @@ import '../../../../components/inputs/simple-input.mjs'
 import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 class MyProfileSection1 extends BaseElement {
         static get properties() {
             return {
@@ -181,8 +183,8 @@ class MyProfileSection1 extends BaseElement {
                     </div>
                 </div>
                 <footer>
-                    <simple-button ?disabled=${this.isReady} label=${this.isReady ? "Обработано": "Обработать"} @click=${this.handleProject}></simple-button>                   <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveProject: this.deleteProject}></simple-button>
-                    <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelProject: this.addProject}></simple-button>
+                    <simple-button ?disabled=${this.isReady} label=${this.isReady ? "Обработано": "Обработать"} @click=${this.handleProject}></simple-button>                   <simple-button label=${this.isModified ? lang`Save`: lang`Delete`} @click=${this.isModified ? this.saveProject: this.deleteProject}></simple-button>
+                    <simple-button label=${this.isModified ? lang`Cancel`: lang`Add`} @click=${this.isModified ? this.cancelProject: this.addProject}></simple-button>
                 </footer>
             `;
         }

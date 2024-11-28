@@ -9,6 +9,8 @@ import '../../../../components/buttons/project-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 import './my-competitions-section-1-page-1.mjs'
 // import './my-competitions-section-1-page-2.mjs'
 import DataSet from './my-competitions-dataset.mjs'
@@ -336,8 +338,8 @@ class MyCompetitionsSection1 extends BaseElement {
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
-                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>${this.isModified ? "Отменить": "Добавить"}</simple-button>
+                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? lang`Save`: lang`Delete`}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>${this.isModified ? lang`Cancel`: lang`Add`}</simple-button>
             </footer>
         `;
     }

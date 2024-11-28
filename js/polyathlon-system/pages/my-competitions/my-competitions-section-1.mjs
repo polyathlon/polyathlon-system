@@ -9,6 +9,8 @@ import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 import '../../../../components/cards/competition-card.mjs';
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 import './my-competitions-section-1-page-1.mjs'
 
 import DataSet from './my-competitions-dataset.mjs'
@@ -514,7 +516,7 @@ class MyCompetitionsSection1 extends BaseElement {
             </div>
             <footer class="right-footer">
                 <nav class='save'>
-                    <simple-button @click=${() => this.showPage('my-competition', 'new')}>Добавить</simple-button>
+                    <simple-button @click=${() => this.showPage('my-competition', 'new')}>${lang`Add`}</simple-button>
                 </nav>
             </footer>
             `;

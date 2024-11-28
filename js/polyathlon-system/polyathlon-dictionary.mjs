@@ -43,6 +43,26 @@ const dictionary = {
         "ru-RU": 'Войти',
         "en-EN": 'Log in'
     },
+    'Add': {
+        "ru-RU": 'Добавить',
+        "en-EN": 'Add'
+    },
+    'Delete': {
+        "ru-RU": 'Удалить',
+        "en-EN": 'Delete'
+    },
+    'Save': {
+        "ru-RU": 'Сохранить',
+        "en-EN": 'Save'
+    },
+    'Cancel': {
+        "ru-RU": 'Отменить',
+        "en-EN": 'Cancel'
+    },
+    'Sign in': {
+        "ru-RU": 'Войти',
+        "en-EN": 'Sign in'
+    },
 }
 
 const language = navigator.language

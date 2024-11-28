@@ -53,7 +53,7 @@ customElements.define('password-recovery-dialog', class PasswordRecoveryDialog e
             default:
                 return html`
                     <button class="footer-button" @click=${this.ok}>Восстановить</button>
-                    <button class="footer-button" @click=${this.close}>Отменить</button>
+                    <button class="footer-button" @click=${this.close}>${lang`Cancel`}</button>
                 `
 
         }

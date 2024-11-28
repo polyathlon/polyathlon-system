@@ -6,6 +6,9 @@ import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/project-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
+
+import lang from '../../polyathlon-dictionary.mjs'
+
 import './my-projects-section-1-page-1.mjs'
 import './my-projects-section-1-page-2.mjs'
 
@@ -272,8 +275,8 @@ class MyProjectsSection1 extends BaseElement {
                     </div>
                 </div>
                 <footer>
-                    <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveProject: this.deleteProject}></simple-button>
-                    <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelProject: this.addProject}></simple-button>
+                    <simple-button label=${this.isModified ? lang`Save`: lang`Delete`} @click=${this.isModified ? this.saveProject: this.deleteProject}></simple-button>
+                    <simple-button label=${this.isModified ? lang`Cancel`: lang`Add`} @click=${this.isModified ? this.cancelProject: this.addProject}></simple-button>
                 </footer>
             `;
         }

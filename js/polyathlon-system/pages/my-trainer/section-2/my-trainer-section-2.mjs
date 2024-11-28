@@ -368,8 +368,8 @@ class MyCompetitionSection2 extends BaseElement {
         if (this.isModified) {
         return html`
             <nav class='save'>
-                <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
         }

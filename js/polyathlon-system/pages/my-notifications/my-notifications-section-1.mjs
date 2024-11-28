@@ -6,6 +6,8 @@ import '../../../../components/inputs/upload-input.mjs'
 import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/notifications/my-notification.mjs'
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 class MyNotificationsSection1 extends BaseElement {
         static get properties() {
             return {
@@ -237,27 +239,27 @@ class MyNotificationsSection1 extends BaseElement {
 
                 <footer>
                     <simple-button label="Скачать PDF" @click=${this.pdfMethod}></simple-button>
-                    <simple-button label=${this.isModified ? "Сохранить": "Удалить"} @click=${this.isModified ? this.saveProject: this.deleteProject}></simple-button>
-                    <simple-button label=${this.isModified ? "Отменить": "Добавить"} @click=${this.isModified ? this.cancelProject: this.addProject}></simple-button>
+                    <simple-button label=${this.isModified ? lang`Save`: lang`Delete`} @click=${this.isModified ? this.saveProject: this.deleteProject}></simple-button>
+                    <simple-button label=${this.isModified ? lang`Cancel`: "${lang`Add`}"} @click=${this.isModified ? this.cancelProject: this.addProject}></simple-button>
                 </footer>
             `;
         }
 
         pdfMethod() {
-            
+
 var docInfo = {
-	
+
 	info: {
 		title:'Тестовый документ PDF',
 		author:'Viktor',
 		subject:'Theme',
 		keywords:'Ключевые слова'
 	},
-	
+
 	pageSize:'A4',
 	pageOrientation:'landscape',//'portrait'
 	pageMargins:[50,50,30,60],
-	
+
 	header:function(currentPage,pageCount) {
 		return {
 			text: currentPage.toString() + 'из' + pageCount,
@@ -265,23 +267,23 @@ var docInfo = {
 			margin:[0,30,10,50]
 		}
 	},
-	
+
 	footer:[
 		{
 			text:'нижний колонтитул',
 			alignment:'center',//left  right
 		}
 	],
-	
+
 	content: [
-	
+
 		{
 			text:'Текст определенного параграфа',
 			fontSize:20,
 			margin:[150,80, 30,0]
 			//pageBreak:'after'
 		},
-		
+
 		{
 			text:'Текст определенного параграфа № 2',
 			style:'header'

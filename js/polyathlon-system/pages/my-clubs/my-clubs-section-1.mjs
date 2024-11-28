@@ -5,6 +5,8 @@ import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/buttons/aside-button.mjs'
 import '../../../../components/buttons/simple-button.mjs'
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 import './my-clubs-section-1-page-1.mjs'
 
 import DataSet from './my-clubs-dataset.mjs'
@@ -312,15 +314,15 @@ class MyClubsSection1 extends BaseElement {
         if (this.isModified) {
             return html`
                 <nav>
-                    <simple-button @click=${this.saveItem}>Сохранить</simple-button>
-                    <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
                 </nav>
             `
         } else {
             return html`
                 <nav>
-                    <simple-button @click=${this.addItem}>Добавить</simple-button>
-                    <simple-button @click=${this.deleteItem}>Удалить</simple-button>
+                    <simple-button @click=${this.addItem}>${lang`Add`}</simple-button>
+                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
                 </nav>
             `
         }

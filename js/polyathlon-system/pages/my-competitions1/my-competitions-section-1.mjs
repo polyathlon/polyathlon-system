@@ -272,8 +272,8 @@ class MyCompetitionsSection1 extends BaseElement {
                     </div>
                 </div>
                 <footer>
-                    <simple-button @click=${this.isModified ? this.saveProject: this.deleteProject}>${this.isModified ? "Сохранить": "Удалить"}</simple-button>
-                    <simple-button @click=${this.isModified ? this.cancelProject: this.addProject}>${this.isModified ? "Отменить": "Добавить"}</simple-button>
+                    <simple-button @click=${this.isModified ? this.saveProject: this.deleteProject}>${this.isModified ? lang`Save`: lang`Delete`}</simple-button>
+                    <simple-button @click=${this.isModified ? this.cancelProject: this.addProject}>${this.isModified ? lang`Cancel`: "${lang`Add`}"}</simple-button>
                 </footer>
             `;
         }

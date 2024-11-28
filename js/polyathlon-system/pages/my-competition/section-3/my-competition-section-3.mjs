@@ -6,7 +6,7 @@ import '../../../../../components/buttons/icon-button.mjs'
 import '../../../../../components/buttons/aside-button.mjs';
 import '../../../../../components/buttons/simple-button.mjs';
 
-import lang from '../../polyathlon-dictionary.mjs'
+import lang from '../../../polyathlon-dictionary.mjs'
 
 import { States } from "../../../../utils.js"
 
@@ -197,10 +197,58 @@ class MyCompetitionSection3 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'pdf-make', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
 
+    pdfMethod() {
+        var docInfo = {
+
+            info: {
+                title:'Тестовый документ PDF',
+                author:'Viktor',
+                subject:'Theme',
+                keywords:'Ключевые слова'
+            },
+
+            pageSize:'A4',
+            pageOrientation:'landscape',//'portrait'
+            pageMargins:[50,50,30,60],
+
+            header:function(currentPage,pageCount) {
+                return {
+                    text: currentPage.toString() + 'из' + pageCount,
+                    alignment:'right',
+                    margin:[0,30,10,50]
+                }
+            },
+
+            footer:[
+                {
+                    text:'нижний колонтитул',
+                    alignment:'center',//left  right
+                }
+            ],
+
+            content: [
+
+                {
+                    text:'Медведев',
+                    fontSize:20,
+                    margin:[150,80, 30,0]
+                    //pageBreak:'after'
+                },
+
+                {
+                    text:'Сергей',
+                    style:'header'
+                    //pageBreak:'before'
+                }
+            ]
+        }
+        pdfMake.createPdf(docInfo).open();
+    }
     showPage(page) {
         location.hash = page;
     }
@@ -373,8 +421,8 @@ class MyCompetitionSection3 extends BaseElement {
     get #firstItemFooter() {
         return html`
             <nav>
-                <simple-button @click=${this.saveFirstItem}>Сохранить</simple-button>
-                <simple-button @click=${this.cancelItem}>Отменить</simple-button>
+                <simple-button @click=${this.saveFirstItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
     }
@@ -382,8 +430,8 @@ class MyCompetitionSection3 extends BaseElement {
     get #newItemFooter() {
         return html`
             <nav>
-                <simple-button @click=${this.saveNewItem}>Сохранить</simple-button>
-                <simple-button @click=${this.cancelNewItem}>Отменить</simple-button>
+                <simple-button @click=${this.saveNewItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelNewItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
     }
@@ -391,8 +439,8 @@ class MyCompetitionSection3 extends BaseElement {
     get #addItemFooter() {
         return html`
             <nav>
-                <simple-button @click=${this.addNewItem}>Add</simple-button>
-                <simple-button @click=${this.deleteItem}>Delete</simple-button>
+                <simple-button @click=${this.addNewItem}>${lang`Add`}</simple-button>
+                <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
             </nav>
         `
     }
@@ -400,8 +448,8 @@ class MyCompetitionSection3 extends BaseElement {
     get #itemFooter() {
         return html`
             <nav>
-                <simple-button @click=${this.saveItem}>Save</simple-button>
-                <simple-button @click=${this.cancelItem}>Cancel</simple-button>
+                <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
     }

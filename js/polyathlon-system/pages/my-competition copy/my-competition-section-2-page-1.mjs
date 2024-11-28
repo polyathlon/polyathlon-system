@@ -55,7 +55,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
             <div class="container">
                 <div class="name-group">
                     <simple-input id="lastName" icon-name="user" label="LastName:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="firstName" icon-name="user-group-solid" label="FistName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" icon-name="user-group-solid" label="FirstName:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="middleName" icon-name="users-solid" label="MiddleName:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 <birthday-input id="birthday" label="Data of Birth:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
