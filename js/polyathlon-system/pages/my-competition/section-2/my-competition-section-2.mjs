@@ -6,6 +6,8 @@ import '../../../../../components/buttons/icon-button.mjs'
 import '../../../../../components/buttons/aside-button.mjs';
 import '../../../../../components/buttons/simple-button.mjs';
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 import { States } from "../../../../utils.js"
 
 import './my-competition-section-2-page-1.mjs'
@@ -196,6 +198,17 @@ class MyCompetitionSection2 extends BaseElement {
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
+        this.pages = [
+            {iconName: 'sportsmen-solid', page: 0, title: 'Sportsmen', click: () => this.gotoPage(0)},
+            {iconName: 'shooting-solid', page: 1, title: 'Shooting', click: () => this.gotoPage(1)},
+            {iconName: 'pull-ups-solid-solid', page: 2, title: 'Pull-ups', click: () => this.gotoPage(2)},
+            {iconName: 'push-ups-solid', page: 3, title: 'Push-ups', click: () => this.gotoPage(3)},
+            {iconName: 'running-solid', page: 4, title: 'Running', click: () => this.gotoPage(4)},
+            {iconName: 'swimming-solid', page: 5, title: 'Swimming', click: () => this.gotoPage(5)},
+            {iconName: 'skiing-solid', page: 6, title: 'Skiing', click: () => this.gotoPage(6)},
+            {iconName: 'throwing-solid', page: 7, title: 'Throwing', click: () => this.gotoPage(7)},
+            {iconName: 'add-solid', page: 8, title: 'Back', click: () => this.agotoPage(7)},
         ]
     }
 
@@ -399,8 +412,8 @@ class MyCompetitionSection2 extends BaseElement {
         return html`
             <nav>
                 <div class="nav-aside-buttons">
-                    ${this.buttons.map( (button, index) =>
-                        html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)
+                    ${this.pages.map( (button, index) =>
+                        html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
                     }
                 </div>
                 <div class="nav-add-buttons">
@@ -441,7 +454,7 @@ class MyCompetitionSection2 extends BaseElement {
             <header class="right-header">
                 ${this.sectionNames.map( (page, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSelection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -467,8 +480,12 @@ class MyCompetitionSection2 extends BaseElement {
         page.startEdit()
     }
 
-    gotoPage(index) {
+    gotoSelection(index) {
         this.currentSection = index
+    }
+
+    gotoPage(index) {
+        this.currentPage = index
     }
 
     nextPage() {

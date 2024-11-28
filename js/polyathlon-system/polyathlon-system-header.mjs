@@ -2,6 +2,8 @@ import { BaseElement, html, css } from '../base-element.mjs'
 
 import '../../components/buttons/toggle-button.mjs';
 
+import lang from './polyathlon-dictionary.mjs';
+
 class PolyathlonSystemHeader extends BaseElement {
     static get properties() {
         return {
@@ -160,8 +162,8 @@ class PolyathlonSystemHeader extends BaseElement {
     }
 
     userAccount() {
-        return this.successUserIn ?  html`<li><a @click=${this.signOut}>Log Out</a></li>` :
-            html`<li><a @click=${this.login}>Log In</a></li>`
+        return this.successUserIn ?  html`<li><a @click=${this.signOut}>${lang`Log out`}</a></li>` :
+            html`<li><a @click=${this.login}>${lang`Log in`}</a></li>`
     }
 
     horizontalHeader() {
@@ -170,10 +172,10 @@ class PolyathlonSystemHeader extends BaseElement {
                 ${this.logo()}
                 <nav class="horizontal">
                     <ul>
-                        <li><a @click=${() => this.showPage("my-competitions")} ?active=${this.activePage==="my-competitions"}>Competitions</a></li>
-                        <li><a @click=${() => this.showPage("my-sportsmen")} ?active=${this.activePage==="my-courses"}>Sportsmen</a></li>
-                        <li><a @click=${() => this.showPage("my-trainers")} ?active=${this.activePage==="my-trainers"}>Trainers</a></li>
-                        <li><a @click=${() => this.showPage("my-referees")} ?active=${this.activePage==="my-referees"}>Referees</a></li>
+                        <li><a @click=${() => this.showPage("my-competitions")} ?active=${this.activePage==="my-competitions"}>${lang`Competitions`}</a></li>
+                        <li><a @click=${() => this.showPage("my-sportsmen")} ?active=${this.activePage==="my-courses"}>${lang`Sportsmen`}</a></li>
+                        <li><a @click=${() => this.showPage("my-trainers")} ?active=${this.activePage==="my-trainers"}>${lang`Trainers`}</a></li>
+                        <li><a @click=${() => this.showPage("my-referees")} ?active=${this.activePage==="my-referees"}>${lang`Referees`}</a></li>
                         ${this.userAccount()}
                     </ul>
                 </nav>
@@ -189,10 +191,10 @@ class PolyathlonSystemHeader extends BaseElement {
             </header>
             <nav class="vertical${this.isShow ? ' show' : ''}">
                 <ul>
-                    <li><a @click=${() => this.showPage("my-competitions")} ?active=${this.activePage==="my-competitions"}>Competitions</a></li>
-                    <li><a @click=${() => this.showPage("my-sportsmen")} ?active=${this.activePage==="my-courses"}>Sportsmen</a></li>
-                    <li><a @click=${() => this.showPage("my-trainers")} ?active=${this.activePage==="my-trainers"}>Trainers</a></li>
-                    <li><a @click=${() => this.showPage("my-referees")} ?active=${this.activePage==="my-referees"}>Referees</a></li>
+                    <li><a @click=${() => this.showPage("my-competitions")} ?active=${this.activePage==="my-competitions"}>${lang`Competitions`}</a></li>
+                    <li><a @click=${() => this.showPage("my-sportsmen")} ?active=${this.activePage==="my-courses"}>${lang`Sportsmen`}</a></li>
+                    <li><a @click=${() => this.showPage("my-trainers")} ?active=${this.activePage==="my-trainers"}>${lang`Trainers`}</a></li>
+                    <li><a @click=${() => this.showPage("my-referees")} ?active=${this.activePage==="my-referees"}>${lang`Referees`}</a></li>
                     ${this.userAccount()}
                 </ul>
             </nav>

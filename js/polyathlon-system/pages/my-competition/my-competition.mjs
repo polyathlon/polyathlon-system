@@ -1,10 +1,10 @@
 import { BaseElement, html, css, cache } from '../../../base-element.mjs'
 
-import './section-1/my-competition-section-1.mjs';
-// import './section-2/my-competition-section-2.mjs';
-
 import '../../../../components/buttons/icon-button.mjs'
 
+import lang from '../../polyathlon-dictionary.mjs'
+
+import './section-1/my-competition-section-1.mjs';
 class MyCompetition extends BaseElement {
     static get properties() {
         return {
@@ -29,10 +29,10 @@ class MyCompetition extends BaseElement {
         super()
         this.version = "1.0.0"
         this.sectionNames = [
-            {label: 'Competition', iconName: 'competition-solid'},
-            {label: 'Sportsmen', iconName: 'sportsmen-solid'},
-            {label: 'Referee', iconName: 'judge1-solid'},
-            {label: 'Statistic', iconName: 'statistic-solid'},
+            {label: lang`Competition`, iconName: 'competition-solid'},
+            {label: lang`Sportsmen`, iconName: 'sportsmen-solid'},
+            {label: lang`Referee`, iconName: 'judge1-solid'},
+            {label: lang`Statistic`, iconName: 'statistic-solid'},
         ]
     }
 

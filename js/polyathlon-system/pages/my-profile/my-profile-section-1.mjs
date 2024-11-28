@@ -7,6 +7,8 @@ import '../../../../components/buttons/simple-button.mjs'
 import '../../../../components/buttons/fashion-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 
+import lang from './polyathlon-dictionary.mjs';
+
 import './my-profile-section-1-page-1.mjs'
 import './my-profile-section-1-page-2.mjs'
 import './my-profile-section-1-page-3.mjs'
@@ -210,10 +212,10 @@ class MyProfileSection1 extends BaseElement {
         super();
         this.statusDataSet = new Map()
         this.pageNames = [
-            {label: 'User', iconName: 'user'},
-            {label: 'Passport', iconName: 'judge1-solid'},
-            {label: 'Sportsman', iconName: 'user'},
-            {label: 'Competition', iconName: 'competition-solid'},
+            {label: lang`User`, iconName: 'user'},
+            {label: lang`Passport`, iconName: 'judge1-solid'},
+            {label: lang`Sportsman`, iconName: 'user'},
+            {label: lang`Competition`, iconName: 'competition-solid'},
         ]
 
         this.currentPage = 0;

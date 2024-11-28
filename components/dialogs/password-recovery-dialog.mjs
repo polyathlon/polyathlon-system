@@ -1,7 +1,10 @@
 import { BaseElement, html, css } from '../../js/base-element.mjs';
 
 import { formStyles } from './modal-dialog-css.mjs'
+
 import '../buttons/close-button.mjs';
+
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
 
 customElements.define('password-recovery-dialog', class PasswordRecoveryDialog extends BaseElement {
     static get properties() {

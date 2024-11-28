@@ -6,6 +6,8 @@ import '../../../../../components/buttons/icon-button.mjs'
 import '../../../../../components/buttons/aside-button.mjs';
 import '../../../../../components/buttons/simple-button.mjs';
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 import { States } from "../../../../utils.js"
 
 import './my-competition-section-3-page-1.mjs'
@@ -386,11 +388,20 @@ class MyCompetitionSection3 extends BaseElement {
         `
     }
 
+    get #addItemFooter() {
+        return html`
+            <nav>
+                <simple-button @click=${this.addNewItem}>Add</simple-button>
+                <simple-button @click=${this.deleteItem}>Delete</simple-button>
+            </nav>
+        `
+    }
+
     get #itemFooter() {
         return html`
             <nav>
-                <simple-button @click=${this.isModified ? this.saveItem: this.addNewItem}>${this.isModified ? "Сохранить": "Добавить"}</simple-button>
-                <simple-button @click=${this.isModified ? this.cancelItem: this.deleteItem}>${this.isModified ? "Отменить": "Удалить"}</simple-button>
+                <simple-button @click=${this.saveItem}>Save</simple-button>
+                <simple-button @click=${this.cancelItem}>Cancel</simple-button>
             </nav>
         `
     }
@@ -401,6 +412,9 @@ class MyCompetitionSection3 extends BaseElement {
         if (this.dataSource.items.length) {
             if (this.dataSource.state === States.NEW) {
                 return this.#newItemFooter
+            }
+            if (this.isModified) {
+                return this.#addItemFooter
             }
             return this.#itemFooter
         }

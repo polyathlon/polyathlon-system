@@ -45,7 +45,7 @@ class GameFindDialog extends BaseElement {
                     <div class="dialog-footer no-select">
                         <div class="footer-buttons">
                             <button type="button" id="ok-button" class="footer-button btn-ok" @click=${()=>this.ok()}>Найти</button>
-                            <button type="button" id="button-cancel" class="footer-button button-cancel" @click=${()=>this.close()}>Отменить</button>
+                            <button type="button" id="button-cancel" class="footer-button button-cancel" @click=${()=>this.close()}>lang`Cancel`</button>
                         </div>
                     </div>
                 </div>
