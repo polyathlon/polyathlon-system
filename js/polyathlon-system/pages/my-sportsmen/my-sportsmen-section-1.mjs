@@ -394,8 +394,8 @@ class MySportsmenSection1 extends BaseElement {
     get #itemFooter() {
         return html`
             <nav class='save'>
-                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? lang`Save`: lang`Delete`}</simple-button>
-                <simple-button @click=${this.isModified ? this.cancelItem: this.addNewItem}>${this.isModified ? lang`Cancel`: lang`Add`}</simple-button>
+                <simple-button @click=${this.isModified ? this.saveItem: this.addNewItem}>${this.isModified ? lang`Save`: lang`Add`}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.deleteItem}>${this.isModified ? lang`Cancel`: lang`Delete`}</simple-button>
             </nav>
         `
     }

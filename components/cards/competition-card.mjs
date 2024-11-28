@@ -157,16 +157,16 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
     render() {
         return html`
             <header>
-                <div class="competition-number">${this.item?.ekp || this.item?.competitionId}</div>
+                <div class="competition-number">${this.#competitionDate}</div>
                 <div class="competition-name">${this.#competitionName}</div>
                 <!-- <div class="competition-name">${this.#competitionDate}</div> -->
             </header>
             <aside>
                 <div class="dates">
-                    ${this.#competitionDate}
+                    ${this.item?.ekp || this.item?.competitionId}
                 </div>
                 <div class="image">
-                    <img src="/images/no-avatar.svg">
+                    <img src="/images/competition.svg">
                 </div>
                 <div class="place">
                     ${this.#competitionPlace}
