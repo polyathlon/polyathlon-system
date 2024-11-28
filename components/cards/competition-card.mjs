@@ -1,4 +1,4 @@
-import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
+import { BaseElement, html, css } from '../../js/base-element.mjs';
 
 import '../buttons/simple-button.mjs'
 
@@ -36,19 +36,19 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
                     grid-area: header;
                     display: flex;
                     flex-direction: row-reverse;
-                    align-items: center;
+                    align-items: safe center;
                     background-color: #6001d2;
                     font-size: 14px;
                     font-weight: bold;
-                    padding: 5px;
+                    overflow: hidden;
+                    padding: 0px 5px;
                     .competition-number {
                         white-space: nowrap;
                         user-select: text;
                     }
                     .competition-name {
                         width: 100%;
-                        text-align: center;
-                        user-select: text;
+                        hyphens: auto;
                     }
                 }
                 aside {
@@ -130,12 +130,12 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
             const start = this.item?.startDate.split("-")
             const end = this.item?.endDate.split("-")
             if (start[2] === end[2] && start[1] === end[1]) {
-                return `${start[2]} ${MyCompetitionSection1List1.monthNames[start[1] - 1]}`
+                return `${start[2]} ${CompetitionCard.monthNames[start[1] - 1]}`
             }
             if (start[1] === end[1]) {
-                return `${start[2]}-${end[2]} ${MyCompetitionSection1List1.monthNames[start[1] - 1]}`
+                return `${start[2]}-${end[2]} ${CompetitionCard.monthNames[start[1] - 1]}`
             }
-            return `${start[2]} ${MyCompetitionSection1List1.monthNames[start[1]-1]} - ${end[2]} ${MyCompetitionSection1List1.monthNames[end[1] - 1]}`
+            return `${start[2]} ${CompetitionCard.monthNames[start[1]-1]} - ${end[2]} ${CompetitionCard.monthNames[end[1] - 1]}`
         }
         return ''
     }
@@ -159,10 +159,11 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
             <header>
                 <div class="competition-number">${this.item?.ekp || this.item?.competitionId}</div>
                 <div class="competition-name">${this.#competitionName}</div>
+                <!-- <div class="competition-name">${this.#competitionDate}</div> -->
             </header>
             <aside>
                 <div class="dates">
-                    ${this.#competitionName}
+                    ${this.#competitionDate}
                 </div>
                 <div class="image">
                     <img src="/images/no-avatar.svg">
