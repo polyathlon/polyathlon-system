@@ -220,6 +220,8 @@ class MyCompetitionSection3 extends BaseElement {
     }
 
     pdfMethod() {
+        const mainReferee = this.dataSource.items.find((item) => item.position.name === "Главный судья")
+        const mainSecretary = this.dataSource.items.find((item) => item.position.name === "Главный секретарь")
         const docInfo = {
           info: {
             title: "Referees",
@@ -241,7 +243,7 @@ class MyCompetitionSection3 extends BaseElement {
                 text: "Всероссийская федерация Полиатлона",
                 fontSize: 14,
                 alignment: "center",
-              },
+            },
             {
                 text: this.parent.name.name,
                 fontSize: 18,
@@ -260,26 +262,25 @@ class MyCompetitionSection3 extends BaseElement {
                 bold:true,
                 alignment: "center",
             },
-              {
-                  columns: [
+            {
+                columns: [
 
-                      {
-                          width: 'auto',
-                          text: this.#competitionDate(this.parent),
-                          margin: [0, 15, 0, 0],
-                          fontSize: 12,
-                      },
-                      {
-                          width: '*',
-                          text: `г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`,
-                          alignment: "right",
-                          margin: [0, 15, 0, 0],
-                          fontSize: 12,
-                      },
-                  ],
-                  columnGap: 20
-              },
-
+                    {
+                        width: 'auto',
+                        text: this.#competitionDate(this.parent),
+                        margin: [0, 15, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: `г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`,
+                        alignment: "right",
+                        margin: [0, 15, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
             {
                 text: "СПРАВКА О СОСТАВЕ И КВАЛИФИКАЦИИ",
                 fontSize: 18,
@@ -307,16 +308,15 @@ class MyCompetitionSection3 extends BaseElement {
             },
             {
                 columns: [
-
                     {
                         width: 300,
-                        text: 'Главный судья,',
+                        text: mainReferee?.position.name,
                         margin: [20, 40, 0, 0],
                         fontSize: 12,
                     },
                     {
                         width: '*',
-                        text: 'Д.В.Ерёмкин',
+                        text: `${mainReferee?.firstName[0]}.${mainReferee?.middleName[0]}. ${mainReferee?.lastName}`,
                         alignment: "left",
                         margin: [0, 40, 0, 0],
                         fontSize: 12,
@@ -329,13 +329,13 @@ class MyCompetitionSection3 extends BaseElement {
 
                     {
                         width: 300,
-                        text: 'судья всероссийской категории',
+                        text: mainReferee?.category.name,
                         margin: [20, 0, 0, 0],
                         fontSize: 12,
                     },
                     {
                         width: '*',
-                        text: '(г.Ковров, Владимирская обл.)',
+                        text: `(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`,
                         alignment: "left",
                         margin: [0, 0, 0, 0],
                         fontSize: 12,
@@ -348,13 +348,13 @@ class MyCompetitionSection3 extends BaseElement {
 
                     {
                         width: 300,
-                        text: 'Главный секретарь,',
+                        text: mainSecretary?.position.name,
                         margin: [20, 50, 0, 0],
                         fontSize: 12,
                     },
                     {
                         width: '*',
-                        text: 'Е.В.Ерёмкина',
+                        text: `${mainSecretary?.firstName[0]}.${mainSecretary?.middleName[0]}. ${mainSecretary?.lastName}`,
                         alignment: "left",
                         margin: [0, 50, 0, 0],
                         fontSize: 12,
@@ -367,13 +367,13 @@ class MyCompetitionSection3 extends BaseElement {
 
                     {
                         width: 300,
-                        text: 'судья всероссийской категории',
+                        text: mainReferee?.category.name,
                         margin: [20, 0, 0, 0],
                         fontSize: 12,
                     },
                     {
                         width: '*',
-                        text: '(г.Ковров, Владимирская обл.)',
+                        text: `(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`,
                         alignment: "left",
                         margin: [0, 0, 0, 0],
                         fontSize: 12,
