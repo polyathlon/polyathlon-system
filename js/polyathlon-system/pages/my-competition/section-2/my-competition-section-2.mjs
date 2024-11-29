@@ -13,6 +13,9 @@ import { States } from "../../../../utils.js"
 import './my-competition-section-2-list-1.mjs'
 import './my-competition-section-2-page-1.mjs'
 import './my-competition-section-2-page-2.mjs'
+import './my-competition-section-2-page-3.mjs'
+import './my-competition-section-2-page-4.mjs'
+
 
 import DataSet from './my-competition-section-2-dataset.mjs'
 import DataSource from './my-competition-section-2-datasource.mjs'
@@ -214,9 +217,9 @@ class MyCompetitionSection2 extends BaseElement {
             {iconName: 'swimming-solid', page: 5, title: 'Swimming', click: () => this.gotoPage(5)},
             {iconName: 'skiing-solid', page: 6, title: 'Skiing', click: () => this.gotoPage(6)},
             {iconName: 'throwing-solid', page: 7, title: 'Throwing', click: () => this.gotoPage(7)},
+            {iconName: 'dice-five-solid', page: 10, title: 'Back', click: () => this.gotoPage(0)},
             {iconName: 'circle-plus-sharp-solid', page: 8, title: 'Back', click: () => this.gotoPage(7)},
-            {iconName: 'circle-trash-sharp-solid', page: 9, title: 'Back', click: () => this.gotoPage(7)},
-            {iconName: 'circle-mark-sharp-solid', page: 10, title: 'Back', click: () => this.gotoPage(7)},
+            {iconName: 'circle-trash-sharp-solid', page: 9, title: 'Back', click: this.deleteItem},
         ]
     }
 
@@ -315,10 +318,11 @@ class MyCompetitionSection2 extends BaseElement {
         switch(this.currentPage) {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
-            case 1: return cache(this.#page3())
-            case 1: return cache(this.#page4())
-            case 1: return cache(this.#page5())
-            case 1: return cache(this.#page6())
+            case 2: return cache(this.#page3())
+            case 3: return cache(this.#page4())
+            case 4: return cache(this.#page5())
+            case 5: return cache(this.#page6())
+            case 6: return cache(this.#page6())
             default: return cache(this.#page1())
         }
     }
@@ -335,27 +339,27 @@ class MyCompetitionSection2 extends BaseElement {
         `;
     }
 
-    #page6() {
+    #page3() {
         return html`
-            <my-competition-section-6-page-6 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-6>
-        `;
-    }
-
-    #page5() {
-        return html`
-            <my-competition-section-5-page-5 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-5-page-5>
-        `;
+            <my-competition-section-2-page-3 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-3>
+            `;
     }
 
     #page4() {
         return html`
-            <my-competition-section-4-page-4 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-4-page-4>
+            <my-competition-section-2-page-4 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-4>
+            `;
+    }
+
+    #page5() {
+        return html`
+            <my-competition-section-2-page-5 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-5>
         `;
     }
 
-    #page3() {
+    #page6() {
         return html`
-            <my-competition-section-3-page-3 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-3-page-3>
+            <my-competition-section-2-page-6 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-6>
         `;
     }
 
@@ -594,14 +598,7 @@ class MyCompetitionSection2 extends BaseElement {
                 this.avatarFile = null;
             } else {
                 const currentItem = key.currentObject ?? this.currentItem
-
-                if (key.id.include('.')) {
-                    const id = key.id.split('.')[-1]
-                    currentItem[id] = value;
-                }
-                else {
-                    currentItem[key.id] = value;
-                }
+                currentItem[key.id] = value;
                 key.value = value;
             }
         });
