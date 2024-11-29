@@ -63,6 +63,7 @@ const dictionary = {
         "ru-RU": 'Войти',
         "en-EN": 'Sign in'
     },
+    
 }
 
 const language = navigator.language
