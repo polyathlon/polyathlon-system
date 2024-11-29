@@ -155,6 +155,22 @@ const dictionary = {
         "ru-RU": 'Личная ссылка',
         "en-EN": 'Person link'
     },
+    'Send Email': {
+        "ru-RU": 'Отправить письмо на почту',
+        "en-EN": 'Send Email'
+    },
+    'Recovery code': {
+        "ru-RU": 'Код подтверждения',
+        "en-EN": 'Recovery code'
+    },
+    'Recover Password': {
+        "ru-RU": 'Восстановить пароль',
+        "en-EN": 'Recover Password'
+    },
+    'Password recovery': {
+        "ru-RU": 'Восстановление пароля',
+        "en-EN": 'Password recovery'
+    },
 }
 
 //const language = navigator.language

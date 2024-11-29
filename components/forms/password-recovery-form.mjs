@@ -12,6 +12,8 @@ import '../inputs/password-input.mjs';
 import '../inputs/simple-informer.mjs';
 import '../buttons/close-button.mjs';
 
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
+
 class PasswordRecoveryForm extends BaseElement {
     static get properties() {
         return {
@@ -80,48 +82,48 @@ class PasswordRecoveryForm extends BaseElement {
 
     get #page1() {
         return html`
-            <simple-input id="login" icon-name="user" placeholder="Login" @blur=${this.loginValidation} button-name=${this.isLoginValid ? "circle-check-sharp-regular" : ''} @input=${this.loginInput}>
+            <simple-input id="login" icon-name="user" placeholder="${lang`Login`}" @blur=${this.loginValidation} button-name=${this.isLoginValid ? "circle-check-sharp-regular" : ''} @input=${this.loginInput}>
                 ${ this.isLoginError || this.isLoginMessage ?
                     html`
                         <simple-informer slot="informer" info-message=${this.loginErrorMessage} error-message=${this.loginInfoMessage} ></simple-informer>
                     `
                 : ''}
             </simple-input>
-            <simple-input id="email" type="mail" icon-name="mail" placeholder="E-mail" @blur=${this.emailValidation} @input=${this.emailInput} button-name=${this.isEmailValid ? "circle-check-sharp-regular" : ''}>
+            <simple-input id="email" type="mail" icon-name="mail" placeholder="${lang`E-mail`}" @blur=${this.emailValidation} @input=${this.emailInput} button-name=${this.isEmailValid ? "circle-check-sharp-regular" : ''}>
                 ${ this.isEmailError ?
                     html`
                         <simple-informer slot="informer" info-message=${this.emailErrorMessage} error-message=${this.emailInfoMessage} ></simple-informer>
                     `
                 : ''}
             </simple-input>
-            <password-input id="password" sign-up="true" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular"  @generate=${this.generatePassword} @keydown=${this.passwordKeyDown} @input=${this.passwordInput} @blur=${this.passwordValidation}>
+            <password-input id="password" sign-up="true" placeholder="${lang`Password`}" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular"  @generate=${this.generatePassword} @keydown=${this.passwordKeyDown} @input=${this.passwordInput} @blur=${this.passwordValidation}>
                 ${ this.isPasswordError || this.isPasswordMessage ?
                     html`
                         <simple-informer slot="informer" info-message=${this.passwordErrorMessage} error-message=${this.passwordInfoMessage} ></simple-informer>
                     `
                 : ''}
             </password-input>
-            <simple-input id="confirm" type="password" icon-name="lock-confirm" placeholder="Confirm" button-name=${this.isConfirmPasswordValid ? "copy-to-clipboard-solid" : ''} @keydown=${this.confirmPasswordKeyDown} @input=${this.confirmPassword} @button-click=${this.copyToClipboard}>
+            <simple-input id="confirm" type="password" icon-name="lock-confirm" placeholder="${lang`Confirm`}" button-name=${this.isConfirmPasswordValid ? "copy-to-clipboard-solid" : ''} @keydown=${this.confirmPasswordKeyDown} @input=${this.confirmPassword} @button-click=${this.copyToClipboard}>
                 ${ this.isConfirmPasswordError || this.isConfirmPasswordMessage ?
                     html`
                         <simple-informer slot="informer" info-message=${this.confirmPasswordErrorMessage} error-message=${this.confirmPasswordInfoMessage}></simple-informer>
                     `
                 : ''}
             </simple-input>
-            <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.passwordRecoveryRequest : nothing}>Send Email</form-button>
+            <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.passwordRecoveryRequest : nothing}>${lang`Send Email`}</form-button>
         `
     }
 
     get #page2() {
         return html`
-            <simple-input id="code" icon-name="order-number-solid" placeholder="Recovery code" button-name=${this.isCodeValid && "circle-check-sharp-regular" || nothing} @input=${this.codeInput}>
+            <simple-input id="code" icon-name="order-number-solid" placeholder="${lang`Recovery code`}" button-name=${this.isCodeValid && "circle-check-sharp-regular" || nothing} @input=${this.codeInput}>
                 ${ this.isCodeError || this.isCodeMessage ?
                     html`
                         <simple-informer slot="informer" info-message=${this.codeErrorMessage} error-message=${this.codeInfoMessage} ></simple-informer>
                     `
                 : ''}
             </simple-input>
-            <form-button ?disable=${!this.isCodeEnable()} @click=${this.isCodeEnable() ? this.passwordRecovery : nothing}>Recover Password</form-button>
+            <form-button ?disable=${!this.isCodeEnable()} @click=${this.isCodeEnable() ? this.passwordRecovery : nothing}>${lang`Recover Password`}</form-button>
         `
     }
 
@@ -132,7 +134,7 @@ class PasswordRecoveryForm extends BaseElement {
                 <form class="form animate" method="post" id="form">
                     <div class="form-header">
                         <div class="form-tabs no-select">
-                            <div class="form-tab" selected data-label="Password recovery">Password recovery</div>
+                            <div class="form-tab" selected data-label="Password recovery">${lang`Password recovery`}</div>
                         </div>
                         <close-button class="close-button no-select" name="times" @click=${()=>this.close('CANCEL')}></close-button>
                     </div>
