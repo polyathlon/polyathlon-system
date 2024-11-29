@@ -202,10 +202,25 @@ class MyCompetitionSection3 extends BaseElement {
         ]
     }
 
-    async pdfMethod() {
-        const CompetitionTypesDataset = await import('../my-competition-types/my-competition-types-dataset.mjs');
-        const competitionTypesDataset = CompetitionTypesDataset.default;
-        var docInfo = {
+    #competitionDate(parent) {
+        const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+
+        if (parent.startDate) {
+            const start = parent.startDate.split("-")
+            const end = parent.endDate.split("-")
+            if (start[2] === end[2] && start[1] === end[1]) {
+                return `${start[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
+            }
+            if (start[1] === end[1]) {
+                return `${start[2]}-${end[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
+            }
+            return `${start[2]} ${monthNames[start[1]-1]} - ${end[2]} ${monthNames[end[1] - 1]} ${start[0]} года`
+        }
+        return ''
+    }
+
+    pdfMethod() {
+        const docInfo = {
           info: {
             title: "Referees",
             author: "Polyathlon systems",
@@ -228,7 +243,7 @@ class MyCompetitionSection3 extends BaseElement {
                 alignment: "center",
               },
             {
-                text: competitionTypesDataset.find("name"),
+                text: this.parent.name.name,
                 fontSize: 18,
                 bold:true,
                 alignment: "center",
@@ -240,7 +255,7 @@ class MyCompetitionSection3 extends BaseElement {
                 alignment: "center",
             },
             {
-                text: "3-борье с лыжной гонкой",
+                text: this.parent?.sportsDiscipline1?.name,
                 fontSize: 18,
                 bold:true,
                 alignment: "center",
@@ -250,13 +265,13 @@ class MyCompetitionSection3 extends BaseElement {
 
                       {
                           width: 'auto',
-                          text: '12-15 января 2023 года',
+                          text: this.#competitionDate(this.parent),
                           margin: [0, 15, 0, 0],
                           fontSize: 12,
                       },
                       {
                           width: '*',
-                          text: 'г.Ковров, Владимирская обл.',
+                          text: `г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`,
                           alignment: "right",
                           margin: [0, 15, 0, 0],
                           fontSize: 12,
@@ -282,12 +297,11 @@ class MyCompetitionSection3 extends BaseElement {
             {
                 table:{
                     widths:['auto','*'],
-
-                    body:[
-                        ['Первая ячейка первой строки','Вторая ячейка первой строки'],
-                        ['Первая ячейка второй строки','Вторая ячейка второй строки'],
-                        [{text:'текстовое содержимое',bold:true},'Текст']
-                    ],
+                    body: this.dataSource.items.map( (item, index) => [
+                        item.position.name, `${item.category.name} ${item.lastName} ${item.firstName} ${item.middleName} (${item?.city?.name}, ${item?.city?.region?.name})`
+                        // ['Первая ячейка второй строки','Вторая ячейка второй строки'],
+                        // [{text:'текстовое содержимое',bold:true},'Текст']
+                    ]),
                     headerRows:1
                 },
             },
@@ -620,9 +634,9 @@ class MyCompetitionSection3 extends BaseElement {
                 return this.#newItemFooter
             }
             if (this.isModified) {
-                return this.#addItemFooter
+                return this.#itemFooter
             }
-            return this.#itemFooter
+            return this.#addItemFooter
         }
         if (this.dataSource.state === States.NEW) {
             return this.#newItemFooter
