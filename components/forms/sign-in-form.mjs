@@ -90,7 +90,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                                     `
                                 : ''}
                             </simple-input>
-                            <password-input id="password" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular" @keydown=${this.passwordKeyDown} @input=${this.passwordInput} @blur=${this.passwordValidation}>
+                            <password-input id="password" placeholder=${lang`Password`} icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular" @keydown=${this.passwordKeyDown} @input=${this.passwordInput} @blur=${this.passwordValidation}>
                                 ${ this.isPasswordError || this.isPasswordMessage ?
                                     html`
                                         <simple-informer slot="informer" info-message=${this.passwordErrorMessage} error-message=${this.passwordInfoMessage} ></simple-informer>
@@ -100,10 +100,10 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
                             <div class="login-options">
                                 <div class="checkbox-remember">
-                                    <label for="remember">Remember me</label>
+                                    <label for="remember">${lang`Remember me`}</label>
                                     <input type="checkbox" id="remember" name="remember" @click=${this.rememberMe}>
                                 </div>
-                                <link-button @click=${this.forgotClick}>Forgot password?</link-button>
+                                <link-button @click=${this.forgotClick}>${lang`Forgot password?`}</link-button>
                             </div>
 
                             <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>${lang`Sign in`}</form-button>
@@ -113,7 +113,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
                     </div>
 
                     <div class="form-footer">
-                        <link-button @click=${this.signUpClick}>New user? Sign up!</link-button>
+                        <link-button @click=${this.signUpClick}>${lang`Registration`}</link-button>
                     </div>
                 </form>
             </div>

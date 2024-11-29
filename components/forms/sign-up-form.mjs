@@ -12,6 +12,8 @@ import '../inputs/password-input.mjs';
 import '../inputs/simple-informer.mjs';
 import '../buttons/close-button.mjs';
 
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
+
 class SignUpForm extends BaseElement {
     static get properties() {
         return {
@@ -88,28 +90,28 @@ class SignUpForm extends BaseElement {
                 <form class="form animate" method="post" id="form">
                     <div class="form-header">
                         <div class="form-tabs no-select">
-                            <div class="form-tab" selected data-label="Sign Up">Sign Up</div>
+                            <div class="form-tab" selected data-label="Sign Up">${lang`Sign Up`}</div>
                         </div>
                         <close-button class="close-button no-select" name="times" @click=${()=>this.close('CANCEL')}></close-button>
                     </div>
 
                     <div class="form-body">
                         <div id="db-tab-section" class="form-tab-section selected">
-                            <simple-input id="login" icon-name="user" placeholder="Login" @blur=${this.loginValidation} button-name=${this.isLoginValid ? "circle-check-sharp-regular" : ''} @input=${this.loginInput}>
+                            <simple-input id="login" icon-name="user" placeholder="${lang`Login`}" @blur=${this.loginValidation} button-name=${this.isLoginValid ? "circle-check-sharp-regular" : ''} @input=${this.loginInput}>
                                 ${ this.isLoginError || this.isLoginMessage ?
                                     html`
                                         <simple-informer slot="informer" info-message=${this.loginErrorMessage} error-message=${this.loginInfoMessage} ></simple-informer>
                                     `
                                 : ''}
                             </simple-input>
-                        <simple-input id="email" type="mail" icon-name="mail" placeholder="E-mail" @blur=${this.emailValidation} @input=${this.emailInput} button-name=${this.isEmailValid ? "circle-check-sharp-regular" : ''}>
+                        <simple-input id="email" type="mail" icon-name="mail" placeholder="${lang`E-mail`}" @blur=${this.emailValidation} @input=${this.emailInput} button-name=${this.isEmailValid ? "circle-check-sharp-regular" : ''}>
                             ${ this.isEmailError ?
                                 html`
                                     <simple-informer slot="informer" info-message=${this.emailErrorMessage} error-message=${this.emailInfoMessage} ></simple-informer>
                                 `
                             : ''}
                         </simple-input>
-                        <password-input id="password" sign-up="true" placeholder="Password" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular"  @generate=${this.generatePassword} @keydown=${this.passwordKeyDown} @input=${this.passwordInput} @blur=${this.passwordValidation}>
+                        <password-input id="password" sign-up="true" placeholder="${lang`Password`}" icon-name="lock" visible-icon="eye-slash-regular" invisible-icon="eye-regular"  @generate=${this.generatePassword} @keydown=${this.passwordKeyDown} @input=${this.passwordInput} @blur=${this.passwordValidation}>
                                 ${ this.isPasswordError || this.isPasswordMessage ?
                                     html`
                                         <simple-informer slot="informer" info-message=${this.passwordErrorMessage} error-message=${this.passwordInfoMessage} ></simple-informer>
@@ -117,7 +119,7 @@ class SignUpForm extends BaseElement {
                                 : ''}
                             </password-input>
                         <!-- <password-input id="password" sign-up="true" icon-name="lock" placeholder="Password" visible-icon="eye-slash-regular" invisible-icon="eye-regular" @generate=${this.generatePassword} @input=${this.passwordChange}></password-input> -->
-                        <simple-input id="confirm" type="password" icon-name="lock-confirm" placeholder="Confirm" button-name=${this.isConfirmPasswordValid ? "copy-to-clipboard-solid" : ''} @keydown=${this.confirmPasswordKeyDown} @input=${this.confirmPassword} @button-click=${this.copyToClipboard}>
+                        <simple-input id="confirm" type="password" icon-name="lock-confirm" placeholder="${lang`Confirm`}" button-name=${this.isConfirmPasswordValid ? "copy-to-clipboard-solid" : ''} @keydown=${this.confirmPasswordKeyDown} @input=${this.confirmPassword} @button-click=${this.copyToClipboard}>
                             ${ this.isConfirmPasswordError || this.isConfirmPasswordMessage ?
                                 html`
                                     <simple-informer slot="informer" info-message=${this.confirmPasswordErrorMessage} error-message=${this.confirmPasswordInfoMessage}></simple-informer>
@@ -126,11 +128,11 @@ class SignUpForm extends BaseElement {
                         </simple-input>
                         <div class="sign-up-options">
                             <div class="checkbox-remember">
-                                <label for="remember"><b>Remember me</b></label>
+                                <label for="remember"><b>${lang`Remember me`}</b></label>
                                 <input type="checkbox" id="remember" name="remember" @click=${this.RememberMe}>
                             </div>
                         </div>
-                        <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>Sign Up</form-button>
+                        <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>${lang`Sign Up`}</form-button>
                     </div>
                 </div>
             </div>
