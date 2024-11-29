@@ -97,7 +97,7 @@ class MyCompetitionSection1List1 extends BaseElement {
     render() {
         return html`
             <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
+                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/competition.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
             </div>
             <div class="label">
                 ${this.#competitionName}

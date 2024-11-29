@@ -222,7 +222,7 @@ class MyRefereesSection1 extends BaseElement {
             },
               {
                   columns: [
-                        
+
                       {
                           width: 'auto',
                           text: '12-15 января 2023 года',
@@ -257,7 +257,7 @@ class MyRefereesSection1 extends BaseElement {
             {
                 table:{
                     widths:['auto','*'],
-                    
+
                     body:[
                         ['Первая ячейка первой строки','Вторая ячейка первой строки'],
                         ['Первая ячейка второй строки','Вторая ячейка второй строки'],
@@ -268,7 +268,7 @@ class MyRefereesSection1 extends BaseElement {
             },
             {
                 columns: [
-                      
+
                     {
                         width: 300,
                         text: 'Главный судья,',
@@ -287,7 +287,7 @@ class MyRefereesSection1 extends BaseElement {
             },
             {
                 columns: [
-                      
+
                     {
                         width: 300,
                         text: 'судья всероссийской категории',
@@ -306,7 +306,7 @@ class MyRefereesSection1 extends BaseElement {
             },
             {
                 columns: [
-                      
+
                     {
                         width: 300,
                         text: 'Главный секретарь,',
@@ -325,7 +325,7 @@ class MyRefereesSection1 extends BaseElement {
             },
             {
                 columns: [
-                      
+
                     {
                         width: 300,
                         text: 'судья всероссийской категории',
@@ -343,7 +343,7 @@ class MyRefereesSection1 extends BaseElement {
                 columnGap: 20
             },
           ],
-          
+
           styles: {
             header0:{
             }
@@ -591,7 +591,7 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {

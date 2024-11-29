@@ -386,16 +386,31 @@ class MyCompetitionSection1 extends BaseElement {
         `
     }
 
+
+
     get #rightFooter() {
         if (this.isModified) {
-        return html`
-            <nav class='save'>
-                <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
-                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
-            </nav>
-        `
+            return html`
+                <nav>
+                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
         }
-        else return ''
+        else {
+            return html`
+                <nav>
+                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
+                </nav>
+            `
+        }
+    }
+
+    async deleteItem() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить это соревнование?')
+        if (modalResult !== 'Ok')
+            return;
+        this.dataSource.deleteItem(this.currentItem)
     }
 
     render() {
@@ -478,7 +493,7 @@ class MyCompetitionSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {

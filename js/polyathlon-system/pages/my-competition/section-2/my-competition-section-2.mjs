@@ -10,8 +10,9 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import { States } from "../../../../utils.js"
 
-import './my-competition-section-2-page-1.mjs'
 import './my-competition-section-2-list-1.mjs'
+import './my-competition-section-2-page-1.mjs'
+import './my-competition-section-2-page-2.mjs'
 
 import DataSet from './my-competition-section-2-dataset.mjs'
 import DataSource from './my-competition-section-2-datasource.mjs'
@@ -314,6 +315,10 @@ class MyCompetitionSection2 extends BaseElement {
         switch(this.currentPage) {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
+            case 1: return cache(this.#page3())
+            case 1: return cache(this.#page4())
+            case 1: return cache(this.#page5())
+            case 1: return cache(this.#page6())
             default: return cache(this.#page1())
         }
     }
@@ -326,7 +331,31 @@ class MyCompetitionSection2 extends BaseElement {
 
     #page2() {
         return html`
-            <my-competition-section-1-page-2 .item=${this.currentItem}></my-competition-section-1-page-2>
+            <my-competition-section-2-page-2 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-2>
+        `;
+    }
+
+    #page6() {
+        return html`
+            <my-competition-section-6-page-6 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-6>
+        `;
+    }
+
+    #page5() {
+        return html`
+            <my-competition-section-5-page-5 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-5-page-5>
+        `;
+    }
+
+    #page4() {
+        return html`
+            <my-competition-section-4-page-4 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-4-page-4>
+        `;
+    }
+
+    #page3() {
+        return html`
+            <my-competition-section-3-page-3 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-3-page-3>
         `;
     }
 
@@ -410,7 +439,7 @@ class MyCompetitionSection2 extends BaseElement {
         return html`
             <nav>
                 <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
-                <simple-button @click=${this.deleteItem}>${lang`Cancel`}</simple-button>
+                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
     }
@@ -555,7 +584,7 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
@@ -565,7 +594,14 @@ class MyCompetitionSection2 extends BaseElement {
                 this.avatarFile = null;
             } else {
                 const currentItem = key.currentObject ?? this.currentItem
-                currentItem[key.id] = value;
+
+                if (key.id.include('.')) {
+                    const id = key.id.split('.')[-1]
+                    currentItem[id] = value;
+                }
+                else {
+                    currentItem[key.id] = value;
+                }
                 key.value = value;
             }
         });

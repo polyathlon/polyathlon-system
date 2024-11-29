@@ -509,7 +509,7 @@ class MySportsmenSection1 extends BaseElement {
         if (this.oldValues.size === 0) {
             this.isModified = false;
         } else {
-            const modalResult = await this.showDialog('Вы действительно хотите отменить все изменения?', 'confirm')
+            const modalResult = await this.showDialog('Вы действительно хотите отменить все сделанные изменения?', 'confirm')
             if (modalResult !== 'Ok')
                 return
             this.oldValues.forEach( (value, key) => {

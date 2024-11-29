@@ -376,7 +376,7 @@ class MyCompetitionSection2 extends BaseElement {
 
     async saveItem() {
         if (this.currentPage === 2) {
-            const modalResult = await this.addSportsmanDialogShow('Вы действительно хотите отменить все изменения?')
+            const modalResult = await this.addSportsmanDialogShow('Вы действительно хотите отменить все сделанные изменения?')
             await SportsmenDataSet.addItem(modalResult, this.currentItem._id);
         }
         else if ('_id' in this.currentItem) {
@@ -389,7 +389,7 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {

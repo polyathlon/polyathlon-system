@@ -438,7 +438,7 @@ class MyCompetitionSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {

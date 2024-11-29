@@ -756,7 +756,7 @@ class MyProjectsSection1Page2 extends BaseElement {
 
 
         async cancelProject() {
-            const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все изменения?')
+            const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все сделанные изменения?')
             if (modalResult !== 'Ok')
                 return
             this.oldValues.forEach( (value, key) => {

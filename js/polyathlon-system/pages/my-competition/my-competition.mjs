@@ -32,7 +32,7 @@ class MyCompetition extends BaseElement {
             {label: lang`Competition`, iconName: 'competition-solid'},
             {label: lang`Sportsmen`, iconName: 'sportsmen-solid'},
             {label: lang`Referees`, iconName: 'judge1-solid'},
-            {label: lang`Statistic`, iconName: 'statistic-solid'},
+            {label: lang`Statistic`, iconName: 'chart-pie-solid'},
         ]
     }
 
