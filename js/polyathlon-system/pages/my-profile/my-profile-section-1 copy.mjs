@@ -7,7 +7,6 @@ import '../../../../components/inputs/email-input.mjs'
 import '../../../../components/inputs/password-input.mjs'
 
 
-
 class MyProfileSection1 extends BaseElement {
         static get properties() {
             return {
