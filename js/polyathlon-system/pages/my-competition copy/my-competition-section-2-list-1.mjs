@@ -55,7 +55,7 @@ class MyCompetitionSection2List1 extends BaseElement {
                 html `<icon-button
                         label=${ this.fio(item) }
                         title=${ item._id }
-                        icon-name=${ item.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+                        icon-name=${ item.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
                         .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'hash-number-solid'} : '' }
                         ?selected=${ this.currentItem === item }
                         @click=${() => this.showItem(index, item._id)}

@@ -74,7 +74,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
                 <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
                 <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="Category name:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-input id="sportsmanUlid" icon-name=${+this.item?.gender ? "sportsman-girl-solid" : "sportsman-boy-solid"} @icon-click=${() => this.showPage('my-sportsman')} label="Sportsman Ulid:" .value=${this.item?.sportsmanUlid} @input=${this.validateInput}></simple-input>
+                <simple-input id="sportsmanUlid" icon-name=${+this.item?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${() => this.showPage('my-sportsman')} label="Sportsman Ulid:" .value=${this.item?.sportsmanUlid} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

@@ -56,11 +56,19 @@ class MyCompetition extends BaseElement {
         `;
     }
 
+    get #section4() {
+        import('./section-4/my-competition-section-4.mjs');
+        return html`
+            <my-competition-section-4 .sectionNames=${this.sectionNames}></my-competition-section-4>
+        `;
+    }
+
     get #section() {
         switch(this.currentSection) {
             case 0: return cache(this.#section1)
             case 1: return cache(this.#section2)
             case 2: return cache(this.#section3)
+            case 3: return cache(this.#section4)
             default: return cache(this.#section1)
         }
     }

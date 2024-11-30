@@ -134,8 +134,8 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                     <icon-button
                         label=${ this.fio(item) }
                         title=${ item.sportsmanId || item?._id }
-                        icon-name=${ item.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
-                        image-name=${ item.gender == 0 ? "../../../../images/sportsman-boy-solid.svg" : "../../../../images/sportsman-girl-solid.svg" }
+                        icon-name=${ item.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
+                        image-name=${ item.gender == 0 ? "../../../../images/sportsman-man-solid.svg" : "../../../../images/sportsman-woman-solid.svg" }
                         .status=${{ name: item.sportsmanId || item?._id, icon: 'cake-candles-solid'} }
                         @click=${() => this.selectItem(index, item)}
                     >

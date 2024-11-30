@@ -328,7 +328,7 @@ class MySportsmenSection1 extends BaseElement {
         return html `<icon-button
                 label=${ this.listItem.key }
                 title=${ this.listItem.id }
-                icon-name=${ this.listItem.value?.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+                icon-name=${ this.listItem.value?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
                 ?selected=${ this.currentItem?._id === this.listItem?.id }
                 .status=${{ name: this.listItem.value?.hashNumber, icon: 'hash-number-solid'} }
             >
@@ -336,7 +336,7 @@ class MySportsmenSection1 extends BaseElement {
         `
     }
 
-    //icon-name=${ item.value?.gender == 0 ? "sportsman-boy-solid" : "sportsman-girl-solid" }
+    //icon-name=${ item.value?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
     makeList() {
         if (!this.dataSource?.items || this.dataSource?.items.length === 0)
             return;
@@ -347,7 +347,7 @@ class MySportsmenSection1 extends BaseElement {
                 html `<icon-button
                     label=${ item.key }
                     title=${ item.id }
-                    image-name=${ item.value?.gender == 0 ? "../../../../images/sportsman-boy-solid.svg" : "../../../../images/sportsman-girl-solid.svg" }
+                    image-name=${ item.value?.gender == 0 ? "../../../../images/sportsman-man-solid.svg" : "../../../../images/sportsman-woman-solid.svg" }
                     ?selected=${ this.currentItem?._id === item.id }
                     .status=${{ name: item.value?.hashNumber || item?.id, icon: 'hash-number-solid'} }
                     @click=${() => this.showItem(item)}
