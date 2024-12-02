@@ -214,18 +214,18 @@ class MyCompetitionSection2 extends BaseElement {
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
         ]
         this.pages = [
-            {iconName: 'sportsmen-solid', page: 0, title: 'Sportsmen', click: () => this.gotoPage(0)},
-            {iconName: 'shooting-solid', page: 1, title: 'Shooting', click: () => this.gotoPage(1)},
-            {iconName: 'swimming-solid', page: 4, title: 'Swimming', click: () => this.gotoPage(4)},
-            {iconName: 'sprinting-solid', page: 6, title: 'Sprinting', click: () => this.gotoPage(6)},
-            {iconName: 'throwing-solid', page: 5, title: 'Throwing', click: () => this.gotoPage(5)},
-            {iconName: 'running-solid', page: 7, title: 'Running', click: () => this.gotoPage(7)},
-            {iconName: 'pull-ups-solid', page: 2, title: 'Pull-ups', click: () => this.gotoPage(2)},
-            {iconName: 'push-ups-solid', page: 3, title: 'Push-ups', click: () => this.gotoPage(3)},
-            {iconName: 'skiing-solid', page: 8, title: 'Skiing', click: () => this.gotoPage(8)},
-            {iconName: 'dice-five-solid', page: 10, title: 'Back', click: () => this.gotoPage(0)},
-            {iconName: 'circle-plus-sharp-solid', page: -1, title: 'Back', click: this. addItem},
-            {iconName: 'circle-trash-sharp-solid', page: -2, title: 'Back', click: this.deleteItem},
+            {iconName: 'sportsmen-solid', page: 0, title: lang`Sportsmen`, click: () => this.gotoPage(0)},
+            {iconName: 'shooting-solid', page: 1, title: lang`Shooting`, click: () => this.gotoPage(1)},
+            {iconName: 'swimming-solid', page: 4, title: lang`Swimming`, click: () => this.gotoPage(4)},
+            {iconName: 'sprinting-solid', page: 6, title: lang`Sprinting`, click: () => this.gotoPage(6)},
+            {iconName: 'throwing-solid', page: 5, title: lang`Throwing`, click: () => this.gotoPage(5)},
+            {iconName: 'running-solid', page: 7, title: lang`Running`, click: () => this.gotoPage(7)},
+            {iconName: 'pull-ups-solid', page: 2, title: lang`Pull-ups`, click: () => this.gotoPage(2)},
+            {iconName: 'push-ups-solid', page: 3, title: lang`Push-ups`, click: () => this.gotoPage(3)},
+            {iconName: 'skiing-solid', page: 8, title: lang`Skiing`, click: () => this.gotoPage(8)},
+            {iconName: 'dice-five-solid', page: 10, title: lang`Back`, click: () => this.gotoPage(0)},
+            {iconName: 'circle-plus-sharp-solid', page: -1, title: lang`Back`, click: this. addItem},
+            {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Back`, click: this.deleteItem},
         ]
     }
 
