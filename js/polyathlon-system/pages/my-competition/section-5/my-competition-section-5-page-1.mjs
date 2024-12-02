@@ -1,38 +1,33 @@
-import { BaseElement, html, css } from '../../../../../base-element.mjs'
+import { BaseElement, html, css } from '../../../../base-element.mjs'
 
-import '../../../../../../components/inputs/simple-input.mjs'
-import '../../../../../../components/inputs/gender-input.mjs'
-import '../../../../../../components/inputs/birthday-input.mjs'
-import '../../../../../../components/selects/simple-select.mjs'
+import '../../../../../components/inputs/simple-input.mjs'
+import '../../../../../components/inputs/gender-input.mjs'
+import '../../../../../components/inputs/birthday-input.mjs'
+import '../../../../../components/selects/simple-select.mjs'
 
-import lang from '../../../../polyathlon-dictionary.mjs'
+import RefereeCategoriesDataset from '../../my-referee-categories/my-referee-categories-dataset.mjs'
+import RefereeCategoriesDataSource from '../../my-referee-categories/my-referee-categories-datasource.mjs'
 
-import SportsCategoryDataSource from '../../../my-sports-categories/my-sports-categories-datasource.mjs'
-import SportsCategoryDataset from '../../../my-sports-categories/my-sports-categories-dataset.mjs'
+import RefereePositionsDataset from '../../my-referee-positions/my-referee-positions-dataset.mjs'
+import RefereePositionsDataSource from '../../my-referee-positions/my-referee-positions-datasource.mjs'
 
-import RegionDataSource from '../../../my-regions/my-regions-datasource.mjs'
-import RegionDataset from '../../../my-regions/my-regions-dataset.mjs'
+import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
+import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 
-import ClubDataSource from '../../../my-clubs/my-clubs-datasource.mjs'
-import ClubDataset from '../../../my-clubs/my-clubs-dataset.mjs'
+import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
+import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 
-import AgeGroupDataSource from '../../../my-age-groups/my-age-groups-datasource.mjs'
-import AgeGroupDataset from '../../../my-age-groups/my-age-groups-dataset.mjs'
+import RefereeDataset from '../../my-referees/my-referees-dataset.mjs'
 
-import Dataset from './my-competition-section-1-dataset.mjs'
-import DataSource from './my-competition-section-1-datasource.mjs'
 
-import SportsmanDataset from '../../../my-sportsmen/my-sportsmen-dataset.mjs'
-
-class MyCompetitionSection1Page2 extends BaseElement {
+class MyCompetitionSection3Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: { type: Object, default: null },
-            sportsCategorySource: {type: Object, default: null},
+            refereeCategoriesDataSource: {type: Object, default: null},
+            refereePositionsDataSource: {type: Object, default: null},
             regionDataSource: {type: Object, default: null},
-            clubDataSource: {type: Object, default: null},
-            ageGroupDataSource: {type: Object, default: null},
+            cityDataSource: {type: Object, default: null},
             findDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
@@ -68,18 +63,17 @@ class MyCompetitionSection1Page2 extends BaseElement {
             <modal-dialog></modal-dialog>
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="lastName" label=${lang`Last name` + ':'} icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="firstName" label=${lang`First name` + ':'} icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="lastName" icon-name="user" label="Last name:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" icon-name="user-group-solid" label="First name:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="middleName" label=${lang`Middle name` + ':'} icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <birthday-input id="birthday" label=${lang`Data of birth` + ':'} .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
-                <simple-input id="sportsmanId" label=${lang`Sportsman ID` + ':'} .dataSource=${this.findDataSource} icon-name="id-number-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.sportsmanId} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
-                <gender-input id="gender" label=${lang`Gender` + ':'} icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="ageGroup" label=${lang`Age group` + ':'} icon-name="age-group-solid" @icon-click=${() => this.showPage('my-age-groups')} .dataSource=${this.ageGroupDataSource} .value=${this.item?.ageGroup} @input=${this.validateInput}></simple-select>
-                <simple-select id="region" label=${lang`Region name` + ':'} icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="club" label=${lang`Club name` + ':'} icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
-                <simple-select id="category" label=${lang`Sports category` + ':'} icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-input id="sportsmanUlid" label=${lang`Sportsman Ulid` + ':'} icon-name=${+this.item?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${() => this.showPage('my-sportsman')} .value=${this.item?.sportsmanUlid} @input=${this.validateInput}></simple-input>
+                <simple-input id="middleName" icon-name="users-solid" label="Middle name:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
+                <simple-input id="refereeId" .dataSource=${this.findDataSource} icon-name="id-number-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} label="Referee ID:" .value=${this.item?.refereeId} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-select id="position" icon-name="referee-position-solid" @icon-click=${() => this.showPage('my-referee-positions')} label="Position:" .dataSource=${this.refereePositionsDataSource} .value=${this.item?.position} @input=${this.validateInput}></simple-select>
+                <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
+                <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-referee-categories')} label="Category:" .dataSource=${this.refereeCategoriesDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="refereeUlid" icon-name=${+this.item?.gender ? "referee-woman-solid" : "referee-man-solid"} @icon-click=${() => this.showPage('my-referee')} label="Referee Ulid:" .value=${this.item?.refereeUlid} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -129,7 +123,7 @@ class MyCompetitionSection1Page2 extends BaseElement {
                 await this.errorDialog('Вы не задали фамилию для поиска')
                 return
             }
-            sportsman = await SportsmanDataset.getItemByLastName(lastName)
+            sportsman = await RefereeDataset.getItemByLastName(lastName)
             if (sportsman.rows.length === 0) {
                 this.showDialog('Такой спортсмен не найден')
                 return
@@ -142,9 +136,9 @@ class MyCompetitionSection1Page2 extends BaseElement {
             }
             sportsman = sportsman.rows[0].doc
         } else if (value.includes(":")) {
-            sportsman = await SportsmanDataset.getItem(value)
+            sportsman = await RefereeDataset.getItem(value)
         } else if (target.value.includes("-")) {
-            sportsman = await SportsmanDataset.getItemBySportsmanId(value)
+            sportsman = await RefereeDataset.getItemBySportsmanId(value)
             if (sportsman.rows.length === 0) {
                 this.showDialog('Такой спортсмен не найден')
                 return
@@ -155,14 +149,14 @@ class MyCompetitionSection1Page2 extends BaseElement {
             }
             sportsman = sportsman.rows[0].doc
         } else {
-            sportsman = await SportsmanDataset.getItemByLastName(value)
+            sportsman = await RefereeDataset.getItemByLastName(value)
             if (sportsman.rows.length >= 0) {
                 this.findDataSource = sportsman.rows
             }
         }
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.refereeUlid = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
@@ -178,7 +172,7 @@ class MyCompetitionSection1Page2 extends BaseElement {
     sportsmanChoose(e) {
         let sportsman = e.detail
         if (sportsman) {
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.refereeUlid = sportsman._id
             const inputs = this.$id()
             inputs.forEach(input => {
                 if (input.id in sportsman) {
@@ -225,9 +219,6 @@ class MyCompetitionSection1Page2 extends BaseElement {
         }
     }
 
-    async saveItem() {
-        await this.dataSource.saveItem(this.currentItem);
-    }
     startEdit() {
         let input = this.$id("lastName")
         input.focus()
@@ -236,19 +227,12 @@ class MyCompetitionSection1Page2 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        // this.dataSource = new DataSource(this)
-        // await this.dataSource.getItem()
-        this.sportsman = await Dataset.getSportsman()
-        Object.assign(this.item, this.sportsman)
-        if ("_id" in this.sportsman) {
-            this.item.sportsmanUlid = this.sportsman._id
-        }
-        this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
+        this.refereeCategoriesDataSource = new RefereeCategoriesDataSource(this, await RefereeCategoriesDataset.getDataSet())
+        this.refereePositionsDataSource = new RefereePositionsDataSource(this, await RefereePositionsDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
-        this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
-        this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
+        this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }
 
 }
 
-customElements.define("my-competition-section-1-page-2", MyCompetitionSection1Page2);
+customElements.define("my-competition-section-3-page-1", MyCompetitionSection3Page1);

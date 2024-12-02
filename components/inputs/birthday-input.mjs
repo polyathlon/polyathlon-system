@@ -2,7 +2,6 @@ import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
 
-
 import styles from './input-css.mjs'
 
 import './year-input.mjs'

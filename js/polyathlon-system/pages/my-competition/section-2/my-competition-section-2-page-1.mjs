@@ -5,6 +5,8 @@ import '../../../../../components/inputs/gender-input.mjs'
 import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
+import lang from '../../../polyathlon-dictionary.mjs'
+
 import SportsCategoryDataSource from '../../my-sports-categories/my-sports-categories-datasource.mjs'
 import SportsCategoryDataset from '../../my-sports-categories/my-sports-categories-dataset.mjs'
 
@@ -63,18 +65,18 @@ class MyCompetitionSection2Page1 extends BaseElement {
             <modal-dialog></modal-dialog>
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="lastName" icon-name="user" label="Last name:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="firstName" icon-name="user-group-solid" label="First name:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="lastName" label=${lang`Last name` + ':'} icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" label=${lang`First name` + ':'} icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="middleName" icon-name="users-solid" label="Middle name:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <birthday-input id="birthday" label="Data of birth:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
-                <simple-input id="sportsmanId" .dataSource=${this.findDataSource} icon-name="id-number-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} label="Sportsman ID:" .value=${this.item?.sportsmanId} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
-                <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="ageGroup" icon-name="age-group-solid" @icon-click=${() => this.showPage('my-age-groups')} label="Age group:" .dataSource=${this.ageGroupDataSource} .value=${this.item?.ageGroup} @input=${this.validateInput}></simple-select>
-                <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="club" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
-                <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="Sports category:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-input id="sportsmanUlid" icon-name=${+this.item?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${() => this.showPage('my-sportsman')} label="Sportsman Ulid:" .value=${this.item?.sportsmanUlid} @input=${this.validateInput}></simple-input>
+                <simple-input id="middleName" label=${lang`Middle name` + ':'} icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
+                <birthday-input id="birthday" label=${lang`Data of birth` + ':'} .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
+                <simple-input id="sportsmanId" label=${lang`Sportsman ID` + ':'} .dataSource=${this.findDataSource} icon-name="id-number-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.sportsmanId} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <gender-input id="gender" label=${lang`Gender` + ':'} icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
+                <simple-select id="ageGroup" label=${lang`Age group` + ':'} icon-name="age-group-solid" @icon-click=${() => this.showPage('my-age-groups')} .dataSource=${this.ageGroupDataSource} .value=${this.item?.ageGroup} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" label=${lang`Region name` + ':'} icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="club" label=${lang`Club name` + ':'} icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+                <simple-select id="category" label=${lang`Sports category` + ':'} icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="sportsmanUlid" label=${lang`Sportsman Ulid` + ':'} icon-name=${+this.item?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${() => this.showPage('my-sportsman')} .value=${this.item?.sportsmanUlid} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

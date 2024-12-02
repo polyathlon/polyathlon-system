@@ -135,6 +135,10 @@ const dictionary = {
         "ru-RU": 'Регион',
         "en-EN": 'Region name'
     },
+    'City name': {
+        "ru-RU": 'Город',
+        "en-EN": 'City name'
+    },
     'Club name': {
         "ru-RU": 'Клуб',
         "en-EN": 'Club name'
@@ -191,6 +195,39 @@ const dictionary = {
         "ru-RU": 'Профиль',
         "en-EN": 'Profile'
     },
+    'Send request': {
+        "ru-RU": 'Отправить заявку',
+        "en-EN": 'Send request'
+    },
+    'Competition name': {
+        "ru-RU": 'Наименование соревнования',
+        "en-EN": 'Competition name'
+    },
+    'Stage': {
+        "ru-RU": 'Этап',
+        "en-EN": 'Stage'
+    },
+    'Competition ID': {
+        "ru-RU": 'Номер соревнования',
+        "en-EN": 'Competition ID'
+    },
+    'EKP Number': {
+        "ru-RU": 'Номер ЕКП',
+        "en-EN": 'EKP Number'
+    },
+    'Age groups': {
+        "ru-RU": 'Возрастные группы',
+        "en-EN": 'Age groups'
+    },
+    'Sports discipline': {
+        "ru-RU": 'Спортивная дисциплина',
+        "en-EN": 'Sports discipline'
+    },
+    'Flow': {
+        "ru-RU": 'Попытка',
+        "en-EN": 'Flow'
+    },
+
 
 }
 
