@@ -224,11 +224,105 @@ const dictionary = {
         "en-EN": 'Sports discipline'
     },
     'Flow': {
-        "ru-RU": 'Попытка',
+        "ru-RU": 'Поток',
         "en-EN": 'Flow'
     },
-
-
+    'Shift': {
+        "ru-RU": 'Смена',
+        "en-EN": 'Shift'
+    },
+    'Shield': {
+        "ru-RU": 'Щит',
+        "en-EN": 'Shield'
+    },
+    'Result': {
+            "ru-RU": 'Результат',
+            "en-EN": 'Result'
+    },
+    'Points': {
+            "ru-RU": 'Очки',
+            "en-EN": 'Points'
+    },
+    'Place': {
+            "ru-RU": 'Место',
+            "en-EN": 'Place'
+    },
+    'Swim': {
+            "ru-RU": 'Заплыв',
+            "en-EN": 'Swim'
+    },
+    'Track': {
+            "ru-RU": 'Дорожка',
+            "en-EN": 'Track'
+    },
+    'Race': {
+            "ru-RU": 'Забег',
+            "en-EN": 'Race'
+    },
+    'Sector': {
+            "ru-RU": 'Сектор',
+            "en-EN": 'Sector'
+    },
+    'Throw': {
+            "ru-RU": 'Бросок',
+            "en-EN": 'Throw'
+    },
+    'Horizontal bar': {
+            "ru-RU": 'Перекладина',
+            "en-EN": 'Horizontal Bar'
+    },
+    'Platform': {
+            "ru-RU": 'Платформа',
+            "en-EN": 'Platform'
+    },
+    'Start': {
+            "ru-RU": 'Старт',
+            "en-EN": 'Start'
+    },
+    'Finish': {
+            "ru-RU": 'Финиш',
+            "en-EN": 'Finish'
+    },
+    'Skier number': {
+            "ru-RU": 'Номер лыжника',
+            "en-EN": 'Skier number'
+    },
+    'Shooting': {
+            "ru-RU": 'Стрельба',
+            "en-EN": 'Shooting'
+    },
+    'Swimming': {
+            "ru-RU": 'Плавание',
+            "en-EN": 'Swimming'
+    },
+    'Sprinting': {
+            "ru-RU": 'Спринт',
+            "en-EN": 'Throw'
+    },
+    'Throwing': {
+            "ru-RU": 'Метание',
+            "en-EN": 'Throwing'
+    },
+    'Running': {
+            "ru-RU": 'Бег',
+            "en-EN": 'Running'
+    },
+    'Pull-ups': {
+            "ru-RU": 'Подтягивания',
+            "en-EN": 'Pull-ups'
+    },
+    'Push-ups': {
+            "ru-RU": 'Отжимания',
+            "en-EN": 'Push-ups'
+    },
+    'Skiing': {
+            "ru-RU": 'Лыжный бег',
+            "en-EN": 'Throw'
+    },
+    'Back': {
+            "ru-RU": 'Назад',
+            "en-EN": 'Back'
+    },
 }
 
 //const language = navigator.language
