@@ -34,9 +34,10 @@ class MyCompetitionSection1Page2 extends BaseElement {
             clubDataSource: {type: Object, default: null},
             ageGroupDataSource: {type: Object, default: null},
             findDataSource: {type: Object, default: null},
-            item: {type: Object, default: null},
+            item: {type: Object, default: {}},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
+            parent: { type: Object, default: {} },
         }
     }
 
@@ -226,8 +227,9 @@ class MyCompetitionSection1Page2 extends BaseElement {
     }
 
     async saveItem() {
-        await this.dataSource.saveItem(this.currentItem);
+        await Dataset.addItem(this.item);
     }
+
     startEdit() {
         let input = this.$id("lastName")
         input.focus()
@@ -238,11 +240,15 @@ class MyCompetitionSection1Page2 extends BaseElement {
         super.firstUpdated();
         // this.dataSource = new DataSource(this)
         // await this.dataSource.getItem()
+        const parentId = localStorage.getItem('currentCompetition').split(':')[1]
+        Dataset.getDataSet(parentId)
         this.sportsman = await Dataset.getSportsman()
         Object.assign(this.item, this.sportsman)
         if ("_id" in this.sportsman) {
             this.item.sportsmanUlid = this.sportsman._id
         }
+        delete this.item._id
+        delete this.item._rev
         this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())

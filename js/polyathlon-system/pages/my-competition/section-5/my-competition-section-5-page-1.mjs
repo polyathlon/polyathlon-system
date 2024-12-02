@@ -20,7 +20,7 @@ import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 import RefereeDataset from '../../my-referees/my-referees-dataset.mjs'
 
 
-class MyCompetitionSection3Page1 extends BaseElement {
+class MyCompetitionSection5Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -235,4 +235,4 @@ class MyCompetitionSection3Page1 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-3-page-1", MyCompetitionSection3Page1);
+customElements.define("my-competition-section-5-page-1", MyCompetitionSection5Page1);

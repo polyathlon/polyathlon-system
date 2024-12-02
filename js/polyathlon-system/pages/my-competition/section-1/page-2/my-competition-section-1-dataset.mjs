@@ -5,10 +5,11 @@ export default class DataSet {
     static #parentId;
 
     static async getDataSet(id) {
-        if (!DataSet.#dataSet || DataSet.#parentId != id) {
-            DataSet.#dataSet = await DataSet.#getItems(id)
-            DataSet.#parentId = id
-        }
+        // if (!DataSet.#dataSet || DataSet.#parentId != id) {
+        //     DataSet.#dataSet = await DataSet.#getItems(id)
+        //     DataSet.#parentId = id
+        // }
+        DataSet.#parentId = id
         return DataSet.#dataSet
     }
 
@@ -68,7 +69,7 @@ export default class DataSet {
         }
 
         const newItem = await DataSet.getItem(result.id)
-        DataSet.addToDataset(newItem)
+        // DataSet.addToDataset(newItem)
         return newItem
     }
 

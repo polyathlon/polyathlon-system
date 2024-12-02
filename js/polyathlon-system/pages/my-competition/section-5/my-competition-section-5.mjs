@@ -522,13 +522,13 @@ class MyCompetitionSection5 extends BaseElement {
 
     #page1() {
         return html`
-            <my-competition-section-3-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-3-page-1>
+            <my-competition-section-5-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-5-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-competition-section-3-page-1 .item=${this.currentItem}></my-competition-section-3-page-1>
+            <my-competition-section-5-page-1 .item=${this.currentItem}></my-competition-section-5-page-1>
         `;
     }
 
@@ -564,13 +564,13 @@ class MyCompetitionSection5 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-3-list-1 .item=${this}></my-competition-section-3-list-1>
+            <my-competition-section-5-list-1 .item=${this}></my-competition-section-5-list-1>
         `;
     }
 
     #list3() {
         return html`
-            <my-competition-section-3-list-1 .parent=${this.currentItem}></my-competition-section-3-list-3>
+            <my-competition-section-5-list-1 .parent=${this.currentItem}></my-competition-section-5-list-3>
         `;
     }
 
@@ -678,7 +678,7 @@ class MyCompetitionSection5 extends BaseElement {
     }
 
     addFirstItem() {
-        const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
+        const page = this.renderRoot.querySelector('my-sportsmen-section-5-page-1')
         page.startEdit()
     }
 
@@ -706,7 +706,7 @@ class MyCompetitionSection5 extends BaseElement {
 
     async addNewItem() {
         this.dataSource.addNewItem(this.currentItem);
-        // const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
+        // const page = this.renderRoot.querySelector('my-sportsmen-section-5-page-1')
         // page.startEdit()
     }
 

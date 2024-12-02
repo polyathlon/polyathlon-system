@@ -345,7 +345,7 @@ class MyCompetitionSection1 extends BaseElement {
 
     #page2() {
         return html`
-            <my-competition-section-1-page-2 .item=${this.currentItem}></my-competition-section-1-page-2>
+            <my-competition-section-1-page-2 .parent=${this.currentItem}></my-competition-section-1-page-2>
         `;
     }
 
@@ -388,10 +388,12 @@ class MyCompetitionSection1 extends BaseElement {
     }
 
     async saveRegistration() {
-        const page  = this.renderRoot.querySelection('my-competition-section-1-page-2')
+        const page  = this.renderRoot.querySelector('my-competition-section-1-page-2')
         await page.saveItem()
-
-        this.currentPage = 0;
+        const modalResult = await this.showDialog("Ваша заявка успешно отправлена")
+        if (modalResult === "Ok") {
+            this.currentPage = 0;
+        }
     }
 
     cancelRegistration() {
@@ -410,8 +412,8 @@ class MyCompetitionSection1 extends BaseElement {
         if (this.isModified) {
             return html`
                 <nav>
-                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
                     <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
                 </nav>
             `
         }
