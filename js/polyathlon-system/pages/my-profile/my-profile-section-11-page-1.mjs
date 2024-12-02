@@ -173,14 +173,14 @@ class MyProfileSection1Page1 extends BaseElement {
     }
     // <div class="right-container">
     //             <div class="name-group">
-    //                 <simple-input label="First Name:" id="firstName" icon-name="user" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
-    //                 <simple-input label="Last Name:" id="lastName" icon-name="user-group-solid" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
+    //                 <simple-input label="First name:" id="firstName" icon-name="user" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
+    //                 <simple-input label="Last name:" id="lastName" icon-name="user-group-solid" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
     //             </div>
     //         </div>
-    // <simple-input label="NickName:" id="nickName" icon-name="user-alien-solid" .value=${this.item?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
+    // <simple-input label="Nickname:" id="nickName" icon-name="user-alien-solid" .value=${this.item?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
     // <simple-input label="Email:" id="email" icon-name="envelope-regular" .value="${this.item?.personalInfo?.email}" @input=${this.validateInput}></simple-input>
     // <gender-input label="Gender:" id="gender" icon-name="gender" .value="${this.item?.personalInfo?.gender}" @input=${this.validateInput}></gender-input>
-    // <birthday-input label="Data of Birth:" id="birthday" .value="${this.item?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
+    // <birthday-input label="Data of birth:" id="birthday" .value="${this.item?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
                 // <div>
                 //     <simple-input id="name" icon-name="user" label="Country name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
                 //     <simple-input id="region" icon-name="flag-solid" label="Region name:" .value=${this.item?.region} @input=${this.validateInput}></simple-input>

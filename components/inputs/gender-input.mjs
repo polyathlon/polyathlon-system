@@ -2,6 +2,8 @@ import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
 
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
+
 import styles from './input-css.mjs'
 
 customElements.define("gender-input", class GenderInput extends BaseElement {
@@ -86,8 +88,8 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
         return html`
             <fieldset class="fieldset">
                 ${this.label ? this.#legend : ''}
-                <label><input type="radio" name="gender" ?checked=${this.setChecked("0")} id="0" value="0" @input=${this.changeValue}>Male</label>
-                <label><input type="radio" name="gender" ?checked=${this.setChecked("1")} id="1" value="1" @input=${this.changeValue}>Female</label>
+                <label><input type="radio" name="gender" ?checked=${this.setChecked("0")} id="0" value="0" @input=${this.changeValue}>${lang`Male`}</label>
+                <label><input type="radio" name="gender" ?checked=${this.setChecked("1")} id="1" value="1" @input=${this.changeValue}>${lang`Female`}</label>
             </fieldset>
         `;
     }

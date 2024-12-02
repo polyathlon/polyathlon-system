@@ -404,7 +404,7 @@ class MyProfileSection1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>Profile ${this.currentItem?.name}</p>
+                <p>${lang`Profile`} ${this.currentItem?.name}</p>
             </header>
             <header class="right-header">
                 ${this.pageNames.map( (page, index) =>

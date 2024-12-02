@@ -177,8 +177,8 @@ class MyProfileSection1 extends BaseElement {
                 </div>
                 <div class="right-layout">
                     <div>
-                        <simple-input label="First Name:" type="text" id="name" icon-name="user" .value=${this.name} @input="${(e) => alert('11')}"></simple-input>
-                        <simple-input label="Last Name:" type="text" id="surname" icon-name="user" .value=${this.surname} @input="${(e) => this.surname = e.target.value}"></simple-input>
+                        <simple-input label="First name:" type="text" id="name" icon-name="user" .value=${this.name} @input="${(e) => alert('11')}"></simple-input>
+                        <simple-input label="Last name:" type="text" id="surname" icon-name="user" .value=${this.surname} @input="${(e) => this.surname = e.target.value}"></simple-input>
                         <simple-input label="Email" type="text" id="email" icon-name="envelope-regular" .value="${this.email}" @input="${(e) => this.email = e.target.value}"></simple-input>
                     </div>
                 </div>

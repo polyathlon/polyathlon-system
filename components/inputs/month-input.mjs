@@ -35,7 +35,8 @@ customElements.define("month-input", class MonthInput extends BaseElement {
 
     constructor() {
         super();
-        this.months = ['Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        // this.months = ['Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        this.months = ['Месяц', 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     }
 
     firstUpdated(setPath = false) {
@@ -82,6 +83,8 @@ customElements.define("month-input", class MonthInput extends BaseElement {
         `
     }
 
+    // <option ?selected=${month==="Month"} ?disabled=${month==="Month"} value=${index}>${month}</option>
+
     render() {
         return html`
             ${this.label ? this.#label : ''}
@@ -89,7 +92,7 @@ customElements.define("month-input", class MonthInput extends BaseElement {
                 <select>
                     ${this.months.map( (month , index) =>
                         html`
-                            <option ?selected=${month==="Month"} ?disabled=${month==="Month"} value=${index}>${month}</option>
+                            <option ?selected=${month==="Месяц"} ?disabled=${month==="Месяц"} value=${index}>${month}</option>
                         `)
                     }
                 </select>

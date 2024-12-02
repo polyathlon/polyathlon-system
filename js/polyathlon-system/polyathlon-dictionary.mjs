@@ -99,29 +99,37 @@ const dictionary = {
         "ru-RU": 'Регистрация',
         "en-EN": 'Sign Up'
     },
-    'First Name': {
+    'First name': {
         "ru-RU": 'Имя',
-        "en-EN": 'First Name'
+        "en-EN": 'First name'
     },
-    'Last Name': {
+    'Last name': {
         "ru-RU": 'Фамилия',
-        "en-EN": 'Last Name'
+        "en-EN": 'Last name'
     },
-    'Middle Name': {
+    'Middle name': {
         "ru-RU": 'Отчество',
-        "en-EN": 'Middle Name'
+        "en-EN": 'Middle name'
     },
-    'NickName': {
+    'Nickname': {
         "ru-RU": 'Никнейм',
-        "en-EN": 'NickName'
+        "en-EN": 'Nickname'
     },
     'Gender': {
         "ru-RU": 'Пол',
         "en-EN": 'Gender'
     },
-    'Data of Birth': {
+    'Male': {
+        "ru-RU": 'Мужской',
+        "en-EN": 'Male'
+    },
+    'Female': {
+        "ru-RU": 'Женский',
+        "en-EN": 'Female'
+    },
+    'Data of birth': {
         "ru-RU": 'Дата рождения',
-        "en-EN": 'Data of Birth'
+        "en-EN": 'Data of birth'
     },
     'Region name': {
         "ru-RU": 'Регион',
@@ -131,20 +139,20 @@ const dictionary = {
         "ru-RU": 'Клуб',
         "en-EN": 'Club name'
     },
-    'Sportsman ulid': {
-        "ru-RU": 'Идентификатор спортсмена',
-        "en-EN": 'Sportsman ulid'
+    'Sportsman Ulid': {
+        "ru-RU": 'Ulid спортсмена',
+        "en-EN": 'Sportsman Ulid'
     },
     'Sportsman number': {
         "ru-RU": 'Номер спортсмена',
         "en-EN": 'Sportsman number'
     },
-    'Category name': {
+    'Category': {
         "ru-RU": 'Категория',
-        "en-EN": 'Category name'
+        "en-EN": 'Category'
     },
     'Order number': {
-        "ru-RU": 'Порядковый номер',
+        "ru-RU": 'Номер приказа',
         "en-EN": 'Order number'
     },
     'Order link': {
@@ -171,6 +179,19 @@ const dictionary = {
         "ru-RU": 'Восстановление пароля',
         "en-EN": 'Password recovery'
     },
+    'Age group': {
+        "ru-RU": 'Возрастная группа',
+        "en-EN": 'Age group'
+    },
+    'Sports category': {
+        "ru-RU": 'Спортивный разряд',
+        "en-EN": 'Sports category'
+    },
+    'Profile': {
+        "ru-RU": 'Профиль',
+        "en-EN": 'Profile'
+    },
+
 }
 
 //const language = navigator.language

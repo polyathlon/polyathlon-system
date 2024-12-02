@@ -57,17 +57,17 @@ class MyProfileSection1Page3 extends BaseElement {
         return html`
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="lastName" icon-name="user" label="${lang`Last Name`}:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="firstName" icon-name="user-group-solid" label="${lang`First Name`}:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="lastName" icon-name="user" label="${lang`Last name`}:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" icon-name="user-group-solid" label="${lang`First name`}:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="middleName" icon-name="users-solid" label="${lang`Middle Name`}:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <birthday-input id="birthday" label="${lang`Data of Birth`}:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
+                <simple-input id="middleName" icon-name="users-solid" label="${lang`Middle name`}:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
+                <birthday-input id="birthday" label="${lang`Data of birth`}:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
                 <gender-input id="gender" icon-name="gender" label="${lang`Gender`}:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="${lang`Region name`}:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} label="${lang`Club name`}:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
-                <simple-input id="profileUlid" icon-name="hash-number-solid" @icon-click=${this.copyToClipboard} label="${lang`Sportsman ulid`}:" .value=${this.item?.profileUlid} @input=${this.validateInput}></simple-input>
+                <simple-input id="profileUlid" icon-name="hash-number-solid" @icon-click=${this.copyToClipboard} label="${lang`Sportsman Ulid`}:" .value=${this.item?.profileUlid} @input=${this.validateInput}></simple-input>
                 <simple-input id="hashNumber" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} label="${lang`Sportsman number`}:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
-                <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="${lang`Category name`}:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="${lang`Sports category`}:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input id="order.number" icon-name="order-number-solid" @icon-click=${this.numberClick} label="${lang`Order number`}:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" icon-name="link-solid" @icon-click=${this.linkClick} label="${lang`Order link`}:" .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>

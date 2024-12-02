@@ -249,13 +249,13 @@ class MyProfileSection1 extends BaseElement {
             <div class="right-layout">
                 <div class="right-container">
                     <div class="name-group">
-                        <simple-input label="First Name:" id="firstName" icon-name="user" .value=${this.dataSet?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
-                        <simple-input label="Last Name:" id="lastName" icon-name="user-group-solid" .value=${this.dataSet?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
+                        <simple-input label="First name:" id="firstName" icon-name="user" .value=${this.dataSet?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
+                        <simple-input label="Last name:" id="lastName" icon-name="user-group-solid" .value=${this.dataSet?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
                     </div>
-                    <simple-input label="NickName:" id="nickName" icon-name="user-alien-solid" .value=${this.dataSet?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
+                    <simple-input label="Nickname:" id="nickName" icon-name="user-alien-solid" .value=${this.dataSet?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
                     <simple-input label="Email:" id="email" icon-name="envelope-regular" .value="${this.dataSet?.personalInfo?.email}" @input=${this.validateInput}></simple-input>
                     <gender-input label="Gender:" id="gender" icon-name="gender" .value="${this.dataSet?.personalInfo?.gender}" @input=${this.validateInput}></gender-input>
-                    <birthday-input label="Data of Birth:" id="birthday" .value="${this.dataSet?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
+                    <birthday-input label="Data of birth:" id="birthday" .value="${this.dataSet?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
                 </div>
             </div>
             <footer>

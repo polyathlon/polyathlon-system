@@ -41,13 +41,13 @@ class MyProfileSection1Page1 extends BaseElement {
             <verify-email-form></verify-email-form>
             <div class="container">
                 <div class="name-group">
-                    <simple-input label="${lang`First Name`}:" id="firstName" icon-name="user" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
-                    <simple-input label="${lang`Last Name`}:" id="lastName" icon-name="user-group-solid" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
+                    <simple-input label="${lang`First name`}:" id="firstName" icon-name="user" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input label="${lang`Last name`}:" id="lastName" icon-name="user-group-solid" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input label="${lang`NickName`}:" id="nickName" icon-name="user-alien-solid" .value=${this.item?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
+                <simple-input label="${lang`Nickname`}:" id="nickName" icon-name="user-alien-solid" .value=${this.item?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
                 <simple-input label="${lang`Email`}:" id="email" icon-name=${this.item?.emailVerified ? "envelope-solid" : "envelope-regular"} .value=${this.item?.email} button-name=${this.item?.emailVerified ? nothing : "envelope-dot-solid"} @button-click=${this.item?.emailVerified ? nothing : this.confirmEmail} @input=${this.validateInput}></simple-input>
                 <gender-input label="${lang`Gender`}:" id="gender" icon-name="gender" .value="${this.item?.personalInfo?.gender}" @input=${this.validateInput}></gender-input>
-                <birthday-input label="${lang`Data of Birth`}:" id="birthday" .value="${this.item?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
+                <birthday-input label="${lang`Data of birth`}:" id="birthday" .value="${this.item?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
             </div>
         `;
     }
