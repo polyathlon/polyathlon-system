@@ -297,7 +297,7 @@ class MyCompetitionSection3 extends BaseElement {
             },
             {
                 table:{
-                    widths:['auto','*'],
+                    width:['auto','*'],
                     body: this.dataSource.items.map( (item, index) => [
                         item.position.name, `${item.category.name} ${item.lastName} ${item.firstName} ${item.middleName} (${item?.city?.name}, ${item?.city?.region?.name})`
                         // ['Первая ячейка второй строки','Вторая ячейка второй строки'],
