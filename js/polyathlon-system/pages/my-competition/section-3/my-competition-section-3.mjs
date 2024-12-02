@@ -556,7 +556,7 @@ class MyCompetitionSection3 extends BaseElement {
                 title=''
                 icon-name=${ this.currentItem?.gender == 0 ? "referee-man-solid" : "referee-woman-solid" }
                 ?selected=${ true }
-                .status=${{ name: this.currentItem?.refereeId || this.currentItem?.refereeUlid || "referee:new", icon: 'hash-number-solid'} }
+                .status=${{ name: this.currentItem?.refereeId || this.currentItem?.refereeUlid || "referee:new", icon: 'id-number-solid'} }
             >
             </icon-button>
         `

@@ -266,7 +266,7 @@ class MyCompetitionSection4Page1 extends BaseElement {
                     tooltip: true,
                     title: {
                         display: true,
-                        text: 'Статистика',
+                        text: 'Статистика соревнования',
                         color: 'rgba(255, 255, 255, 0.9)',
                     }
                 },

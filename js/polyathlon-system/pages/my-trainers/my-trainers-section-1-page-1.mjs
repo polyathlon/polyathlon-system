@@ -57,7 +57,7 @@ class MyTrainersSection1Page1 extends BaseElement {
                 <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="category" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} label="Category name:" .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" icon-name="region-solid" label="Region name:" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-input id="trainerId" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} label="Trainer ID:" .value=${this.item?.trainerId} @input=${this.validateInput}></simple-input>
+                <simple-input id="trainerId" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} label="Trainer ID:" .value=${this.item?.trainerId} @input=${this.validateInput}></simple-input>
 
                 <div class="name-group">
                     <simple-input id="order.number" icon-name="order-number-solid" @icon-click=${this.numberClick} label="Order number:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>

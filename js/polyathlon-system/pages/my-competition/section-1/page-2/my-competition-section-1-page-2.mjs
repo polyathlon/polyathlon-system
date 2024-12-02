@@ -1,29 +1,32 @@
-import { BaseElement, html, css } from '../../../../base-element.mjs'
+import { BaseElement, html, css } from '../../../../../base-element.mjs'
 
-import '../../../../../components/inputs/simple-input.mjs'
-import '../../../../../components/inputs/gender-input.mjs'
-import '../../../../../components/inputs/birthday-input.mjs'
-import '../../../../../components/selects/simple-select.mjs'
+import '../../../../../../components/inputs/simple-input.mjs'
+import '../../../../../../components/inputs/gender-input.mjs'
+import '../../../../../../components/inputs/birthday-input.mjs'
+import '../../../../../../components/selects/simple-select.mjs'
 
-import SportsCategoryDataSource from '../../my-sports-categories/my-sports-categories-datasource.mjs'
-import SportsCategoryDataset from '../../my-sports-categories/my-sports-categories-dataset.mjs'
+import SportsCategoryDataSource from '../../../my-sports-categories/my-sports-categories-datasource.mjs'
+import SportsCategoryDataset from '../../../my-sports-categories/my-sports-categories-dataset.mjs'
 
-import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
-import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
+import RegionDataSource from '../../../my-regions/my-regions-datasource.mjs'
+import RegionDataset from '../../../my-regions/my-regions-dataset.mjs'
 
-import ClubDataSource from '../../my-clubs/my-clubs-datasource.mjs'
-import ClubDataset from '../../my-clubs/my-clubs-dataset.mjs'
+import ClubDataSource from '../../../my-clubs/my-clubs-datasource.mjs'
+import ClubDataset from '../../../my-clubs/my-clubs-dataset.mjs'
 
-import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs'
-import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
+import AgeGroupDataSource from '../../../my-age-groups/my-age-groups-datasource.mjs'
+import AgeGroupDataset from '../../../my-age-groups/my-age-groups-dataset.mjs'
 
-import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
+import Dataset from './my-competition-section-1-dataset.mjs'
+import DataSource from './my-competition-section-1-datasource.mjs'
 
+import SportsmanDataset from '../../../my-sportsmen/my-sportsmen-dataset.mjs'
 
 class MyCompetitionSection1Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
+            dataSource: { type: Object, default: null },
             sportsCategorySource: {type: Object, default: null},
             regionDataSource: {type: Object, default: null},
             clubDataSource: {type: Object, default: null},
@@ -220,6 +223,9 @@ class MyCompetitionSection1Page2 extends BaseElement {
         }
     }
 
+    async saveItem() {
+        await this.dataSource.saveItem(this.currentItem);
+    }
     startEdit() {
         let input = this.$id("lastName")
         input.focus()
@@ -228,6 +234,13 @@ class MyCompetitionSection1Page2 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
+        // this.dataSource = new DataSource(this)
+        // await this.dataSource.getItem()
+        this.sportsman = await Dataset.getSportsman()
+        Object.assign(this.item, this.sportsman)
+        if ("_id" in this.sportsman) {
+            this.item.sportsmanUlid = this.sportsman._id
+        }
         this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())

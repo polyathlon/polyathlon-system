@@ -48,7 +48,7 @@ customElements.define('add-sportsman-dialog', class AddSportsmanDialog extends B
 
                     <div class="dialog-body">
                         <simple-select id="name" icon-name="club-solid" @icon-click=${this.find} label="Club name:" .dataSource=${this.clubDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
-                        <simple-input id="hash" icon-name="hash-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.find} label="Sportsman number:" .value=${this.item?.hash} @input=${this.validateInput}></simple-input>
+                        <simple-input id="hash" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.find} label="Sportsman number:" .value=${this.item?.hash} @input=${this.validateInput}></simple-input>
                     </div>
 
                     <div class="dialog-footer no-select">

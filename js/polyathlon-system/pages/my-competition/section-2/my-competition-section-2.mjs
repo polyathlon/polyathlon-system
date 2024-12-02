@@ -15,6 +15,11 @@ import './my-competition-section-2-page-1.mjs'
 import './my-competition-section-2-page-2.mjs'
 import './my-competition-section-2-page-3.mjs'
 import './my-competition-section-2-page-4.mjs'
+import './my-competition-section-2-page-5.mjs'
+import './my-competition-section-2-page-6.mjs'
+import './my-competition-section-2-page-7.mjs'
+import './my-competition-section-2-page-8.mjs'
+import './my-competition-section-2-page-9.mjs'
 
 
 import DataSet from './my-competition-section-2-dataset.mjs'
@@ -211,15 +216,16 @@ class MyCompetitionSection2 extends BaseElement {
         this.pages = [
             {iconName: 'sportsmen-solid', page: 0, title: 'Sportsmen', click: () => this.gotoPage(0)},
             {iconName: 'shooting-solid', page: 1, title: 'Shooting', click: () => this.gotoPage(1)},
-            {iconName: 'pull-ups-solid-solid', page: 2, title: 'Pull-ups', click: () => this.gotoPage(2)},
+            {iconName: 'swimming-solid', page: 4, title: 'Swimming', click: () => this.gotoPage(4)},
+            {iconName: 'sprinting-solid', page: 6, title: 'Sprinting', click: () => this.gotoPage(6)},
+            {iconName: 'throwing-solid', page: 5, title: 'Throwing', click: () => this.gotoPage(5)},
+            {iconName: 'running-solid', page: 7, title: 'Running', click: () => this.gotoPage(7)},
+            {iconName: 'pull-ups-solid', page: 2, title: 'Pull-ups', click: () => this.gotoPage(2)},
             {iconName: 'push-ups-solid', page: 3, title: 'Push-ups', click: () => this.gotoPage(3)},
-            {iconName: 'running-solid', page: 4, title: 'Running', click: () => this.gotoPage(4)},
-            {iconName: 'swimming-solid', page: 5, title: 'Swimming', click: () => this.gotoPage(5)},
-            {iconName: 'skiing-solid', page: 6, title: 'Skiing', click: () => this.gotoPage(6)},
-            {iconName: 'throwing-solid', page: 7, title: 'Throwing', click: () => this.gotoPage(7)},
+            {iconName: 'skiing-solid', page: 8, title: 'Skiing', click: () => this.gotoPage(8)},
             {iconName: 'dice-five-solid', page: 10, title: 'Back', click: () => this.gotoPage(0)},
-            {iconName: 'circle-plus-sharp-solid', page: 8, title: 'Back', click: () => this.gotoPage(7)},
-            {iconName: 'circle-trash-sharp-solid', page: 9, title: 'Back', click: this.deleteItem},
+            {iconName: 'circle-plus-sharp-solid', page: -1, title: 'Back', click: this. addItem},
+            {iconName: 'circle-trash-sharp-solid', page: -2, title: 'Back', click: this.deleteItem},
         ]
     }
 
@@ -322,7 +328,9 @@ class MyCompetitionSection2 extends BaseElement {
             case 3: return cache(this.#page4())
             case 4: return cache(this.#page5())
             case 5: return cache(this.#page6())
-            case 6: return cache(this.#page6())
+            case 6: return cache(this.#page7())
+            case 7: return cache(this.#page8())
+            case 8: return cache(this.#page9())
             default: return cache(this.#page1())
         }
     }
@@ -363,6 +371,24 @@ class MyCompetitionSection2 extends BaseElement {
         `;
     }
 
+    #page7() {
+        return html`
+            <my-competition-section-2-page-7 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-7>
+        `;
+    }
+
+    #page8() {
+        return html`
+            <my-competition-section-2-page-8 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-8>
+        `;
+    }
+
+    #page9() {
+        return html`
+            <my-competition-section-2-page-9 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-9>
+        `;
+    }
+
     get #pageName() {
         return this.pageNames[this.currentPage];
     }
@@ -387,7 +413,7 @@ class MyCompetitionSection2 extends BaseElement {
                 title=''
                 icon-name=${ this.currentItem?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
                 ?selected=${ true }
-                .status=${{ name: this.currentItem?.refereeId || this.currentItem?.refereeUlid || "referee:new", icon: 'hash-number-solid'} }
+                .status=${{ name: this.currentItem?.refereeId || this.currentItem?.refereeUlid || "referee:new", icon: 'id-number-solid'} }
             >
             </icon-button>
         `

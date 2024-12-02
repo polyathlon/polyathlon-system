@@ -330,7 +330,7 @@ class MySportsmenSection1 extends BaseElement {
                 title=${ this.listItem.id }
                 icon-name=${ this.listItem.value?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
                 ?selected=${ this.currentItem?._id === this.listItem?.id }
-                .status=${{ name: this.listItem.value?.hashNumber, icon: 'hash-number-solid'} }
+                .status=${{ name: this.listItem.value?.hashNumber, icon: 'id-number-solid'} }
             >
             </icon-button>
         `
@@ -349,7 +349,7 @@ class MySportsmenSection1 extends BaseElement {
                     title=${ item.id }
                     image-name=${ item.value?.gender == 0 ? "../../../../images/sportsman-man-solid.svg" : "../../../../images/sportsman-woman-solid.svg" }
                     ?selected=${ this.currentItem?._id === item.id }
-                    .status=${{ name: item.value?.hashNumber || item?.id, icon: 'hash-number-solid'} }
+                    .status=${{ name: item.value?.hashNumber || item?.id, icon: 'id-number-solid'} }
                     @click=${() => this.showItem(item)}
                 >
                 </icon-button>
@@ -358,7 +358,7 @@ class MySportsmenSection1 extends BaseElement {
         return itemTemplates
     }
 
-    // .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'hash-number-solid'} : '' }
+    // .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'id-number-solid'} : '' }
     get #list() {
         return html`
             ${this.makeList()}

@@ -14,7 +14,8 @@ class MyCompetitionSection1List1 extends BaseElement {
             stage: {type: String, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null, attribute: "old-values" },
-            isFirst: { type: Boolean, default: false }
+            isFirst: { type: Boolean, default: false },
+            currentPage: { type: Boolean, default: false, local: true },
         }
     }
 
@@ -105,8 +106,12 @@ class MyCompetitionSection1List1 extends BaseElement {
             <div class="label">
                 ${this.#competitionDate}
             </div>
-            <fashion-button>Зарегистрироваться</fashion-button>
+            <fashion-button @click=${this.registration}>Зарегистрироваться</fashion-button>
         `
+    }
+
+    registration() {
+        this.currentPage = 1
     }
 
     async firstUpdated() {

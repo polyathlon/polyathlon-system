@@ -7,7 +7,7 @@ import '../../../../../components/selects/simple-select.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
-class MyCompetitionSection2Page4 extends BaseElement {
+class MyCompetitionSection2Page9 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -50,14 +50,18 @@ class MyCompetitionSection2Page4 extends BaseElement {
             <modal-dialog></modal-dialog>
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="walk" icon-name="push-ups-walk-solid" label="Walk:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.walk} @input=${this.validateInput}></simple-input>
-                    <simple-input id="platform" icon-name="push-ups-platform-solid" label="Platform:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.platform} @input=${this.validateInput}></simple-input>
+                    <simple-input id="race" icon-name="ski-solid" label="Race:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.race} @input=${this.validateInput}></simple-input>
+                    <simple-input id="number" icon-name="circle-number-solid" label="Skier number:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.number} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="order-number-solid" label="Result:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.result} @input=${this.validateInput}></simple-input>
-                    <simple-input id="points" icon-name="hundred-points-solid" label="Points:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.point} @input=${this.validateInput}></simple-input>
+                    <simple-input id="start" icon-name="start-gun-solid" label="Start:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.start} @input=${this.validateInput}></simple-input>
+                    <simple-input id="finish" icon-name="flag-checkered-solid" label="Finish:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.finish} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="places-solid" label="Place:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.place} @input=${this.validateInput}></simple-input>
+                <div class="name-group">
+                    <simple-input id="result" icon-name="timer-solid" label="Result:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="points" icon-name="hundred-points-solid" label="Points:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.points} @input=${this.validateInput}></simple-input>
+                </div>
+                <simple-input id="place" icon-name="users-solid" label="Place:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -70,7 +74,7 @@ class MyCompetitionSection2Page4 extends BaseElement {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.pushUps ??= currentItem
+                this.item.skiing ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }
@@ -114,4 +118,4 @@ class MyCompetitionSection2Page4 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-2-page-4", MyCompetitionSection2Page4);
+customElements.define("my-competition-section-2-page-9", MyCompetitionSection2Page9);

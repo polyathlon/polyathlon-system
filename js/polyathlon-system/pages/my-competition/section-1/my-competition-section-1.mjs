@@ -13,7 +13,7 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import './my-competition-section-1-page-1.mjs'
 import './my-competition-section-1-list-1.mjs'
-//import './my-competition-section-1-page-2.mjs'
+import './page-2/my-competition-section-1-page-2.mjs'
 // import './my-competition-section-2-page-1.mjs'
 // import './my-competition-section-2-list-1.mjs'
 
@@ -33,7 +33,7 @@ class MyCompetitionSection1 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: { type: BigInt, default: 0 },
+            currentPage: { type: BigInt, default: 0, local: true  },
             isFirst: { type: Boolean, default: false },
             currentSection: { type: BigInt, default: 0, local: true},
             currentList: { type: BigInt, default: 0, local: true},
@@ -333,6 +333,7 @@ class MyCompetitionSection1 extends BaseElement {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
             case 2: return cache(this.#page3())
+            default: return cache(this.#page1())
         }
     }
 
@@ -386,9 +387,26 @@ class MyCompetitionSection1 extends BaseElement {
         `
     }
 
+    async saveRegistration() {
+        const page  = this.renderRoot.querySelection('my-competition-section-1-page-2')
+        await page.saveItem()
 
+        this.currentPage = 0;
+    }
+
+    cancelRegistration() {
+        this.currentPage = 0;
+    }
 
     get #rightFooter() {
+        if (this.currentPage === 1) {
+            return html`
+                <nav>
+                    <simple-button @click=${this.saveRegistration}>${lang`Send request`}</simple-button>
+                    <simple-button @click=${this.cancelRegistration}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
+        }
         if (this.isModified) {
             return html`
                 <nav>
@@ -426,7 +444,7 @@ class MyCompetitionSection1 extends BaseElement {
             <header class="right-header">
                 ${this.sectionNames.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoPage(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -446,8 +464,12 @@ class MyCompetitionSection1 extends BaseElement {
         `;
     }
 
-    gotoPage(index) {
+    gotoSelection(index) {
         this.currentSection = index
+    }
+
+    gotoPage(index) {
+        this.currentPage = index
     }
 
     gotoList(index) {
