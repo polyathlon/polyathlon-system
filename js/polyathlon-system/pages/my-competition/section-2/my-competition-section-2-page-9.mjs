@@ -61,7 +61,7 @@ class MyCompetitionSection2Page9 extends BaseElement {
                     <simple-input id="result" icon-name="timer-solid" label=${lang`Result` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.result} @input=${this.validateInput}></simple-input>
                     <simple-input id="points" icon-name="hundred-points-solid" label=${lang`Points` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="users-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="place" icon-name="places-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

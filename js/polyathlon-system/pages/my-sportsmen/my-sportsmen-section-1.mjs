@@ -347,7 +347,7 @@ class MySportsmenSection1 extends BaseElement {
                 html `<icon-button
                     label=${ item.key }
                     title=${ item.id }
-                    image-name=${ item.value?.gender == 0 ? "../../../../images/sportsman-man-solid.svg" : "../../../../images/sportsman-woman-solid.svg" }
+                    image-name=${ item.value?.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg" }
                     ?selected=${ this.currentItem?._id === item.id }
                     .status=${{ name: item.value?.hashNumber || item?.id, icon: 'id-number-solid'} }
                     @click=${() => this.showItem(item)}

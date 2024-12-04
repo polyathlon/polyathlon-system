@@ -57,7 +57,7 @@ class MyCompetitionSection2Page2 extends BaseElement {
                     <simple-input id="result" icon-name="bullseye-sharp-solid" label=${lang`Result` + ':'} .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.result} @input=${this.validateInput}></simple-input>
                     <simple-input id="points" icon-name="hundred-points-solid" label=${lang`Points` + ':'} .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="competition-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="place" icon-name="places-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

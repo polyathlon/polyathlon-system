@@ -142,7 +142,7 @@ class PolyathlonSystemHeader extends BaseElement {
 
     logo() {
         // <svg>
-        //     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/favicon.svg"></use>
+        //     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href='images/favicon.svg"></use>
         // </svg>
         return html`
             <div class="logo" title="Home">

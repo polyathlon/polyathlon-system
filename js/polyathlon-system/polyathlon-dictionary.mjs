@@ -236,92 +236,100 @@ const dictionary = {
         "en-EN": 'Shield'
     },
     'Result': {
-            "ru-RU": 'Результат',
-            "en-EN": 'Result'
+        "ru-RU": 'Результат',
+        "en-EN": 'Result'
     },
     'Points': {
-            "ru-RU": 'Очки',
-            "en-EN": 'Points'
+        "ru-RU": 'Очки',
+        "en-EN": 'Points'
     },
     'Place': {
-            "ru-RU": 'Место',
-            "en-EN": 'Place'
+        "ru-RU": 'Место',
+        "en-EN": 'Place'
     },
     'Swim': {
-            "ru-RU": 'Заплыв',
-            "en-EN": 'Swim'
+        "ru-RU": 'Заплыв',
+        "en-EN": 'Swim'
     },
     'Track': {
-            "ru-RU": 'Дорожка',
-            "en-EN": 'Track'
+        "ru-RU": 'Дорожка',
+        "en-EN": 'Track'
     },
     'Race': {
-            "ru-RU": 'Забег',
-            "en-EN": 'Race'
+        "ru-RU": 'Забег',
+        "en-EN": 'Race'
     },
     'Sector': {
-            "ru-RU": 'Сектор',
-            "en-EN": 'Sector'
+        "ru-RU": 'Сектор',
+        "en-EN": 'Sector'
     },
     'Throw': {
-            "ru-RU": 'Бросок',
-            "en-EN": 'Throw'
+        "ru-RU": 'Бросок',
+        "en-EN": 'Throw'
     },
     'Horizontal bar': {
-            "ru-RU": 'Перекладина',
-            "en-EN": 'Horizontal Bar'
+        "ru-RU": 'Перекладина',
+        "en-EN": 'Horizontal Bar'
     },
     'Platform': {
-            "ru-RU": 'Платформа',
-            "en-EN": 'Platform'
+        "ru-RU": 'Платформа',
+        "en-EN": 'Platform'
     },
     'Start': {
-            "ru-RU": 'Старт',
-            "en-EN": 'Start'
+        "ru-RU": 'Старт',
+        "en-EN": 'Start'
     },
     'Finish': {
-            "ru-RU": 'Финиш',
-            "en-EN": 'Finish'
+        "ru-RU": 'Финиш',
+        "en-EN": 'Finish'
     },
     'Skier number': {
-            "ru-RU": 'Номер лыжника',
-            "en-EN": 'Skier number'
+        "ru-RU": 'Номер лыжника',
+        "en-EN": 'Skier number'
     },
     'Shooting': {
-            "ru-RU": 'Стрельба',
-            "en-EN": 'Shooting'
+        "ru-RU": 'Стрельба',
+        "en-EN": 'Shooting'
     },
     'Swimming': {
-            "ru-RU": 'Плавание',
-            "en-EN": 'Swimming'
+        "ru-RU": 'Плавание',
+        "en-EN": 'Swimming'
     },
     'Sprinting': {
-            "ru-RU": 'Спринт',
-            "en-EN": 'Throw'
+        "ru-RU": 'Спринт',
+        "en-EN": 'Throw'
     },
     'Throwing': {
-            "ru-RU": 'Метание',
-            "en-EN": 'Throwing'
+        "ru-RU": 'Метание',
+        "en-EN": 'Throwing'
     },
     'Running': {
-            "ru-RU": 'Бег',
-            "en-EN": 'Running'
+        "ru-RU": 'Бег',
+        "en-EN": 'Running'
     },
     'Pull-ups': {
-            "ru-RU": 'Подтягивания',
-            "en-EN": 'Pull-ups'
+        "ru-RU": 'Подтягивания',
+        "en-EN": 'Pull-ups'
     },
     'Push-ups': {
-            "ru-RU": 'Отжимания',
-            "en-EN": 'Push-ups'
+        "ru-RU": 'Отжимания',
+        "en-EN": 'Push-ups'
     },
     'Skiing': {
-            "ru-RU": 'Лыжный бег',
-            "en-EN": 'Throw'
+        "ru-RU": 'Лыжный бег',
+        "en-EN": 'Throw'
     },
     'Back': {
-            "ru-RU": 'Назад',
-            "en-EN": 'Back'
+        "ru-RU": 'Назад',
+        "en-EN": 'Back'
+    },
+    'Latitude': {
+        "ru-RU": 'Широта',
+        "en-EN": 'Latitude'
+    },
+    'Longitude': {
+        "ru-RU": 'Долгота',
+        "en-EN": 'Longitude'
     },
 }
 

@@ -166,7 +166,7 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
                     ${this.item?.ekp || this.item?.competitionId}
                 </div>
                 <div class="image">
-                    <img src="/images/competition.svg">
+                    <img src="images/competition.svg">
                 </div>
                 <div class="place">
                     ${this.#competitionPlace}

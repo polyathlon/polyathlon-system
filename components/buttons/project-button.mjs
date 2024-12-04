@@ -125,7 +125,7 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
 
     get #image() {
         return html`
-            <img src=${this.avatar || '/images/home/project-avatar.svg'} alt="Логотип проекта" />
+            <img src=${this.avatar || 'images/home/project-avatar.svg'} alt="Логотип проекта" />
         `
     }
 

@@ -15,6 +15,9 @@ import CompetitionStageDataSource from '../../my-competition-stages/my-competiti
 import SportsDisciplineDataset from '../../my-sports-disciplines/my-sports-disciplines-dataset.mjs'
 import SportsDisciplineDataSource from '../../my-sports-disciplines/my-sports-disciplines-datasource.mjs'
 
+import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
+import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
+
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
 
@@ -68,6 +71,7 @@ class MyCompetitionSection1Page1 extends BaseElement {
                 <simple-select id="stage" label=${lang`Stage` + ':'} icon-name="order-number-solid" @icon-click=${() => this.showPage('my-competition-stages')} .dataSource=${this.competitionStageDataSource} .value=${this.item?.stage} @input=${this.validateInput}></simple-select>
                 <simple-select id="sportsDiscipline1" label=${lang`Sports discipline` + ' 1:'} icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline1} @input=${this.validateInput}></simple-select>
                 <simple-select id="sportsDiscipline2" label=${lang`Sports discipline` + ' 2:'} icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" label=${lang`Region name` + ':'} icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label=${lang`City name` + ':'} icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-input id="competitionId" label=${lang`Competition ID` + ':'} icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionId} .value=${this.item?.competitionId} @input=${this.validateInput}></simple-input>
                 <simple-input id="ekpNumber" label=${lang`EKP Number` + ':'} icon-name="square-list-sharp-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
@@ -79,7 +83,6 @@ class MyCompetitionSection1Page1 extends BaseElement {
                     <simple-input type="date" label=${lang`Начало регистрации` + ':'} id="startRegistration" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                     <simple-input type="date" label=${lang`Окончание регистрации` + ':'} id="endRegistration" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 </div>
-                <checkbox-group-input id="ageGroups" label=${lang`Age groups` + ':'} .value=${this.item?.ageGroups || []} .dataSet=${this.ageGroupDataSource} @input=${this.validateInput}></checkbox-group-input>
             </div>
         `;
     }
@@ -143,6 +146,7 @@ class MyCompetitionSection1Page1 extends BaseElement {
         this.competitionTypeDataSource = new CompetitionTypeDataSource(this, await CompetitionTypeDataset.getDataSet())
         this.sportsDisciplineDataSource = new SportsDisciplineDataSource(this, await SportsDisciplineDataset.getDataSet())
         this.competitionStageDataSource = new CompetitionStageDataSource(this, await CompetitionStageDataset.getDataSet())
+        this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
         this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
     }

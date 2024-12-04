@@ -4,18 +4,18 @@ export const polyathlonSystemStyles = css`
     :host {
         --white-square-background-color: #f0d9b5;
         --black-square-background-color: #b58863;
-        --white-king-background-image: url('./images/pieces/classic/150/wk.png');
-        --white-queen-background-image: url('./images/pieces/classic/150/wq.png');
-        --white-rook-background-image: url('./images/pieces/classic/150/wr.png');
-        --white-knight-background-image: url('./images/pieces/classic/150/wn.png');
-        --white-bishop-background-image: url('./images/pieces/classic/150/wb.png');
-        --white-pawn-background-image: url('./images/pieces/classic/150/wp.png');
-        --black-king-background-image: url('./images/pieces/classic/150/bk.png');
-        --black-queen-background-image: url('./images/pieces/classic/150/bq.png');
-        --black-rook-background-image: url('./images/pieces/classic/150/br.png');
-        --black-knight-background-image: url('./images/pieces/classic/150/bn.png');
-        --black-bishop-background-image: url('./images/pieces/classic/150/bb.png');
-        --black-pawn-background-image: url('./images/pieces/classic/150/bp.png');
+        --white-king-background-image: url('images/pieces/classic/150/wk.png');
+        --white-queen-background-image: url('images/pieces/classic/150/wq.png');
+        --white-rook-background-image: url('images/pieces/classic/150/wr.png');
+        --white-knight-background-image: url('images/pieces/classic/150/wn.png');
+        --white-bishop-background-image: url('images/pieces/classic/150/wb.png');
+        --white-pawn-background-image: url('images/pieces/classic/150/wp.png');
+        --black-king-background-image: url('images/pieces/classic/150/bk.png');
+        --black-queen-background-image: url('images/pieces/classic/150/bq.png');
+        --black-rook-background-image: url('images/pieces/classic/150/br.png');
+        --black-knight-background-image: url('images/pieces/classic/150/bn.png');
+        --black-bishop-background-image: url('images/pieces/classic/150/bb.png');
+        --black-pawn-background-image: url('images/pieces/classic/150/bp.png');
     }
 
     header {

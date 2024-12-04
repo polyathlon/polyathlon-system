@@ -169,9 +169,8 @@ class MyCompetitionSection2 extends BaseElement {
                             justify-content: center;
                         }
                     }
-
-
                 }
+
                 icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
@@ -223,7 +222,6 @@ class MyCompetitionSection2 extends BaseElement {
             {iconName: 'pull-ups-solid', page: 2, title: lang`Pull-ups`, click: () => this.gotoPage(2)},
             {iconName: 'push-ups-solid', page: 3, title: lang`Push-ups`, click: () => this.gotoPage(3)},
             {iconName: 'skiing-solid', page: 8, title: lang`Skiing`, click: () => this.gotoPage(8)},
-            {iconName: 'dice-five-solid', page: 10, title: lang`Back`, click: () => this.gotoPage(0)},
             {iconName: 'circle-plus-sharp-solid', page: -1, title: lang`Back`, click: this. addItem},
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Back`, click: this.deleteItem},
         ]

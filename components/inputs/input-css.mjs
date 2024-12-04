@@ -58,7 +58,7 @@ input[type="date"] {
         display: block;
         width: 20px;
         height: 20px;
-        background: url('/images/calendar-solid.svg') no-repeat;
+        background: url('images/calendar-solid.svg') no-repeat;
     }
     /* &::-webkit-datetime-edit { padding: 1em; }
     &::-webkit-datetime-edit-fields-wrapper { background: silver; }

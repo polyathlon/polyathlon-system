@@ -57,7 +57,7 @@ class MyCompetitionSection2Page3 extends BaseElement {
                     <simple-input id="result" icon-name="order-number-solid" label=${lang`Result` + ':'} .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.result} @input=${this.validateInput}></simple-input>
                     <simple-input id="points" icon-name="hundred-points-solid" label=${lang`Points` + ':'} .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="users-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="place" icon-name="places-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

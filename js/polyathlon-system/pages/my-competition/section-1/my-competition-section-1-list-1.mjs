@@ -111,7 +111,7 @@ class MyCompetitionSection1List1 extends BaseElement {
     }
 
     registration() {
-        this.currentPage = 1
+        this.currentPage = 3
     }
 
     async firstUpdated() {

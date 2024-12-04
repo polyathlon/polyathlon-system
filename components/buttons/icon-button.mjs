@@ -152,7 +152,7 @@ customElements.define('icon-button', class IconButton extends BaseElement {
     }
 
     defaultImage(e) {
-        e.target.src = `../../images/${this.errorImage}.svg`
+        e.target.src = `images/${this.errorImage}.svg`
         e.onerror = null
     }
 

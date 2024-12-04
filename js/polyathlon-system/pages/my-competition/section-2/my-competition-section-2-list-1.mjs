@@ -54,7 +54,7 @@ class MyCompetitionSection2List1 extends BaseElement {
                 html `<icon-button
                         label=${this.sportsmanName(item)}
                         title=${item._id}
-                        image-name=${item.gender == 0 ? "../../../../images/sportsman-man-solid.svg" : "../../../../images/sportsman-woman-solid.svg"}
+                        image-name=${item.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
                         .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
                         @click=${() => this.showItem(item)}

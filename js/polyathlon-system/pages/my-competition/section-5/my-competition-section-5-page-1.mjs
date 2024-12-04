@@ -232,7 +232,6 @@ class MyCompetitionSection5Page1 extends BaseElement {
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }
-
 }
 
 customElements.define("my-competition-section-5-page-1", MyCompetitionSection5Page1);

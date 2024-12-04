@@ -152,6 +152,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                     @input=${this.changeValue}
                     @focus=${this.changeFocus}
                     @blur=${this.changeBlur}
+                    @keydown=${this.keyDown}
                 >
                 ${this.imageName ? this.#image : this.#icon }
                 ${this.buttonName ? this.#button : ''}
@@ -191,7 +192,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
     }
 
     changeFocus(e) {
-      this.isFocus = true;
+        this.isFocus = true;
     }
 
     changeBlur(e) {
@@ -205,6 +206,20 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
         this.isListFocus = false;
         this.value = item;
         this.fire('input')
+    }
+
+    keyDown(e) {
+        switch (e.key) {
+            case "Enter":
+                this.isFocus = true;
+                break;
+            case "Escape":
+                this.isFocus = false
+                this.isListFocus = false;
+                break;
+            default:
+                return;
+        }
     }
 
     listInFocus() {

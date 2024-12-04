@@ -24,7 +24,7 @@ import DataSource from './my-competition-section-1-datasource.mjs'
 
 import SportsmanDataset from '../../../my-sportsmen/my-sportsmen-dataset.mjs'
 
-class MyCompetitionSection1Page2 extends BaseElement {
+class MyCompetitionSection1Page4 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -257,4 +257,4 @@ class MyCompetitionSection1Page2 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-1-page-2", MyCompetitionSection1Page2);
+customElements.define("my-competition-section-1-page-4", MyCompetitionSection1Page4);

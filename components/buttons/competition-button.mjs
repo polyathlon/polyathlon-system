@@ -7,7 +7,7 @@ customElements.define('competition-button', class CompetitionButton extends Base
         return {
             label: { type: String, default: '' },
             name: { type: String, default: '', isIcon: true },
-            logotype: { type: String, default: '/images/home/project-avatar.svg' },
+            logotype: { type: String, default: 'images/home/project-avatar.svg' },
             project: {type: Object, default: null},
             status: {type: Object, default: null},
         }
@@ -113,7 +113,7 @@ customElements.define('competition-button', class CompetitionButton extends Base
         return html`
             <div class="container">
                 <div class="logotype">
-                    <img src=${this.logotype || '/images/home/project-avatar.svg'} alt="Логотип" />
+                    <img src=${this.logotype || 'images/home/project-avatar.svg'} alt="Логотип" />
                 </div>
                 <div class="content">
                     <h1>${this.label}</h1>

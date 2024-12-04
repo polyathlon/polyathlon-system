@@ -13,7 +13,10 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import './my-competition-section-1-page-1.mjs'
 import './my-competition-section-1-list-1.mjs'
-import './page-2/my-competition-section-1-page-2.mjs'
+import './my-competition-section-1-page-2.mjs'
+import './my-competition-section-1-page-3.mjs'
+import './page-4/my-competition-section-1-page-4.mjs'
+// import './page-2/my-competition-section-1-page-2.mjs'
 // import './my-competition-section-2-page-1.mjs'
 // import './my-competition-section-2-list-1.mjs'
 
@@ -188,16 +191,19 @@ class MyCompetitionSection1 extends BaseElement {
                         simple-button {
                             height: 100%;
                         }
+                        &.buttons {
+                            justify-content: center;
+                        }
                     }
                 }
 
-                /* icon-button[selected] {
+                icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
                 icon-button:hover {
                     background: rgba(255, 255, 255, 0.1)
-                } */
+                }
 
                 /* width */
                 ::-webkit-scrollbar {
@@ -234,6 +240,14 @@ class MyCompetitionSection1 extends BaseElement {
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
+        this.pages = [
+            {iconName: 'competition-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
+            {iconName: 'age-group-solid', page: 1, title: lang`Location`, click: () => this.gotoPage(1)},
+            {iconName: 'location-circle-solid', page: 2, title: lang`Location`, click: () => this.gotoPage(2)},
+            // {iconName: 'map-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
+            {iconName: 'registration-solid', page: 5, title: lang`Swimming`, click: () => this.gotoPage(5)},
+            {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
         ]
     }
 
@@ -333,6 +347,7 @@ class MyCompetitionSection1 extends BaseElement {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
             case 2: return cache(this.#page3())
+            case 3: return cache(this.#page4())
             default: return cache(this.#page1())
         }
     }
@@ -345,13 +360,19 @@ class MyCompetitionSection1 extends BaseElement {
 
     #page2() {
         return html`
-            <my-competition-section-1-page-2 .parent=${this.currentItem}></my-competition-section-1-page-2>
+            <my-competition-section-1-page-2 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-1-page-2>
         `;
     }
 
     #page3() {
         return html`
-            <my-competition-section-1-page-3 .item=${this.currentItem}></my-competition-section-1-page-3>
+            <my-competition-section-1-page-3 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-1-page-3>
+        `;
+    }
+
+    #page4() {
+        return html`
+            <my-competition-section-1-page-4 .parent=${this.currentItem}></my-competition-section-1-page-4>
         `;
     }
 
@@ -401,7 +422,7 @@ class MyCompetitionSection1 extends BaseElement {
     }
 
     get #rightFooter() {
-        if (this.currentPage === 1) {
+        if (this.currentPage === 3) {
             return html`
                 <nav>
                     <simple-button @click=${this.saveRegistration}>${lang`Send request`}</simple-button>
@@ -412,15 +433,17 @@ class MyCompetitionSection1 extends BaseElement {
         if (this.isModified) {
             return html`
                 <nav>
-                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
                     <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
                 </nav>
             `
         }
         else {
             return html`
-                <nav>
-                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
+                <nav class="buttons">
+                    ${this.pages.map( (button, index) =>
+                        html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                    }
                 </nav>
             `
         }

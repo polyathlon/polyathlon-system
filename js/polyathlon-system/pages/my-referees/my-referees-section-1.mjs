@@ -495,7 +495,7 @@ class MyRefereesSection1 extends BaseElement {
                 html `<icon-button
                         label=${this.fio(item)}
                         title=${item._id}
-                        image-name=${item.gender == 0 ? "../../../../images/referee-man-solid.svg" : "../../../../images/referee-woman-solid.svg"}
+                        image-name=${item.gender == 0 ? "images/referee-man-solid.svg" : "images/referee-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
                         .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
                         @click=${() => this.showItem(item)}

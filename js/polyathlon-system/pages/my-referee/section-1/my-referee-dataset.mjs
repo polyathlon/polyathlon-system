@@ -197,7 +197,7 @@ export default class DataSet {
 
         return blob ? window.URL.createObjectURL(blob) : blob;
     }
-    
+
     static fetchGetQRCode(token, item) {
         return fetch(`https://localhost:4500/api/qr-code?data=123`, {
             method: "GET",

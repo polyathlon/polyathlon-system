@@ -9,7 +9,7 @@ import lang from '../../../polyathlon-dictionary.mjs'
 import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
 import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs'
 
-class MyCompetitionSection1Page2 extends BaseElement {
+class MyCompetitionSection1Page4 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -50,7 +50,7 @@ class MyCompetitionSection1Page2 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <checkbox-group-input id="ageGroups" label=${lang`Age groups` + ':'} .value=${this.item?.ageGroups || []} .dataSet=${this.ageGroupDataSource} @input=${this.validateInput}></checkbox-group-input>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d15539.474224670596!2d39.75727491917126!3d54.62237057131561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2sru!4v1701552244449!5m2!1sru!2sru" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         `;
     }
@@ -96,8 +96,7 @@ class MyCompetitionSection1Page2 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
     }
 }
 
-customElements.define("my-competition-section-1-page-2", MyCompetitionSection1Page2);
+customElements.define("my-competition-section-1-page-4", MyCompetitionSection1Page4);

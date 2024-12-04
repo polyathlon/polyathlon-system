@@ -214,7 +214,7 @@ button:not(.active) {
 
 .button-king.white-king {
     margin-right: 10px;
-    background-image: url('../../images/pieces/classic/150/wk.png');
+    background-image: url('images/pieces/classic/150/wk.png');
 }
 
 .button-king.selected {
@@ -223,7 +223,7 @@ button:not(.active) {
 
 .button-king.black-king {
     margin-left: 10px;
-    background-image: url('../../images/pieces/classic/150/bk.png')
+    background-image: url('images/pieces/classic/150/bk.png')
 }
 
 .button-king.flash {

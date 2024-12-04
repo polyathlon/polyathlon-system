@@ -7,7 +7,7 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
         return {
             label: { type: String, default: '' },
             name: { type: String, default: '', isIcon: true },
-            avatar: { type: String, default: '/images/home/project-avatar.svg' },
+            avatar: { type: String, default: 'images/home/project-avatar.svg' },
             project: {type: Object, default: null},
             status: {type: Object, default: null},
         }
@@ -113,7 +113,7 @@ customElements.define('project-button', class ProjectButton extends BaseElement 
         return html`
             <div class="container">
                 <div class="avatar">
-                    <img src=${this.avatar || '/images/home/project-avatar.svg'} alt="Логотип проекта" />
+                    <img src=${this.avatar || 'images/home/project-avatar.svg'} alt="Логотип проекта" />
                 </div>
                 <div class="content">
                     <h1>${this.label}</h1>
