@@ -331,6 +331,14 @@ const dictionary = {
         "ru-RU": 'Долгота',
         "en-EN": 'Longitude'
     },
+    'User': {
+        "ru-RU": 'Пользователь',
+        "en-EN": 'User'
+    },
+    'Passport': {
+        "ru-RU": 'Паспорт',
+        "en-EN": 'Passport'
+    },
 }
 
 //const language = navigator.language

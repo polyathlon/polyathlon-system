@@ -137,7 +137,7 @@ class MyCompetitionSection3Page1 extends BaseElement {
                 return
             }
             sportsman = sportsman.rows[0].doc
-        } else if (value.includes("` + ":"})) {
+        } else if (value.includes(":")) {
             sportsman = await RefereeDataset.getItem(value)
         } else if (target.value.includes("-")) {
             sportsman = await RefereeDataset.getItemBySportsmanId(value)
