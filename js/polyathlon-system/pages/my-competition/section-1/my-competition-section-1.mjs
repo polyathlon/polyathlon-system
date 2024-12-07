@@ -409,7 +409,7 @@ class MyCompetitionSection1 extends BaseElement {
     }
 
     async saveRegistration() {
-        const page  = this.renderRoot.querySelector('my-competition-section-1-page-2')
+        const page  = this.renderRoot.querySelector('my-competition-section-1-page-4')
         await page.saveItem()
         const modalResult = await this.showDialog("Ваша заявка успешно отправлена")
         if (modalResult === "Ok") {

@@ -419,7 +419,6 @@ class MySportsmenSection1 extends BaseElement {
                 <simple-button @click=${this.addNewItem}>${lang`Add`}</simple-button>
             `
         }
-
     }
 
     render() {
@@ -468,6 +467,7 @@ class MySportsmenSection1 extends BaseElement {
     async confirmDialog(message) {
         return this.showDialog(message, 'confirm')
     }
+    
     async addNewItem() {
         this.dataSource.addNewItem(this.currentItem);
         const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')

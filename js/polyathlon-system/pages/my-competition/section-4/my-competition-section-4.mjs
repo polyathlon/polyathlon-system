@@ -188,6 +188,9 @@ class MyCompetitionSection4 extends BaseElement {
                         simple-button {
                             height: 100%;
                         }
+                        &.buttons {
+                            justify-content: center;
+                        }
                     }
                 }
 
@@ -235,6 +238,12 @@ class MyCompetitionSection4 extends BaseElement {
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
+        this.pages = [
+            {iconName: 'chart-pie-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
+            {iconName: 'person-championship-solid', page: 1, title: lang`Location`, click: () => this.gotoPage(1)},
+            {iconName: 'club-solid2', page: 1, title: lang`Location`, click: () => this.gotoPage(1)},
+            {iconName: 'region-championship-solid', page: 1, title: lang`Location`, click: () => this.gotoPage(1)},
         ]
     }
     pdfMethod() {
@@ -583,6 +592,7 @@ class MyCompetitionSection4 extends BaseElement {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
             case 2: return cache(this.#page3())
+            default: return cache(this.#page1())
         }
     }
 
@@ -648,7 +658,13 @@ class MyCompetitionSection4 extends BaseElement {
             `
         }
         else {
-            return ''
+            return html`
+                <nav class="buttons">
+                    ${this.pages.map( (button, index) =>
+                        html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                    }
+                </nav>
+            `
         }
     }
 

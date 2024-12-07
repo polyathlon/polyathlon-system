@@ -81,7 +81,7 @@ export default class DataSource {
         this.addToDataSource(newItem, listItem)
         this.state = States.BROWSE
     }
-    
+
     cancelNewItem() {
         this.component.currentItem = this.#oldItem
         this.state = States.BROWSE

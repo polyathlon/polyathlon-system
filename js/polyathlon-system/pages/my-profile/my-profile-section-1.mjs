@@ -173,6 +173,9 @@ class MyProfileSection1 extends BaseElement {
                         simple-button {
                             height: 100%;
                         }
+                        &.buttons {
+                            justify-content: center;
+                        }
                     }
                 }
 
@@ -223,6 +226,11 @@ class MyProfileSection1 extends BaseElement {
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
+        this.pages = [
+            {iconName: 'user', page: 0, title: lang`User`, click: () => this.gotoPage(0)},
+            {iconName: 'sportsman-hand-up-solid', page: 1, title: lang`Sportsman`, click: () => this.gotoPage(1)},
+            {iconName: 'competition-solid', page: 2, title: lang`Competition`, click: () => this.gotoPage(2)},
         ]
     }
 
@@ -355,7 +363,7 @@ class MyProfileSection1 extends BaseElement {
             <div class="label">
                 ${JSON.parse(this.#loginInfo).login}
             </div>
-            <fashion-button>Telegram Bot</fashion-button>
+            <fashion-button @click=${this.telegramBot}>Telegram Bot</fashion-button>
             <div class="statistic">
                 <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
                 <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
@@ -363,6 +371,12 @@ class MyProfileSection1 extends BaseElement {
             </div>
         `
     }
+
+    telegramBot() {
+        window.open("https://t.me/PolyathlonSystemBot?start=123")
+    }
+
+    href="https://t.me/HTMLAcademyKeksobot?start=eyJib251c0lkIjoiYm9udXMxZGF5In0="
 
     get #task() {
         return html`
@@ -391,9 +405,10 @@ class MyProfileSection1 extends BaseElement {
             `
         } else {
             return html`
-                <nav>
-                    <simple-button @click=${this.addItem}>${lang`Add`}</simple-button>
-                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
+                <nav class="buttons">
+                    ${this.pages.map( (button, index) =>
+                        html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                    }
                 </nav>
             `
         }
