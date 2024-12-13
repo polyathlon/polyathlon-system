@@ -19,7 +19,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/profile', {
+        return fetch('https://localhost:4500/api/federation-member-categories', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -37,12 +37,14 @@ export default class DataSet {
         if (!response.ok) {
             throw new Error(result.error)
         }
-        const items = [result]
+        const items = result.rows.map(item => {
+            return item.doc;
+        })
         return items
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/country`, {
+        return fetch(`https://localhost:4500/api/federation-member-category`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -75,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/profile`, {
+        return fetch(`https://localhost:4500/api/federation-member-category/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -101,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/profile`, {
+        return fetch(`https://localhost:4500/api/federation-member-category/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -134,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/profile/?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/federation-member-category/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -167,83 +169,5 @@ export default class DataSet {
             return
         }
         DataSet.#dataSet.splice(itemIndex, 1)
-    }
-
-    static fetchUploadAvatar(token, formData) {
-        return fetch(`https://localhost:4500/api/upload/avatar`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-            body: formData
-        })
-    }
-
-    static async uploadAvatar(avatar) {
-        const token = getToken();
-        const formData = new FormData();
-        formData.append("file", avatar);
-        let response = await DataSet.fetchUploadAvatar(token, formData)
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchUploadAvatar(token, formData)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result
-    }
-
-    static fetchDownloadAvatar(token) {
-        return fetch(`https://localhost:4500/api/upload/avatar`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
-    }
-
-    static async downloadAvatar() {
-        const token = getToken();
-        let response = await DataSet.fetchDownloadAvatar(token)
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchDownloadAvatar(token)
-        }
-
-        if (!response.ok) {
-            // const result = await response.json()
-            // throw new Error(result.error)
-            return null
-        }
-
-        const blob = await response.blob()
-
-        return blob ? window.URL.createObjectURL(blob) : blob;
-    }
-
-    static fetchTelegramToken(token) {
-        return fetch(`https://localhost:4500/api/telegram-token`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
-    }
-
-    static async telegramToken() {
-        const token = getToken();
-        let response = await DataSet.fetchTelegramToken(token)
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchTelegramToken(token)
-        }
-
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result.token
     }
 }

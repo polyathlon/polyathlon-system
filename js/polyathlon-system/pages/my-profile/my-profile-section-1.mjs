@@ -224,6 +224,7 @@ class MyProfileSection1 extends BaseElement {
         this.currentPage = 0;
         this.oldValues = new Map();
         this.buttons = [
+            {iconName: 'telegram-bot-solid', page: 'my-referee-categories', title: 'Telegram bot', click: () => this.telegramBot()},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
@@ -363,7 +364,7 @@ class MyProfileSection1 extends BaseElement {
             <div class="label">
                 ${JSON.parse(this.#loginInfo).login}
             </div>
-            <fashion-button @click=${this.telegramBot}>Telegram Bot</fashion-button>
+            <fashion-button @click=${this.startTelegramBot}>Telegram Bot</fashion-button>
             <div class="statistic">
                 <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
                 <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
@@ -372,11 +373,18 @@ class MyProfileSection1 extends BaseElement {
         `
     }
 
-    telegramBot() {
-        window.open("https://t.me/PolyathlonSystemBot?start=123")
+    async startTelegramBot() {
+        const ulid = await DataSet.telegramToken()
+        // window.open(`https://t.me/PolyathlonSystemBot?start=${token}`)
+        // window.open(`https://t.me/system_polyathlon_bot?start=${token}`)
+        window.open(`https://t.me/PolyathlonCompetitionBot?start=${ulid}`)
     }
 
-    href="https://t.me/HTMLAcademyKeksobot?start=eyJib251c0lkIjoiYm9udXMxZGF5In0="
+    async telegramBot() {
+        window.open(`https://t.me/PolyathlonCompetitionBot`)
+    }
+
+    // href="https://t.me/HTMLAcademyKeksobot?start=eyJib251c0lkIjoiYm9udXMxZGF5In0="
 
     get #task() {
         return html`

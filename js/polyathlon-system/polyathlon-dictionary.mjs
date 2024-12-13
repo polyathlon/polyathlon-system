@@ -339,6 +339,18 @@ const dictionary = {
         "ru-RU": 'Паспорт',
         "en-EN": 'Passport'
     },
+    'The future is already here': {
+        "ru-RU": 'Будущее уже здесь',
+        "en-EN": 'The future is already here'
+    },
+    'From the GTO badge to the Olympic medal!': {
+        "ru-RU": 'От значка ГТО к олимпийской медали',
+        "en-EN": 'From the GTO badge to the Olympic medal!'
+    },
+    'Learn more': {
+        "ru-RU": 'Узнать больше',
+        "en-EN": 'Learn more'
+    },
 }
 
 //const language = navigator.language

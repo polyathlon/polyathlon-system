@@ -7,12 +7,12 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import './my-referees-section-1-page-1.mjs'
+import './my-federation-members-section-1-page-1.mjs'
 
-import DataSet from './my-referees-dataset.mjs'
-import DataSource from './my-referees-datasource.mjs'
+import DataSet from './my-federation-members-dataset.mjs'
+import DataSource from './my-federation-members-datasource.mjs'
 
-class MyRefereesSection1 extends BaseElement {
+class MyFederationMembersSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -78,6 +78,7 @@ class MyRefereesSection1 extends BaseElement {
                         width: 100%;
                         height: 40px;
                         flex: 0 0 40px;
+                        --image-height: 100%;
                     }
                 }
 
@@ -171,7 +172,7 @@ class MyRefereesSection1 extends BaseElement {
         this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
+            // {iconName: 'federation-member-solid', page: 'my-federation-member-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
             {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             // {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
@@ -400,7 +401,6 @@ class MyRefereesSection1 extends BaseElement {
                     lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
                     firstName: r[1].split(' ')[1],
                     middleName: r[1].split(' ')[2],
-                    gender: r[11],
                     category: {
                         "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
@@ -425,7 +425,7 @@ class MyRefereesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRefereeItem')) {
+        if (changedProps.has('currentFederationMemberItem')) {
             this.currentPage = 0;
         }
     }
@@ -461,13 +461,13 @@ class MyRefereesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-referees-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-referees-section-1-page-1>
+            <my-federation-members-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-members-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-referees-section-1-page-2 .item=${this.currentItem}></my-referees-section-1-page-2>
+            <my-federation-members-section-1-page-2 .item=${this.currentItem}></my-federation-members-section-1-page-2>
         `;
     }
 
@@ -496,7 +496,7 @@ class MyRefereesSection1 extends BaseElement {
                 html `<icon-button
                         label=${this.fio(item)}
                         title=${item._id}
-                        image-name=${item.gender == 0 ? "images/referee-man-solid.svg" : "images/referee-woman-solid.svg"}
+                        image-name=${item.gender == 0 ? "images/federation-member-man-solid.svg" : "images/federation-member-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
                         .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
                         @click=${() => this.showItem(item)}
@@ -536,7 +536,7 @@ class MyRefereesSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Referees<p></header>
+            <header class="left-header"><p>Federation members<p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>
@@ -626,4 +626,4 @@ class MyRefereesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-referees-section-1", MyRefereesSection1)
+customElements.define("my-federation-members-section-1", MyFederationMembersSection1)

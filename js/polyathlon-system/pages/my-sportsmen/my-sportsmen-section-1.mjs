@@ -23,6 +23,9 @@ class MySportsmenSection1 extends BaseElement {
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null },
             listItem: { type: Object, default: null },
+            listStart: { type: BigInt, default: 0},
+            listEnd: { type: BigInt, default: 0},
+            listEnd1: { type: String, default: ''},
             isModified: { type: Boolean, default: "", local: true },
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
@@ -175,6 +178,7 @@ class MySportsmenSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
+            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.changeStart()},
             {iconName: 'excel-import-solid', page: 'my-sportsmen', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-sportsmen', title: 'Back', click: () => this.gotoBack()},
         ]
@@ -186,6 +190,11 @@ class MySportsmenSection1 extends BaseElement {
 
     gotoBack(page) {
         history.back();
+    }
+
+    changeStart() {
+        this.listStart++;
+        this.listEnd--;
     }
 
     async getQRCode() {
@@ -336,14 +345,17 @@ class MySportsmenSection1 extends BaseElement {
         `
     }
 
+    listStart = 0
+    listEnd = 0
+    itemTemplates = new Array(20)
+
     //icon-name=${ item.value?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
     makeList() {
         if (!this.dataSource?.items || this.dataSource?.items.length === 0)
             return;
-        const itemTemplates = new Array(this.dataSource.items.length)
-        for( let i = 0; i < this.dataSource.items.length; i++) {
-            const item = this.dataSource?.items[i]
-            itemTemplates[i] =
+        for( let i = 0; i < 20; i++) {
+            const item = this.dataSource?.items[this.listStart + i]
+            this.itemTemplates[i] =
                 html `<icon-button
                     label=${ item.key }
                     title=${ item.id }
@@ -355,13 +367,26 @@ class MySportsmenSection1 extends BaseElement {
                 </icon-button>
             `
         }
-        return itemTemplates
+        return this.itemTemplates
     }
 
+    listTopHeight() {
+        return this.listStart*40;
+    }
+    listBottomHeight() {
+        // if (this.dataSource?.items?.length) {
+        //     console.log(this.dataSource?.items?.length - 20 - this.listStart)
+        // return (this.dataSource?.items?.length - 20 - this.listStart )*40 +'px';
+        // }
+        return this.listEnd*40
+    }
     // .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'id-number-solid'} : '' }
     get #list() {
+        console.log(this.listTopHeight(),this.listBottomHeight(), this.listTopHeight() + this.listBottomHeight())
         return html`
+            <div style="min-height: ${this.listStart*40 + 'px'}" data-a=${this.listStart}> </div>
             ${this.makeList()}
+            <div style="min-height: ${this.listEnd*40 + 'px'}"> </div>
         `
     }
 
@@ -421,6 +446,25 @@ class MySportsmenSection1 extends BaseElement {
         }
     }
 
+    listScroll(e) {
+        const old = this.listStart
+        this.listStart = Math.floor(e.target.scrollTop/40);
+        // console.log(this.$id("a1"))
+        // console.log(this.$id("a2"))
+        if (this.listStart > this.dataSource?.items?.length - 20) {
+            this.listStart = this.dataSource?.items?.length - 20
+        }
+        if (old !== this.listStart) {
+            e.target.scrollTop = e.target.scrollTop - (this.listStart-old)*40;
+        }
+        this.listEnd = this.dataSource?.items?.length - 20 - this.listStart
+        this.listEnd1 = this.listEnd.toString()
+        //console.log(this.listStart, this.listEnd, this.listStart + this.listEnd)
+        // this.listEnd = this.listStart + 20;
+        //this.requestUpdate()
+    }
+    // <!-- ${this.#list} -->
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
@@ -428,9 +472,11 @@ class MySportsmenSection1 extends BaseElement {
             <header class="right-header">
                 ${this.#pageName}
             </header>
-            <div class="left-layout">
+            <div class="left-layout" @scroll=${this.listScroll} a=${this.listStart}>
                 ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
-                ${this.#list}
+                <div id="a1" style="min-height: ${this.listStart*40 + 'px'}" .data-a=${this.listEnd1}> </div>
+                ${this.makeList()}
+                <div id="a2" style="min-height: ${this.listEnd*40 + 'px'}"> </div>
             </div>
             <div class="right-layout">
                 ${this.#page}
@@ -467,7 +513,7 @@ class MySportsmenSection1 extends BaseElement {
     async confirmDialog(message) {
         return this.showDialog(message, 'confirm')
     }
-    
+
     async addNewItem() {
         this.dataSource.addNewItem(this.currentItem);
         const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
@@ -542,6 +588,8 @@ class MySportsmenSection1 extends BaseElement {
         super.firstUpdated();
         this.dataSource = new DataSource(this, await DataSet.getDataSet())
         await this.dataSource.init();
+        this.listEnd = this.dataSource.items.length - 20;
+        this.requestUpdate()
     }
 }
 

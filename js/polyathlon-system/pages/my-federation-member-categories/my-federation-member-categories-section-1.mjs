@@ -7,24 +7,24 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import './my-referees-section-1-page-1.mjs'
+import './my-federation-member-categories-section-1-page-1.mjs'
 
-import DataSet from './my-referees-dataset.mjs'
-import DataSource from './my-referees-datasource.mjs'
+import DataSet from './my-federation-member-categories-dataset.mjs'
+import DataSource from './my-federation-member-categories-datasource.mjs'
 
-class MyRefereesSection1 extends BaseElement {
+class MyFederationMemberCategoriesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: { type: Object, default: null },
-            statusDataSet: { type: Map, default: null },
-            oldValues: { type: Map, default: null },
-            currentItem: { type: Object, default: null },
-            isModified: { type: Boolean, default: "", local: true },
-            isReady: { type: Boolean, default: true },
+            dataSource: {type: Object, default: null},
+            statusDataSet: {type: Map, default: null },
+            oldValues: {type: Map, default: null },
+            currentItem: {type: Object, default: null},
+            isModified: {type: Boolean, default: "", local: true},
+            isReady: {type: Boolean, default: true},
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: { type: BigInt, default: 0 },
+            currentPage: {type: BigInt, default: 0},
         }
     }
 
@@ -91,7 +91,6 @@ class MyRefereesSection1 extends BaseElement {
                     align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    /* overflow: hidden; */
                     gap: 10px;
                 }
 
@@ -171,187 +170,10 @@ class MyRefereesSection1 extends BaseElement {
         this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
-            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            // {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
-            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-federation-member-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-federation-member-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
-
-    pdfMethod() {
-        var docInfo = {
-          info: {
-            title: "Referees",
-            author: "Polyathlon systems",
-          },
-
-          pageSize: "A4",
-          pageOrientation: 'portrait',
-          pageMargins: [50, 50, 30, 60],
-
-          content: [
-            {
-              text: "Министерство спорта Российской федерации",
-              fontSize: 14,
-              alignment: "center",
-              //margin: [0, 0, 0, 0], //левый, верхний, правый, нижний
-            },
-            {
-                text: "Всероссийская федерация Полиатлона",
-                fontSize: 14,
-                alignment: "center",
-              },
-            {
-                text: "I-ый этап КУБКА РОССИИ — 2023",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-                margin: [0, 15, 0, 0],
-            },
-            {
-                text: "по полиатлону в спортивной дисциплине",
-                fontSize: 18,
-                alignment: "center",
-            },
-            {
-                text: "3-борье с лыжной гонкой",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-            },
-              {
-                  columns: [
-
-                      {
-                          width: 'auto',
-                          text: '12-15 января 2023 года',
-                          margin: [0, 15, 0, 0],
-                          fontSize: 12,
-                      },
-                      {
-                          width: '*',
-                          text: 'г.Ковров, Владимирская обл.',
-                          alignment: "right",
-                          margin: [0, 15, 0, 0],
-                          fontSize: 12,
-                      },
-                  ],
-                  columnGap: 20
-              },
-
-            {
-                text: "СПРАВКА О СОСТАВЕ И КВАЛИФИКАЦИИ",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-                margin: [0, 30, 0, 0],
-            },
-            {
-                text: "ГЛАВНОЙ СУДЕЙСКОЙ КОЛЛЕГИИ",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-                margin: [0, 0, 0, 15],
-            },
-            {
-                table:{
-                    widths:['auto','*'],
-
-                    body:[
-                        ['Первая ячейка первой строки','Вторая ячейка первой строки'],
-                        ['Первая ячейка второй строки','Вторая ячейка второй строки'],
-                        [{text:'текстовое содержимое',bold:true},'Текст']
-                    ],
-                    headerRows:1
-                },
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: 'Главный судья,',
-                        margin: [20, 40, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: 'Д.В.Ерёмкин',
-                        alignment: "left",
-                        margin: [0, 40, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: 'судья всероссийской категории',
-                        margin: [20, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: '(г.Ковров, Владимирская обл.)',
-                        alignment: "left",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: 'Главный секретарь,',
-                        margin: [20, 50, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: 'Е.В.Ерёмкина',
-                        alignment: "left",
-                        margin: [0, 50, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: 'судья всероссийской категории',
-                        margin: [20, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: '(г.Ковров, Владимирская обл.)',
-                        alignment: "left",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-          ],
-
-          styles: {
-            header0:{
-            }
-          }
-        };
-
-        pdfMake.createPdf(docInfo).open();
-        }
 
     showPage(page) {
         location.hash = page;
@@ -393,20 +215,19 @@ class MyRefereesSection1 extends BaseElement {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
         const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-        const regionDataset = RegionDataset.default
+        const regionDataset = await RegionDataset.RegionDataset()
         raw_data.forEach((r, index) => {
             if(index !== 0){
                 const newItem = {
                     lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
                     firstName: r[1].split(' ')[1],
                     middleName: r[1].split(' ')[2],
-                    gender: r[11],
                     category: {
                         "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
                         "name": "Судья всероссийской категории",
                     },
-                    region: regionDataset.find("name", r[3]),
+                    region: regionDataset.find("name", r[4]),
                     order: {
                         number: r[5],
                         link: r[6]
@@ -425,22 +246,12 @@ class MyRefereesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRefereeItem')) {
+        if (changedProps.has('currentFederationMemberCategoryItem')) {
             this.currentPage = 0;
         }
     }
 
-    copyToClipboard(text) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text)
-        }
-    }
-
-    async showItem(item) {
-        if (this.currentItem?._id === item._id) {
-            this.copyToClipboard(item.id || item._id)
-            return
-        }
+    async showItem(index, itemId) {
         if (this.isModified) {
             const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
@@ -451,7 +262,7 @@ class MyRefereesSection1 extends BaseElement {
             }
         }
         else {
-            this.dataSource.setCurrentItem(item)
+            this.dataSource.setCurrentItem(this.dataSource.items[index])
         }
     }
 
@@ -461,13 +272,13 @@ class MyRefereesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-referees-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-referees-section-1-page-1>
+            <my-federation-member-categories-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-categories-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-referees-section-1-page-2 .item=${this.currentItem}></my-referees-section-1-page-2>
+            <my-federation-member-categories-section-1-page-2 .item=${this.currentItem}></my-federation-member-categories-section-1-page-2>
         `;
     }
 
@@ -475,31 +286,16 @@ class MyRefereesSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    fio(item) {
-        if (!item) {
-            return item
-        }
-        let result = item.lastName
-        if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
-        }
-        if (item.middleName) {
-            result += `${item.middleName[0]}.`
-        }
-        return result
-    }
-
-    //                        icon-name="judge1-solid"
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
-                        label=${this.fio(item)}
+                html `
+                    <icon-button
+                        label=${item.name}
                         title=${item._id}
-                        image-name=${item.gender == 0 ? "images/referee-man-solid.svg" : "images/referee-woman-solid.svg"}
+                        icon-name="federation-member-category-solid"
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
-                        @click=${() => this.showItem(item)}
+                        @click=${() => this.showItem(index, item._id)}
                     ></icon-button>
                 `
             )}
@@ -536,7 +332,7 @@ class MyRefereesSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Referees<p></header>
+            <header class="left-header"><p>Federation member categories</p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>
@@ -564,12 +360,6 @@ class MyRefereesSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async getQRCode() {
-        const dataURI = await DataSet.getQRCode(this.currentItem._id)
-        const blob = await (await fetch(dataURI)).blob();
-        window.open(URL.createObjectURL(blob))
-    }
-
     async showDialog(message, type='message') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')
         modalDialog.type = type
@@ -581,7 +371,7 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новый регион" }
+        const newItem = { name: "Новая категория" }
         this.dataSource.addItem(newItem);
     }
 
@@ -596,17 +386,8 @@ class MyRefereesSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            let id = key.id
-            let currentItem = this.currentItem
-            if (id == "order.number") {
-                id = "number"
-                currentItem = this.currentItem.order
-            }
-            if (id == "order.link") {
-                id = "link"
-                currentItem = this.currentItem.order
-            }
-            currentItem[id] = value;
+            const currentItem = key.currentObject ?? this.currentItem
+            currentItem[key.id] = value;
             key.value = value;
         });
         this.oldValues.clear();
@@ -614,7 +395,7 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого судью?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить эту категорию?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)
@@ -626,4 +407,4 @@ class MyRefereesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-referees-section-1", MyRefereesSection1)
+customElements.define("my-federation-member-categories-section-1", MyFederationMemberCategoriesSection1);

@@ -2,6 +2,8 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/buttons/fashion-button.mjs'
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 class HomeSection1 extends BaseElement {
     static get properties() {
         return {
@@ -90,10 +92,10 @@ class HomeSection1 extends BaseElement {
             </div>
             <div class="right-layout">
                 <div>
-                    <h2>The future is already here</h2>
+                    <h2>${lang`The future is already here`}</h2>
                     <h1>Polyathlon<br>competition<br>system</h1>
-                    <p>From the GTO badge to the Olympic medal!</p>
-                    <fashion-button href="#my-pride">Learn more</fashion-button>
+                    <p>${lang`From the GTO badge to the Olympic medal!`}</p>
+                    <fashion-button href="#my-pride">${lang`Learn more`}</fashion-button>
                 </div>
             </div>
         `;
