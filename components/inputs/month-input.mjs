@@ -1,6 +1,7 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
 
 import styles from './input-css.mjs'
 
@@ -36,7 +37,7 @@ customElements.define("month-input", class MonthInput extends BaseElement {
     constructor() {
         super();
         // this.months = ['Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        this.months = ['Месяц', 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        this.months = [lang`Month`, lang`January`, lang`February`, lang`March`, lang`April`, lang`May`, lang`June`, lang`July`, lang`August`, lang`September`, lang`October`, lang`November`, lang`December`];
     }
 
     firstUpdated(setPath = false) {

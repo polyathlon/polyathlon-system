@@ -3,6 +3,7 @@ import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 import '../icon/icon.mjs'
 
 import styles from './input-css.mjs'
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
 
 import './year-input.mjs'
 import './month-input.mjs'
@@ -128,7 +129,7 @@ customElements.define("birthday-input", class BirthdayInput extends BaseElement 
         return html`
             ${this.label ? this.#label : ''}
             <div class="input-group">
-                <simple-input id="day" placeholder="Day" icon-name="calendar-days-solid" @input=${this.changeValue}></simple-input>
+                <simple-input id="day" placeholder="${lang`Day`}" icon-name="calendar-days-solid" @input=${this.changeValue}></simple-input>
                 <month-input id="month" icon-name="calendar-week-solid" @input=${this.changeValue}></month-input>
                 <year-input id="year" icon-name="calendar-solid" @input=${this.changeValue}></year-input>
             </div>

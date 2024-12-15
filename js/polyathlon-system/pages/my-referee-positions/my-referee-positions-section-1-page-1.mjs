@@ -1,5 +1,6 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
+import lang from '../../polyathlon-dictionary.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 
 class MyRefereePositionsSection1Page1 extends BaseElement {
@@ -34,7 +35,7 @@ class MyRefereePositionsSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="referee-solid" label="Referee position:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="referee-solid" label="${lang`Referee position`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

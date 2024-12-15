@@ -1,6 +1,7 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
+import lang from '../../polyathlon-dictionary.mjs'
 
 class MyProfileSection1Page2 extends BaseElement {
     static get properties() {
@@ -159,9 +160,9 @@ class MyProfileSection1Page2 extends BaseElement {
     render() {
         return html`
             <div>
-                <simple-input id="name" icon-name="user" label="Country name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="region" icon-name="flag-solid" label="Region name:" .value=${this.item?.region} @input=${this.validateInput}></simple-input>
-                <simple-input id="flag" icon-name="flag-solid" label="Flag name:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="user" label="${lang`Country name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="region" icon-name="flag-solid" label="${lang`Region name`}:" .value=${this.item?.region} @input=${this.validateInput}></simple-input>
+                <simple-input id="flag" icon-name="flag-solid" label="${lang`Flag name`}:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

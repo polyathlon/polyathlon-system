@@ -169,7 +169,7 @@ class MyFederationMembersSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Information']
+        this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
             // {iconName: 'federation-member-solid', page: 'my-federation-member-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
@@ -536,7 +536,7 @@ class MyFederationMembersSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Federation members<p></header>
+            <header class="left-header"><p>${lang`Federation members`}<p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>

@@ -234,7 +234,7 @@ class MyCompetitionSection1 extends BaseElement {
         this.statusDataSet = new Map()
         this.currentPage = 0;
         this.listNames = [
-            {label: 'Competition', iconName: ''},
+            {label: lang`Competition`, iconName: ''},
         ]
         this.oldValues = new Map();
         this.buttons = [

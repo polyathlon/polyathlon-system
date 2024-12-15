@@ -351,6 +351,186 @@ const dictionary = {
         "ru-RU": 'Узнать больше',
         "en-EN": 'Learn more'
     },
+    'Country name': {
+        "ru-RU": 'Страна',
+        "en-EN": 'Country name'
+    },
+    'Flag name': {
+        "ru-RU": 'Флаг',
+        "en-EN": 'Flag name'
+    },
+    'Information': {
+        "ru-RU": 'Информация',
+        "en-EN": 'Information'
+    },
+    'Short name': {
+        "ru-RU": 'Короткое название',
+        "en-EN": 'Short name'
+    },
+    'Referee category': {
+        "ru-RU": 'Судейская категория',
+        "en-EN": 'Referee category'
+    },
+    'Referee categories': {
+        "ru-RU": 'Судейские категории',
+        "en-EN": 'Referee categories'
+    },
+    'Country': {
+        "ru-RU": 'Страна',
+        "en-EN": 'Country'
+    },
+    'Link': {
+        "ru-RU": 'Ссылка',
+        "en-EN": 'Link'
+    },
+    'Code': {
+        "ru-RU": 'Код',
+        "en-EN": 'Code'
+    },
+    'Region': {
+        "ru-RU": 'Регион',
+        "en-EN": 'Region'
+    },
+    'City': {
+        "ru-RU": 'Город',
+        "en-EN": 'City'
+    },
+    'Referee position': {
+        "ru-RU": 'Судейская должность',
+        "en-EN": 'Referee position'
+    },
+    'Referee positions': {
+        "ru-RU": 'Судейские должности',
+        "en-EN": 'Referee positions'
+    },
+    'Club': {
+        "ru-RU": 'Клуб',
+        "en-EN": 'Club'
+    },
+    'Sports categories': {
+        "ru-RU": 'Спортивные разряды',
+        "en-EN": 'Sports categories'
+    },
+    'Sports disciplines': {
+        "ru-RU": 'Спортивные дисциплины',
+        "en-EN": 'Sports disciplines'
+    },
+    'Competition names': {
+        "ru-RU": 'Наименования соревнований',
+        "en-EN": 'Competition names'
+    },
+    'Competition stages': {
+        "ru-RU": 'Стадии соревнования',
+        "en-EN": 'Competition stages'
+    },
+    'Competition stage': {
+        "ru-RU": 'Стадия соревнования',
+        "en-EN": 'Competition stage'
+    },
+    'Path kind': {
+        "ru-RU": 'Дорога',
+        "en-EN": 'Path kind'
+    },
+    'Google map': {
+        "ru-RU": 'Google карты',
+        "en-EN": 'Google map'
+    },
+    'Referee ID': {
+        "ru-RU": 'ID судьи',
+        "en-EN": 'Referee ID'
+    },
+    'Sportsman ID': {
+        "ru-RU": 'ID спортсмена',
+        "en-EN": 'Sportsman ID'
+    },
+    'Referee Ulid': {
+        "ru-RU": 'Ulid судьи',
+        "en-EN": 'Referee Ulid'
+    },
+    'Federation members': {
+        "ru-RU": 'Члены федерации',
+        "en-EN": 'Federation members'
+    },
+    'Federation Member ID': {
+        "ru-RU": 'ID члена федерации',
+        "en-EN": 'Federation Member ID'
+    },
+    'Federation member category': {
+        "ru-RU": 'Категория члена федерации',
+        "en-EN": 'Federation Member category'
+    },
+    'Federation member categories': {
+        "ru-RU": 'Категории членов федерации',
+        "en-EN": 'Federation Member categories'
+    },
+    'Trainer ID': {
+        "ru-RU": 'ID тренера',
+        "en-EN": 'Trainer ID'
+    },
+    'Year': {
+        "ru-RU": 'Год',
+        "en-EN": 'Year'
+    },
+    'December': {
+        "ru-RU": 'Декабрь',
+        "en-EN": 'December'
+    },
+    'January': {
+        "ru-RU": 'Январь',
+        "en-EN": 'January'
+    },
+    'February': {
+        "ru-RU": 'Февраль',
+        "en-EN": 'February'
+    },
+    'March': {
+        "ru-RU": 'Март',
+        "en-EN": 'March'
+    },
+    'May': {
+        "ru-RU": 'Май',
+        "en-EN": 'May'
+    },
+    'June': {
+        "ru-RU": 'Июнь',
+        "en-EN": 'June'
+    },
+    'July': {
+        "ru-RU": 'Июль',
+        "en-EN": 'July'
+    },
+    'August': {
+        "ru-RU": 'Август',
+        "en-EN": 'August'
+    },
+    'September': {
+        "ru-RU": 'Сентябрь',
+        "en-EN": 'September'
+    },
+    'October': {
+        "ru-RU": 'Октябрь',
+        "en-EN": 'October'
+    },
+    'November': {
+        "ru-RU": 'Ноябрь',
+        "en-EN": 'November'
+    },
+    'April': {
+        "ru-RU": 'Апрель',
+        "en-EN": 'April'
+    },
+    'Month': {
+        "ru-RU": 'Месяц',
+        "en-EN": 'Month'
+    },
+    'Day': {
+        "ru-RU": 'День',
+        "en-EN": 'Day'
+    },
+    '©All-Russian Polyathlon Federation': {
+        "ru-RU": '©Всероссийская федерация полиатлона',
+        "en-EN": '©All-Russian Polyathlon Federation'
+    },
 }
 
 //const language = navigator.language

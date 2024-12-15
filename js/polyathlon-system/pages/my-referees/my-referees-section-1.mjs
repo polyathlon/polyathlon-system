@@ -168,7 +168,7 @@ class MyRefereesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Information']
+        this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
@@ -536,7 +536,7 @@ class MyRefereesSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Referees<p></header>
+            <header class="left-header"><p>${lang`Referees`}<p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>

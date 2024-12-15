@@ -168,7 +168,7 @@ class MyRegionsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Information']
+        this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
@@ -324,7 +324,7 @@ class MyRegionsSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Region<p></header>
+            <header class="left-header"><p>${lang`Region`}<p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>

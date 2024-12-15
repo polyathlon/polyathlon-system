@@ -1,6 +1,7 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import '../../../../components/inputs/simple-input.mjs'
+import lang from '../../polyathlon-dictionary.mjs'
 
 class MySportsDisciplinesSection1Page1 extends BaseElement {
     static get properties() {
@@ -34,7 +35,7 @@ class MySportsDisciplinesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="category-solid" label="Sports discipline:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="category-solid" label="${lang`Sports discipline`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

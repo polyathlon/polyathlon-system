@@ -1,5 +1,6 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
+import lang from '../../polyathlon-dictionary.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 
 import '../../../../components/selects/simple-select.mjs'
@@ -44,8 +45,8 @@ class MyCitiesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="city-solid" label="City name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="region" @icon-click=${() => this.showPage('my-regions')} icon-name="region-solid" label="Region:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-input id="name" icon-name="city-solid" label="${lang`City name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-select id="region" @icon-click=${() => this.showPage('my-regions')} icon-name="region-solid" label="${lang`Region`}:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
             </div>
         `;
     }
@@ -74,7 +75,7 @@ class MyCitiesSection1Page1 extends BaseElement {
     showPage(page) {
         location.hash = page;
     }
-    
+
     async firstUpdated() {
         super.firstUpdated();
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())

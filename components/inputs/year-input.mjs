@@ -1,6 +1,7 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
 
 import styles from './input-css.mjs'
 
@@ -50,7 +51,7 @@ customElements.define("year-input", class YearInput extends BaseElement {
         super();
         const date = new Date();
         this.year = date.getFullYear();
-        this.years = ['Year'];
+        this.years = [lang`Year`];
         for (let i = this.year; i >= this.year - 80; i--) {
             this.years.push(i)
         }

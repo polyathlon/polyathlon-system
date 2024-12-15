@@ -651,7 +651,7 @@ class MyCompetitionSection3 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>Referees</p>
+                <p>${lang`Referees`}</p>
             </header>
             <header class="right-header">
                 ${this.sectionNames.map( (page, index) =>

@@ -1,6 +1,8 @@
 import { BaseElement, html, css } from '../base-element.mjs'
 
 import '../../components/buttons/social-button.mjs';
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
+
 
 class PolyathlonSystemFooter extends BaseElement {
     static get properties() {
@@ -114,7 +116,7 @@ class PolyathlonSystemFooter extends BaseElement {
     render() {
         return html`
             <footer>
-                <p>©All-Russian Polyathlon Federation</p>
+                <p>${lang`©All-Russian Polyathlon Federation`}</p>
                 ${this.social()}
             </footer>
         `;

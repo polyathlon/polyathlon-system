@@ -168,7 +168,7 @@ class MySportsCategoriesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Information']
+        this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
@@ -333,7 +333,7 @@ class MySportsCategoriesSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Sports categories<p></header>
+            <header class="left-header"><p>${lang`Sports categories`}<p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>

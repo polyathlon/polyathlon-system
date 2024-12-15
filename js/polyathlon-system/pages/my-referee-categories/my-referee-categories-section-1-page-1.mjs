@@ -1,5 +1,6 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
+import lang from '../../polyathlon-dictionary.mjs'
 import '../../../../components/inputs/simple-input.mjs'
 
 class MyRefereeCategoriesSection1Page1 extends BaseElement {
@@ -34,8 +35,8 @@ class MyRefereeCategoriesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="referee-category-solid" label="Referee category:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="shortName" icon-name="short-referee-category-solid" label="Short name:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="referee-category-solid" label="${lang`Referee category`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="shortName" icon-name="short-referee-category-solid" label="${lang`Short name`}:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

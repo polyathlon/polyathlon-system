@@ -174,7 +174,7 @@ class MySportsmenSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Information']
+        this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
@@ -468,7 +468,7 @@ class MySportsmenSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Sportsmen</p></header>
+            <header class="left-header"><p>${lang`Sportsmen`}</p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>
