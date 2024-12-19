@@ -531,6 +531,14 @@ const dictionary = {
         "ru-RU": '©Всероссийская федерация полиатлона',
         "en-EN": '©All-Russian Polyathlon Federation'
     },
+    'Jumping': {
+        "ru-RU": 'Прыжки',
+        "en-EN": 'Jumping'
+    },
+    'Length': {
+        "ru-RU": 'Длина',
+        "en-EN": 'Length'
+    },
 }
 
 //const language = navigator.language
