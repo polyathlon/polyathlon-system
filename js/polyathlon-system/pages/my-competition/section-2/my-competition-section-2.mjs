@@ -20,6 +20,7 @@ import './my-competition-section-2-page-6.mjs'
 import './my-competition-section-2-page-7.mjs'
 import './my-competition-section-2-page-8.mjs'
 import './my-competition-section-2-page-9.mjs'
+import './my-competition-section-2-page-10.mjs'
 
 
 import DataSet from './my-competition-section-2-dataset.mjs'
@@ -222,6 +223,7 @@ class MyCompetitionSection2 extends BaseElement {
             {iconName: 'pull-ups-solid', page: 2, title: lang`Pull-ups`, click: () => this.gotoPage(2)},
             {iconName: 'push-ups-solid', page: 3, title: lang`Push-ups`, click: () => this.gotoPage(3)},
             {iconName: 'skiing-solid', page: 8, title: lang`Skiing`, click: () => this.gotoPage(8)},
+            {iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Back`, click: this.deleteItem},
             {iconName: 'circle-plus-sharp-solid', page: -1, title: lang`Back`, click: this.addNewItem},
         ]
@@ -329,6 +331,7 @@ class MyCompetitionSection2 extends BaseElement {
             case 6: return cache(this.#page7())
             case 7: return cache(this.#page8())
             case 8: return cache(this.#page9())
+            case 9: return cache(this.#page10())
             default: return cache(this.#page1())
         }
     }
@@ -384,6 +387,11 @@ class MyCompetitionSection2 extends BaseElement {
     #page9() {
         return html`
             <my-competition-section-2-page-9 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-9>
+        `;
+    }
+    #page10() {
+        return html`
+            <my-competition-section-2-page-10 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-10>
         `;
     }
 

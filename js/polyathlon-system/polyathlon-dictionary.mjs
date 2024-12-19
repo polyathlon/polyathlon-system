@@ -565,7 +565,15 @@ const dictionary = {
     },
     'Group': {
         "ru-RU": 'Группа',
-        "en-EN": 'Group'
+        "en-EN": 'Group',
+    },
+    'Jumping': {
+        "ru-RU": 'Прыжки',
+        "en-EN": 'Jumping'
+    },
+    'Length': {
+        "ru-RU": 'Длина',
+        "en-EN": 'Length'
     },
 }
 
