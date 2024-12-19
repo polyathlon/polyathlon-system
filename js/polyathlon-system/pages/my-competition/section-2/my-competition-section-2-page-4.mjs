@@ -50,14 +50,14 @@ class MyCompetitionSection2Page4 extends BaseElement {
             <modal-dialog></modal-dialog>
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="flow" icon-name="push-ups-flow-solid" label=${lang`Flow` + ':'} .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.flow} @input=${this.validateInput}></simple-input>
-                    <simple-input id="platform" icon-name="push-ups-platform-solid" label=${lang`Platform` + ':'} .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.platform} @input=${this.validateInput}></simple-input>
+                    <simple-input id="flow" icon-name="push-ups-flow-solid" label="${lang`Flow`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.flow} @input=${this.validateInput}></simple-input>
+                    <simple-input id="platform" icon-name="push-ups-platform-solid" label="${lang`Platform`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.platform} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="order-number-solid" label=${lang`Result` + ':'} .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.result} @input=${this.validateInput}></simple-input>
-                    <simple-input id="points" icon-name="hundred-points-solid" label=${lang`Points` + ':'} .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.point} @input=${this.validateInput}></simple-input>
+                    <simple-input id="result" icon-name="order-number-solid" label="${lang`Result`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.point} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="places-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

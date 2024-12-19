@@ -1,36 +1,30 @@
-import DataSet from "./my-sportsmen-dataset.mjs"
+import DataSet from "./my-competition-section-1-dataset.mjs";
 
-import { States } from "../../../utils.js";
+import { States } from "../../../../../utils.js";
 
 export default class DataSource {
-
     #lock = false
-
-    #newItem
     #oldItem
-    #oldListItem
 
     constructor(component, dataSet) {
         this.component = component
         this.items = [...dataSet]
+        this.init()
         this.state = States.BROWSE
     }
 
-    async init() {
+    init() {
         if (this.items.length) {
-            let itemId = sessionStorage.getItem('currentSportsman')
-            let listItem
+            let itemId = sessionStorage.getItem('currentCompetitionSportsman')
+            let item
             if (itemId) {
-                listItem = this.items.find((item) => item.id == itemId)
+                item = this.items.find((item) => item.id == itemId)
             }
-            listItem ??= this.items[0]
-            const item = await DataSet.getItem(listItem.id)
-            sessionStorage.setItem('currentSportsman', listItem.id)
+            item ??= this.items[0]
+            sessionStorage.setItem('currentCompetitionSportsman', item.id)
             this.component.currentItem = item
-            this.component.listItem = listItem
         } else {
             this.component.currentItem = {}
-            this.component.listItem = {}
         }
     }
 
@@ -40,15 +34,20 @@ export default class DataSource {
         }).sort( (a, b) => a.name.localeCompare(b.name) )
     }
 
-    async getCurrentItem(item_id){
-        return await this.setCurrentItem(item_id)
+    getCurrentItem(){
+        const item = sessionStorage.getItem('currentCompetitionSportsman')
+        if (item) {
+            return this.items.find(p => p._id === item)
+        }
+        else {
+            sessionStorage.setItem('currentCompetitionSportsman', this.items[0]?._id)
+            return this.items?.[0]
+        }
     }
 
-    async setCurrentItem(listItem) {
-        const item = await DataSet.getItem(listItem.id)
-        sessionStorage.setItem('currentSportsman', listItem.id)
+    setCurrentItem(item) {
+        sessionStorage.setItem('currentCompetitionSportsman', item._id)
         this.component.currentItem = item
-        this.component.listItem = listItem
     }
 
     async saveFirstItem(item) {
@@ -59,27 +58,21 @@ export default class DataSource {
 
     async addNewItem(item) {
         this.#oldItem = this.component.currentItem
-        this.#oldListItem = this.component.listItem
-        this.#newItem = {key: "Новый спортсмен"}
         this.state = States.NEW
         this.component.currentItem = {}
-        this.component.listItem = this.#newItem
     }
 
     async addItem(item) {
         const newItem = await DataSet.addItem(item)
-        const listItem = DataSet.addToDataset(newItem)
         if (!this.#lock) {
-            this.addToDataSource(newItem, listItem)
+            this.addToDataSource(newItem)
         }
     }
 
-    addToDataSource(newItem, listItem) {
-        this.items.push(listItem)
-        this.items.sort( (a, b) => a.key.localeCompare(b.key))
-        sessionStorage.setItem('currentSportsman', listItem.id)
-        this.component.currentItem = newItem
-        this.component.listItem = listItem
+    addToDataSource(item) {
+        this.items.push(item)
+        this.items.sort( (a, b) => a._id.localeCompare(b._id))
+        this.setCurrentItem(item)
     }
 
     async saveNewItem(item) {
@@ -91,7 +84,6 @@ export default class DataSource {
 
     cancelNewItem() {
         this.component.currentItem = this.#oldItem
-        this.component.listItem = this.#oldListItem
         this.state = States.BROWSE
     }
 
@@ -111,29 +103,18 @@ export default class DataSource {
 
     async saveItem(item, listItem) {
         await DataSet.saveItem(item)
-        listItem.key = item.lastName
-        if (item.firstName) {
-            listItem.key += ' ' + item.firstName[0] + '.'
-        }
-        if (item.middleName) {
-            listItem.key += item.middleName[0] + '.'
-        }
-        listItem.value.hashNumber = item.hashNumber
-        listItem.value.gender = item.gender
         this.state = States.BROWSE
     }
 
-    async deleteItem(item, listItem) {
-        await DataSet.deleteItem(item, listItem)
-        this.deleteFrom(listItem)
+    async deleteItem(item) {
+        await DataSet.deleteItem(item)
+        this.deleteFrom(item)
     }
 
-    deleteFrom(listItem) {
-        const currentIndex = this.items.indexOf(listItem)
+    deleteFrom(item) {
+        const currentIndex = this.items.indexOf(item)
         if (this.items.length === 1) {
-            sessionStorage.removeItem('currentSportsman')
-            this.component.currentItem = {}
-            this.component.listItem = {}
+            this.setCurrentItem({})
         }
         else if (currentIndex === 0) {
             this.setCurrentItem(this.items[currentIndex + 1])

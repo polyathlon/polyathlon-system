@@ -351,6 +351,10 @@ const dictionary = {
         "ru-RU": 'Узнать больше',
         "en-EN": 'Learn more'
     },
+    'Countries': {
+        "ru-RU": 'Страны',
+        "en-EN": 'Countries'
+    },
     'Country name': {
         "ru-RU": 'Страна',
         "en-EN": 'Country name'
@@ -530,6 +534,38 @@ const dictionary = {
     '©All-Russian Polyathlon Federation': {
         "ru-RU": '©Всероссийская федерация полиатлона',
         "en-EN": '©All-Russian Polyathlon Federation'
+    },
+    'Discipline groups': {
+        "ru-RU": 'Группы дисциплин',
+        "en-EN": 'Discipline groups'
+    },
+    'Icon': {
+        "ru-RU": 'Иконка',
+        "en-EN": 'Icon'
+    },
+    'Group name': {
+        "ru-RU": 'Наименование группы',
+        "en-EN": 'Group name'
+    },
+    'Points Table': {
+        "ru-RU": 'Таблица очков',
+        "en-EN": 'Points Table'
+    },
+    'Component name': {
+        "ru-RU": 'Наименование составляющей',
+        "en-EN": 'Component name'
+    },
+    'Components': {
+        "ru-RU": 'Составляющие',
+        "en-EN": 'Components'
+    },
+    'Component': {
+        "ru-RU": 'Составляющая',
+        "en-EN": 'Component'
+    },
+    'Group': {
+        "ru-RU": 'Группа',
+        "en-EN": 'Group'
     },
 }
 

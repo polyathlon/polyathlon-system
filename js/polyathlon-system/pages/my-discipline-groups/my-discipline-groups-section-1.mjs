@@ -7,12 +7,14 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import './my-discipline-names-section-1-page-1.mjs'
+import { States } from "../../../utils.js"
 
-import DataSet from './my-discipline-names-dataset.mjs'
-import DataSource from './my-discipline-names-datasource.mjs'
+import './my-discipline-groups-section-1-page-1.mjs'
 
-class MyDisciplineNamesSection1 extends BaseElement {
+import DataSet from './my-discipline-groups-dataset.mjs'
+import DataSource from './my-discipline-groups-datasource.mjs'
+
+class MyDisciplineGroupsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -167,7 +169,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Information']
+        this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
@@ -251,18 +253,18 @@ class MyDisciplineNamesSection1 extends BaseElement {
         }
     }
 
-    async showItem(index, itemId) {
+    async showItem(item) {
         if (this.isModified) {
             const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
-                await this.dataSource.saveItem(this.currentItem);
+                await this.dataSource.saveItem(item);
             }
             else {
                 await this.cancelItem()
             }
         }
-        else {
-            this.dataSource.setCurrentItem(this.dataSource.items[index])
+        else if (this.currentItem !== item) {
+            this.dataSource.setCurrentItem(item)
         }
     }
 
@@ -272,13 +274,13 @@ class MyDisciplineNamesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-discipline-names-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-discipline-names-section-1-page-1>
+            <my-discipline-groups-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-discipline-groups-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-discipline-names-section-1-page-2 .item=${this.currentItem}></my-discipline-names-section-1-page-2>
+            <my-discipline-groups-section-1-page-2 .item=${this.currentItem}></my-discipline-groups-section-1-page-2>
         `;
     }
 
@@ -293,12 +295,23 @@ class MyDisciplineNamesSection1 extends BaseElement {
                     <icon-button
                         label=${item.name}
                         title=${item._id}
-                        icon-name="competition-solid"
+                        icon-name=${item.icon || nothing}
                         ?selected=${this.currentItem === item}
-                        @click=${() => this.showItem(index, item._id)}
+                        @click=${() => this.showItem(item)}
                     ></icon-button>
                 `
             )}
+        `
+    }
+
+    newRecord() {
+        return html `<icon-button
+                label=${ this.currentItem?.name }
+                title=${ this.currentItem?.name }
+                icon-name=${ this.currentItem?.icon || "picture-circle-solid" }
+                ?selected=${ true }
+            >
+            </icon-button>
         `
     }
 
@@ -310,33 +323,86 @@ class MyDisciplineNamesSection1 extends BaseElement {
         `
     }
 
-    get #rightFooter() {
-        if (this.isModified) {
-            return html`
-                <nav>
-                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
-                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
-                </nav>
-            `
-        } else {
-            return html`
-                <nav>
-                    <simple-button @click=${this.addItem}>${lang`Add`}</simple-button>
-                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
-                </nav>
-            `
-        }
-
+    async saveNewItem() {
+        this.dataSource.saveNewItem(this.currentItem);
+        this.oldValues?.clear();
+        this.isModified = false;
     }
+
+    get #newItemFooter() {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.saveNewItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelNewItem}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
+    async cancelNewItem() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить добавление?')
+        if (modalResult !== 'Ok')
+            return
+        this.dataSource.cancelNewItem()
+        this.oldValues.clear();
+        this.isModified = false;
+    }
+
+    get #itemFooter() {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.isModified ? this.saveItem: this.addNewItem}>${this.isModified ? lang`Save`: lang`Add`}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.deleteItem}>${this.isModified ? lang`Cancel`: lang`Delete`}</simple-button>
+            </nav>
+        `
+    }
+
+    async addNewItem() {
+        this.dataSource.addNewItem(this.currentItem);
+        // const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
+        // page.startEdit()
+    }
+
+
+    get #rightFooter() {
+        if (!this.dataSource?.items)
+            return ''
+        if (this.dataSource.items.length) {
+            return (this.dataSource.state === States.NEW) ? this.#newItemFooter : this.#itemFooter
+        }
+        // if (this.dataSource.state === States.NEW) {
+        if (this.isModified) {
+            return this.#newItemFooter
+        }
+    }
+
+    // get #rightFooter() {
+    //     if (this.isModified) {
+    //         return html`
+    //             <nav>
+    //                 <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+    //                 <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+    //             </nav>
+    //         `
+    //     } else {
+    //         return html`
+    //             <nav>
+    //                 <simple-button @click=${this.addItem}>${lang`Add`}</simple-button>
+    //                 <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
+    //             </nav>
+    //         `
+    //     }
+
+    // }
 
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>Sport disciplines</p></header>
+            <header class="left-header"><p>${lang`Discipline groups`}</p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>
             <div class="left-layout">
+                ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
                 ${this.#list}
             </div>
             <div class="right-layout">
@@ -371,7 +437,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новая дисциплина" }
+        const newItem = { name: "Новая группа дисциплин" }
         this.dataSource.addItem(newItem);
     }
 
@@ -404,7 +470,8 @@ class MyDisciplineNamesSection1 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.dataSource = new DataSource(this, await DataSet.getDataSet())
+        await this.dataSource.init();
     }
 }
 
-customElements.define("my-discipline-names-section-1", MyDisciplineNamesSection1);
+customElements.define("my-discipline-groups-section-1", MyDisciplineGroupsSection1);

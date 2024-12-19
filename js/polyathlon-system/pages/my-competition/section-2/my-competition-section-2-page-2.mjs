@@ -50,14 +50,14 @@ class MyCompetitionSection2Page2 extends BaseElement {
             <modal-dialog></modal-dialog>
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="shift" icon-name="shift-solid" label=${lang`Shift` + ':'} .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.shift} @input=${this.validateInput}></simple-input>
-                    <simple-input id="shield" icon-name="shield-solid" label=${lang`Shield` + ':'} .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.shield} @input=${this.validateInput}></simple-input>
+                    <simple-input id="shift" icon-name="shift-solid" label="${lang`Shift`}:" .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.shift} @input=${this.validateInput}></simple-input>
+                    <simple-input id="shield" icon-name="shield-solid" label="${lang`Shield`}:" .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.shield} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="bullseye-sharp-solid" label=${lang`Result` + ':'} .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.result} @input=${this.validateInput}></simple-input>
-                    <simple-input id="points" icon-name="hundred-points-solid" label=${lang`Points` + ':'} .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.points} @input=${this.validateInput}></simple-input>
+                    <simple-input id="result" icon-name="bullseye-sharp-solid" label="${lang`Result`}:" .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="places-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

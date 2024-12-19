@@ -52,20 +52,20 @@ class MyTrainersSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="lastName" label=${lang`Last name` + ":"} icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="firstName" label=${lang`First name` + ":"} icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="middleName" label=${lang`Middle name` + ":"} icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <gender-input id="gender" label=${lang`Gender` + ":"} icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="category" label=${lang`Category` + ":"} icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-select id="region" label=${lang`Region name` + ":"} icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-input id="trainerId" label=${lang`Trainer ID` + ":"} icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} .value=${this.item?.trainerId} @input=${this.validateInput}></simple-input>
+                <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
+                <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
+                <simple-select id="category" label="${lang`Category`}:" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-input id="trainerId" label="${lang`Trainer ID`}:" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} .value=${this.item?.trainerId} @input=${this.validateInput}></simple-input>
 
                 <div class="name-group">
-                    <simple-input id="order.number" label=${lang`Order number` + ":"} icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
-                    <simple-input id="order.link" label=${lang`Order link` + ":"} icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="personLink" label=${lang`Person link` + ":"} icon-name="user-link" @icon-click=${this.linkClick} .value=${this.item?.link} @input=${this.validateInput}></simple-input>
+                <simple-input id="personLink" label="${lang`Person link`}:" icon-name="user-link" @icon-click=${this.linkClick} .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

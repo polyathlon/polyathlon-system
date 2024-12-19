@@ -50,18 +50,18 @@ class MyCompetitionSection2Page9 extends BaseElement {
             <modal-dialog></modal-dialog>
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="race" icon-name="ski-solid" label=${lang`Race` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.race} @input=${this.validateInput}></simple-input>
-                    <simple-input id="number" icon-name="circle-number-solid" label=${lang`Skier number` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.number} @input=${this.validateInput}></simple-input>
+                    <simple-input id="race" icon-name="ski-solid" label="${lang`Race`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.race} @input=${this.validateInput}></simple-input>
+                    <simple-input id="number" icon-name="circle-number-solid" label="${lang`Skier number`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.number} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="start" icon-name="start-gun-solid" label=${lang`Start` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.start} @input=${this.validateInput}></simple-input>
-                    <simple-input id="finish" icon-name="flag-checkered-solid" label=${lang`Finish` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.finish} @input=${this.validateInput}></simple-input>
+                    <simple-input id="start" icon-name="start-gun-solid" label="${lang`Start`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.start} @input=${this.validateInput}></simple-input>
+                    <simple-input id="finish" icon-name="flag-checkered-solid" label="${lang`Finish`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.finish} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="timer-solid" label=${lang`Result` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.result} @input=${this.validateInput}></simple-input>
-                    <simple-input id="points" icon-name="hundred-points-solid" label=${lang`Points` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.points} @input=${this.validateInput}></simple-input>
+                    <simple-input id="result" icon-name="timer-solid" label="${lang`Result`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="places-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

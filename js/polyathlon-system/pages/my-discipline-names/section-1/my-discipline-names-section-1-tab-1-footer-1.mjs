@@ -1,10 +1,10 @@
-import { BaseElement, html, css } from '../../../base-element.mjs'
-
-import '../../../../components/inputs/simple-input.mjs'
+import { BaseElement, html, css, nothing } from '../../../base-element.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-class MyCountriesSection1Page1 extends BaseElement {
+import '../../../../components/inputs/simple-input.mjs'
+
+class MyDisciplineNamesSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -36,8 +36,8 @@ class MyCountriesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="country-solid" image-name=${this.item?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.flag + '.svg' } error-image="country-red-solid" label="${lang`Country name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="flag" icon-name="flag-solid" label="${lang`Flag name`}:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name=${this.item?.icon || nothing} label="${lang`Discipline name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="icon" icon-name="picture-circle-solid" label="${lang`Icon`}:" .value=${this.item?.icon} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -56,11 +56,11 @@ class MyCountriesSection1Page1 extends BaseElement {
 
             currentItem[e.target.id] = e.target.value
 
-            if (e.target.id === 'name' || e.target.id === 'flag') {
+            if (e.target.id === 'name' || e.target.id === 'icon') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
-            if (e.target.id === 'flag') {
-                this.requestUpdate()
+            if (e.target.id === 'icon') {
+                 this.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;
         }
@@ -68,4 +68,4 @@ class MyCountriesSection1Page1 extends BaseElement {
 
 }
 
-customElements.define("my-countries-section-1-page-1", MyCountriesSection1Page1);
+customElements.define("my-discipline-names-section-1-page-1", MyDisciplineNamesSection1Page1);

@@ -50,11 +50,11 @@ class MyCompetitionSection1Page3 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input type="text" id="path" label=${lang`Path kind` + ':'} icon-name="path-direction-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.path} @input=${this.validateInput}></simple-input>
-                <simple-input id="map" label=${lang`Google map` + ':'} icon-name="link-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.map} @input=${this.validateInput}></simple-input>
+                <simple-input type="text" id="path" label="${lang`Path kind`}:" icon-name="path-direction-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.path} @input=${this.validateInput}></simple-input>
+                <simple-input id="map" label="${lang`Google map`}:" icon-name="link-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.map} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="latitude" label=${lang`Latitude` + ':'} icon-name="latitude-solid" .value=${this.item?.latitude} @input=${this.validateInput}></simple-input>
-                    <simple-input id="longitude" label=${lang`Longitude` + ':'} icon-name="longitude-solid" .value=${this.item?.longitude} @input=${this.validateInput}></simple-input>
+                    <simple-input id="latitude" label="${lang`Latitude`}:" icon-name="latitude-solid" .value=${this.item?.latitude} @input=${this.validateInput}></simple-input>
+                    <simple-input id="longitude" label="${lang`Longitude`}:" icon-name="longitude-solid" .value=${this.item?.longitude} @input=${this.validateInput}></simple-input>
                 </div>
                 <iframe src=${this.item?.map || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2309.74093246612!2d39.7485642764163!3d54.626170072688076!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4149e22d671256c5%3A0x147bb54d9f2efd26!2z0J_QsNC80Y_RgtC90LjQuiAi0JPRgNC40LHRiyDRgSDQs9C70LDQt9Cw0LzQuCI!5e0!3m2!1sru!2sru!4v1733243900155!5m2!1sru!2sru"} width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 

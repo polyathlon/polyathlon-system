@@ -50,20 +50,20 @@ class MyCompetitionSection2Page6 extends BaseElement {
             <modal-dialog></modal-dialog>
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="flow" icon-name="throw-solid" label=${lang`Flow` + ':'} .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.flow} @input=${this.validateInput}></simple-input>
-                    <simple-input id="sector" icon-name="chart-pie-simple-solid" label=${lang`Sector` + ':'} .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.sector} @input=${this.validateInput}></simple-input>
+                    <simple-input id="flow" icon-name="throw-solid" label="${lang`Flow`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.flow} @input=${this.validateInput}></simple-input>
+                    <simple-input id="sector" icon-name="chart-pie-simple-solid" label="${lang`Sector`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.sector} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="throw1" icon-name="throwing-ruler-solid" label=${lang`Throw` + ' 1' + ':'} .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.throw1} @input=${this.validateInput}></simple-input>
-                    <simple-input id="throw2" icon-name="throwing-ruler-solid" label=${lang`Throw` + ' 2' + ':'} .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.throw2} @input=${this.validateInput}></simple-input>
-                    <simple-input id="throw3" icon-name="throwing-ruler-solid" label=${lang`Throw` + ' 3' + ':'} .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.throw3} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throw1" icon-name="throwing-ruler-solid" label="${lang`Throw` + ' 1'}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.throw1} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throw2" icon-name="throwing-ruler-solid" label="${lang`Throw` + ' 2'}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.throw2} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throw3" icon-name="throwing-ruler-solid" label="${lang`Throw` + ' 3'}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.throw3} @input=${this.validateInput}></simple-input>
 
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="map-location-dot-solid" label=${lang`Result` + ':'} .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.result} @input=${this.validateInput}></simple-input>
-                    <simple-input id="points" icon-name="hundred-points-solid" label=${lang`Points` + ':'} .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.points} @input=${this.validateInput}></simple-input>
+                    <simple-input id="result" icon-name="map-location-dot-solid" label="${lang`Result`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="places-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

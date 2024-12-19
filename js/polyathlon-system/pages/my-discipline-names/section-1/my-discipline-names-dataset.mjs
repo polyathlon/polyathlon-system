@@ -1,4 +1,4 @@
-import refreshToken, {getToken} from "../../refresh-token.mjs";
+import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -63,17 +63,19 @@ export default class DataSet {
             response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
+
         if (!response.ok) {
             throw new Error(result.error)
         }
 
         const newItem = await DataSet.getItem(result.id)
-        DataSet.addToDataset(newItem)
+
         return newItem
     }
 
     static addToDataset(item) {
-        DataSet.#dataSet.unshift(item);
+        DataSet.#dataSet.push(item)
+
     }
 
     static #fetchGetItem(token, itemId) {

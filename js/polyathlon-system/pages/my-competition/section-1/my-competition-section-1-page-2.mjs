@@ -50,7 +50,7 @@ class MyCompetitionSection1Page2 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <checkbox-group-input id="ageGroups" label=${lang`Age groups` + ':'} .value=${this.item?.ageGroups || []} .dataSet=${this.ageGroupDataSource} @input=${this.validateInput}></checkbox-group-input>
+                <checkbox-group-input id="ageGroups" label="${lang`Age groups`}:" .value=${this.item?.ageGroups || []} .dataSet=${this.ageGroupDataSource} @input=${this.validateInput}></checkbox-group-input>
             </div>
         `;
     }
