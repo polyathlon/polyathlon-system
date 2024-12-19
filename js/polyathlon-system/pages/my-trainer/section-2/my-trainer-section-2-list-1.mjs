@@ -10,7 +10,7 @@ class MyCompetitionSection2List1 extends BaseElement {
             item: {type: Object, default: null},
             avatar: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null, attribute: "old-values" },
+            oldValues: {type: Map, default: null},
             isFirst: { type: Boolean, default: false }
         }
     }

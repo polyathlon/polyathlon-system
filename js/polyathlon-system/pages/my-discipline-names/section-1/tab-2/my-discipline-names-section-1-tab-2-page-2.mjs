@@ -10,7 +10,7 @@ class MyDisciplineNamesSection1Tab2Page2 extends BaseElement {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null, attribute: "old-values" },
+            oldValues: {type: Map, default: null},
             currentPage: { type: BigInt, default: 0, local: true },
             currentRow: { type: BigInt, default: 0, local: true },
         }

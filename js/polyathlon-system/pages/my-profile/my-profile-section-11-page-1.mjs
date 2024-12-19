@@ -10,7 +10,7 @@ class MyProfileSection1Page1 extends BaseElement {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null, attribute: "old-values" },
+            oldValues: {type: Map, default: null},
         }
     }
 

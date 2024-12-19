@@ -33,7 +33,7 @@ class MyCompetitionSection3Page1 extends BaseElement {
             findDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null, attribute: "old-values" },
+            oldValues: {type: Map, default: null},
         }
     }
 

@@ -13,7 +13,7 @@ class MyCompetitionSection1List1 extends BaseElement {
             endDate: {type: String, default: null},
             stage: {type: String, default: null},
             isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null, attribute: "old-values" },
+            oldValues: {type: Map, default: null},
             isFirst: { type: Boolean, default: false },
             currentPage: { type: Boolean, default: false, local: true },
         }

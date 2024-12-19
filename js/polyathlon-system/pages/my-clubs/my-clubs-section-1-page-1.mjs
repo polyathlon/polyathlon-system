@@ -20,7 +20,7 @@ class MyClubsSection1Page1 extends BaseElement {
             regionDataSource: {type: Object, default: null},
             cityDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null, attribute: "old-values" },
+            oldValues: {type: Map, default: null},
         }
     }
 
