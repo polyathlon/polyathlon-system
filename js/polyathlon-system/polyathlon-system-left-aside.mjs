@@ -64,6 +64,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
             {iconName: 'bell-sharp-solid', page: 'my-notifications', title: 'Notifications', blink: 1, click: () => this.showPage('my-notifications')},
             {iconName: 'settings-solid', page: 'my-settings', title: 'Settings', click: () => this.showPage('my-settings')},
             {iconName: 'settings-solid', page: 'my-sports-disciplines', title: 'Settings', click: () => this.showPage('my-sports-disciplines')},
+            {iconName: 'settings-solid', page: 'my-sports-discipline-components', title: 'Settings', click: () => this.showPage('my-sports-discipline-components')},
             // {iconName: 'user', page: 'my-referee', title: 'Settings', click: () => this.showPage('my-referee')},
             // {iconName: 'trainer-solid', page: 'my-trainer', title: 'My Trainer', click: () => this.showPage('my-trainer')},
         ]
