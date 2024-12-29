@@ -4,9 +4,9 @@ import '../../../../components/buttons/icon-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import './section-1/my-sports-disciplines-section-1.mjs';
+import './section-1/my-sports-discipline-components-section-1.mjs';
 
-class MySportsDisciplines extends BaseElement {
+class MySportsDisciplineComponents extends BaseElement {
     static get properties() {
         return {
             currentSection: { type: BigInt, default: 0, local: true},
@@ -30,30 +30,28 @@ class MySportsDisciplines extends BaseElement {
         super()
         this.version = "1.0.0"
         this.sectionNames = [
-            {label: lang`Sports discipline`, iconName: 'category-solid'},
-            {label: lang`Component`, iconName: 'puzzle-solid'},
-            {label: lang`Categories table`, iconName: 'sportsman-man-solid'},
-            {label: lang`Categories table`, iconName: 'sportsman-woman-solid'},
+            {label: lang`Discipline`, iconName: 'competition-solid'},
+            {label: lang`Points Table`, iconName: 'sportsmen-solid'},
         ]
     }
 
     get #section1() {
         return html`
-            <my-sports-disciplines-section-1 .sectionNames=${this.sectionNames}></my-sports-disciplines-section-1>
+            <my-sports-discipline-components-section-1 .sectionNames=${this.sectionNames}></my-sports-discipline-components-section-1>
         `;
     }
 
     get #section2() {
-        import('./section-2/my-sports-disciplines-section-2.mjs');
+        import('./section-2/my-sports-discipline-components-section-2.mjs');
         return html`
-            <my-sports-disciplines-section-2 .sectionNames=${this.sectionNames}></my-sports-disciplines-section-2>
+            <my-sports-discipline-components-section-2 .sectionNames=${this.sectionNames}></my-sports-discipline-components-section-2>
         `;
     }
 
     get #section() {
         switch(this.currentSection) {
             case 0: return cache(this.#section1)
-            case 1: return this.#section2
+            case 1: return cache(this.#section2)
             default: return cache(this.#section1)
         }
     }
@@ -67,11 +65,11 @@ class MySportsDisciplines extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         let params = new URLSearchParams(window.location.search)
-        if (params.has('sports-disciplines')) {
-            localStorage.setItem('currentSportsDisciplineComponent', params.get('sports-disciplines'))
+        if (params.has('sports-discipline-components')) {
+            localStorage.setItem('currentSportsDisciplineComponent', params.get('sports-discipline-components'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
     }
 }
 
-customElements.define("my-sports-disciplines", MySportsDisciplines)
+customElements.define("my-sports-discipline-components", MySportsDisciplineComponents)

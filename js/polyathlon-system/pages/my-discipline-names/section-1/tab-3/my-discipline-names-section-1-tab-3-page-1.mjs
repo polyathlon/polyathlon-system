@@ -5,7 +5,7 @@ import lang from '../../../../polyathlon-dictionary.mjs'
 import '../../../../../../components/inputs/simple-input.mjs'
 import '../../../../../../components/tables/simple-table.mjs'
 
-class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
+class MyDisciplineNamesSection1Tab3Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -54,7 +54,7 @@ class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.item.men}></simple-table>
+                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.item.women}></simple-table>
             </div>
         `;
     }
@@ -100,4 +100,4 @@ class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
 
 }
 
-customElements.define("my-discipline-names-section-1-tab-2-page-1", MyDisciplineNamesSection1Tab2Page1);
+customElements.define("my-discipline-names-section-1-tab-3-page-1", MyDisciplineNamesSection1Tab3Page1);

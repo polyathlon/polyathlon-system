@@ -7,8 +7,8 @@ import RefereeTypeDataSource from '../../my-referee-types/my-referee-types-datas
 import RefereeTypeDataset from '../../my-referee-types/my-referee-types-dataset.mjs'
 import RefereeStageDataset from '../../my-referee-stages/my-referee-stages-dataset.mjs'
 import RefereeStageDataSource from '../../my-referee-stages/my-referee-stages-datasource.mjs'
-import SportsDisciplineDataset from '../../my-sports-disciplines/my-sports-disciplines-dataset.mjs'
-import SportsDisciplineDataSource from '../../my-sports-disciplines/my-sports-disciplines-datasource.mjs'
+import SportsDisciplineDataset from '../../my-sports-disciplines/section-1/my-sports-disciplines-dataset.mjs'
+import SportsDisciplineDataSource from '../../my-sports-disciplines/section-1/my-sports-disciplines-datasource.mjs'
 import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 

@@ -5,6 +5,7 @@ import '../../../../components/buttons/icon-button.mjs'
 import lang from '../../polyathlon-dictionary.mjs'
 
 import './section-1/my-competition-section-1.mjs';
+
 class MyCompetition extends BaseElement {
     static get properties() {
         return {

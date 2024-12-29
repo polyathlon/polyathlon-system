@@ -9,16 +9,16 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import { States } from "../../../../utils.js"
 
-import './tab-1/my-discipline-names-section-1-tab-1-page-1.mjs'
-import './tab-2/my-discipline-names-section-1-tab-2-page-1.mjs'
-import './tab-2/my-discipline-names-section-1-tab-2-page-2.mjs'
-import './tab-3/my-discipline-names-section-1-tab-3-page-1.mjs'
-import './tab-3/my-discipline-names-section-1-tab-3-page-2.mjs'
+import './tab-1/my-sports-discipline-components-section-1-tab-1-page-1.mjs'
+import './tab-2/my-sports-discipline-components-section-1-tab-2-page-1.mjs'
+import './tab-2/my-sports-discipline-components-section-1-tab-2-page-2.mjs'
+import './tab-3/my-sports-discipline-components-section-1-tab-3-page-1.mjs'
+import './tab-3/my-sports-discipline-components-section-1-tab-3-page-2.mjs'
 
-import DataSet from './my-discipline-names-dataset.mjs'
-import DataSource from './my-discipline-names-datasource.mjs'
+import DataSet from './my-sports-discipline-components-dataset.mjs'
+import DataSource from './my-sports-discipline-components-datasource.mjs'
 
-class MyDisciplineNamesSection1 extends BaseElement {
+class MySportsDisciplineComponentsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -260,11 +260,11 @@ class MyDisciplineNamesSection1 extends BaseElement {
     }
 
     async importFromExcel(e) {
-        const file = e.target.files[0];
+        const file = e.target.files[0]
         const target = e.target
-        const workbook = XLSX.read(await file.arrayBuffer());
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+        const workbook = XLSX.read(await file.arrayBuffer())
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1})
         if (this.currentTab === 1) {
             this.currentItem.men = []
         } else {
@@ -275,9 +275,29 @@ class MyDisciplineNamesSection1 extends BaseElement {
                 if (r[1]) {
                     const result = r[1].toString().trim()
                     if (result) {
+                        const results = result.split(":")
+                        let value
+                        if (results.length > 1) {
+                            value = results[0] * 60 * 10
+                            const values = results[1].split(',')
+                            if (values.length > 1) {
+                                value += values[0]*10 + +values[1]
+                            } else {
+                                value += values[0]*10
+                            }
+                        } else {
+                            const values = results[0].split(',')
+                            if (values.length > 1) {
+                                value = values[0]*10 + +values[1]
+                            } else {
+                                value = values[0]*10
+                            }
+                        }
+
                         const newItem = {
                             points: +r[0],
-                            result
+                            result,
+                            value,
                         }
                         if (this.currentTab === 1) {
                             this.currentItem.men.push(newItem)
@@ -289,8 +309,10 @@ class MyDisciplineNamesSection1 extends BaseElement {
             }
 
         });
-       // await this.dataSource.saveItem(this.currentItem);
-       target.value = '';
+        // console.log(this.currentItem.men)
+        await this.dataSource.saveItem(this.currentItem)
+        target.value = ''
+        this.requestUpdate()
     }
 
     update(changedProps) {
@@ -300,7 +322,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentDisciplineNameItem')) {
+        if (changedProps.has('currentSportsDisciplineComponent')) {
             this.currentPage = 0;
         }
     }
@@ -342,28 +364,28 @@ class MyDisciplineNamesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-discipline-names-section-1-tab-1-page-1 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.currentItem}></my-discipline-names-section-1-tab-1-page-1>
+            <my-sports-discipline-components-section-1-tab-1-page-1 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.currentItem}></my-sports-discipline-components-section-1-tab-1-page-1>
         `;
     }
 
     #page21() {
         return html`
-            <my-discipline-names-section-1-tab-2-page-1 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.currentItem}></my-discipline-names-section-1-tab-2-page-1>
+            <my-sports-discipline-components-section-1-tab-2-page-1 .men=${this.currentItem?.men} .currentPage=${this.currentPage} .item=${this.currentItem} @table-click=${this.tableClick}></my-sports-discipline-components-section-1-tab-2-page-1>
         `;
     }
     #page22() {
         return html`
-            <my-discipline-names-section-1-tab-2-page-2 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.newRow}></my-discipline-names-section-1-tab-2-page-2>
+            <my-sports-discipline-components-section-1-tab-2-page-2 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.newRow}></my-sports-discipline-components-section-1-tab-2-page-2>
         `;
     }
     #page31() {
         return html`
-            <my-discipline-names-section-1-tab-3-page-1 .item=${this.currentItem}></my-discipline-names-section-1-tab-3-page-1>
+            <my-sports-discipline-components-section-1-tab-3-page-1 .women=${this.currentItem?.women} .item=${this.currentItem} @table-click=${this.tableClick}></my-sports-discipline-components-section-1-tab-3-page-1>
         `;
     }
     #page32() {
         return html`
-            <my-discipline-names-section-1-tab-3-page-2 .item=${this.newRow} .currentPage=${this.currentPage} .oldValues=${this.oldValues}></my-discipline-names-section-1-tab-3-page-2>
+            <my-sports-discipline-components-section-1-tab-3-page-2 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.newRow} ></my-sports-discipline-components-section-1-tab-3-page-2>
         `;
     }
 
@@ -404,6 +426,14 @@ class MyDisciplineNamesSection1 extends BaseElement {
                 html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
             </nav>
         `
+    }
+
+    tableClick(e) {
+        this.currentRow = e.detail
+        this.newRow =  this.currentTab === 1 ?
+            structuredClone(this.currentItem.men[this.currentRow]) :
+            structuredClone(this.currentItem.women[this.currentRow])
+        this.currentPage = 1
     }
 
     async saveNewItem() {
@@ -556,7 +586,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
     }
 
     deleteRow() {
-        if (this.currentTab === 2) {
+        if (this.currentTab === 1) {
             if (this.currentRow === -1) {
                 this.currentPage = 0;
                 return
@@ -571,6 +601,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
             this.currentItem.women.splice(this.currentRow, 1);
             this.saveItem()
         }
+        this.currentPage = 0
     }
 
     get #rightFooter() {
@@ -713,4 +744,4 @@ class MyDisciplineNamesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-discipline-names-section-1", MyDisciplineNamesSection1);
+customElements.define("my-sports-discipline-components-section-1", MySportsDisciplineComponentsSection1);

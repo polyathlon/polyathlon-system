@@ -1,18 +1,22 @@
-import { BaseElement, html, css, nothing } from '../../../../../base-element.mjs'
+import { BaseElement, html, css } from '../../../../../base-element.mjs'
 
 import lang from '../../../../polyathlon-dictionary.mjs'
 
 import '../../../../../../components/inputs/simple-input.mjs'
-import '../../../../../../components/tables/simple-table.mjs'
+import '../../../../../../components/selects/simple-select.mjs'
 
-class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
+import SportsCategoriesDataset from '../../../my-sports-categories/my-sports-categories-dataset.mjs'
+import SportsCategoriesDataSource from '../../../my-sports-categories/my-sports-categories-datasource.mjs'
+
+class MySportsDisciplinesSection1Tab3Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
+            sportsCategoriesDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
-            currentPage: { type: BigInt, default: 0, local: true },
+            currentPage: { type: BigInt, default: 1, local: true },
             currentRow: { type: BigInt, default: 0, local: true },
         }
     }
@@ -31,46 +35,30 @@ class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
                 .container {
                     min-width: min(600px, 50vw);
                     max-width: 600px;
-                    color: white;
                 }
             `
         ]
     }
 
-    constructor () {
-        super()
-        this.columns = [
-            {
-                name: "points",
-                label: "Points"
-            },
-            {
-                name: "result",
-                label: "Result",
-            }
-        ]
-    }
+    isNew = true;
 
     render() {
         return html`
             <div class="container">
-                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.item.men}></simple-table>
+                <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="${lang`Sports category`}:" .dataSource=${this.sportsCategoriesDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .value=${this.item?.points} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
+    showPage(page) {
+        location.hash = page;
+    }
+
     validateInput(e) {
         if (e.target.value !== "") {
-            if (!this.item.men) {
-                this.item.men = []
-            }
-            let currentItem
-            if (this.currentRow === -1 && this.isNew) {
-                this.item.men.push({})
-                this.isNew = false
-            }
 
-            currentItem = e.target.currentObject ?? this.item?.men.at(this.currentRow)
+            const currentItem = e.target.currentObject ?? this.item
 
             if (!this.oldValues.has(e.target)) {
                 if (currentItem[e.target.id] !== e.target.value) {
@@ -86,18 +74,20 @@ class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
             if (e.target.id === 'name' || e.target.id === 'icon') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
+
             if (e.target.id === 'icon') {
                  this.requestUpdate()
             }
+
             this.isModified = this.oldValues.size !== 0;
         }
     }
 
-    tableClick(e) {
-        this.currentPage = 1
-        this.currentRow = e.details
+    async firstUpdated() {
+        super.firstUpdated();
+        this.sportsCategoriesDataSource = new SportsCategoriesDataSource(this, await SportsCategoriesDataset.getDataSet())
     }
 
 }
 
-customElements.define("my-discipline-names-section-1-tab-2-page-1", MyDisciplineNamesSection1Tab2Page1);
+customElements.define("my-sports-disciplines-section-1-tab-3-page-2", MySportsDisciplinesSection1Tab3Page2);

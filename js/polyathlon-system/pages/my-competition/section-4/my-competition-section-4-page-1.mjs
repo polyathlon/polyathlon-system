@@ -12,8 +12,8 @@ import CompetitionTypeDataSource from '../../my-competition-types/my-competition
 import CompetitionStageDataset from '../../my-competition-stages/my-competition-stages-dataset.mjs'
 import CompetitionStageDataSource from '../../my-competition-stages/my-competition-stages-datasource.mjs'
 
-import SportsDisciplineDataset from '../../my-sports-disciplines/my-sports-disciplines-dataset.mjs'
-import SportsDisciplineDataSource from '../../my-sports-disciplines/my-sports-disciplines-datasource.mjs'
+import SportsDisciplineDataset from '../../my-sports-disciplines/section-1/my-sports-disciplines-dataset.mjs'
+import SportsDisciplineDataSource from '../../my-sports-disciplines/section-1/my-sports-disciplines-datasource.mjs'
 
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 import CityDataSource from '../../my-cities/my-cities-datasource.mjs'

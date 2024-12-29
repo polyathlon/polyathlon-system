@@ -9,16 +9,16 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import { States } from "../../../../utils.js"
 
-import './tab-1/my-discipline-names-section-1-tab-1-page-1.mjs'
-import './tab-2/my-discipline-names-section-1-tab-2-page-1.mjs'
-import './tab-2/my-discipline-names-section-1-tab-2-page-2.mjs'
-import './tab-3/my-discipline-names-section-1-tab-3-page-1.mjs'
-import './tab-3/my-discipline-names-section-1-tab-3-page-2.mjs'
+import './tab-1/my-sports-disciplines-section-1-tab-1-page-1.mjs'
+import './tab-2/my-sports-disciplines-section-1-tab-2-page-1.mjs'
+import './tab-2/my-sports-disciplines-section-1-tab-2-page-2.mjs'
+import './tab-3/my-sports-disciplines-section-1-tab-3-page-1.mjs'
+import './tab-3/my-sports-disciplines-section-1-tab-3-page-2.mjs'
 
-import DataSet from './my-discipline-names-dataset.mjs'
-import DataSource from './my-discipline-names-datasource.mjs'
+import DataSet from './my-sports-disciplines-dataset.mjs'
+import DataSource from './my-sports-disciplines-datasource.mjs'
 
-class MyDisciplineNamesSection1 extends BaseElement {
+class MySportsDisciplinesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -30,6 +30,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
+            currentSection: { type: BigInt, default: 0, local: true},
             currentPage: { type: BigInt, default: 0, local: true },
             currentTab: { type: BigInt, default: 0, local: true},
             currentRow: { type: BigInt, default: 0, local: true },
@@ -203,13 +204,14 @@ class MyDisciplineNamesSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = [lang`Component`]
+        this.pageNames = [lang`Sports discipline`]
         this.oldValues = new Map();
         this.currentTab = 0
         this.tabNames = [
-            {label: lang`Component`, iconName: 'puzzle-solid'},
-            {label: lang`Points Table`, iconName: 'sportsman-man-solid'},
-            {label: lang`Points Table`, iconName: 'sportsman-woman-solid'},
+            {label: lang`Sports discipline`, iconName: 'category-solid'},
+            {label: lang`Components`, iconName: 'puzzle-solid'},
+            {label: lang`Categories table`, iconName: 'sportsman-man-solid'},
+            {label: lang`Categories table`, iconName: 'sportsman-woman-solid'},
         ]
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
@@ -260,11 +262,11 @@ class MyDisciplineNamesSection1 extends BaseElement {
     }
 
     async importFromExcel(e) {
-        const file = e.target.files[0];
+        const file = e.target.files[0]
         const target = e.target
-        const workbook = XLSX.read(await file.arrayBuffer());
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+        const workbook = XLSX.read(await file.arrayBuffer())
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1})
         if (this.currentTab === 1) {
             this.currentItem.men = []
         } else {
@@ -275,9 +277,29 @@ class MyDisciplineNamesSection1 extends BaseElement {
                 if (r[1]) {
                     const result = r[1].toString().trim()
                     if (result) {
+                        const results = result.split(":")
+                        let value
+                        if (results.length > 1) {
+                            value = results[0] * 60 * 10
+                            const values = results[1].split(',')
+                            if (values.length > 1) {
+                                value += values[0]*10 + +values[1]
+                            } else {
+                                value += values[0]*10
+                            }
+                        } else {
+                            const values = results[0].split(',')
+                            if (values.length > 1) {
+                                value = values[0]*10 + +values[1]
+                            } else {
+                                value = values[0]*10
+                            }
+                        }
+
                         const newItem = {
                             points: +r[0],
-                            result
+                            result,
+                            value,
                         }
                         if (this.currentTab === 1) {
                             this.currentItem.men.push(newItem)
@@ -289,8 +311,10 @@ class MyDisciplineNamesSection1 extends BaseElement {
             }
 
         });
-       // await this.dataSource.saveItem(this.currentItem);
-       target.value = '';
+        // console.log(this.currentItem.men)
+        await this.dataSource.saveItem(this.currentItem)
+        target.value = ''
+        this.requestUpdate()
     }
 
     update(changedProps) {
@@ -300,7 +324,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentDisciplineNameItem')) {
+        if (changedProps.has('currentSportsDiscipline')) {
             this.currentPage = 0;
         }
     }
@@ -324,13 +348,13 @@ class MyDisciplineNamesSection1 extends BaseElement {
         switch(this.currentTab) {
             case 0:
                 return this.#page1()
-            case 1:
+            case 2:
                 switch(this.currentPage) {
                     case 0: return this.#page21()
                     case 1: return this.#page22()
                     default: return this.#page21()
                 }
-            case 2:
+            case 3:
                 switch(this.currentPage) {
                     case 0: return this.#page31()
                     case 1: return this.#page32()
@@ -342,28 +366,28 @@ class MyDisciplineNamesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-discipline-names-section-1-tab-1-page-1 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.currentItem}></my-discipline-names-section-1-tab-1-page-1>
+            <my-sports-disciplines-section-1-tab-1-page-1 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.currentItem}></my-sports-disciplines-section-1-tab-1-page-1>
         `;
     }
 
     #page21() {
         return html`
-            <my-discipline-names-section-1-tab-2-page-1 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.currentItem}></my-discipline-names-section-1-tab-2-page-1>
+            <my-sports-disciplines-section-1-tab-2-page-1 .men=${this.currentItem?.men} .currentPage=${this.currentPage} .item=${this.currentItem} @table-click=${this.tableClick}></my-sports-disciplines-section-1-tab-2-page-1>
         `;
     }
     #page22() {
         return html`
-            <my-discipline-names-section-1-tab-2-page-2 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.newRow}></my-discipline-names-section-1-tab-2-page-2>
+            <my-sports-disciplines-section-1-tab-2-page-2 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.newRow}></my-sports-disciplines-section-1-tab-2-page-2>
         `;
     }
     #page31() {
         return html`
-            <my-discipline-names-section-1-tab-3-page-1 .item=${this.currentItem}></my-discipline-names-section-1-tab-3-page-1>
+            <my-sports-disciplines-section-1-tab-3-page-1 .women=${this.currentItem?.women} .item=${this.currentItem} @table-click=${this.tableClick}></my-sports-disciplines-section-1-tab-3-page-1>
         `;
     }
     #page32() {
         return html`
-            <my-discipline-names-section-1-tab-3-page-2 .item=${this.newRow} .currentPage=${this.currentPage} .oldValues=${this.oldValues}></my-discipline-names-section-1-tab-3-page-2>
+            <my-sports-disciplines-section-1-tab-3-page-2 .currentPage=${this.currentPage} .oldValues=${this.oldValues} .item=${this.newRow}></my-sports-disciplines-section-1-tab-3-page-2>
         `;
     }
 
@@ -378,7 +402,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
                     <icon-button
                         label=${item.name}
                         title=${item._id}
-                        icon-name=${item.icon || nothing}
+                        icon-name=${item.icon || 'category-solid'}
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(item)}
                     ></icon-button>
@@ -404,6 +428,16 @@ class MyDisciplineNamesSection1 extends BaseElement {
                 html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
             </nav>
         `
+    }
+
+    tableClick(e) {
+        this.currentRow = e.detail
+        if (this.currentTab === 2) {
+            this.newRow = structuredClone(this.currentItem.men[this.currentRow])
+        } else if (this.currentTab === 3) {
+            structuredClone(this.currentItem.women[this.currentRow])
+        }
+        this.currentPage = 1
     }
 
     async saveNewItem() {
@@ -500,7 +534,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
 
     async saveRow() {
         if (this.currentRow === -1) {
-            if (this.currentTab === 1) {
+            if (this.currentTab === 2) {
                 if (!this.currentItem.men) {
                     this.currentItem.men = []
                 }
@@ -512,12 +546,12 @@ class MyDisciplineNamesSection1 extends BaseElement {
                 this.currentItem.women.push(this.newRow)
             }
         } else {
-            if (this.currentTab === 1) {
+            if (this.currentTab === 2) {
+                this.currentItem.men[this.currentRow].category = this.newRow.category
                 this.currentItem.men[this.currentRow].points = this.newRow.points
-                this.currentItem.men[this.currentRow].result = this.newRow.result
             } else {
+                this.currentItem.women[this.currentRow].category = this.newRow.category
                 this.currentItem.women[this.currentRow].points = this.newRow.points
-                this.currentItem.women[this.currentRow].result = this.newRow.result
             }
         }
         await this.dataSource.saveItem(this.currentItem);
@@ -540,7 +574,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         if (this.currentRow === -1) {
-            this.newRow = {points: "", result: ""}
+            this.newRow = {category: "", points: ""}
         } else {
             this.oldValues.forEach( (value, key) => {
                 this.newRow[key.id] = value
@@ -571,19 +605,20 @@ class MyDisciplineNamesSection1 extends BaseElement {
             this.currentItem.women.splice(this.currentRow, 1);
             this.saveItem()
         }
+        this.currentPage = 0
     }
 
     get #rightFooter() {
         switch(this.currentTab) {
             case 0:
                 return this.#rightFooterTab1Page1
-            case 1:
+            case 2:
                 switch(this.currentPage) {
                     case 0: return this.#rightFooterTab2Page1
                     case 1: return this.#rightFooterTab2Page2
                     default: return this.#rightFooterTab2Page1
                 }
-            case 2:
+            case 3:
                 switch(this.currentPage) {
                     case 0: return this.#rightFooterTab2Page1
                     case 1: return this.#rightFooterTab2Page2
@@ -615,7 +650,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>${lang`Components`}</p></header>
+            <header class="left-header"><p>${lang`Sports disciplines`}</p></header>
             <header class="right-header">
                 ${this.tabNames.map( (tab, index) =>
                     html `
@@ -646,7 +681,12 @@ class MyDisciplineNamesSection1 extends BaseElement {
     }
 
     gotoTab(index) {
-        this.currentTab = index
+        if (index === 1) {
+            this.currentSection = 1
+            this.currentTab = 1
+        } else {
+            this.currentTab = index
+        }
     }
 
     gotoPage(index) {
@@ -713,4 +753,4 @@ class MyDisciplineNamesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-discipline-names-section-1", MyDisciplineNamesSection1);
+customElements.define("my-sports-disciplines-section-1", MySportsDisciplinesSection1);

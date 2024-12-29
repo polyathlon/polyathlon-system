@@ -12,8 +12,8 @@ import CompetitionTypeDataSource from '../../my-competition-types/my-competition
 import CompetitionStageDataset from '../../my-competition-stages/my-competition-stages-dataset.mjs'
 import CompetitionStageDataSource from '../../my-competition-stages/my-competition-stages-datasource.mjs'
 
-import SportsDisciplineDataset from '../../my-sports-disciplines/my-sports-disciplines-dataset.mjs'
-import SportsDisciplineDataSource from '../../my-sports-disciplines/my-sports-disciplines-datasource.mjs'
+import SportsDisciplineDataset from '../../my-sports-disciplines/section-1/my-sports-disciplines-dataset.mjs'
+import SportsDisciplineDataSource from '../../my-sports-disciplines/section-1/my-sports-disciplines-datasource.mjs'
 
 import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
@@ -69,8 +69,8 @@ class MyCompetitionSection1Page1 extends BaseElement {
             <div class="container">
                 <simple-select id="name" label="${lang`Competition name`}:" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
                 <simple-select id="stage" label="${lang`Stage`}:" icon-name="order-number-solid" @icon-click=${() => this.showPage('my-competition-stages')} .dataSource=${this.competitionStageDataSource} .value=${this.item?.stage} @input=${this.validateInput}></simple-select>
-                <simple-select id="sportsDiscipline1" label="${lang`Sports discipline` + ' 1:'} icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline1} @input=${this.validateInput}></simple-select>
-                <simple-select id="sportsDiscipline2" label="${lang`Sports discipline` + ' 2:'} icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
+                <simple-select id="sportsDiscipline1" label="${lang`Sports discipline`} 1:" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline1} @input=${this.validateInput}></simple-select>
+                <simple-select id="sportsDiscipline2" label="${lang`Sports discipline`} 2:" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-input id="competitionId" label="${lang`Competition ID`}:" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionId} .value=${this.item?.competitionId} @input=${this.validateInput}></simple-input>

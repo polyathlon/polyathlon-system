@@ -1,18 +1,15 @@
-import { BaseElement, html, css } from '../../../../../base-element.mjs'
+import { BaseElement, html, css } from '../../../base-element.mjs'
 
-import lang from '../../../../polyathlon-dictionary.mjs'
+import '../../../../components/inputs/simple-input.mjs'
+import lang from '../../polyathlon-dictionary.mjs'
 
-import '../../../../../../components/inputs/simple-input.mjs'
-
-class MyDisciplineNamesSection1Tab2Page2 extends BaseElement {
+class MyDisciplinesSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
-            currentPage: { type: BigInt, default: 1, local: true },
-            currentRow: { type: BigInt, default: 0, local: true },
         }
     }
 
@@ -35,26 +32,17 @@ class MyDisciplineNamesSection1Tab2Page2 extends BaseElement {
         ]
     }
 
-    isNew = true;
-
     render() {
         return html`
             <div class="container">
-                <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .value=${this.item?.points} @input=${this.validateInput}></simple-input>
-                <simple-input id="result" icon-name="order-number-solid" label="${lang`Result`}:" .value=${this.item?.result} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="category-solid" label="${lang`Sports discipline`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
-    showPage(page) {
-        location.hash = page;
-    }
-
     validateInput(e) {
         if (e.target.value !== "") {
-
             const currentItem = e.target.currentObject ?? this.item
-
             if (!this.oldValues.has(e.target)) {
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
@@ -65,23 +53,13 @@ class MyDisciplineNamesSection1Tab2Page2 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
-
-            if (e.target.id === 'name' || e.target.id === 'icon') {
+            if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
-
-            if (e.target.id === 'icon') {
-                 this.requestUpdate()
-            }
-
             this.isModified = this.oldValues.size !== 0;
         }
     }
 
-    async firstUpdated() {
-        super.firstUpdated();
-    }
-
 }
 
-customElements.define("my-discipline-names-section-1-tab-2-page-2", MyDisciplineNamesSection1Tab2Page2);
+customElements.define("my-disciplines-section-1-page-1", MyDisciplinesSection1Page1);

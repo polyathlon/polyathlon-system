@@ -575,6 +575,19 @@ const dictionary = {
         "ru-RU": 'Длина',
         "en-EN": 'Length'
     },
+    'Close': {
+        "ru-RU": 'Закрыть',
+        "en-EN": 'Close'
+    },
+    'Categories table': {
+        "ru-RU": 'Таблица разрядов',
+        "en-EN": 'Categories table'
+    },
+    'Sort order': {
+        "ru-RU": 'Порядок сортировки',
+        "en-EN": 'Sort order'
+    },
+
 }
 
 //const language = navigator.language

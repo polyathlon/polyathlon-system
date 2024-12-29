@@ -50,7 +50,7 @@ class MyCompetitionSection2Page10 extends BaseElement {
                 <modal-dialog></modal-dialog>
                 <div class="container">
                     <div class="name-group">
-                        <simple-input id="flow" icon-name="jumping-solid" label=${lang`Flow` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.flow} @input=${this.validateInput}></simple-input>
+                        <simple-input id="flow" icon-name="jumping-solid2" label=${lang`Flow` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.flow} @input=${this.validateInput}></simple-input>
                         <simple-input id="sector" icon-name="chart-pie-simple-solid" label=${lang`Sector` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.sector} @input=${this.validateInput}></simple-input>
                     </div>
                     <div class="name-group">

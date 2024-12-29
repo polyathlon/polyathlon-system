@@ -5,7 +5,7 @@ import lang from '../../../../polyathlon-dictionary.mjs'
 import '../../../../../../components/inputs/simple-input.mjs'
 import '../../../../../../components/tables/simple-table.mjs'
 
-class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
+class MySportsDisciplinesSection1Tab3Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -14,6 +14,7 @@ class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
             oldValues: {type: Map, default: null},
             currentPage: { type: BigInt, default: 0, local: true },
             currentRow: { type: BigInt, default: 0, local: true },
+            women: {type: Object, default: null},
         }
     }
 
@@ -41,12 +42,12 @@ class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
         super()
         this.columns = [
             {
-                name: "points",
-                label: "Points"
+                name: "category",
+                label: "Sports category"
             },
             {
-                name: "result",
-                label: "Result",
+                name: "points",
+                label: "Points"
             }
         ]
     }
@@ -54,7 +55,7 @@ class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.item.men}></simple-table>
+                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.item.women}></simple-table>
             </div>
         `;
     }
@@ -94,10 +95,13 @@ class MyDisciplineNamesSection1Tab2Page1 extends BaseElement {
     }
 
     tableClick(e) {
-        this.currentPage = 1
-        this.currentRow = e.details
+        if (typeof e.details === "number") {
+            this.fire("table-click", e.details)
+        }
+        // this.currentPage = 1
+        //this.currentRow = e.details
     }
 
 }
 
-customElements.define("my-discipline-names-section-1-tab-2-page-1", MyDisciplineNamesSection1Tab2Page1);
+customElements.define("my-sports-disciplines-section-1-tab-3-page-1", MySportsDisciplinesSection1Tab3Page1);

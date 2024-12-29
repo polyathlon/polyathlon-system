@@ -189,9 +189,8 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                     ${this.rows?.map((row, index) =>
                         html`
                             <tr @click=${(e) => e.details = index}>
-                                <td tabindex=${index}>${index}</td>
-                                <td>Accountant</td>
-                                <td>Tokyo</td>
+                                <td>${typeof row[this.columns[0].name] === 'object' ? row[this.columns[0].name].name : row[this.columns[0].name]}</td>
+                                <td>${row[this.columns[1].name]}</td>
                             </tr>
                         `
                     )}
