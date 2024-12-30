@@ -62,16 +62,16 @@ class MySportsDisciplinesSection1Tab3Page1 extends BaseElement {
 
     validateInput(e) {
         if (e.target.value !== "") {
-            if (!this.item.men) {
-                this.item.men = []
+            if (!this.item.women) {
+                this.item.women = []
             }
             let currentItem
             if (this.currentRow === -1 && this.isNew) {
-                this.item.men.push({})
+                this.item.women.push({})
                 this.isNew = false
             }
 
-            currentItem = e.target.currentObject ?? this.item?.men.at(this.currentRow)
+            currentItem = e.target.currentObject ?? this.item?.women.at(this.currentRow)
 
             if (!this.oldValues.has(e.target)) {
                 if (currentItem[e.target.id] !== e.target.value) {

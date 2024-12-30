@@ -288,7 +288,7 @@ class MyAgeGroupsSection1 extends BaseElement {
                 html `<icon-button
                         label=${item.name}
                         title=${item._id}
-                        icon-name="age-group-solid"
+                        icon-name=${item?.gender=="1" ? "age-group-women-solid" : "age-group-solid"}
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
                     ></icon-button>

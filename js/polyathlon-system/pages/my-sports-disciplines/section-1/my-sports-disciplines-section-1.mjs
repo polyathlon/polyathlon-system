@@ -382,7 +382,7 @@ class MySportsDisciplinesSection1 extends BaseElement {
     }
     #page31() {
         return html`
-            <my-sports-disciplines-section-1-tab-3-page-1 .women=${this.currentItem?.women} .item=${this.currentItem} @table-click=${this.tableClick}></my-sports-disciplines-section-1-tab-3-page-1>
+            <my-sports-disciplines-section-1-tab-3-page-1 .women=${this.currentItem?.women} .currentPage=${this.currentPage} .item=${this.currentItem} @table-click=${this.tableClick}></my-sports-disciplines-section-1-tab-3-page-1>
         `;
     }
     #page32() {
@@ -435,7 +435,7 @@ class MySportsDisciplinesSection1 extends BaseElement {
         if (this.currentTab === 2) {
             this.newRow = structuredClone(this.currentItem.men[this.currentRow])
         } else if (this.currentTab === 3) {
-            structuredClone(this.currentItem.women[this.currentRow])
+            this.newRow = structuredClone(this.currentItem.women[this.currentRow])
         }
         this.currentPage = 1
     }

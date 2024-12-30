@@ -39,13 +39,13 @@ class MyAgeGroupsSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="category" icon-name="age-group-solid" label="Age group:" .value=${this.item?.category} @input=${this.validateInput}></simple-input>
+                <simple-input id="category" icon-name=${this.item?.gender=="1" ? "age-group-women-solid" : "age-group-solid"} label="Age group:" .value=${this.item?.category} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="minAge" icon-name="age-min-group-solid" label="Min Age:" .value=${this.item?.minAge} @input=${this.validateInput}></simple-input>
-                    <simple-input id="maxAge" icon-name="age-max-group-solid" label="Max Age:" .value=${this.item?.maxAge} @input=${this.validateInput}></simple-input>
+                    <simple-input id="minAge" icon-name=${this.item?.gender=="1"  ? "age-min-group-women-solid" : "age-min-group-solid"} label="Min Age:" .value=${this.item?.minAge} @input=${this.validateInput}></simple-input>
+                    <simple-input id="maxAge" icon-name=${this.item?.gender=="1" ? "age-max-group-women-solid" : "age-max-group-solid"} label="Max Age:" .value=${this.item?.maxAge} @input=${this.validateInput}></simple-input>
                 </div>
                 <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-input id="sortOrder" icon-name="order-number-solid" label="Sort Order:" .value=${this.item?.sortOrder} @input=${this.validateInput}></simple-input>
+                <simple-input id="sortOrder" icon-name="order-number-solid" label="Sort order:" .value=${this.item?.sortOrder} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
