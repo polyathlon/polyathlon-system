@@ -6,7 +6,7 @@ class MySportsDisciplinesSection2List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            item: {type: Object, default: null},
+            dataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
             currentItem: {type: Object, default: null, local: true }
@@ -53,13 +53,12 @@ class MySportsDisciplinesSection2List1 extends BaseElement {
 
     render() {
         return html`
-            ${this.item.dataSource?.items?.map((item, index) =>
+            ${this.dataSource?.items?.map((item, index) =>
                 html `<icon-button
-                        label=${this.fio(item)}
+                        label=${item.ageGroup?.name}
                         title=${item._id}
-                        image-name=${item.gender == 0 ? "images/referee-man-solid.svg" : "images/referee-man-solid.svg"}
+                        icon-name=${item.ageGroup?.gender=="1"  ? "age-group-women-solid" : "age-group-solid"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>                `
 
@@ -71,14 +70,14 @@ class MySportsDisciplinesSection2List1 extends BaseElement {
         if (this.isModified) {
             const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
-                await this.item.dataSource.saveItem(this.currentItem);
+                await this.dataSource.saveItem(this.currentItem);
             }
             else {
                 await this.cancelItem()
             }
         }
         else {
-            this.item.dataSource.setCurrentItem(item)
+            this.dataSource.setCurrentItem(item)
         }
     }
 

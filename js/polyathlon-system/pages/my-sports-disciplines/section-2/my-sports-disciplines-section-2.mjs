@@ -548,7 +548,7 @@ class MySportsDisciplinesSection2 extends BaseElement {
 
     #list1() {
         return html`
-            <my-sports-disciplines-section-2-list-1 .item=${this}></my-sports-disciplines-section-2-list-1>
+            <my-sports-disciplines-section-2-list-1 .dataSource=${this.dataSource}></my-sports-disciplines-section-2-list-1>
         `;
     }
 
@@ -750,6 +750,9 @@ class MySportsDisciplinesSection2 extends BaseElement {
             } else {
                 const currentItem = key.currentObject ?? this.currentItem
                 currentItem[key.id] = value;
+                if ('oldValue' in key) {
+                    key.oldValue = null
+                }
                 key.value = value;
             }
         });

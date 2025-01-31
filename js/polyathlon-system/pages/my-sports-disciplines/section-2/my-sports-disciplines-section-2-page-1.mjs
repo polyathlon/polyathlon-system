@@ -4,11 +4,14 @@ import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/gender-input.mjs'
 import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
+import '../../../../../components/inputs/checkbox-group-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
 import AgeGroupsDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
 import AgeGroupsDataSource from '../../my-age-groups/my-age-groups-datasource.mjs'
+import SportsDisciplineComponentsDataset from '../../my-sports-discipline-components/section-1/my-sports-discipline-components-dataset.mjs'
+import SportsDisciplineComponentsDataSource from '../../my-sports-discipline-components/section-1/my-sports-discipline-components-datasource.mjs'
 
 // import RefereePositionsDataset from '../../my-referee-positions/my-referee-positions-dataset.mjs'
 // import RefereePositionsDataSource from '../../my-referee-positions/my-referee-positions-datasource.mjs'
@@ -30,6 +33,8 @@ class MySportsDisciplinesSection2Page1 extends BaseElement {
             refereePositionsDataSource: {type: Object, default: null},
             regionDataSource: {type: Object, default: null},
             cityDataSource: {type: Object, default: null},
+            ageGroupsDataSource: {type: Object, default: null},
+            sportsDisciplineComponentsDataSource: {type: Object, default: null},
             findDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
@@ -64,13 +69,8 @@ class MySportsDisciplinesSection2Page1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-select id="ageGroup" label="${lang`Age group`}:" icon-name="referee-position-solid" @icon-click=${() => this.showPage('my-age-groups')} .dataSource=${this.ageGroupsDataSource} .value=${this.item?.ageGroup} @input=${this.validateInput}></simple-select>
-                <div class="name-group">
-                    <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
-                </div>
-                <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <!-- <simple-input id="refereeId" label="${lang`Referee ID`}:" .dataSource=${this.findDataSource} icon-name="id-number-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.refereeId} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input> -->
+                <simple-select id="ageGroup" label="${lang`Age group`}:"  icon-name=${this.item?.ageGroup?.gender == "1"  ? "age-group-women-solid" : "age-group-solid"} @icon-click=${() => this.showPage('my-age-groups')} .dataSource=${this.ageGroupsDataSource} .value=${this.item?.ageGroup} @input=${this.validateInput}></simple-select>
+                <checkbox-group-input id="sportsDisciplineComponents" label="${lang`Components`}:" .value=${this.item?.sportsDisciplineComponents || []} .dataSet=${this.sportsDisciplineComponentsDataSource} @input=${this.validateInput}></checkbox-group-input>
             </div>
         `;
     }
@@ -79,31 +79,63 @@ class MySportsDisciplinesSection2Page1 extends BaseElement {
         location.hash = page;
     }
 
+    // validateInput(e) {
+    //     if (e.target.value !== "") {
+    //         const currentItem = e.target.currentObject ?? this.item
+    //         if (!this.oldValues.has(e.target)) {
+    //             if (currentItem[e.target.id] !== e.target.value) {
+    //                 this.oldValues.set(e.target, currentItem[e.target.id])
+    //             }
+    //         }
+    //         else if (this.oldValues.get(e.target) === e.target.value) {
+    //                 this.oldValues.delete(e.target)
+    //         }
+
+    //         currentItem[e.target.id] = e.target.value
+    //         if (e.target.id === 'name') {
+    //             this.parentNode.parentNode.host.requestUpdate()
+    //         }
+    //         if (e.target.id === 'birthday' || e.target.id === 'gender') {
+    //             try {
+    //                 this.changeAgeGroup()
+    //                 this.requestUpdate()
+    //             }
+    //             catch {
+
+    //             }
+    //         }
+    //         this.isModified = this.oldValues.size !== 0;
+    //     }
+    // }
+
     validateInput(e) {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? this.item
             if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
+                if (Array.isArray(e.target.value)) {
+                    this.oldValues.set(e.target, e.target.oldValue)
+                } else {
+                    this.oldValues.set(e.target.id, currentItem[e.target.id])
                 }
             }
-            else if (this.oldValues.get(e.target) === e.target.value) {
+            else {
+                const oldValue = this.oldValues.get(e.target)
+                if (Array.isArray(oldValue)) {
+                    if (oldValue.length === e.target.value.length && e.target.value.every(item1 => oldValue.some( item2 =>
+                        item1.name ===  item2.name
+                    ))) {
+                        this.oldValues.delete(e.target)
+                    }
+                } else if (oldValue === e.target.value) {
                     this.oldValues.delete(e.target)
+                }
             }
 
             currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-            if (e.target.id === 'birthday' || e.target.id === 'gender') {
-                try {
-                    this.changeAgeGroup()
-                    this.requestUpdate()
-                }
-                catch {
 
-                }
-            }
+            // if (e.target.id === 'name' || e.target.id === 'startDate' || e.target.id === 'endDate' || e.target.id === 'stage') {
+            //     this.parentNode.parentNode.host.requestUpdate()
+            // }
             this.isModified = this.oldValues.size !== 0;
         }
     }
@@ -166,20 +198,20 @@ class MySportsDisciplinesSection2Page1 extends BaseElement {
     //     }
     // }
 
-    sportsmanChoose(e) {
-        let sportsman = e.detail
-        if (sportsman) {
-            sportsman.refereeUlid = sportsman._id
-            const inputs = this.$id()
-            inputs.forEach(input => {
-                if (input.id in sportsman) {
-                    input.setValue(sportsman[input.id])
-                }
-            })
-            //Object.assign(this.item, sportsman)
-            this.requestUpdate()
-        }
-    }
+    // sportsmanChoose(e) {
+    //     let sportsman = e.detail
+    //     if (sportsman) {
+    //         sportsman.refereeUlid = sportsman._id
+    //         const inputs = this.$id()
+    //         inputs.forEach(input => {
+    //             if (input.id in sportsman) {
+    //                 input.setValue(sportsman[input.id])
+    //             }
+    //         })
+    //         //Object.assign(this.item, sportsman)
+    //         this.requestUpdate()
+    //     }
+    // }
 
     async showDialog(message, type='message', title='') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')
@@ -207,6 +239,7 @@ class MySportsDisciplinesSection2Page1 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.ageGroupsDataSource = new AgeGroupsDataSource(this, await AgeGroupsDataset.getDataSet())
+        this.sportsDisciplineComponentsDataSource = new SportsDisciplineComponentsDataSource(this, await SportsDisciplineComponentsDataset.getDataSet())
         // this.refereePositionsDataSource = new RefereePositionsDataSource(this, await RefereePositionsDataset.getDataSet())
         // this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         // this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())

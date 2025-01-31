@@ -24,10 +24,10 @@ export default class DataSource {
             let itemId = sessionStorage.getItem('currentSportsDisciplineComponent')
             let item
             if (itemId) {
-                item = this.items.find((item) => item.id == itemId)
+                item = this.items.find((item) => item._id == itemId)
             }
             item ??= this.items[0]
-            sessionStorage.setItem('currentSportsDisciplineComponent', item.id)
+            sessionStorage.setItem('currentSportsDisciplineComponent', item._id)
             this.component.currentItem = item
         } else {
             this.component.currentItem = {}
