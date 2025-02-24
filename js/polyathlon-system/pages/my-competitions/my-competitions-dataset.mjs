@@ -1,7 +1,9 @@
 import refreshToken, {getToken} from "../../refresh-token.mjs";
 
 export default class DataSet {
-    static #dataSet;
+    static #dataSet
+
+    static year
 
     static async getDataSet() {
         if (DataSet.#dataSet) {
@@ -12,6 +14,11 @@ export default class DataSet {
     }
 
     static async getDataSetByYear(year) {
+        if (DataSet.year != year) {
+            DataSet.year = year
+            DataSet.#dataSet = await DataSet.getItemsByYear(year)
+            return DataSet.#dataSet
+        }
         if (DataSet.#dataSet) {
             return DataSet.#dataSet
         }

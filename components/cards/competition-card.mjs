@@ -163,7 +163,7 @@ customElements.define("competition-card", class CompetitionCard extends BaseElem
             </header>
             <aside>
                 <div class="dates">
-                    ${this.item?.ekp || this.item?.competitionId}
+                    ${this.item?.ekpNumber || this.item?.competitionId}
                 </div>
                 <div class="image">
                     <img src="images/competition.svg">
