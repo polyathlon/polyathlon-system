@@ -59,7 +59,7 @@ class MyCompetitionSection3List1 extends BaseElement {
                         title=${item._id}
                         image-name=${item.gender == 0 ? "images/referee-man-solid.svg" : "images/referee-man-solid.svg"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
+                        .status=${ { name: item.position?.name || item?._id, icon: 'referee-position-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>                `
 

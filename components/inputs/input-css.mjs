@@ -38,13 +38,17 @@ input[type="date"] {
     display: inline-block;
     width: 100%;
     margin: 8px 2px;
-    padding: 12px 40px 12px 40px;
+    padding: 12px 40px;
     border: 1px solid rgb(204, 204, 204);
     border-radius: 10px;
     font-size: 14px;
     text-overflow: ellipsis;
     outline-color: var(--form-outline-color);
     color: var(--form-input-color, gray);
+}
+
+input[type="date"] {
+    padding: 8px 40px;
 }
 
 input:-internal-autofill-selected {

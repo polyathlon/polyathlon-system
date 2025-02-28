@@ -8,10 +8,14 @@ import '../../../../components/buttons/icon-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 import '../../../../components/buttons/aside-button.mjs';
 import '../../../../components/cards/competition-card.mjs';
+import '../../../../components/selects/filter-select.mjs';
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import './my-competitions-section-1-page-1.mjs'
+// import './my-competitions-section-1-page-1.mjs'
+
+import CompetitionTypeDataset from '../my-competition-types/my-competition-types-dataset.mjs'
+import CompetitionTypeDataSource from '../my-competition-types/my-competition-types-datasource.mjs'
 
 import DataSet from './my-competitions-dataset.mjs'
 import DataSource from './my-competitions-datasource.mjs'
@@ -21,6 +25,10 @@ class MyCompetitionsSection1 extends BaseElement {
         return {
             version: { type: String, default: '1.0.0', save: true },
             dataSource: {type: Object, default: null},
+            competitionTypeDataSource: {type: Object, default: null},
+            competitionType: {type: Object, default: null},
+            competitionStatus: {type: Object, default: null},
+            startDate: {type: String, default: ''},
             statusDataSet: {type: Map, default: null },
             oldValues: {type: Map, default: null },
             currentItem: {type: Object, default: null},
@@ -76,6 +84,7 @@ class MyCompetitionsSection1 extends BaseElement {
 
                 .filter {
                     display: flex;
+                    width: 100%;
                 }
 
                 .left-layout {
@@ -305,6 +314,9 @@ class MyCompetitionsSection1 extends BaseElement {
 
                     }
                 }
+                competition-card:nth-of-type(2n + 1) {
+                    background-color: rgba(0, 0, 0, 0.3);
+                }
             `
         ]
     }
@@ -313,7 +325,16 @@ class MyCompetitionsSection1 extends BaseElement {
         super();
         this.statusDataSet = new Map()
         this.pageNames = ['Information']
-        this.oldValues = new Map();
+        this.oldValues = new Map()
+        this.startDate = (new Date(Date.now()).toISOString()).split('T')[0]
+        this.competitionStatusDateSource = {}
+        this.competitionStatusDateSource.items = [
+            { name: '--Статус--' },
+            { name: 'Текущее' },
+            { name: 'Ближайшее' },
+            { name: 'Прошедшее' }
+        ]
+        this.competitionStatus = this.competitionStatusDateSource.items[0];
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
@@ -367,7 +388,7 @@ class MyCompetitionsSection1 extends BaseElement {
         const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
         const regionDataset = await RegionDataset.RegionDataset()
         raw_data.forEach((r, index) => {
-            if(index !== 0){
+            if( index !== 0 ){
                 const newItem = {
                     lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
                     firstName: r[1].split(' ')[1],
@@ -429,17 +450,17 @@ class MyCompetitionsSection1 extends BaseElement {
         // return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
     }
 
-    #page1() {
-        return html`
-            <my-competitions-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competitions-section-1-page-1>
-        `;
-    }
+    // #page1() {
+    //     return html`
+    //         <my-competitions-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competitions-section-1-page-1>
+    //     `;
+    // }
 
-    #page2() {
-        return html`
-            <my-competitions-section-1-page-2 .item=${this.currentItem}></my-competitions-section-1-page-2>
-        `;
-    }
+    // #page2() {
+    //     return html`
+    //         <my-competitions-section-1-page-2 .item=${this.currentItem}></my-competitions-section-1-page-2>
+    //     `;
+    // }
 
     get #pageName() {
         return this.pageNames[this.currentPage];
@@ -476,31 +497,43 @@ class MyCompetitionsSection1 extends BaseElement {
         `
     }
 
+    dateChange(e) {
+        console.log(e.target.value)
+    }
+
+    // <input type="date" id="competition-time" min="2023-01-01" class="form-control" value="2024-10-07" onchange="competitionTimeFilter(event)">
+    //         <!-- <input type="date" id="from" name="from" data-provide="datepicker" placeholder="Дата начало" class="form-control"> -->
+    // <!-- <filter-select id="name" icon-name="referee-solid" @icon-click=${() => this.showPage('my-referee-types')} label="Name:" .dataSource=${this.refereeTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></filter-select> -->
+    //
+    //
+
+
+//<simple-select id="name" label="${lang`Competition name`}:" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
+    competitionTypeChange(e) {
+        this.competitionType = e.target.value
+        this.dataSource.filter(this.startDate, this.competitionStatus, this.competitionType)
+    }
+
+    competitionStatusChange(e) {
+        this.competitionStatus = e.target.value
+        this.dataSource.filter(this.startDate, this.competitionStatus, this.competitionType)
+    }
+
+    async startDateChange(e) {
+        this.startDate = e.target.value
+        const currentYear = new Date(this.startDate).getFullYear()
+        if (DataSet.year !== currentYear) {
+            this.dataSource = new DataSource(this, await DataSet.getDataSetByYear(currentYear))
+        }
+        this.dataSource.filter(this.startDate, this.competitionStatus, this.competitionType)
+    }
+
     get #filter() {
         return html`
         <div class="filter">
-            <input type="date" id="competition-time" min="2023-01-01" class="form-control" value="2024-10-07" onchange="competitionTimeFilter(event)">
-            <!-- <input type="date" id="from" name="from" data-provide="datepicker" placeholder="Дата начало" class="form-control"> -->
-            <select name="select" id="competition-status" class="form-control" onchange="competitionStatusFilter(event)">
-                <option value="--Статус--">--Статус--</option>
-                <option value="Текущее">Текущее</option>
-                <option value="Прошедшее">Прошедшее</option>
-                <option value="Ближайшее">Ближайшее</option>
-            </select>
-            <select name="select" id="competition-name" class="form-control" onchange="competitionNameFilter(event)">
-                <option value="--Соревнование--">--Соревнование--</option>
-                                    <option value="Кубок мира">Кубок мира</option>
-                                    <option value="Кубок России">Кубок России</option>
-                                    <option value="Первенство федерального округа">Первенство федерального округа</option>
-                                    <option value="Чемпионат федерального округа">Чемпионат федерального округа</option>
-                                    <option value="Первенство России">Первенство России</option>
-                                    <option value="Чемпионат РССС (Всероссийские соревнования)">Чемпионат РССС (Всероссийские соревнования)</option>
-                                    <option value="Всероссийские соревнования">Всероссийские соревнования</option>
-                                    <option value="Чемпионат России">Чемпионат России</option>
-                                    <option value="Чемпионат мира">Чемпионат мира</option>
-                                    <option value="Первенство мира">Первенство мира</option>
-                                    <option value="Фестиваль">Фестиваль</option>
-                            </select>
+            <simple-input type="date" id="startDate" icon-name="calendar-days-solid" .value=${this.startDate} @input=${this.startDateChange} lang="ru-Ru"></simple-input>
+            <filter-select id="status" icon-name="alarm-clock-solid" .dataSource=${this.competitionStatusDateSource} .value=${this.competitionStatus} @input=${this.competitionStatusChange}></filter-select>
+            <filter-select id="competition-solid" icon-name="competition-solid" @icon-click=${() => this.showPage('my-referee-types')} .dataSource=${this.competitionTypeDataSource} .value=${this.competitionType} @input=${this.competitionTypeChange}></filter-select>
         </div>
         `
     }
@@ -565,7 +598,10 @@ class MyCompetitionsSection1 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.dataSource = new DataSource(this, await DataSet.getDataSetByYear(2024))
+        this.dataSource = new DataSource(this, await DataSet.getDataSetByYear(new Date(Date.now()).getFullYear()))
+        this.competitionTypeDataSource = new CompetitionTypeDataSource(this, await CompetitionTypeDataset.getDataSet())
+        this.competitionTypeDataSource?.items?.unshift({name: '--Наименование--'})
+        this.competitionType = this.competitionTypeDataSource?.items?.[0]
     }
 }
 
