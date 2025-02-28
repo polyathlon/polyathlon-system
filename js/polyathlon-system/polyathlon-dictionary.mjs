@@ -587,6 +587,14 @@ const dictionary = {
         "ru-RU": 'Порядок сортировки',
         "en-EN": 'Sort order'
     },
+    'Verify Email': {
+        "ru-RU": 'Подтверждение почты',
+        "en-EN": 'Verify Email'
+    },
+    'Verification code': {
+        "ru-RU": 'Код подтверждения',
+        "en-EN": 'Verification code'
+    },
 
 }
 
