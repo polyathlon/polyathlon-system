@@ -50,14 +50,14 @@ class MyCompetitionSection6Page4 extends BaseElement {
             <modal-dialog></modal-dialog>
             <div class="container">
                 <div class="name-group">
-                    <simple-input id="flow" icon-name="push-ups-flow-solid" label="${lang`Flow`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.flow} @input=${this.validateInput}></simple-input>
-                    <simple-input id="platform" icon-name="push-ups-platform-solid" label="${lang`Platform`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.platform} @input=${this.validateInput}></simple-input>
+                    <simple-input id="swim" icon-name="swim-solid" label="${lang`Swim`}:" .currentObject=${this.item?.swimming} .value=${this.item?.swimming?.swim} @input=${this.validateInput}></simple-input>
+                    <simple-input id="track" icon-name="pool-track-solid" label="${lang`Track`}:" .currentObject=${this.item?.swimming} .value=${this.item?.swimming?.track} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="order-number-solid" label="${lang`Result`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.result} @input=${this.validateInput}></simple-input>
-                    <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.point} @input=${this.validateInput}></simple-input>
+                    <simple-input id="result" icon-name="timer-solid" label="${lang`Result`}:" .currentObject=${this.item?.swimming} .value=${this.item?.swimming?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.swimming} .value=${this.item?.swimming?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.swimming} .value=${this.item?.swimming?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -70,7 +70,7 @@ class MyCompetitionSection6Page4 extends BaseElement {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.pushUps ??= currentItem
+                this.item.swimming ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }

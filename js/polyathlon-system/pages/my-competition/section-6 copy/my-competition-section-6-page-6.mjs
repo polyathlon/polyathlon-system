@@ -7,7 +7,7 @@ import '../../../../../components/selects/simple-select.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
-class MyCompetitionSection6Page5 extends BaseElement {
+class MyCompetitionSection6Page6 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -120,4 +120,4 @@ class MyCompetitionSection6Page5 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-6-page-5", MyCompetitionSection6Page5);
+customElements.define("my-competition-section-6-page-6", MyCompetitionSection6Page6);

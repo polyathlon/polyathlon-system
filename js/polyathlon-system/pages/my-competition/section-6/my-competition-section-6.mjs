@@ -12,6 +12,7 @@ import { States } from "../../../../utils.js"
 
 import './my-competition-section-6-list-1.mjs'
 import './my-competition-section-6-page-1.mjs'
+import './my-competition-section-6-page-1.mjs'
 import './my-competition-section-6-page-2.mjs'
 import './my-competition-section-6-page-3.mjs'
 import './my-competition-section-6-page-4.mjs'
@@ -20,8 +21,6 @@ import './my-competition-section-6-page-6.mjs'
 import './my-competition-section-6-page-7.mjs'
 import './my-competition-section-6-page-8.mjs'
 import './my-competition-section-6-page-9.mjs'
-import './my-competition-section-6-page-10.mjs'
-
 
 import DataSet from './my-competition-section-6-dataset.mjs'
 import DataSource from './my-competition-section-6-datasource.mjs'
@@ -214,18 +213,15 @@ class MyCompetitionSection6 extends BaseElement {
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
         ]
         this.pages = [
-            {iconName: 'sportsmen-solid', page: 0, title: lang`Sportsmen`, click: () => this.gotoPage(0)},
-            {iconName: 'shooting-solid', page: 1, title: lang`Shooting`, click: () => this.gotoPage(1)},
-            {iconName: 'swimming-solid', page: 4, title: lang`Swimming`, click: () => this.gotoPage(4)},
-            {iconName: 'sprinting-solid', page: 6, title: lang`Sprinting`, click: () => this.gotoPage(6)},
-            {iconName: 'throwing-solid', page: 5, title: lang`Throwing`, click: () => this.gotoPage(5)},
-            {iconName: 'running-solid', page: 7, title: lang`Running`, click: () => this.gotoPage(7)},
-            {iconName: 'pull-ups-solid', page: 2, title: lang`Pull-ups`, click: () => this.gotoPage(2)},
-            {iconName: 'push-ups-solid', page: 3, title: lang`Push-ups`, click: () => this.gotoPage(3)},
-            {iconName: 'skiing-solid', page: 8, title: lang`Skiing`, click: () => this.gotoPage(8)},
-            {iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
-            {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Back`, click: this.deleteItem},
-            {iconName: 'circle-plus-sharp-solid', page: -1, title: lang`Back`, click: this.addNewItem},
+            {name: 'page1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
+            {name: 'page2', iconName: 'swimming-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
+            {name: 'page3', iconName: 'sprinting-solid', page: 5, title: lang`Sprinting`, click: () => this.gotoPage(5)},
+            {name: 'page4', iconName: 'throwing-solid', page: 4, title: lang`Throwing`, click: () => this.gotoPage(4)},
+            {name: 'page5', iconName: 'running-solid', page: 6, title: lang`Running`, click: () => this.gotoPage(6)},
+            {name: 'page6', iconName: 'pull-ups-solid', page: 1, title: lang`Pull-ups`, click: () => this.gotoPage(1)},
+            {name: 'page7', iconName: 'push-ups-solid', page: 2, title: lang`Push-ups`, click: () => this.gotoPage(2)},
+            {name: 'page8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
+            {name: 'page9', iconName: 'jumping-solid', page: 8, title: lang`Jumping`, click: () => this.gotoPage(8)},
         ]
     }
 
@@ -320,83 +316,62 @@ class MyCompetitionSection6 extends BaseElement {
     //     }
     // }
 
-    get #page() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#page1())
-            case 1: return cache(this.#page2())
-            case 2: return cache(this.#page3())
-            case 3: return cache(this.#page4())
-            case 4: return cache(this.#page5())
-            case 5: return cache(this.#page6())
-            case 6: return cache(this.#page7())
-            case 7: return cache(this.#page8())
-            case 8: return cache(this.#page9())
-            case 9: return cache(this.#page10())
-            default: return cache(this.#page1())
-        }
+    get page() {
+        return cache(this[this.pages[this.currentPage].name])
     }
 
-    #page1() {
+    get page1() {
         return html`
             <my-competition-section-6-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-1>
         `;
     }
 
-    #page2() {
+    get page2() {
         return html`
             <my-competition-section-6-page-2 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-2>
         `;
     }
 
-    #page3() {
+    get page3() {
         return html`
             <my-competition-section-6-page-3 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-3>
             `;
     }
 
-    #page4() {
+    get page4() {
         return html`
             <my-competition-section-6-page-4 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-4>
             `;
     }
 
-    #page5() {
+    get page5() {
         return html`
             <my-competition-section-6-page-5 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-5>
         `;
     }
 
-    #page6() {
+    get page6() {
         return html`
             <my-competition-section-6-page-6 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-6>
         `;
     }
 
-    #page7() {
+    get page7() {
         return html`
             <my-competition-section-6-page-7 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-7>
         `;
     }
 
-    #page8() {
+    get page8() {
         return html`
             <my-competition-section-6-page-8 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-8>
         `;
     }
 
-    #page9() {
+    get page9() {
         return html`
             <my-competition-section-6-page-9 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-9>
         `;
-    }
-    #page10() {
-        return html`
-            <my-competition-section-6-page-10 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-10>
-        `;
-    }
-
-    get #pageName() {
-        return this.pageNames[this.currentPage];
     }
 
     fio(item) {
@@ -530,7 +505,7 @@ class MyCompetitionSection6 extends BaseElement {
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page}
+                ${this.page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
