@@ -10,7 +10,7 @@ class MyCompetition extends BaseElement {
     static get properties() {
         return {
             currentSection: { type: BigInt, default: 0, local: true},
-            sectionNames: { type: Array, default: 0 },
+            sections: { type: Array, default: null },
             version: { type: String, default: '1.0.0', save: true },
         }
     }
@@ -29,63 +29,65 @@ class MyCompetition extends BaseElement {
     constructor() {
         super()
         this.version = "1.0.0"
-        this.sectionNames = [
-            {label: lang`Competition`, iconName: 'competition-solid'},
-            {label: lang`Sportsmen`, iconName: 'sportsmen-solid'},
-            {label: lang`Referees`, iconName: 'judge1-solid'},
-            {label: lang`Statistic`, iconName: 'chart-pie-solid'},
-            {label: lang`Requests`, iconName: 'registration-solid'},
+        this.sections = [
+            {name: "section1", label: lang`Competition`, iconName: 'competition-solid'},
+            {name: "section2", label: lang`Sportsmen`, iconName: 'sportsmen-solid'},
+            // {name: "section6", label: lang`Results`, iconName: 'hundred-points-solid'},
+            {name: "section6", label: lang`Results`, iconName: 'timer-solid'},
+            {name: "section3", label: lang`Referees`, iconName: 'judge1-solid'},
+            {name: "section4", label: lang`Statistic`, iconName: 'chart-pie-solid'},
+            {name: "section5", label: lang`Requests`, iconName: 'registration-solid'},
         ]
     }
 
-    get #section1() {
+    get section1() {
         return html`
-            <my-competition-section-1 .sectionNames=${this.sectionNames}></my-competition-section-1>
+            <my-competition-section-1 .sections=${this.sections}></my-competition-section-1>
         `;
     }
 
-    get #section2() {
+    get section2() {
         import('./section-2/my-competition-section-2.mjs');
         return html`
-            <my-competition-section-2 .sectionNames=${this.sectionNames}></my-competition-section-2>
+            <my-competition-section-2 .sections=${this.sections}></my-competition-section-2>
         `;
     }
 
-    get #section3() {
+    get section3() {
         import('./section-3/my-competition-section-3.mjs');
         return html`
-            <my-competition-section-3 .sectionNames=${this.sectionNames}></my-competition-section-3>
+            <my-competition-section-3 .sections=${this.sections}></my-competition-section-3>
         `;
     }
 
-    get #section4() {
+    get section4() {
         import('./section-4/my-competition-section-4.mjs');
         return html`
-            <my-competition-section-4 .sectionNames=${this.sectionNames}></my-competition-section-4>
+            <my-competition-section-4 .sections=${this.sections}></my-competition-section-4>
         `;
     }
 
-    get #section5() {
+    get section5() {
         import('./section-5/my-competition-section-5.mjs');
         return html`
-            <my-competition-section-5 .sectionNames=${this.sectionNames}></my-competition-section-5>
+            <my-competition-section-5 .sections=${this.sections}></my-competition-section-5>
         `;
     }
 
-    get #section() {
-        switch(this.currentSection) {
-            case 0: return cache(this.#section1)
-            case 1: return cache(this.#section2)
-            case 2: return cache(this.#section3)
-            case 3: return cache(this.#section4)
-            case 4: return cache(this.#section5)
-            default: return cache(this.#section1)
-        }
+    get section6() {
+        import('./section-6/my-competition-section-6.mjs');
+        return html`
+            <my-competition-section-6 .sections=${this.sections}></my-competition-section-6>
+        `;
+    }
+
+    get section() {
+        return cache(this[this.sections[this.currentSection].name])
     }
 
     render() {
         return html`
-            ${this.#section}
+            ${this.section}
         `;
     }
 

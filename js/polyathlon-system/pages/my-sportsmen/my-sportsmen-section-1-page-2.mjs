@@ -18,7 +18,7 @@ import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 import ClubDataSource from '../my-clubs/my-clubs-datasource.mjs'
 import ClubDataset from '../my-clubs/my-clubs-dataset.mjs'
 
-class MySportsmenSection1Page1 extends BaseElement {
+class MySportsmenSection1Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -54,19 +54,6 @@ class MySportsmenSection1Page1 extends BaseElement {
         ]
     }
 
-    // <simple-input id="profileUlid" label="${lang`Sportsman Ulid`}:" icon-name="hash-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?._id} @input=${this.validateInput}></simple-input>
-    clubShowValue(item) {
-        return item?.name ? `${item?.name} (${item?.city?.type?.shortName || ''} ${item?.city?.name})` : ''
-    }
-    
-    clubListLabel(item) {
-        return item?.type?.shortName + ' ' + item?.name
-    }
-
-    clubListStatus(item) {
-        return { name: item?.city?.name ? `(${item?.city?.type?.shortName || ''} ${item?.city?.name}, ${item?.city?.region?.name})` : item?._id }
-    }
-
     render() {
         return html`
             <div class="container">
@@ -78,7 +65,8 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <birthday-input id="birthday" label="${lang`Data of birth`}:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+                <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+                <simple-input id="profileUlid" label="${lang`Sportsman Ulid`}:" icon-name="hash-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?._id} @input=${this.validateInput}></simple-input>
                 <simple-input id="sportsmanId" label="${lang`Sportsman ID`}:" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createHashNumber} .value=${this.item?.sportsmanId} @input=${this.validateInput}></simple-input>
                 <simple-select id="category" label="${lang`Sports category`}:" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
@@ -146,21 +134,21 @@ class MySportsmenSection1Page1 extends BaseElement {
                 currentItem = this.item.order
             }
 
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[id])
-                }
-            }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
+            // if (!this.oldValues.has(e.target)) {
+            //     if (currentItem[id] !== e.target.value) {
+            //         this.oldValues.set(e.target, currentItem[id])
+            //     }
+            // }
+            // else if (this.oldValues.get(e.target) === e.target.value) {
+            //         this.oldValues.delete(e.target)
+            // }
 
             currentItem[id] = e.target.value
 
-            if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-            this.isModified = this.oldValues.size !== 0;
+            // if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
+            //     this.parentNode.parentNode.host.requestUpdate()
+            // }
+            // this.isModified = this.oldValues.size !== 0;
         }
     }
 
@@ -178,4 +166,4 @@ class MySportsmenSection1Page1 extends BaseElement {
     }
 }
 
-customElements.define("my-sportsmen-section-1-page-1", MySportsmenSection1Page1);
+customElements.define("my-sportsmen-section-1-page-2", MySportsmenSection1Page2);

@@ -43,13 +43,26 @@ class MyClubsSection1Page1 extends BaseElement {
         ]
     }
 
+    cityListLabel(item) {
+        return item?.type?.shortName + ' ' + item?.name
+    }
+
+    cityShowValue(item) {
+        return item?.name ? item?.type?.shortName + ' ' + item?.name : ''
+    }
+
+    cityListStatus(item) {
+        return { name: '(' + item?.region?.name + ')' || item?._id }
+    }
+
     render() {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="club-solid" label="${lang`Club name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="fullName" icon-name="club-solid" label="${lang`Full name`}:" .value=${this.item?.fullName} @input=${this.validateInput}></simple-input>
                 <simple-select id="country" icon-name="country-solid" @icon-click=${() => this.showPage('my-countries')} image-name=${this.item?.city?.region?.country?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.city?.region?.country?.flag + '.svg'} label="${lang`Country name`}:" .dataSource=${this.countryDataSource} .value=${this.item?.city?.region?.country} @input=${this.countryChange}></simple-select>
                 <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="${lang`Region name`}:" .dataSource=${this.regionDataSource} .value=${this.item?.city?.region} @input=${this.regionChange}></simple-select>
-                <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="${lang`City name`}:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-select id="city" .showValue=${this.cityShowValue} .listStatus=${this.cityListStatus}  .listLabel=${this.cityListLabel} icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="${lang`City name`}:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
             </div>
         `;
     }
@@ -74,6 +87,11 @@ class MyClubsSection1Page1 extends BaseElement {
             this.isModified = this.oldValues.size !== 0;
         }
     }
+
+    showPage(page) {
+        location.hash = page;
+    }
+
     async firstUpdated() {
         super.firstUpdated();
         this.countryDataSource = new CountryDataSource(this, await CountryDataset.getDataSet())

@@ -10,15 +10,25 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import { States } from "../../../../utils.js"
 
-import './my-competition-section-3-page-1.mjs'
-import './my-competition-section-3-list-1.mjs'
+import './my-competition-section-6-list-1.mjs'
+import './my-competition-section-6-page-1.mjs'
+import './my-competition-section-6-page-2.mjs'
+import './my-competition-section-6-page-3.mjs'
+import './my-competition-section-6-page-4.mjs'
+import './my-competition-section-6-page-5.mjs'
+import './my-competition-section-6-page-6.mjs'
+import './my-competition-section-6-page-7.mjs'
+import './my-competition-section-6-page-8.mjs'
+import './my-competition-section-6-page-9.mjs'
+import './my-competition-section-6-page-10.mjs'
 
-import DataSet from './my-competition-section-3-dataset.mjs'
-import DataSource from './my-competition-section-3-datasource.mjs'
+
+import DataSet from './my-competition-section-6-dataset.mjs'
+import DataSource from './my-competition-section-6-datasource.mjs'
 
 import CompetitionDataSource from '../section-1/my-competition-datasource.mjs'
 
-class MyCompetitionSection3 extends BaseElement {
+class MyCompetitionSection6 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -156,8 +166,12 @@ class MyCompetitionSection3 extends BaseElement {
                         simple-button {
                             height: 100%;
                         }
+                        &.buttons {
+                            justify-content: center;
+                        }
                     }
                 }
+
                 icon-button[selected] {
                     background: rgba(255, 255, 255, 0.1)
                 }
@@ -197,230 +211,24 @@ class MyCompetitionSection3 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+        ]
+        this.pages = [
+            {iconName: 'sportsmen-solid', page: 0, title: lang`Sportsmen`, click: () => this.gotoPage(0)},
+            {iconName: 'shooting-solid', page: 1, title: lang`Shooting`, click: () => this.gotoPage(1)},
+            {iconName: 'swimming-solid', page: 4, title: lang`Swimming`, click: () => this.gotoPage(4)},
+            {iconName: 'sprinting-solid', page: 6, title: lang`Sprinting`, click: () => this.gotoPage(6)},
+            {iconName: 'throwing-solid', page: 5, title: lang`Throwing`, click: () => this.gotoPage(5)},
+            {iconName: 'running-solid', page: 7, title: lang`Running`, click: () => this.gotoPage(7)},
+            {iconName: 'pull-ups-solid', page: 2, title: lang`Pull-ups`, click: () => this.gotoPage(2)},
+            {iconName: 'push-ups-solid', page: 3, title: lang`Push-ups`, click: () => this.gotoPage(3)},
+            {iconName: 'skiing-solid', page: 8, title: lang`Skiing`, click: () => this.gotoPage(8)},
+            {iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
+            {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Back`, click: this.deleteItem},
+            {iconName: 'circle-plus-sharp-solid', page: -1, title: lang`Back`, click: this.addNewItem},
         ]
     }
 
-    #competitionDate(parent) {
-        const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
-
-        if (parent.startDate) {
-            const start = parent.startDate.split("-")
-            const end = parent.endDate.split("-")
-            if (start[2] === end[2] && start[1] === end[1]) {
-                return `${start[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
-            }
-            if (start[1] === end[1]) {
-                return `${start[2]}-${end[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
-            }
-            return `${start[2]} ${monthNames[start[1]-1]} - ${end[2]} ${monthNames[end[1] - 1]} ${start[0]} года`
-        }
-        return ''
-    }
-
-    pdfMethod() {
-        const mainReferee = this.dataSource.items.find((item) => item.position.name === "Главный судья")
-        const mainSecretary = this.dataSource.items.find((item) => item.position.name === "Главный секретарь")
-        const docInfo = {
-          info: {
-            title: "Referees",
-            author: "Polyathlon systems",
-          },
-
-          pageSize: "A4",
-          pageOrientation: 'portrait',
-          pageMargins: [50, 50, 30, 60],
-
-          content: [
-            {
-              text: "Министерство спорта Российской федерации",
-              fontSize: 14,
-              alignment: "center",
-              //margin: [0, 0, 0, 0], //левый, верхний, правый, нижний
-            },
-            {
-                text: "Всероссийская федерация Полиатлона",
-                fontSize: 14,
-                alignment: "center",
-            },
-            {
-                text: this.parent.name.name,
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-                margin: [0, 15, 0, 0],
-            },
-            {
-                text: "по полиатлону в спортивной дисциплине",
-                fontSize: 18,
-                alignment: "center",
-            },
-            {
-                text: this.parent?.sportsDiscipline1?.name,
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-            },
-            {
-                columns: [
-
-                    {
-                        width: 'auto',
-                        text: this.#competitionDate(this.parent),
-                        margin: [0, 15, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: `г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`,
-                        alignment: "right",
-                        margin: [0, 15, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                text: "СПРАВКА О СОСТАВЕ И КВАЛИФИКАЦИИ",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-                margin: [0, 30, 0, 0],
-            },
-            {
-                text: "ГЛАВНОЙ СУДЕЙСКОЙ КОЛЛЕГИИ",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-                margin: [0, 0, 0, 15],
-            },
-            {
-                table:{
-                    width:['auto','*'],
-                    body: this.dataSource.items.map( (item, index) => [
-                        item.position.name, `${item.category.name} ${item.lastName} ${item.firstName} ${item.middleName} (${item?.city?.name}, ${item?.city?.region?.name})`
-                        // ['Первая ячейка второй строки','Вторая ячейка второй строки'],
-                        // [{text:'текстовое содержимое',bold:true},'Текст']
-                    ]),
-                    headerRows:1
-                },
-            },
-            {
-                columns: [
-                    {
-                        width: 300,
-                        text: mainReferee?.position.name,
-                        margin: [20, 40, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: `${mainReferee?.firstName[0]}.${mainReferee?.middleName[0]}. ${mainReferee?.lastName}`,
-                        alignment: "left",
-                        margin: [0, 40, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: mainReferee?.category.name,
-                        margin: [20, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: `(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`,
-                        alignment: "left",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: mainSecretary?.position.name,
-                        margin: [20, 50, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: `${mainSecretary?.firstName[0]}.${mainSecretary?.middleName[0]}. ${mainSecretary?.lastName}`,
-                        alignment: "left",
-                        margin: [0, 50, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: mainSecretary?.category.name,
-                        margin: [20, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: `(г. ${mainSecretary?.city?.name}, ${mainSecretary?.city?.region?.name})`,
-                        alignment: "left",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-          ],
-
-          styles: {
-            header0:{
-            }
-          }
-        };
-
-        pdfMake.createPdf(docInfo).open();
-        }
-
-    showPage(page) {
-        location.hash = page;
-    }
-
-    gotoBack(page) {
-        history.back();
-    }
-
-    async getNewFileHandle() {
-        const options = {
-          types: [
-            {
-              description: 'Excel files',
-              accept: {
-                'application/octet-stream': ['.xslx'],
-              },
-            },
-            {
-              description: 'Neural Models',
-              accept: {
-                'application/octet-stream': ['.pkl'],
-              },
-            },
-
-          ],
-        };
-        const handle = await window.showSaveFilePicker(options);
-        return handle;
-    }
     showPage(page) {
         location.hash = page;
     }
@@ -516,19 +324,74 @@ class MyCompetitionSection3 extends BaseElement {
         switch(this.currentPage) {
             case 0: return cache(this.#page1())
             case 1: return cache(this.#page2())
+            case 2: return cache(this.#page3())
+            case 3: return cache(this.#page4())
+            case 4: return cache(this.#page5())
+            case 5: return cache(this.#page6())
+            case 6: return cache(this.#page7())
+            case 7: return cache(this.#page8())
+            case 8: return cache(this.#page9())
+            case 9: return cache(this.#page10())
             default: return cache(this.#page1())
         }
     }
 
     #page1() {
         return html`
-            <my-competition-section-3-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-3-page-1>
+            <my-competition-section-6-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-competition-section-3-page-1 .item=${this.currentItem}></my-competition-section-3-page-1>
+            <my-competition-section-6-page-2 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-2>
+        `;
+    }
+
+    #page3() {
+        return html`
+            <my-competition-section-6-page-3 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-3>
+            `;
+    }
+
+    #page4() {
+        return html`
+            <my-competition-section-6-page-4 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-4>
+            `;
+    }
+
+    #page5() {
+        return html`
+            <my-competition-section-6-page-5 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-5>
+        `;
+    }
+
+    #page6() {
+        return html`
+            <my-competition-section-6-page-6 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-6>
+        `;
+    }
+
+    #page7() {
+        return html`
+            <my-competition-section-6-page-7 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-7>
+        `;
+    }
+
+    #page8() {
+        return html`
+            <my-competition-section-6-page-8 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-8>
+        `;
+    }
+
+    #page9() {
+        return html`
+            <my-competition-section-6-page-9 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-9>
+        `;
+    }
+    #page10() {
+        return html`
+            <my-competition-section-6-page-10 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-10>
         `;
     }
 
@@ -552,11 +415,11 @@ class MyCompetitionSection3 extends BaseElement {
 
     newRecord() {
         return html `<icon-button
-                label=${ this.fio(this.currentItem) || "Новый судья" }
+                label=${ this.fio(this.currentItem) || "Новый спортсмен" }
                 title=''
-                icon-name=${ this.currentItem?.gender == 0 ? "referee-man-solid" : "referee-woman-solid" }
+                icon-name=${ this.currentItem?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
                 ?selected=${ true }
-                .status=${{ name: this.currentItem?.refereeId || this.currentItem?.refereeUlid || "referee:new", icon: 'id-number-solid'} }
+                .status=${{ name: this.currentItem?.sportsmanId || this.currentItem?.sportsmanUlid || "sportsman:new", icon: 'id-number-solid'} }
             >
             </icon-button>
         `
@@ -564,21 +427,20 @@ class MyCompetitionSection3 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-3-list-1 .item=${this}></my-competition-section-3-list-1>
+            <my-competition-section-6-list-1 .item=${this}></my-competition-section-6-list-1>
         `;
     }
 
     #list3() {
         return html`
-            <my-competition-section-3-list-1 .parent=${this.currentItem}></my-competition-section-3-list-3>
+            <my-competition-section-6-list-1 .parent=${this.currentItem}></my-competition-section-6-list-3>
         `;
     }
 
     get #list() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#list1())
-            case 1: return cache(this.#list1())
-            default: return cache(this.#list3())
+        switch (this.currentPage) {
+            // case 6: return cache(this.#list2())
+            default: return cache(this.#list1())
         }
     }
 
@@ -608,20 +470,21 @@ class MyCompetitionSection3 extends BaseElement {
         `
     }
 
-    get #addItemFooter() {
-        return html`
-            <nav>
-                <simple-button @click=${this.addNewItem}>${lang`Add`}</simple-button>
-                <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
-            </nav>
-        `
-    }
-
     get #itemFooter() {
         return html`
             <nav>
                 <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
                 <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
+    get #addItemFooter() {
+        return html`
+            <nav class="buttons">
+                ${this.pages.map( (button, index) =>
+                    html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                }
             </nav>
         `
     }
@@ -651,12 +514,14 @@ class MyCompetitionSection3 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>${lang`Referees`}</p>
+                <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
+                <!-- <aside-button icon-name="search-solid" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button> -->
+                <aside-button icon-name="filter-solid" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
             </header>
             <header class="right-header">
                 ${this.sections.map( (page, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSelection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -678,12 +543,16 @@ class MyCompetitionSection3 extends BaseElement {
     }
 
     addFirstItem() {
-        const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
+        const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
         page.startEdit()
     }
 
-    gotoPage(index) {
+    gotoSelection(index) {
         this.currentSection = index
+    }
+
+    gotoPage(index) {
+        this.currentPage = index
     }
 
     nextPage() {
@@ -706,7 +575,7 @@ class MyCompetitionSection3 extends BaseElement {
 
     async addNewItem() {
         this.dataSource.addNewItem(this.currentItem);
-        // const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
+        // const page = this.renderRoot.querySelector('my-sportsmen-section-6-page-1')
         // page.startEdit()
     }
 
@@ -805,4 +674,4 @@ class MyCompetitionSection3 extends BaseElement {
     }
 }
 
-customElements.define("my-competition-section-3", MyCompetitionSection3);
+customElements.define("my-competition-section-6", MyCompetitionSection6);

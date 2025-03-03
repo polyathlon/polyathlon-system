@@ -22,7 +22,7 @@ import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
 import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 
 
-class MyCompetitionSection2Page1 extends BaseElement {
+class MyCompetitionSection6Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -253,4 +253,4 @@ class MyCompetitionSection2Page1 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-2-page-1", MyCompetitionSection2Page1);
+customElements.define("my-competition-section-6-page-1", MyCompetitionSection6Page1);

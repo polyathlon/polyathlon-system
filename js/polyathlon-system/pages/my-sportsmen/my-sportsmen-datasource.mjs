@@ -40,6 +40,18 @@ export default class DataSource {
         }).sort( (a, b) => a.name.localeCompare(b.name) )
     }
 
+    find(value) {
+        return this.items.find(item =>
+            item?.key?.includes(value?.lastName)
+        )
+    }
+    
+    findIndex(value) {
+        return this.items.findIndex(item =>
+            item?.key?.includes(value?.lastName)
+        )
+    }
+
     async getCurrentItem(item_id){
         return await this.setCurrentItem(item_id)
     }

@@ -52,6 +52,34 @@ export default class DataSet {
         return result.rows
     }
 
+    static #fetchGetAllItems(token) {
+        return fetch('https://localhost:4500/api/sportsmen/all', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getAllItems() {
+        const token = getToken()
+        let response = await DataSet.#fetchGetAllItems(token)
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetAllItems(token)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        // const items = result.rows.map(item => {
+        //     return item.doc;
+        // })
+        // const items = result.rows.map(item => {
+        //     return {_id: item.id, ...item.value};
+        // })
+        return result.rows
+    }
+
     static fetchAddItem(token, item) {
         return fetch(`https://localhost:4500/api/sportsman`, {
             method: "POST",

@@ -686,7 +686,7 @@ class MyCompetitionSection4 extends BaseElement {
                 )}
             </header>
             <header class="right-header">
-                ${this.sectionNames.map( (section, index) =>
+                ${this.sections.map( (section, index) =>
                     html `
                         <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoPage(index)}></icon-button>
                     `

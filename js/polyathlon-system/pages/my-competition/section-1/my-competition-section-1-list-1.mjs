@@ -9,13 +9,18 @@ class MyCompetitionSection1List1 extends BaseElement {
             version: { type: String, default: '1.0.0', save: true },
             avatar: {type: Object, default: null},
             name: {type: String, default: null},
+            regulationsLink: {type: String, default: null},
+            protocolLink: {type: String, default: null},
             startDate: {type: String, default: null},
             endDate: {type: String, default: null},
+            startRegistration: {type: String, default: null},
+            endRegistration: {type: String, default: null},
             stage: {type: String, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
             isFirst: { type: Boolean, default: false },
             currentPage: { type: Boolean, default: false, local: true },
+            currentItem: {type: Object, default: null},
         }
     }
 
@@ -53,7 +58,12 @@ class MyCompetitionSection1List1 extends BaseElement {
                 fashion-button {
                     border-radius: 8px;
                     padding: 10px 10px;
+                    &.regulations-link {
+                        --button-background-color: white;
+                        --native-color: red;
+                    }
                 }
+
 
             `
         ]
@@ -95,6 +105,16 @@ class MyCompetitionSection1List1 extends BaseElement {
         return ''
     }
 
+    get #registration() {
+        const currentDate = new Date(Date.now())
+        const startDate = new Date(this.startRegistration)
+        const endDate = new Date(this.endRegistration)
+        if (currentDate >= startDate && currentDate <= endDate ) {
+            return html`<fashion-button @click=${this.registration}>Зарегистрироваться</fashion-button>`
+        }
+        return ''
+    }
+
     render() {
         return html`
             <div class="avatar">
@@ -106,12 +126,22 @@ class MyCompetitionSection1List1 extends BaseElement {
             <div class="label">
                 ${this.#competitionDate}
             </div>
-            <fashion-button @click=${this.registration}>Зарегистрироваться</fashion-button>
+            ${this.#registration}
+            ${this.regulationsLink && !this.protocolLink ? html`<fashion-button class="regulations-link" @click=${this.regulationsLinkClick}>Регламент</fashion-button>` : ''}
+            ${this.protocolLink ? html`<fashion-button @click=${this.protocolLinkClick}>Протоколы</fashion-button>` : ''}
         `
     }
 
     registration() {
         this.currentPage = 3
+    }
+
+    regulationsLinkClick() {
+        window.open(this.regulationsLink);
+    }
+
+    protocolLinkClick() {
+        window.open(this.protocolLink);
     }
 
     async firstUpdated() {

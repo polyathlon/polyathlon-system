@@ -24,6 +24,7 @@ import DataSet from './my-competition-dataset.mjs'
 //import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
+
 class MyCompetitionSection1 extends BaseElement {
     static get properties() {
         return {
@@ -382,7 +383,7 @@ class MyCompetitionSection1 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-1-list-1 .avatar=${this.avatar} .name=${this.currentItem?.name} .startDate=${this.currentItem?.startDate} .endDate=${this.currentItem?.endDate} .stage=${this.currentItem?.stage}></my-competition-section-1-list-1>
+            <my-competition-section-1-list-1 .startRegistration=${this.currentItem?.startRegistration} .endRegistration=${this.currentItem?.endRegistration} .avatar=${this.avatar} .name=${this.currentItem?.name} .startDate=${this.currentItem?.startDate} .endDate=${this.currentItem?.endDate} .stage=${this.currentItem?.stage} .regulationsLink=${this.currentItem?.regulationsLink} .protocolLink=${this.currentItem?.protocolLink}></my-competition-section-1-list-1>
         `;
     }
 
@@ -467,7 +468,7 @@ class MyCompetitionSection1 extends BaseElement {
                 )}
             </header>
             <header class="right-header">
-                ${this.sectionNames.map( (section, index) =>
+                ${this.sections.map( (section, index) =>
                     html `
                         <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
                     `

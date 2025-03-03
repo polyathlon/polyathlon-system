@@ -61,10 +61,10 @@ class PolyathlonSystemLeftAside extends BaseElement {
             // {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
             // {iconName: 'chart-pie-simple-circle-dollar-solid', page: 'tariff-plans', title: 'Tariff Plans', click: () => this.showPage('tariff-plans')},
             {iconName: 'federation-members-solid', page: 'my-federation-members', title: 'Federation members', blink: 1, click: () => this.showPage('my-federation-members')},
+            {iconName: 'category-solid', page: 'my-sports-disciplines', title: 'Sports disciplines', click: () => this.showPage('my-sports-disciplines')},
+            {iconName: 'table-list-solid', page: 'my-sports-discipline-components', title: 'Sports components', click: () => this.showPage('my-sports-discipline-components')},
             {iconName: 'bell-sharp-solid', page: 'my-notifications', title: 'Notifications', blink: 1, click: () => this.showPage('my-notifications')},
             {iconName: 'settings-solid', page: 'my-settings', title: 'Settings', click: () => this.showPage('my-settings')},
-            {iconName: 'settings-solid', page: 'my-sports-disciplines', title: 'Settings', click: () => this.showPage('my-sports-disciplines')},
-            {iconName: 'settings-solid', page: 'my-sports-discipline-components', title: 'Settings', click: () => this.showPage('my-sports-discipline-components')},
             // {iconName: 'user', page: 'my-referee', title: 'Settings', click: () => this.showPage('my-referee')},
             // {iconName: 'trainer-solid', page: 'my-trainer', title: 'My Trainer', click: () => this.showPage('my-trainer')},
         ]

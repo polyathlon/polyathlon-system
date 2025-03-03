@@ -2,7 +2,7 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
 
-class MyCompetitionSection2List1 extends BaseElement {
+class MyCompetitionSection6List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -87,4 +87,4 @@ class MyCompetitionSection2List1 extends BaseElement {
     // }
 }
 
-customElements.define("my-competition-section-2-list-1", MyCompetitionSection2List1);
+customElements.define("my-competition-section-6-list-1", MyCompetitionSection6List1);

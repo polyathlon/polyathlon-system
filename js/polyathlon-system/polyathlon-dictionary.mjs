@@ -136,7 +136,7 @@ const dictionary = {
         "en-EN": 'Region name'
     },
     'City name': {
-        "ru-RU": 'Город',
+        "ru-RU": 'Населенный пункт',
         "en-EN": 'City name'
     },
     'Club name': {
@@ -368,7 +368,7 @@ const dictionary = {
         "en-EN": 'Information'
     },
     'Short name': {
-        "ru-RU": 'Короткое название',
+        "ru-RU": 'Сокращение',
         "en-EN": 'Short name'
     },
     'Referee category': {
@@ -396,7 +396,7 @@ const dictionary = {
         "en-EN": 'Region'
     },
     'City': {
-        "ru-RU": 'Город',
+        "ru-RU": 'Населенный пункт',
         "en-EN": 'City'
     },
     'Referee position': {
@@ -587,7 +587,66 @@ const dictionary = {
         "ru-RU": 'Порядок сортировки',
         "en-EN": 'Sort order'
     },
-
+    'City type name': {
+        "ru-RU": 'Вид населенного пункта',
+        "en-EN": 'City type name'
+    },
+    'Short city type name': {
+        "ru-RU": 'Сокращение',
+        "en-EN": 'Short name'
+    },
+    'City types': {
+        "ru-RU": 'Виды населенных пунктов',
+        "en-EN": 'City types'
+    },
+    'City type': {
+        "ru-RU": 'Вид населенного пункта',
+        "en-EN": 'City type'
+    },
+    'Search': {
+        "ru-RU": 'Поиск',
+        "en-EN": 'Search'
+    },
+    'Find': {
+        "ru-RU": 'Найти',
+        "en-EN": 'Find'
+    },
+    'Regulations link': {
+        "ru-RU": 'Регламент',
+        "en-EN": 'Regulations link'
+    },
+    'Regulations': {
+        "ru-RU": 'Регламент',
+        "en-EN": 'Regulations'
+    },
+    'Protocol link': {
+        "ru-RU": 'Протоколы',
+        "en-EN": 'Protocol link'
+    },
+    'Import from Excel': {
+        "ru-RU": 'Импорт из Excel',
+        "en-EN": 'Import from Excel'
+    },
+    'Export to Excel': {
+        "ru-RU": 'Экспорт в Excel',
+        "en-EN": 'Export to Excel'
+    },
+    'QR code': {
+        "ru-RU": 'QR-код',
+        "en-EN": 'QR code'
+    },
+    'Back': {
+        "ru-RU": 'Назад',
+        "en-EN": 'Back'
+    },
+    'Full name': {
+        "ru-RU": 'Полное название',
+        "en-EN": 'Full name'
+    },
+    'Results': {
+        "ru-RU": 'Результаты',
+        "en-EN": 'Results'
+    },
 }
 
 //const language = navigator.language

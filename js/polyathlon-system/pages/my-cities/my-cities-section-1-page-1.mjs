@@ -5,8 +5,11 @@ import '../../../../components/inputs/simple-input.mjs'
 
 import '../../../../components/selects/simple-select.mjs'
 
-import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../my-regions/my-regions-dataset.mjs'
+import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
+
+import CityTypesDataset from '../my-city-types/my-city-types-dataset.mjs'
+import CityTypesDataSource from '../my-city-types/my-city-types-datasource.mjs'
 
 class MyCitiesSection1Page1 extends BaseElement {
     static get properties() {
@@ -14,6 +17,7 @@ class MyCitiesSection1Page1 extends BaseElement {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
             regionDataSource: {type: Object, default: null},
+            cityTypesDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
         }
@@ -46,6 +50,7 @@ class MyCitiesSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="city-solid" label="${lang`City name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-select id="type" @icon-click=${() => this.showPage('my-city-types')} icon-name="city-type-solid" label="${lang`City type`}:" .dataSource=${this.cityTypesDataSource} .value=${this.item?.type} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" @icon-click=${() => this.showPage('my-regions')} icon-name="region-solid" label="${lang`Region`}:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
             </div>
         `;
@@ -79,6 +84,7 @@ class MyCitiesSection1Page1 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
+        this.cityTypesDataSource = new CityTypesDataSource(this, await CityTypesDataset.getDataSet())
     }
 }
 

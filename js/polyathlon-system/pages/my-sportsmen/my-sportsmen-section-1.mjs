@@ -10,6 +10,7 @@ import lang from '../../polyathlon-dictionary.mjs'
 import { States } from "../../../utils.js"
 
 import './my-sportsmen-section-1-page-1.mjs'
+import './my-sportsmen-section-1-page-2.mjs'
 
 import DataSet from './my-sportsmen-dataset.mjs'
 import DataSource from './my-sportsmen-datasource.mjs'
@@ -31,6 +32,7 @@ class MySportsmenSection1 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
+            currentFilter: { type: Object, default: {} },
         }
     }
 
@@ -174,13 +176,14 @@ class MySportsmenSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = [lang`Information`]
+        this.pageNames = [lang`Information`, lang`Search`]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.changeStart()},
-            {iconName: 'excel-import-solid', page: 'my-sportsmen', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-sportsmen', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
+            // {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.changeStart()},
+            {iconName: 'excel-import-solid', page: 'my-sportsmen', title: lang`Export to Excel`, click: () => this.exportToExcel()},
+            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-sportsmen', title: lang`Import from Excel`, click: this.ExcelFile},
+            {iconName: 'arrow-left-solid', page: 'my-sportsmen', title: lang`Back`, click: () => this.gotoBack()},
         ]
     }
 
@@ -248,6 +251,7 @@ class MySportsmenSection1 extends BaseElement {
             this.dataSource.lock();
             const promises = new Array(raw_data.length)
             raw_data.forEach((r, index) => {
+                try {
                 if(index !== 0){
                     const newItem = {
                         lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
@@ -265,14 +269,111 @@ class MySportsmenSection1 extends BaseElement {
                     }
                     promises[index] = this.dataSource.addItem(newItem);
                 }
+                }
+                catch(e) {
+                    console.log(index, r)
+                }
             });
             try {
                 await Promise.allSettled(promises)
-                await this.showDialog('Все данные были успешно импортированы!')
+                this.showDialog('Все данные были успешно импортированы!')
             } catch(e) {
-                await this.showDialog('Не все данные успешно импортированы')
+                this.showDialog('Не все данные успешно импортированы')
             }
             this.dataSource.unlock();
+        }
+    }
+
+    async exportToExcel(e) {
+        const modalResult = await this.showDialog('Вы действительно хотите экспортировать всех спортсменов в файл?', 'confirm')
+        if (modalResult === 'Ok') {
+            const raw_data = await DataSet.getAllItems()
+            const rows = raw_data.map(row => ({
+                lastName: row.doc.lastName,
+                firstName: row.doc.firstName,
+                middleName: row.doc.middleName,
+                category: row.doc.category?.shortName,
+                birthday: row.doc.birthday,
+                region: row.doc.region?.name,
+                club: row.doc.club?.name,
+                sportsmanId: row.doc.sportsmanId,
+                orderNumber: row.doc.order?.number,
+                link: row.doc.link,
+                orderLink: row.doc.order?.link,
+                gender: row.doc.gender,
+            })).sort((l, r) => {
+                let a = l.lastName?.localeCompare(r.lastName)
+                if (a) {
+                    return a
+                }
+                a = l.firstName?.localeCompare(r.firstName)
+                if (a) {
+                    return a
+                }
+                a = l.middleName?.localeCompare(r.middleName)
+                if (a) {
+                    return a
+                }
+                a = l.birthday?.localeCompare(r.birthday)
+                if (a) {
+                    return a
+                }
+                return 0
+            });
+
+            /* generate worksheet and workbook */
+            const worksheet = XLSX.utils.json_to_sheet(rows);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Спортсмены");
+
+            /* fix headers */
+            XLSX.utils.sheet_add_aoa(worksheet, [[
+                "Фамилия",
+                "Имя",
+                "Отчество",
+                "Разряд",
+                "Дата рождения",
+                "Регион",
+                "Клуб",
+                "ID Спортсмена",
+                "Дата приказа",
+                "Персональная ссылка",
+                "Ссылка на приказ",
+                "Пол",
+            ]], { origin: "A1" });
+
+            /* calculate column width */
+            const max_width_1 = rows.reduce((w, r) => Math.max(w, r.lastName?.length), 10);
+            const max_width_2 = rows.reduce((w, r) => r.firstName?.length ? Math.max(w, r.firstName?.length) : w, 10);
+            const max_width_3 = rows.reduce((w, r) => r.middleName?.length ? Math.max(w, r.middleName?.length) : w, 10);
+            const max_width_4 = rows.reduce((w, r) => r.category?.length ? Math.max(w, r.category?.length) : w, 6);
+            const max_width_5 = rows.reduce((w, r) => r.birthday?.length ? Math.max(w, r.birthday?.length) : w, 10);
+            const max_width_6 = rows.reduce((w, r) => r.region?.length ? Math.max(w, r.region?.length) : w, 10);
+
+            const LightBlue = {
+                fgColor: { rgb: "BDD7EE" }
+            };
+
+            const alignmentCenter = { horizontal: "center", vertical: "center", wrapText: true };
+
+            const ThinBorder = {
+                top: { style: "thin" },
+                bottom: { style: "thin" },
+                left: { style: "thin" },
+                right: { style: "thin" }
+            };
+
+            const fillAlignmentBorder = {
+                fill: LightBlue,
+                alignment: alignmentCenter,
+                border: ThinBorder
+            };
+
+            worksheet["A1"].s = fillAlignmentBorder;
+            worksheet["!cols"] = [ { wch: max_width_1 },  { wch: max_width_2 }, { wch: max_width_3 }, { wch: max_width_4 }, { wch: max_width_5 }, { wch: max_width_6 },];
+
+            /* create an XLSX file and try to save to Presidents.xlsx */
+            XLSX.writeFile(workbook, "Sportsmen.xlsx", { compression: true });
         }
     }
 
@@ -296,7 +397,7 @@ class MySportsmenSection1 extends BaseElement {
 
     async showItem(item) {
         if (this.currentItem?._id === item.id) {
-            this.copyToClipboard(item.value.hashNumber || item.id)
+            this.copyToClipboard(item.value.sportsmanId || item.id)
             return
         }
         if (this.isModified) {
@@ -325,7 +426,7 @@ class MySportsmenSection1 extends BaseElement {
 
     #page2() {
         return html`
-            <my-sportsmen-section-1-page-2 .item=${this.currentItem}></my-sportsmen-section-1-page-2>
+            <my-sportsmen-section-1-page-2 .item=${this.currentFilter}></my-sportsmen-section-1-page-2>
         `;
     }
 
@@ -357,11 +458,11 @@ class MySportsmenSection1 extends BaseElement {
             const item = this.dataSource?.items[this.listStart + i]
             this.itemTemplates[i] =
                 html `<icon-button
-                    label=${ item.key }
+                    label=${ item.key + (item.value?.category ? ' (' + item.value?.category + ')' : '')}
                     title=${ item.id }
                     image-name=${ item.value?.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg" }
                     ?selected=${ this.currentItem?._id === item.id }
-                    .status=${{ name: item.value?.hashNumber || item?.id, icon: 'id-number-solid'} }
+                    .status=${{ name: item.value?.sportsmanId || item?.id, icon: 'id-number-solid'} }
                     @click=${() => this.showItem(item)}
                 >
                 </icon-button>
@@ -425,7 +526,30 @@ class MySportsmenSection1 extends BaseElement {
         `
     }
 
+    cancelFind() {
+        this.currentPage = 0
+    }
+
+    find() {
+        // alert(JSON.stringify(this.dataSource.findIndex(this.currentFilter)))
+        const result = this.dataSource.find(this.currentFilter)
+        this.currentPage = 0
+        this.dataSource.setCurrentItem(result)
+    }
+
+    get #findFooter() {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.find}>${lang`Find`}</simple-button>
+                <simple-button @click=${this.cancelFind}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
     get #rightFooter() {
+        if (this.currentPage === 1) {
+            return this.#findFooter
+        }
         if (!this.dataSource?.items)
             return ''
         if (this.dataSource.items.length) {
@@ -468,7 +592,10 @@ class MySportsmenSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>${lang`Sportsmen`}</p></header>
+            <header class="left-header">
+                <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
+                <aside-button icon-name="search-solid" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
+            </header>
             <header class="right-header">
                 ${this.#pageName}
             </header>
@@ -503,6 +630,8 @@ class MySportsmenSection1 extends BaseElement {
     prevPage() {
         this.currentPage--;
     }
+
+
 
     async showDialog(message, type='message') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')
@@ -594,3 +723,38 @@ class MySportsmenSection1 extends BaseElement {
 }
 
 customElements.define("my-sportsmen-section-1", MySportsmenSection1)
+
+// {
+//     "_id": "_design/sportsmen",
+//     "_rev": "3-a6ea7536143ba6fff32743d5b63461bd",
+//     "views": {
+//       "list": {
+//         "map": "function (doc) {\n  fio = doc.lastName;\n  if (doc.firstName) { fio += ' ' + doc.firstName + '.'}\n  if (doc.middleName) { fio += doc.middleName[0] + '.' }\n  emit(fio, {sportsmanId: doc.sportsmanId, gender: doc.gender, category: doc.category.shortName})\n}"
+//       },
+//       "sportsman-id": {
+//         "map": "function (doc) {\n  if(doc.sportsmanId)\n    emit(doc.sportsmanId, 1);\n}"
+//       },
+//       "last-name": {
+//         "map": "function (doc) {\n  emit(doc.lastName, 1);\n}"
+//       }
+//     },
+//     "language": "javascript",
+//     "options": {
+//       "partitioned": true
+//     }
+//   }
+
+
+// {
+//     "_id": "_design/sportsmen",
+//     "_rev": "2-d54962bae939c67bd571c0cec763f41d",
+//     "views": {
+//       "list": {
+//         "map": "function (doc) {\n  fio = doc.lastName;\n  if (doc.firstName) { fio += ' ' + doc.firstName + ''}\n  if (doc.middleName) { fio += ' ' +doc.middleName[0] + '.' }\n  emit(fio, {sportsmanId: doc.sportsmanId, gender: doc.gender, category: doc.category && doc.category.shortName});\n}"
+//       }
+//     },
+//     "language": "javascript",
+//     "options": {
+//       "partitioned": true
+//     }
+//   }

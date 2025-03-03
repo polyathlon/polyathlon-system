@@ -291,10 +291,11 @@ class MyClubsSection1 extends BaseElement {
             ${this.dataSource?.items?.map((item, index) =>
                 html `
                     <icon-button
-                        label=${item.name}
+                        label=${ item.city ? `${item.name} (${item?.city?.type?.shortName} ${item.city?.name})` : item.name}
                         title=${item._id}
                         icon-name="club-solid"
                         ?selected=${this.currentItem === item}
+                        .status=${{ name: item.city?.region?.name || item?.id, icon: item.city?.region?.name ? 'region-solid' : 'id-number-solid'} }
                         @click=${() => this.showItem(index, item._id)}
                     ></icon-button>
                 `

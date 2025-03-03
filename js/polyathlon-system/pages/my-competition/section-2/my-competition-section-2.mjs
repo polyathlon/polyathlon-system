@@ -514,10 +514,12 @@ class MyCompetitionSection2 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>${lang`Sportsmen`}</p>
+                <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
+                <!-- <aside-button icon-name="search-solid" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button> -->
+                <aside-button icon-name="filter-solid" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
             </header>
             <header class="right-header">
-                ${this.sectionNames.map( (page, index) =>
+                ${this.sections.map( (page, index) =>
                     html `
                         <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSelection(index)}></icon-button>
                     `

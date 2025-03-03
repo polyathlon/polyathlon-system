@@ -654,7 +654,7 @@ class MyCompetitionSection5 extends BaseElement {
                 <p>Referees</p>
             </header>
             <header class="right-header">
-                ${this.sectionNames.map( (page, index) =>
+                ${this.sections.map( (page, index) =>
                     html `
                         <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
                     `

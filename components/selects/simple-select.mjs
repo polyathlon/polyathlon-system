@@ -22,6 +22,9 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             iconName: { type: String, default: 'project-avatar-solid', attribute: 'icon-name'},
             imageName: { type: String, default: '', attribute: 'image-name'},
             listLabel: { type: Function, default: null, attribute: 'list-name'},
+            listStatus: { type: Function, default: null, attribute: 'list-status'},
+            showValue: { type: Function, default: null, attribute: 'show-value'},
+            listIconName: { type: Function, default: null, attribute: 'show-value'},
         }
     }
 
@@ -148,7 +151,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                 <input type=${this.type}
                     placeholder=${this.placeholder || nothing}
                     ${this.required ? 'required' : ''}
-                    .value=${this.value?.name || ''}
+                    .value=${this.showValue?.(this.value) || this.value?.name || ''}
                     @input=${this.changeValue}
                     @focus=${this.changeFocus}
                     @blur=${this.changeBlur}
@@ -169,9 +172,9 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                     <icon-button
                         label=${this.listLabel ? this.listLabel(item) : item.name}
                         title=${item._id}
-                        icon-name=${this.iconName}
+                        icon-name=${this.listIconName ? this.listIconName(item) : this.iconName}
                         image-name=${item.flag ? 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' : ''}
-                        .status=${this.statusDataSet?.get(item._id)}
+                        .status=${this.listStatus?.(item) || this.statusDataSet?.get(item._id)}
                         ?selected=${this.currentItem === item}
                         @click=${() => this.selectItem(index, item)}
                     >

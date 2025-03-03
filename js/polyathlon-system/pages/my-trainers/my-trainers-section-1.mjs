@@ -399,7 +399,7 @@ class MyTrainersSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>${lang`Trainers`}<p></header>
+            <header class="left-header"><p>${lang`Trainers` + ' ('+ this.dataSource?.items?.length +')'}<p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>

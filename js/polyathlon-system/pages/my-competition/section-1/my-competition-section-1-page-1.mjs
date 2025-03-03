@@ -26,6 +26,9 @@ import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs
 
 import DataSet from './my-competition-dataset.mjs'
 
+import sportsDisciplineAgeGroupsDataSet from '../../my-sports-disciplines/section-2/my-sports-disciplines-section-2-dataset.mjs'
+// import sportsDisciplineAgeGroupsDataSource from '../../my-sports-disciplines/section-2/my-sports-disciplines-section-2-datasource.mjs'
+
 class MyCompetitionSection1Page1 extends BaseElement {
     static get properties() {
         return {
@@ -74,15 +77,17 @@ class MyCompetitionSection1Page1 extends BaseElement {
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-input id="competitionId" label="${lang`Competition ID`}:" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionId} .value=${this.item?.competitionId} @input=${this.validateInput}></simple-input>
-                <simple-input id="ekpNumber" label="${lang`EKP Number`}:" icon-name="square-list-sharp-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
+                <simple-input id="ekpNumber" label="${lang`EKP Number`}:" icon-name="ekp-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input type="date" label="${lang`Дата начала`}:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                     <simple-input type="date" label="${lang`Дата окончания`}:" id="endDate" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input type="date" label="${lang`Начало регистрации`}:" id="startRegistration" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
-                    <simple-input type="date" label="${lang`Окончание регистрации`}:" id="endRegistration" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="startRegistration" type="date" label="${lang`Начало регистрации`}:" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="endRegistration" type="date" label="${lang`Окончание регистрации`}:" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 </div>
+                <simple-input id="regulationsLink" label="${lang`Regulations link`}:" icon-name="regulations-solid" @icon-click=${this.myLinkClick} .value=${this.item?.regulationsLink} @input=${this.validateInput}></simple-input>
+                <simple-input id="protocolLink" label="${lang`Protocol link`}:" icon-name="protocol-solid" @icon-click=${this.myLinkClick} .value=${this.item?.protocolLink} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -91,6 +96,10 @@ class MyCompetitionSection1Page1 extends BaseElement {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(e.target.value)
         }
+    }
+
+    myLinkClick(e) {
+        window.open(e.target.value);
     }
 
     async createCompetitionId(e) {
@@ -134,6 +143,12 @@ class MyCompetitionSection1Page1 extends BaseElement {
 
             currentItem[e.target.id] = e.target.value
 
+            if (e.target.id === "sportsDiscipline1") {
+                const sportsDisciplineId = e.target.value._id.split(':')[1]
+                sportsDisciplineAgeGroupsDataSet.getDataSet(sportsDisciplineId).then((value) => {
+                    currentItem["sportsDiscipline1"].ageGroups = value
+                })
+            }
             if (e.target.id === 'name' || e.target.id === 'startDate' || e.target.id === 'endDate' || e.target.id === 'stage') {
                 this.parentNode.parentNode.host.requestUpdate()
             }

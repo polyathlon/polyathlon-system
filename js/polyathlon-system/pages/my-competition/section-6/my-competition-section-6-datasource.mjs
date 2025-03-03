@@ -1,4 +1,4 @@
-import DataSet from "./my-competition-section-2-dataset.mjs";
+import DataSet from "./my-competition-section-6-dataset.mjs";
 
 import { States } from "../../../../utils.js";
 
