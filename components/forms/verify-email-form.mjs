@@ -13,6 +13,8 @@ import '../inputs/simple-informer.mjs';
 import '../buttons/close-button.mjs';
 import '../buttons/form-button.mjs';
 
+import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
+
 class VerifyEmailForm extends BaseElement {
     static get properties() {
         return {
@@ -67,20 +69,20 @@ class VerifyEmailForm extends BaseElement {
                 <form class="form animate" method="post" id="form">
                     <div class="form-header">
                         <div class="form-tabs no-select">
-                            <div class="form-tab" selected data-label="Verify Email">Verify Email</div>
+                            <div class="form-tab" selected data-label="Verify Email">${lang`Verify Email`}</div>
                         </div>
                         <close-button class="close-button no-select" name="times" @click=${()=>this.close('CANCEL')}></close-button>
                     </div>
                     <div class="form-body">
                         <div id="db-tab-section" class="form-tab-section selected">
-                            <simple-input id="code" icon-name="order-number-solid" placeholder="Verification code" button-name=${this.isCodeValid && "circle-check-sharp-regular" || nothing} @input=${this.codeInput}>
+                            <simple-input id="code" icon-name="order-number-solid" placeholder=${lang`Verification code`} button-name=${this.isCodeValid && "circle-check-sharp-regular" || nothing} @input=${this.codeInput}>
                                 ${ this.isCodeError || this.isCodeMessage ?
                                     html`
                                         <simple-informer slot="informer" info-message=${this.codeErrorMessage} error-message=${this.codeInfoMessage} ></simple-informer>
                                     `
                                 : ''}
                             </simple-input>
-                            <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.verifyEmail : nothing}>Verify Email</form-button>
+                            <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.verifyEmail : nothing}>${lang`Verify Email`}</form-button>
                         </div>
                     </div>
                 </form>
