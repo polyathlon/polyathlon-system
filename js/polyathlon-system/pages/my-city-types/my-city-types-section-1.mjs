@@ -293,7 +293,7 @@ class MyCityTypesSection1 extends BaseElement {
                     <icon-button
                         label=${item.name}
                         title=${item._id}
-                        icon-name="city-types-solid"
+                        icon-name="city-type-solid"
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
                     ></icon-button>

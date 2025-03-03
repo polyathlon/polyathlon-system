@@ -631,13 +631,13 @@ const dictionary = {
         "ru-RU": 'Протоколы',
         "en-EN": 'Protocol link'
     },
-    'Import from Excel': {
-        "ru-RU": 'Импорт из Excel',
-        "en-EN": 'Import from Excel'
+    'Import to Excel': {
+        "ru-RU": 'Импорт в Excel',
+        "en-EN": 'Import to Excel'
     },
-    'Export to Excel': {
-        "ru-RU": 'Экспорт в Excel',
-        "en-EN": 'Export to Excel'
+    'Export from Excel': {
+        "ru-RU": 'Экспорт из Excel',
+        "en-EN": 'Export from Excel'
     },
     'QR code': {
         "ru-RU": 'QR-код',

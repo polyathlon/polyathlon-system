@@ -43,11 +43,11 @@ class MySportsDisciplineComponentsSection1Tab3Page1 extends BaseElement {
         this.columns = [
             {
                 name: "points",
-                label: "Points"
+                label: lang`Points`,
             },
             {
                 name: "result",
-                label: "Result",
+                label: lang`Results`,
             }
         ]
     }

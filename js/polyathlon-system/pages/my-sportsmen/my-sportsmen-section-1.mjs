@@ -181,8 +181,8 @@ class MySportsmenSection1 extends BaseElement {
         this.buttons = [
             {iconName: 'qrcode-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
             // {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.changeStart()},
-            {iconName: 'excel-import-solid', page: 'my-sportsmen', title: lang`Export to Excel`, click: () => this.exportToExcel()},
-            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-sportsmen', title: lang`Import from Excel`, click: this.ExcelFile},
+            {iconName: 'excel-import-solid', page: 'my-sportsmen', title: lang`Import to Excel`, click: () => this.importToExcel()},
+            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-sportsmen', title: lang`Export from Excel`, click: this.ExcelFile},
             {iconName: 'arrow-left-solid', page: 'my-sportsmen', title: lang`Back`, click: () => this.gotoBack()},
         ]
     }
@@ -237,55 +237,8 @@ class MySportsmenSection1 extends BaseElement {
         this.renderRoot.getElementById("fileInput").click();
     }
 
-    async importFromExcel(e) {
-        const file = e.target.files[0];
-        const modalResult = await this.showDialog('Вы действительно хотите импортировать эти данные?', 'confirm')
-        if (modalResult === 'Ok') {
-            const workbook = XLSX.read(await file.arrayBuffer());
-            const worksheet = workbook.Sheets[workbook.SheetNames[2]];
-            const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-            const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-            const regionDataset = RegionDataset.default;
-            const SportsCategoryDataset = await import('../my-sports-categories/my-sports-categories-dataset.mjs');
-            const sportsCategoryDataset = SportsCategoryDataset.default;
-            this.dataSource.lock();
-            const promises = new Array(raw_data.length)
-            raw_data.forEach((r, index) => {
-                try {
-                if(index !== 0){
-                    const newItem = {
-                        lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
-                        firstName: r[1].split(' ')[1],
-                        middleName: r[1].split(' ')[2],
-                        gender: r[10],
-                        category: sportsCategoryDataset.find("shortName", r[2]),
-                        region: regionDataset.find("name", r[3]),
-                        order: {
-                            number: r[4],
-                            link: r[6]
-                        },
-                        link: r[5],
-
-                    }
-                    promises[index] = this.dataSource.addItem(newItem);
-                }
-                }
-                catch(e) {
-                    console.log(index, r)
-                }
-            });
-            try {
-                await Promise.allSettled(promises)
-                this.showDialog('Все данные были успешно импортированы!')
-            } catch(e) {
-                this.showDialog('Не все данные успешно импортированы')
-            }
-            this.dataSource.unlock();
-        }
-    }
-
-    async exportToExcel(e) {
-        const modalResult = await this.showDialog('Вы действительно хотите экспортировать всех спортсменов в файл?', 'confirm')
+    async importToExcel(e) {
+        const modalResult = await this.showDialog('Вы действительно хотите импортировать всех спортсменов в файл?', 'confirm')
         if (modalResult === 'Ok') {
             const raw_data = await DataSet.getAllItems()
             const rows = raw_data.map(row => ({
@@ -354,26 +307,74 @@ class MySportsmenSection1 extends BaseElement {
                 fgColor: { rgb: "BDD7EE" }
             };
 
-            const alignmentCenter = { horizontal: "center", vertical: "center", wrapText: true };
+            // const alignmentCenter = { horizontal: "center", vertical: "center", wrapText: true };
 
-            const ThinBorder = {
-                top: { style: "thin" },
-                bottom: { style: "thin" },
-                left: { style: "thin" },
-                right: { style: "thin" }
-            };
+            // const ThinBorder = {
+            //     top: { style: "thin" },
+            //     bottom: { style: "thin" },
+            //     left: { style: "thin" },
+            //     right: { style: "thin" }
+            // };
 
-            const fillAlignmentBorder = {
-                fill: LightBlue,
-                alignment: alignmentCenter,
-                border: ThinBorder
-            };
+            // const fillAlignmentBorder = {
+            //     fill: LightBlue,
+            //     alignment: alignmentCenter,
+            //     border: ThinBorder
+            // };
 
-            worksheet["A1"].s = fillAlignmentBorder;
+            // worksheet["A1"].s = fillAlignmentBorder;
+
             worksheet["!cols"] = [ { wch: max_width_1 },  { wch: max_width_2 }, { wch: max_width_3 }, { wch: max_width_4 }, { wch: max_width_5 }, { wch: max_width_6 },];
 
             /* create an XLSX file and try to save to Presidents.xlsx */
             XLSX.writeFile(workbook, "Sportsmen.xlsx", { compression: true });
+        }
+    }
+    
+    async exportFromExcel(e) {
+        const file = e.target.files[0];
+        const modalResult = await this.showDialog('Вы действительно хотите экспортировать данные из файла?', 'confirm')
+        if (modalResult === 'Ok') {
+            const workbook = XLSX.read(await file.arrayBuffer());
+            const worksheet = workbook.Sheets[workbook.SheetNames[2]];
+            const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+            const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+            const regionDataset = RegionDataset.default;
+            const SportsCategoryDataset = await import('../my-sports-categories/my-sports-categories-dataset.mjs');
+            const sportsCategoryDataset = SportsCategoryDataset.default;
+            this.dataSource.lock();
+            const promises = new Array(raw_data.length)
+            raw_data.forEach((r, index) => {
+                try {
+                if(index !== 0){
+                    const newItem = {
+                        lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
+                        firstName: r[1].split(' ')[1],
+                        middleName: r[1].split(' ')[2],
+                        gender: r[10],
+                        category: sportsCategoryDataset.find("shortName", r[2]),
+                        region: regionDataset.find("name", r[3]),
+                        order: {
+                            number: r[4],
+                            link: r[6]
+                        },
+                        link: r[5],
+
+                    }
+                    promises[index] = this.dataSource.addItem(newItem);
+                }
+                }
+                catch(e) {
+                    console.log(index, r)
+                }
+            });
+            try {
+                await Promise.allSettled(promises)
+                this.showDialog('Все данные были успешно импортированы!')
+            } catch(e) {
+                this.showDialog('Не все данные успешно импортированы')
+            }
+            this.dataSource.unlock();
         }
     }
 
@@ -614,7 +615,7 @@ class MySportsmenSection1 extends BaseElement {
             <footer class="right-footer">
                 ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.exportFromExcel}/>
         `;
     }
 

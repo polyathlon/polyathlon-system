@@ -179,7 +179,7 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                         ${this.columns?.map((column, index) =>
                             html`
                                 <th data-dt-column=${index} rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc    dt-ordering-asc" aria-sort="ascending" aria-label="Name: Activate to invert sorting" tabindex=${index}>
-                                    ${column.name}
+                                    ${column.label}
                                 </th>
                             `
                         )}
