@@ -170,8 +170,8 @@ export default class DataSet {
         }
         DataSet.#dataSet.splice(itemIndex, 1)
     }
-    static fetchCreateHashNumber(token, item) {
-        return fetch(`https://localhost:4500/api/trainer-id`, {
+    static fetchCreateTrainerPC(token, item) {
+        return fetch(`https://localhost:4500/api/trainer-pc`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -181,13 +181,13 @@ export default class DataSet {
         })
     }
 
-    static async createHashNumber(item) {
+    static async createTrainerPC(item) {
         const token = getToken();
-        let response = await DataSet.fetchCreateHashNumber(token, item)
+        let response = await DataSet.fetchCreateTrainerPC(token, item)
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchCreateHashNumber(token, item)
+            response = await DataSet.fetchCreateTrainerPC(token, item)
         }
         const result = await response.json()
         if (!response.ok) {

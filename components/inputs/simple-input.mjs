@@ -21,6 +21,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             lang: { type: String, default: ''},
             listLabel: { type: Function, default: null, attribute: 'list-name'},
             isShowList: {type: Boolean, default: false},
+            mask: {type: Function, default: undefined},
         }
     }
 
@@ -157,10 +158,12 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                 <input type=${this.type}
                     placeholder=${this.placeholder || nothing}
                     ${this.required ? 'required' : ''}
-                    .value=${this.value || ''} @input=${this.changeValue}
+                    .value=${this.value || ''}
                     lang=${this.lang || nothing}
+                    @input=${this.changeValue}
                     @focus=${this.changeFocus}
                     @blur=${this.changeBlur}
+                    @beforeinput=${this.mask ? this.beforeinput : nothing}
                 >
                 ${this.#image}
                 ${this.buttonName ? this.#button : ''}
@@ -168,6 +171,10 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             <slot name="informer"></slot>
             ${this.isShowList ? this.#list : ''}
         `;
+    }
+
+    beforeinput(e) {
+        this.mask(e)
     }
 
     focus() {

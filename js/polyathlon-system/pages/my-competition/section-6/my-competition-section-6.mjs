@@ -12,7 +12,6 @@ import { States } from "../../../../utils.js"
 
 import './my-competition-section-6-list-1.mjs'
 import './my-competition-section-6-page-1.mjs'
-import './my-competition-section-6-page-1.mjs'
 import './my-competition-section-6-page-2.mjs'
 import './my-competition-section-6-page-3.mjs'
 import './my-competition-section-6-page-4.mjs'
@@ -21,6 +20,7 @@ import './my-competition-section-6-page-6.mjs'
 import './my-competition-section-6-page-7.mjs'
 import './my-competition-section-6-page-8.mjs'
 import './my-competition-section-6-page-9.mjs'
+import './my-competition-section-6-page-10.mjs'
 
 import DataSet from './my-competition-section-6-dataset.mjs'
 import DataSource from './my-competition-section-6-datasource.mjs'
@@ -221,7 +221,8 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'page6', iconName: 'pull-ups-solid', page: 1, title: lang`Pull-ups`, click: () => this.gotoPage(1)},
             {name: 'page7', iconName: 'push-ups-solid', page: 2, title: lang`Push-ups`, click: () => this.gotoPage(2)},
             {name: 'page8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
-            {name: 'page9', iconName: 'jumping-solid', page: 8, title: lang`Jumping`, click: () => this.gotoPage(8)},
+            {name: 'page9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
+            {name: 'page10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
         ]
     }
 
@@ -371,6 +372,12 @@ class MyCompetitionSection6 extends BaseElement {
     get page9() {
         return html`
             <my-competition-section-6-page-9 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-9>
+        `;
+    }
+
+    get page10() {
+        return html`
+            <my-competition-section-6-page-10 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-10>
         `;
     }
 

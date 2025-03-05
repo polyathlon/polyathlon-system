@@ -6,6 +6,7 @@ import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
+import { skiMask } from './masks.mjs'
 
 class MyCompetitionSection6Page9 extends BaseElement {
     static get properties() {
@@ -46,21 +47,25 @@ class MyCompetitionSection6Page9 extends BaseElement {
     }
 
     render() {
-            return html`
-                <modal-dialog></modal-dialog>
-                <div class="container">
-                    <div class="name-group">
-                        <simple-input id="flow" icon-name="jumping-solid2" label=${lang`Flow` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.flow} @input=${this.validateInput}></simple-input>
-                        <simple-input id="sector" icon-name="chart-pie-simple-solid" label=${lang`Sector` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.sector} @input=${this.validateInput}></simple-input>
-                    </div>
-                    <div class="name-group">
-                        <simple-input id="result" icon-name="map-location-dot-solid" label=${lang`Length` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.result} @input=${this.validateInput}></simple-input>
-                        <simple-input id="points" icon-name="hundred-points-solid" label=${lang`Points` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.points} @input=${this.validateInput}></simple-input>
-                    </div>
-                    <simple-input id="place" icon-name="places-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.place} @input=${this.validateInput}></simple-input>
+        return html`
+            <modal-dialog></modal-dialog>
+            <div class="container">
+                <div class="name-group">
+                    <simple-input id="race" icon-name="ski-solid" label="${lang`Race`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.race} @input=${this.validateInput}></simple-input>
+                    <simple-input id="number" icon-name="circle-number-solid" label="${lang`Skier number`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.number} @input=${this.validateInput}></simple-input>
                 </div>
-            `;
-        }
+                <div class="name-group">
+                    <simple-input id="start" icon-name="start-gun-solid" .mask=${skiMask} label="${lang`Start`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.start} @input=${this.validateInput}></simple-input>
+                    <simple-input id="finish" icon-name="flag-checkered-solid" .mask=${skiMask} label="${lang`Finish`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.finish} @input=${this.validateInput}></simple-input>
+                </div>
+                <div class="name-group">
+                    <simple-input id="result" icon-name="timer-solid" .mask=${skiMask} label="${lang`Result`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.points} @input=${this.validateInput}></simple-input>
+                </div>
+                <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.place} @input=${this.validateInput}></simple-input>
+            </div>
+        `;
+    }
 
     showPage(page) {
         location.hash = page;
@@ -70,7 +75,7 @@ class MyCompetitionSection6Page9 extends BaseElement {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.jumping ??= currentItem
+                this.item.skiing ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }

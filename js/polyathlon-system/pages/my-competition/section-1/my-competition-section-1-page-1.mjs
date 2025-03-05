@@ -76,7 +76,7 @@ class MyCompetitionSection1Page1 extends BaseElement {
                 <simple-select id="sportsDiscipline2" label="${lang`Sports discipline`} 2:" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
-                <simple-input id="competitionId" label="${lang`Competition ID`}:" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionId} .value=${this.item?.competitionId} @input=${this.validateInput}></simple-input>
+                <simple-input id="competitionPC" label="${lang`Competition PC`}:" icon-name="competition-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionPC} .value=${this.item?.competitionPC} @input=${this.validateInput}></simple-input>
                 <simple-input id="ekpNumber" label="${lang`EKP Number`}:" icon-name="ekp-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input type="date" label="${lang`Дата начала`}:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
@@ -102,10 +102,10 @@ class MyCompetitionSection1Page1 extends BaseElement {
         window.open(e.target.value);
     }
 
-    async createCompetitionId(e) {
+    async createCompetitionPC(e) {
         const target = e.target
         const year = this.item.startDate.split("-")[0]
-        const id = await DataSet.createCompetitionId({
+        const id = await DataSet.createCompetitionPC({
             countryCode: this.item?.city?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.city?.region?.code,
             year,

@@ -140,7 +140,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
         } else if (value.includes(":")) {
             sportsman = await SportsmanDataset.getItem(value)
         } else if (target.value.includes("-")) {
-            sportsman = await SportsmanDataset.getItemBySportsmanId(value)
+            sportsman = await SportsmanDataset.getItemBySportsmanPC(value)
             if (sportsman.rows.length === 0) {
                 this.showDialog('Такой спортсмен не найден')
                 return
