@@ -1,13 +1,14 @@
-import refreshToken, {getToken} from "../../refresh-token.mjs";
+import refreshToken, { getToken } from "../../../refresh-token.mjs";
 
 export default class DataSet {
     static #dataSet;
+    static #parentId;
 
-    static async getDataSet() {
-        if (DataSet.#dataSet) {
-            return DataSet.#dataSet
+    static async getDataSet(id) {
+        if (!DataSet.#dataSet || DataSet.#parentId != id) {
+            DataSet.#dataSet = await DataSet.#getItems(id)
+            DataSet.#parentId = id
         }
-        DataSet.#dataSet = await DataSet.#getItems()
         return DataSet.#dataSet
     }
 
@@ -18,20 +19,20 @@ export default class DataSet {
         return index === -1 ? null : DataSet.#dataSet[index]
     }
 
-    static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/referees', {
+    static #fetchGetItems(token, id) {
+        return fetch(`https://localhost:4500/api/competition-sportsmen/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
     }
 
-    static async #getItems() {
+    static async #getItems(id) {
         const token = getToken()
-        let response = await DataSet.#fetchGetItems(token)
+        let response = await DataSet.#fetchGetItems(token, id)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.#fetchGetItems(token)
+            response = await DataSet.#fetchGetItems(token, id)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -43,8 +44,8 @@ export default class DataSet {
         return items
     }
 
-    static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/referee`, {
+    static fetchAddItem(token, item, id) {
+        return fetch(`https://localhost:4500/api/competition-sportsman/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -55,12 +56,11 @@ export default class DataSet {
     }
 
     static async addItem(item) {
-        const token = getToken();
-        let response = await DataSet.fetchAddItem(token, item)
-
+        const token = getToken()
+        let response = await DataSet.fetchAddItem(token, item, DataSet.#parentId)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchAddItem(token, item)
+            response = await DataSet.fetchAddItem(token, item, DataSet.#parentId)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -73,11 +73,11 @@ export default class DataSet {
     }
 
     static addToDataset(item) {
-        DataSet.#dataSet.unshift(item);
+        DataSet.#dataSet.push(item);
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/referee/${itemId}`, {
+        return fetch(`https://localhost:4500/api/competition-sportsman/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -102,60 +102,8 @@ export default class DataSet {
         return result
     }
 
-    static #fetchGetItemByRefereePC(token, itemId) {
-        return fetch(`https://localhost:4500/api/referee-pc/${itemId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    static async getItemByRefereePC(itemId) {
-        const token = getToken();
-
-        let response = await DataSet.#fetchGetItemByRefereePC(token, itemId)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.#fetchGetItemByRefereePC(token, itemId)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result
-    }
-
-    static #fetchGetItemByLastName(token, itemId) {
-        return fetch(`https://localhost:4500/api/referee/last-name/${itemId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    static async getItemByLastName(itemId) {
-        const token = getToken();
-
-        let response = await DataSet.#fetchGetItemByLastName(token, itemId)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.#fetchGetItemByLastName(token, itemId)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result
-    }
-
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/referee/${item._id}`, {
+        return fetch(`https://localhost:4500/api/competition-sportsman/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -188,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/referee/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/competition-sportsman/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -223,34 +171,8 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchCreateRefereePC(token, item) {
-        return fetch(`https://localhost:4500/api/referee-pc`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(item)
-        })
-    }
-
-    static async createRefereePC(item) {
-        const token = getToken();
-        let response = await DataSet.fetchCreateRefereePC(token, item)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchCreateRefereePC(token, item)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result.number
-    }
-
     static fetchGetQRCode(token, data) {
-        return fetch(`https://localhost:4500/api/qr-code?data=${data}`, {
+        return fetch(`https://localhost:4500/api/qr-code?${data}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,

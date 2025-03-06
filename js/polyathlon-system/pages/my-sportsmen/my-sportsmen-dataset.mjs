@@ -120,7 +120,7 @@ export default class DataSet {
             id: newItem._id,
             key,
             value: {
-                hashNumber: newItem.hashNumber,
+                sportsmanPC: newItem.sportsmanPC,
                 gender: newItem.gender,
             }
         }
@@ -158,22 +158,22 @@ export default class DataSet {
         return result
     }
 
-    static #fetchGetItemBySportsmanId(token, itemId) {
-        return fetch(`https://localhost:4500/api/sportsman-id/${itemId}`, {
+    static #fetchGetItemBySportsmanPC(token, itemId) {
+        return fetch(`https://localhost:4500/api/sportsman-pc/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
     }
 
-    static async getItemBySportsmanId(itemId) {
+    static async getItemBySportsmanPC(itemId) {
         const token = getToken();
 
-        let response = await DataSet.#fetchGetItemBySportsmanId(token, itemId)
+        let response = await DataSet.#fetchGetItemBySportsmanPC(token, itemId)
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.#fetchGetItemBySportsmanId(token, itemId)
+            response = await DataSet.#fetchGetItemBySportsmanPC(token, itemId)
         }
 
         const result = await response.json()
@@ -279,8 +279,8 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchCreateHashNumber(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman-id`, {
+    static fetchCreateSportsmanPC(token, item) {
+        return fetch(`https://localhost:4500/api/sportsman-pc`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -290,13 +290,13 @@ export default class DataSet {
         })
     }
 
-    static async createHashNumber(item) {
+    static async createSportsmanPC(item) {
         const token = getToken();
-        let response = await DataSet.fetchCreateHashNumber(token, item)
+        let response = await DataSet.fetchCreateSportsmanPC(token, item)
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchCreateHashNumber(token, item)
+            response = await DataSet.fetchCreateSportsmanPC(token, item)
         }
         const result = await response.json()
         if (!response.ok) {

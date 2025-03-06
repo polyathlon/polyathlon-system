@@ -198,8 +198,8 @@ export default class DataSet {
         return blob ? window.URL.createObjectURL(blob) : blob;
     }
 
-    static fetchCreateCompetitionId(token, item) {
-        return fetch(`https://localhost:4500/api/competition-id`, {
+    static fetchCreateCompetitionPC(token, item) {
+        return fetch(`https://localhost:4500/api/competition-pc`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -209,13 +209,13 @@ export default class DataSet {
         })
     }
 
-    static async createCompetitionId(item) {
+    static async createCompetitionPC(item) {
         const token = getToken();
-        let response = await DataSet.fetchCreateCompetitionId(token, item)
+        let response = await DataSet.fetchCreateCompetitionPC(token, item)
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchCreateCompetitionId(token, item)
+            response = await DataSet.fetchCreateCompetitionPC(token, item)
         }
         const result = await response.json()
         if (!response.ok) {

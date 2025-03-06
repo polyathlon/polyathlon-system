@@ -6,6 +6,7 @@ import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
+import { pushMask } from './masks.mjs'
 
 class MyCompetitionSection6Page2 extends BaseElement {
     static get properties() {
@@ -54,7 +55,7 @@ class MyCompetitionSection6Page2 extends BaseElement {
                     <simple-input id="crossbar" label="${lang`Horizontal bar`}:" icon-name="horizontal-bar-solid" .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.crossbar} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="order-number-solid" label="${lang`Result`}:" .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="result" icon-name="order-number-solid" .mask=${pushMask} label="${lang`Result`}:" .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.result} @input=${this.validateInput}></simple-input>
                     <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.points} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.place} @input=${this.validateInput}></simple-input>

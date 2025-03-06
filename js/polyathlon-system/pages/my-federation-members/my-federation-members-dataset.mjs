@@ -102,22 +102,22 @@ export default class DataSet {
         return result
     }
 
-    static #fetchGetItemByFederationMemberId(token, itemId) {
-        return fetch(`https://localhost:4500/api/federation-member-id/${itemId}`, {
+    static #fetchGetItemByFederationMemberPC(token, itemId) {
+        return fetch(`https://localhost:4500/api/federation-member-pc/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
     }
 
-    static async getItemByFederationMemberId(itemId) {
+    static async getItemByFederationMemberPC(itemId) {
         const token = getToken();
 
-        let response = await DataSet.#fetchGetItemByFederationMemberId(token, itemId)
+        let response = await DataSet.#fetchGetItemByFederationMemberPC(token, itemId)
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.#fetchGetItemByFederationMemberId(token, itemId)
+            response = await DataSet.#fetchGetItemByFederationMemberPC(token, itemId)
         }
 
         const result = await response.json()
@@ -223,8 +223,8 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchCreateHashNumber(token, item) {
-        return fetch(`https://localhost:4500/api/federation-member-id`, {
+    static fetchCreateFederationMemberPC(token, item) {
+        return fetch(`https://localhost:4500/api/federation-member-pc`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -234,13 +234,13 @@ export default class DataSet {
         })
     }
 
-    static async createHashNumber(item) {
+    static async createFederationMemberPC(item) {
         const token = getToken();
-        let response = await DataSet.fetchCreateHashNumber(token, item)
+        let response = await DataSet.fetchCreateFederationMemberPC(token, item)
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchCreateHashNumber(token, item)
+            response = await DataSet.fetchCreateFederationMemberPC(token, item)
         }
         const result = await response.json()
         if (!response.ok) {

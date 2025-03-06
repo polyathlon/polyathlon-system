@@ -58,7 +58,7 @@ class MySportsmenSection1Page1 extends BaseElement {
     clubShowValue(item) {
         return item?.name ? `${item?.name} (${item?.city?.type?.shortName || ''} ${item?.city?.name})` : ''
     }
-    
+
     clubListLabel(item) {
         return item?.type?.shortName + ' ' + item?.name
     }
@@ -79,7 +79,7 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
-                <simple-input id="sportsmanId" label="${lang`Sportsman ID`}:" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createHashNumber} .value=${this.item?.sportsmanId} @input=${this.validateInput}></simple-input>
+                <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" icon-name="sportsman-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createSportsmanPC} .value=${this.item?.sportsmanPC} @input=${this.validateInput}></simple-input>
                 <simple-select id="category" label="${lang`Sports category`}:" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
@@ -90,14 +90,14 @@ class MySportsmenSection1Page1 extends BaseElement {
         `;
     }
 
-    async createHashNumber(e) {
+    async createSportsmanPC(e) {
         const target = e.target
-        const id = await DataSet.createHashNumber({
+        const spc = await DataSet.createSportsmanPC({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code,
             ulid: this.item?.profileUlid,
         })
-        target.setValue(id);
+        target.setValue(spc);
     }
 
     async getQRCode() {

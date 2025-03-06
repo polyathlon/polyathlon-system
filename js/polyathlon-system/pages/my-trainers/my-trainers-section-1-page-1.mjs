@@ -59,7 +59,7 @@ class MyTrainersSection1Page1 extends BaseElement {
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="category" label="${lang`Category`}:" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-input id="trainerId" label="${lang`Trainer ID`}:" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} .value=${this.item?.trainerId} @input=${this.validateInput}></simple-input>
+                <simple-input id="trainerPC" label="${lang`Trainer PC`}:" icon-name="trainer-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createTrainerPC} .value=${this.item?.trainerPC} @input=${this.validateInput}></simple-input>
 
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
@@ -70,9 +70,9 @@ class MyTrainersSection1Page1 extends BaseElement {
         `;
     }
 
-    async createHashNumber(e) {
+    async createTrainerPC(e) {
         const target = e.target
-        const id = await DataSet.createHashNumber({
+        const id = await DataSet.createTrainerPC({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code,
             ulid: this.item?.profileUlid,

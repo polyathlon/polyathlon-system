@@ -207,9 +207,9 @@ const dictionary = {
         "ru-RU": 'Этап',
         "en-EN": 'Stage'
     },
-    'Competition ID': {
-        "ru-RU": 'Номер соревнования',
-        "en-EN": 'Competition ID'
+    'Competition PC': {
+        "ru-RU": 'Персональный код соревнования',
+        "en-EN": 'Competition personal code'
     },
     'EKP Number': {
         "ru-RU": 'Номер ЕКП',
@@ -439,13 +439,13 @@ const dictionary = {
         "ru-RU": 'Google карты',
         "en-EN": 'Google map'
     },
-    'Referee ID': {
-        "ru-RU": 'ID судьи',
-        "en-EN": 'Referee ID'
+    'Referee PC': {
+        "ru-RU": 'Персональный код судьи',
+        "en-EN": 'Referee personal code'
     },
-    'Sportsman ID': {
-        "ru-RU": 'ID спортсмена',
-        "en-EN": 'Sportsman ID'
+    'Sportsman PC': {
+        "ru-RU": 'Персональный код спортсмена',
+        "en-EN": 'Sportsman personal code'
     },
     'Referee Ulid': {
         "ru-RU": 'Ulid судьи',
@@ -455,9 +455,9 @@ const dictionary = {
         "ru-RU": 'Члены федерации',
         "en-EN": 'Federation members'
     },
-    'Federation Member ID': {
-        "ru-RU": 'ID члена федерации',
-        "en-EN": 'Federation Member ID'
+    'Federation member PC': {
+        "ru-RU": 'Персональный код члена федерации',
+        "en-EN": 'Federation member personal code'
     },
     'Federation member category': {
         "ru-RU": 'Категория члена федерации',
@@ -465,11 +465,11 @@ const dictionary = {
     },
     'Federation member categories': {
         "ru-RU": 'Категории членов федерации',
-        "en-EN": 'Federation Member categories'
+        "en-EN": 'Federation member categories'
     },
-    'Trainer ID': {
-        "ru-RU": 'ID тренера',
-        "en-EN": 'Trainer ID'
+    'Trainer PC': {
+        "ru-RU": 'Персональный код тренера',
+        "en-EN": 'Trainer personal code'
     },
     'Year': {
         "ru-RU": 'Год',
