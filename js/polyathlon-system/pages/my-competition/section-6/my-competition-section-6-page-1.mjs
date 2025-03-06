@@ -7,7 +7,7 @@ import '../../../../../components/selects/simple-select.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 import { shootingMask } from './masks.mjs'
-import { isShootingValid } from './result-validation.mjs'
+import { isShootingValid } from './validation.mjs'
 
 class MyCompetitionSection6Page1 extends BaseElement {
     static get properties() {
@@ -47,10 +47,25 @@ class MyCompetitionSection6Page1 extends BaseElement {
         ]
     }
 
+    sportsmanName(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        // if (item.middleName) {
+        //     result += ` ${item.middleName[0]}.`
+        // }
+        return result
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
+                <simple-input id="sportsman" icon-name=${this.item.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
                 <div class="name-group">
                     <simple-input id="shift" icon-name="shift-solid" label="${lang`Shift`}:" .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.shift} @input=${this.validateInput}></simple-input>
                     <simple-input id="shield" icon-name="shield-solid" label="${lang`Shield`}:" .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.shield} @input=${this.validateInput}></simple-input>
@@ -69,9 +84,9 @@ class MyCompetitionSection6Page1 extends BaseElement {
         location.hash = page;
     }
 
-    ballFind(result, balls) {
+    pointsFind(result, table) {
         let value  = +result * 10
-        return balls.reduce((last, item) => {
+        return table.reduce((last, item) => {
             if (item.value <= value) {
                 if (item.value <= value && item.points > last)
                     return item.points
@@ -80,6 +95,19 @@ class MyCompetitionSection6Page1 extends BaseElement {
             }
             return last;
         }, 0)
+    }
+
+    setPoints(target) {
+        if (isShootingValid(target.value)) {
+            let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
+            let b = a.sportsDisciplineComponents.find( item => item.group.name === "Стрельба")
+            this.$id("points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
+            this.$id("points").fire('input')
+        }
+        else {
+            this.$id("points").value = ''
+            this.$id("points").fire('input')
+        }
     }
 
     validateInput(e) {
@@ -99,21 +127,7 @@ class MyCompetitionSection6Page1 extends BaseElement {
 
             if (e.target.id === "result")
             {
-                if (isShootingValid(e.target.value)) {
-                    let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
-                    let b = a.sportsDisciplineComponents.find( item => item.group.name === "Стрельба")
-                    if (this.gender === "0") {
-                        this.$id("points").value = b.men[0].points
-                    }
-                    else {
-                        this.$id("points").value = this.ballFind(e.target.value, b.women)
-                    }
-                }
-                else {
-                    this.$id("points").value = ''
-                }
-                console.log(this.parent)
-                console.log(this.item)
+                this.setPoints(e.target)
             }
 
             this.isModified = this.oldValues.size !== 0;

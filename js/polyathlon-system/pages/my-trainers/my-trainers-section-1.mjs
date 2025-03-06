@@ -171,8 +171,8 @@ class MyTrainersSection1 extends BaseElement {
         this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-trainer-categories', title: lang`Import to Excel`, click: () => this.importToExcel()},
-            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-trainer-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'excel-import-solid', page: 'my-trainers', title: lang`Import to Excel`, click: () => this.importToExcel()},
+            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-trainers', title: 'Export from Excel', click: () => this.ExcelFile()},
             {iconName: 'pdf-make',  page: 'my-trainer-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-trainer-categories', title: 'Back', click: () => this.gotoBack()},
         ]
@@ -252,71 +252,73 @@ class MyTrainersSection1 extends BaseElement {
     ExcelFile() {
         this.renderRoot.getElementById("fileInput").click();
     }
+
     async importToExcel(e) {
-            const modalResult = await this.showDialog('Вы действительно хотите импортировать всех тренеров в файл?', 'confirm')
-            if (modalResult === 'Ok') {
-                const raw_data = await this.dataSource.items
-                const rows = raw_data.map(row => ({
-                    lastName: row.doc.lastName,
-                    firstName: row.doc.firstName,
-                    middleName: row.doc.middleName,
-                    category: row.doc.category?.shortName,
-                    region: row.doc.region?.name,
-                    trainerId: row.doc.trainerId,
-                    orderNumber: row.doc.order?.number,
-                    link: row.doc.link,
-                    orderLink: row.doc.order?.link,
-                    gender: row.doc.gender,
-                })).sort((l, r) => {
-                    let a = l.lastName?.localeCompare(r.lastName)
-                    if (a) {
-                        return a
-                    }
-                    a = l.firstName?.localeCompare(r.firstName)
-                    if (a) {
-                        return a
-                    }
-                    a = l.middleName?.localeCompare(r.middleName)
-                    if (a) {
-                        return a
-                    }
-                });
+        const modalResult = await this.showDialog('Вы действительно хотите импортировать всех тренеров в файл?', 'confirm')
+        if (modalResult === 'Ok') {
+            const raw_data = await this.dataSource.items
+            const rows = raw_data.map(row => ({
+                lastName: row.lastName,
+                firstName: row.firstName,
+                middleName: row.middleName,
+                category: row.category?.shortName,
+                region: row.region?.name,
+                trainerId: row.trainerId,
+                orderNumber: row.order?.number,
+                link: row.link,
+                orderLink: row.order?.link,
+                gender: row.gender,
+            })).sort((l, r) => {
+                let a = l.lastName?.localeCompare(r.lastName)
+                if (a) {
+                    return a
+                }
+                a = l.firstName?.localeCompare(r.firstName)
+                if (a) {
+                    return a
+                }
+                a = l.middleName?.localeCompare(r.middleName)
+                if (a) {
+                    return a
+                }
+            });
 
-                const worksheet = XLSX.utils.json_to_sheet(rows);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "Тренеры");
+            const worksheet = XLSX.utils.json_to_sheet(rows);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Тренеры");
 
-                /* fix headers */
-                XLSX.utils.sheet_add_aoa(worksheet, [[
-                    "Фамилия",
-                    "Имя",
-                    "Отчество",
-                    "Разряд",
-                    "Регион",
-                    "ID Тренера",
-                    "Дата приказа",
-                    "Персональная ссылка",
-                    "Ссылка на приказ",
-                    "Пол",
-                ]], { origin: "A1" });
+            /* fix headers */
+            XLSX.utils.sheet_add_aoa(worksheet, [[
+                "Фамилия",
+                "Имя",
+                "Отчество",
+                "Разряд",
+                "Регион",
+                "Персональный код тренера",
+                "Дата приказа",
+                "Персональная ссылка",
+                "Ссылка на приказ",
+                "Пол",
+            ]], { origin: "A1" });
 
-                /* calculate column width */
-                const max_width_1 = rows.reduce((w, r) => Math.max(w, r.lastName?.length), 10);
-                const max_width_2 = rows.reduce((w, r) => r.firstName?.length ? Math.max(w, r.firstName?.length) : w, 10);
-                const max_width_3 = rows.reduce((w, r) => r.middleName?.length ? Math.max(w, r.middleName?.length) : w, 10);
-                const max_width_4 = rows.reduce((w, r) => r.category?.length ? Math.max(w, r.category?.length) : w, 6);
-                const max_width_6 = rows.reduce((w, r) => r.region?.length ? Math.max(w, r.region?.length) : w, 10);
+            /* calculate column width */
+            const max_width_1 = rows.reduce((w, r) => Math.max(w, r.lastName?.length), 10);
+            const max_width_2 = rows.reduce((w, r) => r.firstName?.length ? Math.max(w, r.firstName?.length) : w, 10);
+            const max_width_3 = rows.reduce((w, r) => r.middleName?.length ? Math.max(w, r.middleName?.length) : w, 10);
+            const max_width_4 = rows.reduce((w, r) => r.category?.length ? Math.max(w, r.category?.length) : w, 6);
+            const max_width_5 = rows.reduce((w, r) => r.region?.length ? Math.max(w, r.region?.length) : w, 10);
 
-                const LightBlue = {
-                    fgColor: { rgb: "BDD7EE" }
-                };
+            const LightBlue = {
+                fgColor: { rgb: "BDD7EE" }
+            };
 
-                worksheet["!cols"] = [ { wch: max_width_1 },  { wch: max_width_2 }, { wch: max_width_3 }, { wch: max_width_4 }, { wch: max_width_5 }, { wch: max_width_6 },];
+            worksheet["!cols"] = [ { wch: max_width_1 },  { wch: max_width_2 }, { wch: max_width_3 }, { wch: max_width_4 }, { wch: max_width_5 }, ];
 
-                XLSX.writeFile(workbook, "Trainers.xlsx", { compression: true });
-            }
+            XLSX.writeFile(workbook, "Trainers.xlsx", { compression: true });
         }
-    async importFromExcel(e) {
+    }
+
+    async exportFromExcel(e) {
         const file = e.target.files[0];
         const workbook = XLSX.read(await file.arrayBuffer());
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -479,7 +481,7 @@ class MyTrainersSection1 extends BaseElement {
             <footer class="right-footer">
                 ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.exportFromExcel}/>
         `;
     }
 

@@ -330,7 +330,7 @@ class MySportsmenSection1 extends BaseElement {
             XLSX.writeFile(workbook, "Sportsmen.xlsx", { compression: true });
         }
     }
-    
+
     async exportFromExcel(e) {
         const file = e.target.files[0];
         const modalResult = await this.showDialog('Вы действительно хотите экспортировать данные из файла?', 'confirm')

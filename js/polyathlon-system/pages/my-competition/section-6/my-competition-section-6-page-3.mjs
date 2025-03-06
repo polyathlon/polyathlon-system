@@ -6,7 +6,8 @@ import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
-import { pushMask } from './masks.mjs'
+import { pushUpMask } from './masks.mjs'
+import { isPushUpValid } from './validation.mjs'
 
 class MyCompetitionSection6Page3 extends BaseElement {
     static get properties() {
@@ -55,7 +56,7 @@ class MyCompetitionSection6Page3 extends BaseElement {
                     <simple-input id="platform" icon-name="push-ups-platform-solid" label="${lang`Platform`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.platform} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="order-number-solid" .mask=${pushMask} label="${lang`Result`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="result" icon-name="order-number-solid" .mask=${pushUpMask} label="${lang`Result`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.result} @input=${this.validateInput}></simple-input>
                     <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.point} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.place} @input=${this.validateInput}></simple-input>
@@ -67,11 +68,40 @@ class MyCompetitionSection6Page3 extends BaseElement {
         location.hash = page;
     }
 
+    pointsFind(result, table) {
+        let value  = +result * 10
+        return table.reduce((last, item) => {
+            if (item.value <= value) {
+                if (item.value <= value && item.points > last)
+                    return item.points
+                else
+                    return last
+            }
+            return last;
+        }, 0)
+    }
+
+    setPoints(target) {
+        if (isPushUpValid(target.value)) {
+            let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
+            let b = a.sportsDisciplineComponents.find( item => item.group.name === "Силовая гимнастика")
+            if (this.gender === "0") {
+                this.$id("points").value = this.pointsFind(target.value, b.men)
+            }
+            else {
+                this.$id("points").value = this.pointsFind(target.value, b.women)
+            }
+        }
+        else {
+            this.$id("points").value = ''
+        }
+    }
+
     validateInput(e) {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.pushUps ??= currentItem
+                this.item.shooting ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }
@@ -82,9 +112,15 @@ class MyCompetitionSection6Page3 extends BaseElement {
 
             currentItem[e.target.id] = e.target.value
 
+            if (e.target.id === "result")
+            {
+                this.setPoints(e.target)
+            }
+
             this.isModified = this.oldValues.size !== 0;
         }
     }
+
 
     async showDialog(message, type='message', title='') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')

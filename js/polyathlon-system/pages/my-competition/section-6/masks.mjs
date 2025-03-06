@@ -1,6 +1,6 @@
 
 // 00:00,0
-export function skiMask(e) {
+export function skiingMask(e) {
     if (e.inputType === "insertText") {
         const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ',', '.'];
         const separators = [':', ',', '.'];
@@ -88,7 +88,7 @@ export function swimmingMask(e) {
 }
 
 // 000
-export function pushMask(e) {
+export function pushUpMask(e) {
     if (e.inputType === "insertText") {
         const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
@@ -103,7 +103,12 @@ export function pushMask(e) {
 
 // 000
 export function shootingMask(e) {
-    pushMask(e)
+    return pushUpMask(e)
+}
+
+// 000
+export function pullUpMask(e) {
+    return pushUpMask(e)
 }
 
 // 00,0
@@ -130,4 +135,19 @@ export function throwingMask(e) {
             e.preventDefault()
         }
     }
+}
+
+// 00:00,0
+export function runningMask(e) {
+    return skiingMask(e)
+}
+
+// 00:00,0
+export function rollerSkiingMask(e) {
+    return skiingMask(e)
+}
+
+// 000
+export function jumpingMask(e) {
+    return pushUpMask(e)
 }

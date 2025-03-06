@@ -6,7 +6,8 @@ import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
-import { skiMask } from './masks.mjs'
+import { skiingMask } from './masks.mjs'
+import { isSkiingValid } from './validation.mjs'
 
 class MyCompetitionSection6Page8 extends BaseElement {
     static get properties() {
@@ -55,11 +56,11 @@ class MyCompetitionSection6Page8 extends BaseElement {
                     <simple-input id="number" icon-name="circle-number-solid" label="${lang`Skier number`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.number} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="start" icon-name="start-gun-solid" .mask=${skiMask} label="${lang`Start`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.start} @input=${this.validateInput}></simple-input>
-                    <simple-input id="finish" icon-name="flag-checkered-solid" .mask=${skiMask} label="${lang`Finish`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.finish} @input=${this.validateInput}></simple-input>
+                    <simple-input id="start" icon-name="start-gun-solid" .mask=${skiingMask} label="${lang`Start`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.start} @input=${this.validateInput}></simple-input>
+                    <simple-input id="finish" icon-name="flag-checkered-solid" .mask=${skiingMask} label="${lang`Finish`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.finish} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="timer-solid" .mask=${skiMask} label="${lang`Result`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="result" icon-name="timer-solid" .mask=${skiingMask} label="${lang`Result`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.result} @input=${this.validateInput}></simple-input>
                     <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.points} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.place} @input=${this.validateInput}></simple-input>
@@ -71,11 +72,46 @@ class MyCompetitionSection6Page8 extends BaseElement {
         location.hash = page;
     }
 
+    resultToValue(result) {
+        let parts = result.split(':')
+        let minutes = parts[1].split(',')
+        return (+parts[0] * 60 + +minutes[0].split) * 10 + +minutes[0];
+    }
+
+    pointsFind(result, table) {
+        let value = resultToValue(result)
+        return table.reduce((last, item) => {
+            if (item.value <= value) {
+                if (item.value <= value && item.points > last)
+                    return item.points
+                else
+                    return last
+            }
+            return last;
+        }, 0)
+    }
+
+    setPoints(target) {
+        if (isSkiingValid(target.value)) {
+            let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
+            let b = a.sportsDisciplineComponents.find( item => item.group.name === "Лыжная гонка")
+            if (this.gender === "0") {
+                this.$id("points").value = this.pointsFind(target.value, b.men)
+            }
+            else {
+                this.$id("points").value = this.pointsFind(target.value, b.women)
+            }
+        }
+        else {
+            this.$id("points").value = ''
+        }
+    }
+
     validateInput(e) {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.skiing ??= currentItem
+                this.item.shooting ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }
@@ -85,6 +121,11 @@ class MyCompetitionSection6Page8 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
+
+            if (e.target.id === "result")
+            {
+                this.setPoints(e.target)
+            }
 
             this.isModified = this.oldValues.size !== 0;
         }

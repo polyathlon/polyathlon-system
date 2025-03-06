@@ -7,6 +7,7 @@ import '../../../../../components/selects/simple-select.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 import { sprintMask } from './masks.mjs'
+import { isSprintValid } from './validation.mjs'
 
 class MyCompetitionSection6Page6 extends BaseElement {
     static get properties() {
@@ -67,11 +68,45 @@ class MyCompetitionSection6Page6 extends BaseElement {
         location.hash = page;
     }
 
+    resultToValue(result) {
+        let parts = result.split(',')
+        return +parts[0] * 10 + +minutes[1];
+    }
+
+    pointsFind(result, table) {
+        let value = resultToValue(result)
+        return table.reduce((last, item) => {
+            if (item.value <= value) {
+                if (item.value <= value && item.points > last)
+                    return item.points
+                else
+                    return last
+            }
+            return last;
+        }, 0)
+    }
+
+    setPoints(target) {
+        if (isSprintValid(target.value)) {
+            let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
+            let b = a.sportsDisciplineComponents.find( item => item.group.name === "Спринт")
+            if (this.gender === "0") {
+                this.$id("points").value = this.pointsFind(target.value, b.men)
+            }
+            else {
+                this.$id("points").value = this.pointsFind(target.value, b.women)
+            }
+        }
+        else {
+            this.$id("points").value = ''
+        }
+    }
+
     validateInput(e) {
         if (e.target.value !== "") {
             const currentItem = e.target.currentObject ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.sprinting ??= currentItem
+                this.item.shooting ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }
@@ -81,6 +116,11 @@ class MyCompetitionSection6Page6 extends BaseElement {
             }
 
             currentItem[e.target.id] = e.target.value
+
+            if (e.target.id === "result")
+            {
+                this.setPoints(e.target)
+            }
 
             this.isModified = this.oldValues.size !== 0;
         }
