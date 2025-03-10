@@ -21,7 +21,7 @@ class PolyathlonSystemFooter extends BaseElement {
             css`
                 :host {
                     padding: 10px 0;
-                    height: 80px;
+                    height: var(--polyathlon-footer-height, 80px);
                     background-color: var(--footer-background-color);
                 }
 
@@ -32,6 +32,7 @@ class PolyathlonSystemFooter extends BaseElement {
                 p {
                     text-align: center;
                     margin: 0;
+                    padding-bottom: 4px;
                 }
 
                 a {
@@ -86,6 +87,9 @@ class PolyathlonSystemFooter extends BaseElement {
                         display: none;
                     }
                 }
+                .hidden {
+                    display: none;
+                }
             `
         ]
     }
@@ -105,7 +109,7 @@ class PolyathlonSystemFooter extends BaseElement {
 
     social() {
         return html`
-            <div>
+            <div class="hidden">
                 <a href="https://t.me/v_a_antoshkin"><img src="images/telegram.svg" alt=""/></a>
                 <a href="https://vk.com/id63554332"><img src="images/vk.svg" alt=""/></a>
                 <a href="mailto:v.a.antoshkin@mail.ru"><img src="images/mail.svg" alt=""/></a>

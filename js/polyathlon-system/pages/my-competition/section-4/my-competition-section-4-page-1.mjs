@@ -4,6 +4,8 @@ import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/checkbox-group-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
+import CompetitionDataSource from '../section-1/my-competition-datasource.mjs'
+
 // import Chart from 'chart.js/auto';
 
 import CompetitionTypeDataset from '../../my-competition-types/my-competition-types-dataset.mjs'
@@ -30,15 +32,17 @@ class MyCompetitionSection4Page1 extends BaseElement {
             competitionTypeDataSource: {type: Object, default: null},
             competitionStageDataSource: {type: Object, default: null},
             sportsDisciplineDataSource: {type: Object, default: null},
+            sportsmenDataSource: { type: Object, default: null },
             cityDataSource: {type: Object, default: null},
             ageGroupDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
-            manNumber: {type: BigInt, default: 0},
-            womanNumber: {type: BigInt, default: 0},
+            menNumber: {type: BigInt, default: 0},
+            womenNumber: {type: BigInt, default: 0},
             regionNumber: {type: BigInt, default: 0},
             clubNumber: {type: BigInt, default: 0},
+            parent: { type: Object, default: {} },
         }
     }
 
@@ -69,12 +73,12 @@ class MyCompetitionSection4Page1 extends BaseElement {
         return html`
             <div class="container">
                 <div class="name-group">
-                    <simple-input label="Количество мужчин:" id="manNumber" icon-name="sportsman-man-solid" .value=${this.manNumber} @input=${this.validateInput}></simple-input>
-                    <simple-input label="Количество регионов:" id="regionNumber" icon-name="region-solid" .value=${this.regionNumber} @input=${this.validateInput}></simple-input>
+                    <simple-input label="Количество мужчин:" id="manNumber" icon-name="sportsman-man-solid" .value=${this.menCount()} @input=${this.validateInput}></simple-input>
+                    <simple-input label="Количество женщин:" id="womenNumber" icon-name="sportsman-woman-solid" .value=${this.womenCount()} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input label="Количество женщин:" id="womenNumber" icon-name="sportsman-woman-solid" .value=${this.womanNumber} @input=${this.validateInput}></simple-input>
-                    <simple-input label="Количество клубов:" id="clubNumber" icon-name="club-solid" .value=${this.clubNumber} @input=${this.validateInput}></simple-input>
+                    <simple-input label="Количество регионов:" id="regionNumber" icon-name="region-solid" .value=${this.regionCount()} @input=${this.validateInput}></simple-input>
+                    <simple-input label="Количество клубов:" id="clubNumber" icon-name="club-solid" .value=${this.clubCount()} @input=${this.validateInput}></simple-input>
                 </div>
                 <canvas id="chart"></canvas>
 
@@ -244,18 +248,289 @@ class MyCompetitionSection4Page1 extends BaseElement {
 //     return gradient;
 //   }
 
-    async firstUpdated() {
-        super.firstUpdated();
-        this.manNumber = 10
-        this.womanNumber = 20
-        this.regionNumber = 40
-        this.clubNumber = 30
+    menCount() {
+        return this.sportsmenDataSource?.items?.reduce( (a, item) => item.gender == 0 ? a + 1 : a, 0)
+    }
+
+    womenCount() {
+        return this.sportsmenDataSource?.items?.reduce( (a, item) => item.gender == 1 ? a + 1 : a, 0)
+    }
+
+    regionCount() {
+        const a = new Set(this.sportsmenDataSource?.items.map(item => item.region?.name))
+
+        return a.size
+    }
+
+    clubCount() {
+        const a = new Map(this.sportsmenDataSource?.items.map(item => [item.club?._id, item.club?.name]))
+        return a.size
+    }
+
+    pdfMethod() {
+        const docInfo = {
+          info: {
+            title: "Referees",
+            author: "Polyathlon systems",
+          },
+
+          pageSize: "A4",
+          pageOrientation: 'portrait',
+          pageMargins: [80, 30, 70, 60],
+
+          content: [
+            {
+                text: "Всероссийская федерация Полиатлона",
+                fontSize: 14,
+                alignment: "center",
+                margin: [10, 0, 0, 0],
+            },
+            {
+                text: "Справка о проведённом общероссийской спортивной федерацией всероссийских и межрегиональных спортивных мероприятиях по полиатлону за (year) год",
+                fontSize: 14,
+                bold:true,
+                alignment: "center",
+                margin: [10, 20, 0, 0],
+            },
+            {
+                text: `${this.parent?.name.name} - (year) по полиатлону в спортивной дисциплине ${this.parent?.sportsDiscipline1?.name}`,
+                fontSize: 14,
+                bold:true,
+                alignment: "center",
+                margin: [60, 20, 50, 0],
+            },
+            {
+                text: `Сроки и место проведения: ${this.parent?.sportsDiscipline1?.name}, г.${this.parent?.city.name} ${this.parent?.region.name}`,
+                fontSize: 11,
+                alignment: "left",
+                margin: [10, 20, 0, 0],
+            },
+            {
+                text: "(gender)",
+                fontSize: 11,
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+            },
+            {
+                text: `Вид программы: ${this.parent?.sportsDiscipline1?.name}`,
+                fontSize: 11,
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+            },
+            {
+                text: `Приняли участие: общее количество спортсменов - ${this.menNumber + this.womenNumber} чел., в том числе:`,
+                fontSize: 11,
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+            },
+            {
+                columns: [
+                    {
+                        text: "мужчин",
+                        fontSize: 11,
+                        alignment: "left",
+                        margin: [85, 0, 0, 0],
+                    },
+                    {
+                        text: `- ${this.menNumber} чел.;`,
+                        alignment: "left",
+                        fontSize: 11,
+                    },
+                ],
+            },
+            {
+                columns: [
+                    {
+                        text: "женщин",
+                        fontSize: 11,
+                        alignment: "left",
+                        margin: [85, 0, 0, 0],
+                    },
+                    {
+                        text: `- ${this.womenNumber} чел.;`,
+                        alignment: "left",
+                        fontSize: 11,
+                    },
+                ],
+            },
+            {
+                columns: [
+                    {
+                        text: "количество субъектов РФ",
+                        fontSize: 11,
+                        alignment: "left",
+                        margin: [85, 0, 0, 0],
+                    },
+                    {
+                        text: `- ${this.regionNumber};`,
+                        alignment: "left",
+                        fontSize: 11,
+                    },
+                ],
+            },
+            {
+                columns: [
+                    {
+                        text: "количество клубов",
+                        fontSize: 11,
+                        alignment: "left",
+                        margin: [85, 0, 0, 0],
+                    },
+                    {
+                        text: `- ${this.clubNumber}.`,
+                        alignment: "left",
+                        fontSize: 11,
+                    },
+                ],
+            },
+            {
+                text: "Награждены медалями Минспорта России за:",
+                fontSize: 11,
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+            },
+            {
+                text: "1 место мужчины - (sportsman)",
+                fontSize: 11,
+                alignment: "left",
+                margin: [85, 0, 0, 0],
+            },
+            {
+                text: "2 место мужчины - (sportsman)",
+                fontSize: 11,
+                alignment: "left",
+                margin: [85, 0, 0, 0],
+            },
+            {
+                text: "3 место мужчины - (sportsman)",
+                fontSize: 11,
+                alignment: "left",
+                margin: [85, 0, 0, 0],
+            },
+            {
+                text: "1 место женщины - (sportsman)",
+                fontSize: 11,
+                alignment: "left",
+                margin: [85, 0, 0, 0],
+            },
+            {
+                text: "2 место женщины - (sportsman)",
+                fontSize: 11,
+                alignment: "left",
+                margin: [85, 0, 0, 0],
+            },
+            {
+                text: "3 место женщины - (sportsman)",
+                fontSize: 11,
+                alignment: "left",
+                margin: [85, 0, 0, 0],
+            },
+            {
+                text: "Сведения о командном зачёте среди субъектов РФ",
+                fontSize: 11,
+                alignment: "left",
+                margin: [10, 10, 0, 5],
+            },
+            {
+                table:{
+                    widths: [ 20, 140, 50, 67, 67, 67 ],
+                    body: [
+                    [ {fontSize: 11, text: 'Место', alignment: "center"}, {fontSize: 11, text: 'Субъект РФ', alignment: "center"}, {fontSize: 11, text: 'Количество медалей', alignment: "center"}, {fontSize: 11, text: 'Сумма очков, набранная медалистами', alignment: "center"}, {fontSize: 11, text: 'Количество спортсменов в сборной команде', alignment: "center"}, {fontSize: 11, text: 'Количество спортсменов-медалистов', alignment: "center"} ],
+                    [ {fontSize: 11, text: '1', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "left"}, {fontSize: 11, text: 'Value', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "center"} ],
+                    ],
+                    headerRows: 1,
+                }
+            },
+            {
+                columns: [
+                    {
+                        text: "(position.name)",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 10,
+                    },
+                    {
+                        text: "(name)",
+                        alignment: "left",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+            {
+                columns: [
+
+                    {
+                        text: "(category.name)",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                    {
+                        text: "`(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`",
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+            {
+                columns: [
+                    {
+                        text: "(position.name)",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 10,
+                    },
+                    {
+                        text: "(name)",
+                        alignment: "left",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+            {
+                columns: [
+
+                    {
+                        text: "(category.name)",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                    {
+                        text: "`(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`",
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+          ],
+
+          styles: {
+            header0:{
+            }
+          }
+        };
+
+        pdfMake.createPdf(docInfo).open();
+    }
+
+
+    drawChart(){
+        this.menNumber = this.menCount()
+        this.womenNumber = this.womenCount()
+        this.regionNumber = this.regionCount()
+        this.clubNumber = this.clubCount()
+
         this.chart = new Chart(this.$id('chart'), {
             type: 'bar',
             data: {
               labels: ['Мужчины', 'Женщины', 'Регионы', 'Клубы'],
               datasets: [{
-                data: [this.manNumber, this.womanNumber, this.regionNumber, this.clubNumber],
+                data: [this.menNumber, this.womenNumber, this.regionNumber, this.clubNumber],
                 borderWidth: 1,
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
               }]
@@ -297,6 +572,25 @@ class MyCompetitionSection4Page1 extends BaseElement {
                 }
             }
           });
+    }
+
+    update(changedProps) {
+        super.update(changedProps);
+        if (!changedProps) return;
+        if (changedProps.has('itemStatus') && this.itemStatus) {
+            this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
+            this.requestUpdate()
+        }
+        if (changedProps.has('currentCountryItem')) {
+            this.currentPage = 0;
+        }
+        if (changedProps.has('sportsmenDataSource') && this.sportsmenDataSource) {
+            this.drawChart();
+        }
+    }
+
+    async firstUpdated() {
+        super.firstUpdated();
 
         //   this.chart = new Chart(this.$id('chart'), {
         //     type: 'pie',

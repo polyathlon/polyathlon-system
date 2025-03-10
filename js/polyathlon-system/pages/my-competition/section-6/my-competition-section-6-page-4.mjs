@@ -47,10 +47,25 @@ class MyCompetitionSection6Page4 extends BaseElement {
         ]
     }
 
+    sportsmanName(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        // if (item.middleName) {
+        //     result += ` ${item.middleName[0]}.`
+        // }
+        return result
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
+                <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
                 <div class="name-group">
                     <simple-input id="swim" icon-name="swim-solid" label="${lang`Swim`}:" .currentObject=${this.item?.swimming} .value=${this.item?.swimming?.swim} @input=${this.validateInput}></simple-input>
                     <simple-input id="track" icon-name="pool-track-solid" label="${lang`Track`}:" .currentObject=${this.item?.swimming} .value=${this.item?.swimming?.track} @input=${this.validateInput}></simple-input>
@@ -69,45 +84,36 @@ class MyCompetitionSection6Page4 extends BaseElement {
     }
 
     resultToValue(result) {
-        let parts = result.split(':')
-        let minutes = parts[1].split(',')
-        return (+parts[0] * 60 + +minutes[0].split) * 10 + +minutes[0];
+        const parts = result.split(':')
+        const minutes = parts[1].split(',')
+        return (+parts[0] * 60 + +minutes[0]) * 10 + +minutes[1];
     }
-    
+
     pointsFind(result, table) {
-        let value = this.resultToValue()
-        return table.reduce((last, item) => {
-            if (item.value <= value) {
-                if (item.value <= value && item.points > last)
-                    return item.points
-                else
-                    return last
-            }
-            return last;
-        }, 0)
+        let value = this.resultToValue(result)
+        return table.reduce( (last, item) =>
+            value <= item.value && item.points > last ? item.points : last
+        , 0)
     }
 
     setPoints(target) {
         if (isSwimmingValid(target.value)) {
             let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
             let b = a.sportsDisciplineComponents.find( item => item.group.name === "Плавание")
-            if (this.gender === "0") {
-                this.$id("points").value = this.pointsFind(target.value, b.men)
-            }
-            else {
-                this.$id("points").value = this.pointsFind(target.value, b.women)
-            }
+            this.$id("points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
+            this.$id("points").fire('input')
         }
         else {
             this.$id("points").value = ''
+            this.$id("points").fire('input')
         }
     }
 
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? {}
+            const currentItem = e.target.currentObject ?? this.item.swimming ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.shooting ??= currentItem
+                this.item.swimming ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }

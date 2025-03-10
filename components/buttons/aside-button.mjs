@@ -71,7 +71,6 @@ customElements.define('aside-button', class AsideButton extends BaseElement {
         return html`<simple-icon icon-name=${this.iconName} size="${this.size}"></simple-icon>`;
     }
     render() {
-
         return html`
             <div class=${(this.blink ? 'blink' : '') || nothing}>
                 <simple-icon blink="1000" icon-name=${this.iconName} size=${this.size}></simple-icon>

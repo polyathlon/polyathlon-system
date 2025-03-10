@@ -47,10 +47,25 @@ class MyCompetitionSection6Page6 extends BaseElement {
         ]
     }
 
+    sportsmanName(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        // if (item.middleName) {
+        //     result += ` ${item.middleName[0]}.`
+        // }
+        return result
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
+                <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
                 <div class="name-group">
                     <simple-input id="sprint" icon-name="sprint-solid" label="${lang`Race`}:" .currentObject=${this.item?.sprinting} .value=${this.item?.sprinting?.sprint} @input=${this.validateInput}></simple-input>
                     <simple-input id="track" icon-name="race-track-solid" label="${lang`Track`}:" .currentObject=${this.item?.sprinting} .value=${this.item?.sprinting?.track} @input=${this.validateInput}></simple-input>
@@ -70,43 +85,34 @@ class MyCompetitionSection6Page6 extends BaseElement {
 
     resultToValue(result) {
         let parts = result.split(',')
-        return +parts[0] * 10 + +minutes[1];
+        return +parts[0] * 10 + +parts[1];
     }
 
     pointsFind(result, table) {
-        let value = resultToValue(result)
-        return table.reduce((last, item) => {
-            if (item.value <= value) {
-                if (item.value <= value && item.points > last)
-                    return item.points
-                else
-                    return last
-            }
-            return last;
-        }, 0)
+        let value = this.resultToValue(result)
+        return table.reduce( (last, item) =>
+            value <= item.value && item.points > last ? item.points : last
+        , 0)
     }
 
     setPoints(target) {
         if (isSprintValid(target.value)) {
             let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
             let b = a.sportsDisciplineComponents.find( item => item.group.name === "Спринт")
-            if (this.gender === "0") {
-                this.$id("points").value = this.pointsFind(target.value, b.men)
-            }
-            else {
-                this.$id("points").value = this.pointsFind(target.value, b.women)
-            }
+            this.$id("points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
+            this.$id("points").fire('input')
         }
         else {
             this.$id("points").value = ''
+            this.$id("points").fire('input')
         }
     }
 
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? {}
+            const currentItem = e.target.currentObject ?? this.item.sprinting ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.shooting ??= currentItem
+                this.item.sprinting ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }

@@ -121,7 +121,7 @@ export function throwingMask(e) {
             e.preventDefault()
         }
 
-        if (e.target.value.length >=4 && e.target.selectionStart === e.target.selectionEnd) {
+        if (e.target.value.length >=5 && e.target.selectionStart === e.target.selectionEnd) {
             e.preventDefault()
         }
 

@@ -47,10 +47,25 @@ class MyCompetitionSection6Page5 extends BaseElement {
         ]
     }
 
+    sportsmanName(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        // if (item.middleName) {
+        //     result += ` ${item.middleName[0]}.`
+        // }
+        return result
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
+                <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
                 <div class="name-group">
                     <simple-input id="flow" icon-name="throw-solid" label="${lang`Flow`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.flow} @input=${this.validateInput}></simple-input>
                     <simple-input id="sector" icon-name="chart-pie-simple-solid" label="${lang`Sector`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.sector} @input=${this.validateInput}></simple-input>
@@ -75,43 +90,56 @@ class MyCompetitionSection6Page5 extends BaseElement {
 
     resultToValue(result) {
         let parts = result.split(',')
-        return +parts[0] * 10 + +minutes[1];
+        return +parts[0] * 100 + +parts[1];
     }
 
-    pointsFind(result, table) {
-        let value  = resultToValue(result)
-        return table.reduce((last, item) => {
-            if (item.value <= value) {
-                if (item.value <= value && item.points > last)
-                    return item.points
-                else
-                    return last
-            }
-            return last;
-        }, 0)
+   pointsFind(result, table) {
+        let value  = this.resultToValue(result)
+        return table.reduce( (last, item) =>
+            value >= item.value * 10 && item.points > last ? item.points : last
+        , 0)
     }
 
     setPoints(target) {
         if (isThrowingValid(target.value)) {
             let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
             let b = a.sportsDisciplineComponents.find( item => item.group.name === "Метание")
-            if (this.gender === "0") {
-                this.$id("points").value = this.pointsFind(target.value, b.men)
-            }
-            else {
-                this.$id("points").value = this.pointsFind(target.value, b.women)
-            }
+            this.$id("points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
+            this.$id("points").fire('input')
         }
         else {
             this.$id("points").value = ''
+            this.$id("points").fire('input')
+        }
+    }
+
+    setResult(target1) {
+        if (isThrowingValid(target1.value)) {
+            const value1 = this.resultToValue(target1.value)
+            let result = target1.value
+            const throws = ['throw1', 'throw2', 'throw3']
+            throws.forEach( (item) => {
+                if (item !== target1.id) {
+                    const target2 = this.$id(item)
+                    if (isThrowingValid(target2.value)) {
+                        let value2 = this.resultToValue(target2.value)
+                        if (value2 > value1) {
+                            let result = target2.value
+                        }
+                    }
+                }
+            })
+            const resultTarget = this.$id('result')
+            resultTarget.value = result
+            resultTarget.fire('input')
         }
     }
 
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? {}
+            const currentItem = e.target.currentObject ?? this.item.throwing ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.shooting ??= currentItem
+                this.item.throwing ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }
@@ -125,6 +153,11 @@ class MyCompetitionSection6Page5 extends BaseElement {
             if (e.target.id === "result")
             {
                 this.setPoints(e.target)
+            }
+
+            if (e.target.id === "throw1" || e.target.id === "throw2" || e.target.id === "throw3")
+            {
+                this.setResult(e.target)
             }
 
             this.isModified = this.oldValues.size !== 0;

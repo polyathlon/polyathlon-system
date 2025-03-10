@@ -70,6 +70,7 @@ class MyCompetitionSection6 extends BaseElement {
                 .left-header {
                     grid-area: header1;
                     overflow: hidden;
+                    min-width: 230px;
                     p {
                         overflow: hidden;
                         white-space: nowrap;
@@ -161,7 +162,7 @@ class MyCompetitionSection6 extends BaseElement {
                         align-items: center;
                         justify-content: flex-end;
                         padding: 0 10px;
-                        gap: 1vw;
+                        gap: 1.5vw;
                         simple-button {
                             height: 100%;
                         }
@@ -465,7 +466,7 @@ class MyCompetitionSection6 extends BaseElement {
         return html`
             <nav class="buttons">
                 ${this.pages.map( (button, index) =>
-                    html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                    html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page} size="34"></aside-button>`)
                 }
             </nav>
         `

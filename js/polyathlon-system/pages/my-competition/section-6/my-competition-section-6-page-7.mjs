@@ -47,10 +47,25 @@ class MyCompetitionSection6Page7 extends BaseElement {
         ]
     }
 
+    sportsmanName(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        // if (item.middleName) {
+        //     result += ` ${item.middleName[0]}.`
+        // }
+        return result
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
+                <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
                 <div class="name-group">
                     <simple-input id="race" icon-name="race-solid" label="${lang`Race`}:" .currentObject=${this.item?.running} .value=${this.item?.running?.race} @input=${this.validateInput}></simple-input>
                     <simple-input id="track" icon-name="race-track-solid" label="${lang`Track`}:" .currentObject=${this.item?.running} .value=${this.item?.running?.track} @input=${this.validateInput}></simple-input>
@@ -69,45 +84,53 @@ class MyCompetitionSection6Page7 extends BaseElement {
     }
 
     resultToValue(result) {
-        let parts = result.split(':')
-        let minutes = parts[1].split(',')
-        return (+parts[0] * 60 + +minutes[0].split) * 10 + +minutes[0];
+        const parts = result.split(':')
+        const minutes = parts[1].split(',')
+        return (+parts[0] * 60 + +minutes[0]) * 10 + +minutes[1];
     }
 
     pointsFind(result, table) {
-        let value  = resultToValue(result)
-        return table.reduce((last, item) => {
-            if (item.value <= value) {
-                if (item.value <= value && item.points > last)
-                    return item.points
-                else
-                    return last
-            }
-            return last;
-        }, 0)
+        let value = this.resultToValue(result)
+        return table.reduce( (last, item) =>
+            value <= item.value && item.points > last ? item.points : last
+        , 0)
     }
 
     setPoints(target) {
         if (isRunningValid(target.value)) {
             let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
             let b = a.sportsDisciplineComponents.find( item => item.group.name === "Бег")
-            if (this.gender === "0") {
-                this.$id("points").value = this.pointsFind(target.value, b.men)
-            }
-            else {
-                this.$id("points").value = this.pointsFind(target.value, b.women)
-            }
+            this.$id("points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
+            this.$id("points").fire('input')
         }
         else {
             this.$id("points").value = ''
+            this.$id("points").fire('input')
+        }
+    }
+
+    setResult() {
+        const start = this.$id("start").value;
+        const finish = this.$id("finish").value;
+        if (isRunningValid(start) && isRunningValid(finish)) {
+            const startValue = this.resultToValue(start)
+            const finishValue = this.resultToValue(finish)
+            if (finishValue >= startValue) {
+                const resultValue = finishValue - startValue;
+                const a = (resultValue % 10).toString();
+                const b = (Math.floor(resultValue / 10) % 60).toString().padStart(2, "0");
+                const c = Math.floor(resultValue / 10 / 60).toString().padStart(2, "0");
+                this.$id("result").value = `${c}:${b},${a}`
+                this.$id("result").fire('input')
+            }
         }
     }
 
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? {}
+            const currentItem = e.target.currentObject ?? this.item.running ?? {}
             if (!this.oldValues.has(e.target)) {
-                this.item.shooting ??= currentItem
+                this.item.running ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }

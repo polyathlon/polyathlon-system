@@ -15,7 +15,7 @@ export function isSwimmingValid(value) {
 }
 
 export function isThrowingValid(value) {
-    return /\d{2,3},\d/.test(value)
+    return /\d{2,3},\d\d/.test(value)
 }
 
 export function isSprintValid(value) {
@@ -35,5 +35,5 @@ export function isRollerSkiingValid(value) {
 }
 
 export function isJumpingValid(value) {
-    return /\d+/.test(value)
+    return /\d{1,3}/.test(value)
 }

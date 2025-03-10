@@ -71,6 +71,7 @@ class MyCompetitionSection1 extends BaseElement {
                     grid-area: header1;
                     overflow: hidden;
                     justify-content: flex-start;
+                    min-width: 230px;
                     p {
                         overflow: hidden;
                         white-space: nowrap;
@@ -188,7 +189,7 @@ class MyCompetitionSection1 extends BaseElement {
                         align-items: center;
                         justify-content: flex-end;
                         padding: 0 10px;
-                        gap: 1vw;
+                        gap: 1.5vw;
                         simple-button {
                             height: 100%;
                         }
@@ -244,10 +245,10 @@ class MyCompetitionSection1 extends BaseElement {
         ]
         this.pages = [
             {iconName: 'competition-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
-            {iconName: 'age-group-solid', page: 1, title: lang`Location`, click: () => this.gotoPage(1)},
+            {iconName: 'age-group-solid', page: 1, title: lang`Age groups`, click: () => this.gotoPage(1)},
             {iconName: 'location-circle-solid', page: 2, title: lang`Location`, click: () => this.gotoPage(2)},
             // {iconName: 'map-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
-            {iconName: 'registration-solid', page: 5, title: lang`Swimming`, click: () => this.gotoPage(5)},
+            {iconName: 'registration-solid', page: 5, title: lang`Registration`, click: () => this.gotoPage(5)},
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
         ]
     }
@@ -443,7 +444,7 @@ class MyCompetitionSection1 extends BaseElement {
             return html`
                 <nav class="buttons">
                     ${this.pages.map( (button, index) =>
-                        html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                        html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page} size="30"></aside-button>`)
                     }
                 </nav>
             `

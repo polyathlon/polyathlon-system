@@ -36,7 +36,7 @@ class PolyathlonSystem extends BaseElement {
                 }
                 main {
                     grid-area: content;
-                    height: calc(100vh - 160px);
+                    height: calc(100vh - 80px - var(--polyathlon-footer-height, 80px));
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                     box-sizing: border-box;
                 }
@@ -48,6 +48,9 @@ class PolyathlonSystem extends BaseElement {
                 }
                 polyathlon-system-footer {
                     grid-area: footer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
             `
         ]

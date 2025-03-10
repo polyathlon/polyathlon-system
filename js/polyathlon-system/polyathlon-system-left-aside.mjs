@@ -29,7 +29,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
                     justify-content: space-between;
                     align-items: center;
                     padding: 20px 0;
-                    height: calc(100vh - 160px);
+                    height: calc(100vh - 80px - var(--polyathlon-footer-height, 80px));
                     overflow: hidden;
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
@@ -60,11 +60,11 @@ class PolyathlonSystemLeftAside extends BaseElement {
             // {name: 'credit-card', title: 'Tariff Plans', click: () => this.showPage('tariff-plans')},
             // {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
             // {iconName: 'chart-pie-simple-circle-dollar-solid', page: 'tariff-plans', title: 'Tariff Plans', click: () => this.showPage('tariff-plans')},
-            {iconName: 'federation-members-solid', page: 'my-federation-members', title: 'Federation members', blink: 1, click: () => this.showPage('my-federation-members')},
-            {iconName: 'category-solid', page: 'my-sports-disciplines', title: 'Sports disciplines', click: () => this.showPage('my-sports-disciplines')},
-            {iconName: 'table-list-solid', page: 'my-sports-discipline-components', title: 'Sports components', click: () => this.showPage('my-sports-discipline-components')},
-            {iconName: 'bell-sharp-solid', page: 'my-notifications', title: 'Notifications', blink: 1, click: () => this.showPage('my-notifications')},
-            {iconName: 'settings-solid', page: 'my-settings', title: 'Settings', click: () => this.showPage('my-settings')},
+            {iconName: 'federation-members-solid', page: 'my-federation-members', title: lang`Federation members`, blink: 1, click: () => this.showPage('my-federation-members')},
+            {iconName: 'category-solid', page: 'my-sports-disciplines', title: lang`Sports disciplines`, click: () => this.showPage('my-sports-disciplines')},
+            {iconName: 'table-list-solid', page: 'my-sports-discipline-components', title: lang`Sports components`, click: () => this.showPage('my-sports-discipline-components')},
+            {iconName: 'bell-sharp-solid', page: 'my-notifications', title: lang`Notifications`, blink: 1, click: () => this.showPage('my-notifications')},
+            {iconName: 'settings-solid', page: 'my-settings', title: lang`Settings`, click: () => this.showPage('my-settings')},
             // {iconName: 'user', page: 'my-referee', title: 'Settings', click: () => this.showPage('my-referee')},
             // {iconName: 'trainer-solid', page: 'my-trainer', title: 'My Trainer', click: () => this.showPage('my-trainer')},
         ]

@@ -65,7 +65,7 @@ class MyCompetitionSection6Page1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="sportsman" icon-name=${this.item.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
+                <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
                 <div class="name-group">
                     <simple-input id="shift" icon-name="shift-solid" label="${lang`Shift`}:" .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.shift} @input=${this.validateInput}></simple-input>
                     <simple-input id="shield" icon-name="shield-solid" label="${lang`Shield`}:" .currentObject=${this.item?.shooting} .value=${this.item?.shooting?.shield} @input=${this.validateInput}></simple-input>
@@ -86,15 +86,9 @@ class MyCompetitionSection6Page1 extends BaseElement {
 
     pointsFind(result, table) {
         let value  = +result * 10
-        return table.reduce((last, item) => {
-            if (item.value <= value) {
-                if (item.value <= value && item.points > last)
-                    return item.points
-                else
-                    return last
-            }
-            return last;
-        }, 0)
+        return table.reduce( (last, item) =>
+            item.value <= value && item.points > last ? item.points : last
+        , 0)
     }
 
     setPoints(target) {
@@ -112,7 +106,7 @@ class MyCompetitionSection6Page1 extends BaseElement {
 
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? {}
+            const currentItem = e.target.currentObject ?? this.item.shooting ?? {}
             if (!this.oldValues.has(e.target)) {
                 this.item.shooting ??= currentItem
                 if (currentItem[e.target.id] !== e.target.value) {

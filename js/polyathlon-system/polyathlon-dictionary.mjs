@@ -316,8 +316,12 @@ const dictionary = {
         "en-EN": 'Push-ups'
     },
     'Skiing': {
-        "ru-RU": 'Лыжный бег',
-        "en-EN": 'Throw'
+        "ru-RU": 'Лыжная гонка',
+        "en-EN": 'Skiing '
+    },
+    'Roller skiing': {
+        "ru-RU": 'Лыжероллерная гонка',
+        "en-EN": 'Roller skiing'
     },
     'Back': {
         "ru-RU": 'Назад',
@@ -456,7 +460,7 @@ const dictionary = {
         "en-EN": 'Federation members'
     },
     'Federation member PC': {
-        "ru-RU": 'Персональный код члена федерации',
+        "ru-RU": 'Персональный код представителя федерации',
         "en-EN": 'Federation member personal code'
     },
     'Federation member category': {
@@ -568,7 +572,7 @@ const dictionary = {
         "en-EN": 'Group',
     },
     'Jumping': {
-        "ru-RU": 'Прыжки',
+        "ru-RU": 'Прыжки с места',
         "en-EN": 'Jumping'
     },
     'Length': {
@@ -654,6 +658,22 @@ const dictionary = {
     'Results': {
         "ru-RU": 'Результаты',
         "en-EN": 'Results'
+    },
+    'Location': {
+        "ru-RU": 'Расположение',
+        "en-EN": 'Location'
+    },
+    'Sports components': {
+        "ru-RU": 'Компоненты дисциплин',
+        "en-EN": 'Sports components'
+    },
+    'Notifications': {
+        "ru-RU": 'Уведомления',
+        "en-EN": 'Notifications'
+    },
+    'Settings': {
+        "ru-RU": 'Настройки',
+        "en-EN": 'Settings'
     },
 }
 
