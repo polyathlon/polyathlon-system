@@ -13,6 +13,7 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import './my-competition-section-4-page-1.mjs'
 import './my-competition-section-4-list-1.mjs'
+import './my-competition-section-4-page-2.mjs'
 //import './my-competition-section-4-page-2.mjs'
 // import './my-competition-section-2-page-1.mjs'
 // import './my-competition-section-2-list-1.mjs'
@@ -148,7 +149,7 @@ class MyCompetitionSection4 extends BaseElement {
 
                 .right-layout {
                     grid-area: main;
-                    overflow-y: auto;
+                    overflow-y: hidden;
                     overflow-x: hidden;
                     display: flex;
                     /* justify-content: space-between; */
@@ -249,8 +250,8 @@ class MyCompetitionSection4 extends BaseElement {
         this.pages = [
             {iconName: 'chart-pie-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
             {iconName: 'person-championship-solid', page: 1, title: lang`Location`, click: () => this.gotoPage(1)},
-            {iconName: 'club-solid2', page: 1, title: lang`Location`, click: () => this.gotoPage(1)},
-            {iconName: 'region-championship-solid', page: 1, title: lang`Location`, click: () => this.gotoPage(1)},
+            {iconName: 'club-solid2', page: 2, title: lang`Location`, click: () => this.gotoPage(2)},
+            {iconName: 'region-championship-solid', page: 3, title: lang`Location`, click: () => this.gotoPage(3)},
         ]
     }
     pdfMethod() {
@@ -365,7 +366,7 @@ class MyCompetitionSection4 extends BaseElement {
 
     #page2() {
         return html`
-            <my-competition-section-4-page-2 .item=${this.currentItem}></my-competition-section-4-page-2>
+            <my-competition-section-4-page-2 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource}></my-competition-section-4-page-2>
         `;
     }
 
@@ -470,7 +471,7 @@ class MyCompetitionSection4 extends BaseElement {
     }
 
     gotoPage(index) {
-        this.currentSection = index
+        this.currentPage = index
     }
 
     gotoList(index) {

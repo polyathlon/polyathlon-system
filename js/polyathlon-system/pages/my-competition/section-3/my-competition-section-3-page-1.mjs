@@ -69,13 +69,13 @@ class MyCompetitionSection3Page1 extends BaseElement {
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <simple-input id="refereeId" label="${lang`Referee ID`}:" .dataSource=${this.findDataSource} icon-name="id-number-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.refereeId} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="refereePC" label="${lang`Referee PC`}:" .dataSource=${this.findDataSource} icon-name="referee-pc-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.refereePC} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <simple-select id="position" label="${lang`Referee position`}:" icon-name="referee-position-solid" @icon-click=${() => this.showPage('my-referee-positions')} .dataSource=${this.refereePositionsDataSource} .value=${this.item?.position} @input=${this.validateInput}></simple-select>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-select id="category" label="${lang`Category`}:" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-referee-categories')} .dataSource=${this.refereeCategoriesDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-input id="refereeUlid" label="${lang`Referee Ulid`}:" icon-name=${+this.item?.gender ? "referee-woman-solid" : "referee-man-solid"} @icon-click=${() => this.showPage('my-referee')} .value=${this.item?.refereeUlid} @input=${this.validateInput}></simple-input>
+                <!-- <simple-input id="refereeUlid" label="${lang`Referee Ulid`}:" icon-name=${+this.item?.gender ? "referee-woman-solid" : "referee-man-solid"} @icon-click=${() => this.showPage('my-referee')} .value=${this.item?.refereeUlid} @input=${this.validateInput}></simple-input> -->
             </div>
         `;
     }

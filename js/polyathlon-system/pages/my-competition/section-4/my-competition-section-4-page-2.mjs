@@ -1,15 +1,56 @@
 import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
+import '../../../../../../components/tables/simple-table.mjs'
+import '../../../../../../components/tables/simple-table-header.mjs'
+import lang from '../../../polyathlon-dictionary.mjs'
 
-class MyCompetitionSection1Page2 extends BaseElement {
+class MyCompetitionSection4Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            item: {type: Object, default: null},
+            items: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
+            sportsmenDataSource: { type: Object, default: null },
         }
+    }
+    constructor() {
+        super()
+        this.columns = [
+            {
+                name: "place",
+                label: lang`Place`,
+            },
+            {
+                name: "sportsman",
+                label: lang`Sportsman`,
+            },
+            {
+                name: "category",
+                label: lang`Short sports category`,
+            },
+            {
+                name: "year",
+                label: lang`Year of birth`,
+            },
+            {
+                name: "region",
+                label: lang`Region RF`,
+            },
+            {
+                name: "club",
+                label: lang`Sports club`,
+            },
+            {
+                name: "points",
+                label: lang`Total points`,
+            },
+            {
+                name: "completedCategory",
+                label: lang`Completed category`,
+            },
+        ]
     }
 
     static get styles() {
@@ -21,7 +62,10 @@ class MyCompetitionSection1Page2 extends BaseElement {
                     justify-content: space-between;
                     align-items: center;
                     overflow: hidden;
-                    gap: 10px;
+                    gap: 0px;
+                    height: 100%;
+                    width: 100%;
+                    flex-direction: column;
                 }
 
                 header{
@@ -152,16 +196,65 @@ class MyCompetitionSection1Page2 extends BaseElement {
                     justify-content: center;
                     width: 40px;
                 }
+
+                .table {
+                    overflow-y: auto;
+                    overflow-x: auto;
+                    height: 100%;
+                    width: 100%;
+                    /* width */
+                    &::-webkit-scrollbar {
+                        width: 10px;
+                    }
+
+                    /* Track */
+                    &::-webkit-scrollbar-track {
+                        box-shadow: inset 0 0 5px grey;
+                        border-radius: 5px;
+                    }
+
+                    /* Handle */
+                    &::-webkit-scrollbar-thumb {
+                        background: red;
+                        border-radius: 5px;
+                    }
+
+                }
             `
         ]
     }
 
+    update(changedProps) {
+        super.update(changedProps);
+        if (!changedProps) return;
+        if (changedProps.has('itemStatus') && this.itemStatus) {
+            this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
+            this.requestUpdate()
+        }
+        if (changedProps.has('currentCountryItem')) {
+            this.currentPage = 0;
+        }
+        if (changedProps.has('sportsmenDataSource')) {
+            this.items = this.sportsmenDataSource.items.map(item => {
+                return {
+                    place: item.place ?? 0,
+                    sportsman: `${item.lastName} ${item.firstName}`,
+                    category: item.category.shortName,
+                    year: item.birthday.split('.')[2],
+                    region: item.region.shortName ?? item.region.name,
+                    club: item.club.name,
+                    points: +(item.shooting?.points ?? 0) + +(item.pushUps?.points ?? 0) + +(item.skiing?.points ?? 0),
+                    completedCategory: item.completedCategory ?? item.category.shortName,
+                }
+            });
+        }
+    }
+
     render() {
         return html`
-            <div>
-                <simple-input id="name" icon-name="user" label="Country name:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="region" icon-name="flag-solid" label="Region name:" .value=${this.item?.region} @input=${this.validateInput}></simple-input>
-                <simple-input id="flag" icon-name="flag-solid" label="Flag name:" .value=${this.item?.flag} @input=${this.validateInput}></simple-input>
+            <simple-table-header .columns=${this.columns}></simple-table-header>
+            <div class="table">
+                <simple-table @click=${this.tableClick} .hideHead=${true} .columns=${this.columns} .rows=${this.items}></simple-table>
             </div>
         `;
     }
@@ -188,4 +281,4 @@ class MyCompetitionSection1Page2 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-1-page-2", MyCompetitionSection1Page2);
+customElements.define("my-competition-section-4-page-2", MyCompetitionSection4Page2);

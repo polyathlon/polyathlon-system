@@ -22,6 +22,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             listLabel: { type: Function, default: null, attribute: 'list-name'},
             isShowList: {type: Boolean, default: false},
             mask: {type: Function, default: undefined},
+            textAlign: { type: Boolean, default: false, attribute: 'text-align'},
         }
     }
 
@@ -71,6 +72,9 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                     aspect-ratio: 1 / 1;
                     position: absolute;
                     left: 8px;
+                }
+                .text-align {
+                    text-align: var(--text-align, left)
                 }
 
 
@@ -164,6 +168,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                     @focus=${this.changeFocus}
                     @blur=${this.changeBlur}
                     @beforeinput=${this.mask ? this.beforeinput : nothing}
+                    class=${this.textAlign ? 'text-align' : nothing}
                 >
                 ${this.#image}
                 ${this.buttonName ? this.#button : ''}

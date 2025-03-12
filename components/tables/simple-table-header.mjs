@@ -5,7 +5,7 @@ import '../buttons/country-button.mjs'
 
 import styles from '../inputs/input-css.mjs'
 
-customElements.define("simple-table", class SimpleTable extends BaseElement {
+customElements.define("simple-table-header", class SimpleTableHeader extends BaseElement {
     static get properties() {
         return {
             type: { type: String, default: 'text'},
@@ -24,7 +24,6 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
             listLabel: { type: Function, default: null, attribute: 'list-name'},
             columns: {type: Object, default: null},
             rows: {type: Object, default: null},
-            hideHead: {type: Boolean, default: false},
         }
     }
 
@@ -99,12 +98,6 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                     &:hover{
                         background-color: rgba(255, 255, 255, 0.2);
                     }
-                    &:last-of-type {
-                        height: calc(100vh - 300px);
-                    }
-                }
-                thead[hidden] {
-                    display: none;
                 }
             `
         ]
@@ -181,7 +174,7 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                         `
                     )}
                 </colgroup>
-                <thead ?hidden=${this.hideHead}>
+                <thead>
                     <tr>
                         ${this.columns?.map((column, index) =>
                             html`
@@ -192,18 +185,16 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                         )}
                     </tr>
                 </thead>
-                <tbody>
+                <!-- <tbody>
                     ${this.rows?.map((row, index) =>
                         html`
                             <tr @click=${(e) => e.details = index}>
-                                ${this.columns?.map((column, index) => html`
-                                    <td>${typeof row[column.name] === 'object' ? row[this.column.name].name : row[column.name]}</td>`
-                                )}
+                                <td>${typeof row[this.columns[0].name] === 'object' ? row[this.columns[0].name].name : row[this.columns[0].name]}</td>
+                                <td>${row[this.columns[1].name]}</td>
                             </tr>
                         `
                     )}
-                    <tr></tr>
-                </tbody>
+                </tbody> -->
                 <!-- <tfoot>
                     <tr>
                         ${this.columns?.map((column, index) =>

@@ -191,6 +191,30 @@ const dictionary = {
         "ru-RU": 'Спортивный разряд',
         "en-EN": 'Sports category'
     },
+    'Short sports category': {
+        "ru-RU": 'Разряд',
+        "en-EN": 'Category'
+    },
+    'Region RF': {
+        "ru-RU": 'Субъект Российской Федерации',
+        "en-EN": 'Region'
+    },
+    'Year of birth': {
+        "ru-RU": 'Год рожд.',
+        "en-EN": 'Year of birth'
+    },
+    'Sports club': {
+        "ru-RU": 'Спортклуб, населенный пункт',
+        "en-EN": 'Sports club'
+    },
+    'Total points': {
+        "ru-RU": 'Сумма очков',
+        "en-EN": 'Total points'
+    },
+    'Completed category': {
+        "ru-RU": 'Вып. разр',
+        "en-EN": 'Completed category'
+    },
     'Profile': {
         "ru-RU": 'Профиль',
         "en-EN": 'Profile'
