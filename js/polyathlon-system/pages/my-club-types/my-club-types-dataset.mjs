@@ -12,14 +12,14 @@ export default class DataSet {
     }
 
     static find(name, value) {
-        return DataSet.#dataSet.find(element =>
+        const index = DataSet.#dataSet.findIndex(element =>
             element[name] === value || element[name].toLowerCase() === value
         )
-
+        return index === -1 ? null : DataSet.#dataSet[index]
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/regions', {
+        return fetch('https://localhost:4500/api/club-types', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -44,7 +44,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/region`, {
+        return fetch(`https://localhost:4500/api/club-type`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -77,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/region/${itemId}`, {
+        return fetch(`https://localhost:4500/api/club-type/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -103,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/region/${item._id}`, {
+        return fetch(`https://localhost:4500/api/club-type/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -136,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/region/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/club-type/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`

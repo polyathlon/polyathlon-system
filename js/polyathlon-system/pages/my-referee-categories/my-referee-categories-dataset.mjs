@@ -12,10 +12,9 @@ export default class DataSet {
     }
 
     static find(name, value) {
-        const index = DataSet.#dataSet.findIndex(element =>
+        return DataSet.#dataSet.find(element =>
             element[name] === value || element[name].toLowerCase() === value
         )
-        return index === -1 ? null : DataSet.#dataSet[index]
     }
 
     static #fetchGetItems(token) {

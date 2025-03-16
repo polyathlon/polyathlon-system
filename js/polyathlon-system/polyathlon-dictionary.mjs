@@ -639,6 +639,22 @@ const dictionary = {
         "ru-RU": 'Вид населенного пункта',
         "en-EN": 'City type'
     },
+    'Club type name': {
+        "ru-RU": 'Вид спортивного клуба',
+        "en-EN": 'Club type name'
+    },
+    'Short club type name': {
+        "ru-RU": 'Сокращение',
+        "en-EN": 'Short name'
+    },
+    'Club types': {
+        "ru-RU": 'Виды спортивных клубов',
+        "en-EN": 'Club types'
+    },
+    'Club type': {
+        "ru-RU": 'Вид спортивного клуба',
+        "en-EN": 'Club type'
+    },
     'Search': {
         "ru-RU": 'Поиск',
         "en-EN": 'Search'
@@ -698,6 +714,10 @@ const dictionary = {
     'Settings': {
         "ru-RU": 'Настройки',
         "en-EN": 'Settings'
+    },
+    'Refresh': {
+        "ru-RU": 'Обновить',
+        "en-EN": 'Refresh'
     },
 }
 

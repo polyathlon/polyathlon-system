@@ -28,10 +28,12 @@ class MySportsmenSection1 extends BaseElement {
             listEnd: { type: BigInt, default: 0},
             listEnd1: { type: String, default: ''},
             isModified: { type: Boolean, default: "", local: true },
+            sortDirection: { type: Boolean, default: true},
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
+            currentSection: { type: BigInt, default: 0, local: true},
             currentFilter: { type: Object, default: {} },
         }
     }
@@ -67,11 +69,43 @@ class MySportsmenSection1 extends BaseElement {
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         margin: 0;
+                        font-weight: 700;
                     }
                 }
 
                 .right-header {
                     grid-area: header2;
+                    display: flex;
+                    justify-content: space-between;
+                    .left-aside {
+                        height: 100%;
+                        icon-button {
+                            height: 100%;
+                            padding: 0 1vw;
+                            --icon-height: 100%;
+                            &[active] {
+                                background-color: var(--layout-background-color);
+                                font-weight: bold;
+                            }
+                            &:hover {
+                                background-color: var(--layout-background-color);
+                                &:only-of-type {
+                                    background-color: inherit;
+                                }
+                            }
+                            &:first-of-type {
+                                padding-left: 0;
+                                font-weight: 700;
+                            }
+                        }
+                    }
+                    .right-aside {
+                        display: flex;
+                        justify-content: right;
+                        align-items: center;
+                        height: 100%;
+                        padding-right: 10px;
+                    }
                 }
 
                 .left-layout {
@@ -178,11 +212,16 @@ class MySportsmenSection1 extends BaseElement {
         this.statusDataSet = new Map()
         this.pageNames = [lang`Information`, lang`Search`]
         this.oldValues = new Map();
+        this.pages = [
+            {iconName: 'sportsman-solid', page: 0, title: lang`Sportsman`, click: () => this.gotoPage(0)},
+            {iconName: 'search-regular', page: 1, title: lang`Search`, click: () => this.gotoPage(1)},
+        ]
         this.buttons = [
             {iconName: 'qrcode-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
             // {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.changeStart()},
-            {iconName: 'excel-import-solid', page: 'my-sportsmen', title: lang`Import to Excel`, click: () => this.importToExcel()},
-            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-sportsmen', title: lang`Export from Excel`, click: this.ExcelFile},
+            {iconName: 'excel-import-solid', page: 'my-sportsmen', title: lang`Export to Excel`, click: () => this.exportToExcel()},
+            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-sportsmen', title: lang`Import from Excel`, click: this.ExcelFile},
+            {iconName: 'arrow-rotate-right-solid', page: 'my-sportsmen', title: lang`Refresh`, click: () => this.refresh()},
             {iconName: 'arrow-left-solid', page: 'my-sportsmen', title: lang`Back`, click: () => this.gotoBack()},
         ]
     }
@@ -237,8 +276,8 @@ class MySportsmenSection1 extends BaseElement {
         this.renderRoot.getElementById("fileInput").click();
     }
 
-    async importToExcel(e) {
-        const modalResult = await this.showDialog('Вы действительно хотите импортировать всех спортсменов в файл?', 'confirm')
+    async exportToExcel(e) {
+        const modalResult = await this.showDialog('Вы действительно хотите экспортировать всех спортсменов в Excel?', 'confirm')
         if (modalResult === 'Ok') {
             const raw_data = await DataSet.getAllItems()
             const rows = raw_data.map(row => ({
@@ -249,7 +288,7 @@ class MySportsmenSection1 extends BaseElement {
                 birthday: row.doc.birthday,
                 region: row.doc.region?.name,
                 club: row.doc.club?.name,
-                sportsmanId: row.doc.sportsmanId,
+                sportsmanPC: row.doc.sportsmanPC,
                 orderNumber: row.doc.order?.number,
                 link: row.doc.link,
                 orderLink: row.doc.order?.link,
@@ -331,7 +370,83 @@ class MySportsmenSection1 extends BaseElement {
         }
     }
 
-    async exportFromExcel(e) {
+    async refresh() {
+        const raw_data = await DataSet.getAllItems()
+        const ClubDataset = await import('../my-clubs/my-clubs-dataset.mjs');
+        const clubDataset = ClubDataset.default;
+        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const regionDataset = RegionDataset.default;
+        const CategoryDataset = await import('../my-sports-categories/my-sports-categories-dataset.mjs');
+        const categoryDataset = CategoryDataset.default;
+        const promises = Array()
+        raw_data.forEach(item => {
+            let save = false
+            if (item.doc.club) {
+                const club = clubDataset.find("_id", item.doc.club?._id)
+                if (club) {
+                    if (item.doc.club?._rev !== club._rev) {
+                        item.doc.club = club
+                        save = true
+                    }
+                }
+            }
+            if (item.doc.region) {
+                const region = regionDataset.find("_id", item.doc.region?._id)
+                if (club) {
+                    if (item.doc.region?._rev !== region._rev) {
+                        item.doc.region = region
+                        save = true
+                    }
+                }
+            }
+            if (item.doc.category) {
+                const category = categoryDataset.find("_id", item.doc.category?._id)
+                if (club) {
+                    if (item.doc.category?._rev !== category._rev) {
+                        item.doc.category = category
+                        save = true
+                    }
+                }
+            }
+            if (save) {
+                promises.push(this.dataSource.saveItem2(item.doc))
+            }
+        })
+        try {
+            await Promise.allSettled(promises)
+            this.showDialog('Все данные были успешно обновлены!')
+        } catch(e) {
+            this.showDialog('Не все данные успешно обновлены')
+        }
+    }
+    // regionRefresh
+    // async refresh() {
+    //     const raw_data = await DataSet.getAllItems()
+    //     const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+    //     const regionDataset = RegionDataset.default;
+    //     const promises = Array()
+    //     raw_data.forEach(item => {
+    //         if (!item.doc.region?._id) {
+    //             console.log(item.doc)
+    //         }
+    //         const region = regionDataset.find("_id", item.doc.region?._id)
+    //         if (region) {
+    //            // this.dataSource.addItem(newItem);
+    //             if (item.doc.region?._rev !== region._rev) {
+    //                 item.doc.region = region
+    //                 promises.push(this.dataSource.saveItem2(item.doc))
+    //             }
+    //         }
+    //     })
+    //     try {
+    //         await Promise.allSettled(promises)
+    //         this.showDialog('Все данные были успешно обновлены!')
+    //     } catch(e) {
+    //         this.showDialog('Не все данные успешно обновлены')
+    //     }
+    // }
+
+    async importFromExcel(e) {
         const file = e.target.files[0];
         const modalResult = await this.showDialog('Вы действительно хотите экспортировать данные из файла?', 'confirm')
         if (modalResult === 'Ok') {
@@ -353,7 +468,7 @@ class MySportsmenSection1 extends BaseElement {
                         middleName: r[1].split(' ')[2],
                         gender: r[10],
                         category: sportsCategoryDataset.find("shortName", r[2]),
-                        region: regionDataset.find("name", r[3]),
+                        region: regionDataset.find("name", r[3]) ?? null,
                         order: {
                             number: r[4],
                             link: r[6]
@@ -397,6 +512,9 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     async showItem(item) {
+        if (this.currentPage != 0) {
+            this.currentPage = 0
+        }
         if (this.currentItem?._id === item.id) {
             this.copyToClipboard(item.value.sportsmanId || item.id)
             return
@@ -416,7 +534,7 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     get #page() {
-        return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
+        return this.currentPage === 0 ? this.#page1() : this.#page2();
     }
 
     #page1() {
@@ -594,11 +712,23 @@ class MySportsmenSection1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
-                <aside-button icon-name="search-solid" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
+                <p>${lang`Sportsmen` + (this.dataSource?.items?.length ? ' ('+ this.dataSource?.items?.length +')' : '')}</p>
+                <p>
+                    <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
+                    <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
+                </p>
             </header>
             <header class="right-header">
-                ${this.#pageName}
+                <div class="left-aside">
+                    ${this.sections.map( (section, index) =>
+                        html `
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "sportsman-solid" : "sportswoman-solid") || section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
+                        `
+                    )}
+                </div>
+                <div class="right-aside">
+                    <aside-button icon-name="search-regular" @click=${this.searchPage}></aside-button>
+                </div>
             </header>
             <div class="left-layout" @scroll=${this.listScroll} a=${this.listStart}>
                 ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
@@ -615,7 +745,7 @@ class MySportsmenSection1 extends BaseElement {
             <footer class="right-footer">
                 ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.exportFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
@@ -632,7 +762,15 @@ class MySportsmenSection1 extends BaseElement {
         this.currentPage--;
     }
 
+    searchPage() {
+        this.currentFilter = {}
+        this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
 
+    sortPage() {
+        this.sortDirection = !this.sortDirection
+        this.dataSource.sort(this.sortDirection)
+    }
 
     async showDialog(message, type='message') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')

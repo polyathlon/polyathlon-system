@@ -45,10 +45,16 @@ export default class DataSource {
             item?.key?.includes(value?.lastName)
         )
     }
-    
+
     findIndex(value) {
         return this.items.findIndex(item =>
             item?.key?.includes(value?.lastName)
+        )
+    }
+
+    sort(sortDirection) {
+        this.items.sort( (a, b) =>
+            sortDirection ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key)
         )
     }
 
@@ -133,6 +139,10 @@ export default class DataSource {
         listItem.value.hashNumber = item.hashNumber
         listItem.value.gender = item.gender
         this.state = States.BROWSE
+    }
+
+    async saveItem2(item) {
+        await DataSet.saveItem(item)
     }
 
     async deleteItem(item, listItem) {

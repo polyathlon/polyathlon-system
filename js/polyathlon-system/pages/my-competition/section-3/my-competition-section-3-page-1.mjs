@@ -60,6 +60,21 @@ class MyCompetitionSection3Page1 extends BaseElement {
         ]
     }
 
+    cityShowValue(item) {
+        return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
+    }
+
+    cityListLabel(item) {
+        if (item?.name) {
+            return item?.type?.shortName ? `${item?.type?.shortName} ${item?.name}` : item?.name
+        }
+        return ''
+    }
+
+    cityListStatus(item) {
+        return { name: item?.region?.name ?? ''}
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
@@ -73,7 +88,7 @@ class MyCompetitionSection3Page1 extends BaseElement {
                 <simple-select id="position" label="${lang`Referee position`}:" icon-name="referee-position-solid" @icon-click=${() => this.showPage('my-referee-positions')} .dataSource=${this.refereePositionsDataSource} .value=${this.item?.position} @input=${this.validateInput}></simple-select>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-select id="category" label="${lang`Category`}:" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-referee-categories')} .dataSource=${this.refereeCategoriesDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <!-- <simple-input id="refereeUlid" label="${lang`Referee Ulid`}:" icon-name=${+this.item?.gender ? "referee-woman-solid" : "referee-man-solid"} @icon-click=${() => this.showPage('my-referee')} .value=${this.item?.refereeUlid} @input=${this.validateInput}></simple-input> -->
             </div>

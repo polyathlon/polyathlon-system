@@ -7,12 +7,12 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import './my-cities-section-1-page-1.mjs'
+import './my-club-types-section-1-page-1.mjs'
 
-import DataSet from './my-cities-dataset.mjs'
-import DataSource from './my-cities-datasource.mjs'
+import DataSet from './my-club-types-dataset.mjs'
+import DataSource from './my-club-types-datasource.mjs'
 
-class MyCitiesSection1 extends BaseElement {
+class MyClubTypesSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -246,7 +246,7 @@ class MyCitiesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCityItem')) {
+        if (changedProps.has('currentClubTypeItem')) {
             this.currentPage = 0;
         }
     }
@@ -272,13 +272,13 @@ class MyCitiesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-cities-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-cities-section-1-page-1>
+            <my-club-types-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-club-types-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-cities-section-1-page-2 .item=${this.currentItem}></my-cities-section-1-page-2>
+            <my-club-types-section-1-page-2 .item=${this.currentItem}></my-club-types-section-1-page-2>
         `;
     }
 
@@ -291,11 +291,10 @@ class MyCitiesSection1 extends BaseElement {
             ${this.dataSource?.items?.map((item, index) =>
                 html `
                     <icon-button
-                        label=${item.type ? item.type?.shortName + ' ' + item.name : item.name}
+                        label=${item.name}
                         title=${item._id}
-                        icon-name="city-solid"
+                        icon-name="club-type-solid"
                         ?selected=${this.currentItem === item}
-                        .status=${{ name: item.region ? item.region?.name : item?._id }}
                         @click=${() => this.showItem(index, item._id)}
                     ></icon-button>
                 `
@@ -333,7 +332,7 @@ class MyCitiesSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>${lang`City`}</p></header>
+            <header class="left-header"><p>${lang`Club types`}</p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>
@@ -408,4 +407,4 @@ class MyCitiesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-cities-section-1", MyCitiesSection1)
+customElements.define("my-club-types-section-1", MyClubTypesSection1)

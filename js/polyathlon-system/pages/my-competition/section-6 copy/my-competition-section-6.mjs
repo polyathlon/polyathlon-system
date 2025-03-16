@@ -516,8 +516,8 @@ class MyCompetitionSection6 extends BaseElement {
             <modal-dialog></modal-dialog>
             <header class="left-header">
                 <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
-                <!-- <aside-button icon-name="search-solid" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button> -->
-                <aside-button icon-name="filter-solid" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
+                <!-- <aside-button icon-name="search-regular" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button> -->
+                <aside-button icon-name="filter-regular" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
             </header>
             <header class="right-header">
                 ${this.sections.map( (page, index) =>

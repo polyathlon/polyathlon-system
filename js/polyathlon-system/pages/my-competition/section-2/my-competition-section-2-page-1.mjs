@@ -61,7 +61,9 @@ class MyCompetitionSection2Page1 extends BaseElement {
     }
 
     clubShowValue(item) {
-        return `${item?.name}, ${item?.city?.type?.shortName || ''} ${item?.city?.name}`
+        if (item?.name)
+            return `${item?.name}, ${item?.city?.type?.shortName || ''} ${item?.city?.name}`
+        return ''
     }
 
     clubListLabel(item) {

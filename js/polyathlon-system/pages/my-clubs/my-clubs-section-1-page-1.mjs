@@ -11,6 +11,9 @@ import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 import CityDataSource from '../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../my-cities/my-cities-dataset.mjs'
 
+import ClubTypesDataset from '../my-club-types/my-club-types-dataset.mjs'
+import ClubTypesDataSource from '../my-club-types/my-club-types-datasource.mjs'
+
 class MyClubsSection1Page1 extends BaseElement {
     static get properties() {
         return {
@@ -19,6 +22,7 @@ class MyClubsSection1Page1 extends BaseElement {
             countryDataSource: {type: Object, default: null},
             regionDataSource: {type: Object, default: null},
             cityDataSource: {type: Object, default: null},
+            cityTypeDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
         }
@@ -43,16 +47,19 @@ class MyClubsSection1Page1 extends BaseElement {
         ]
     }
 
-    cityListLabel(item) {
-        return item?.type?.shortName + ' ' + item?.name
+    cityShowValue(item) {
+        return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
     }
 
-    cityShowValue(item) {
-        return item?.name ? item?.type?.shortName + ' ' + item?.name : ''
+    cityListLabel(item) {
+        if (item?.name) {
+            return item?.type?.shortName ? `${item?.type?.shortName} ${item?.name}` : item?.name
+        }
+        return ''
     }
 
     cityListStatus(item) {
-        return { name: '(' + item?.region?.name + ')' || item?._id }
+        return { name: item?.region?.name ?? ''}
     }
 
     render() {
@@ -62,7 +69,8 @@ class MyClubsSection1Page1 extends BaseElement {
                 <simple-input id="fullName" icon-name="club-solid" label="${lang`Full name`}:" .value=${this.item?.fullName} @input=${this.validateInput}></simple-input>
                 <simple-select id="country" icon-name="country-solid" @icon-click=${() => this.showPage('my-countries')} image-name=${this.item?.city?.region?.country?.flag && 'https://hatscripts.github.io/circle-flags/flags/' + this.item?.city?.region?.country?.flag + '.svg'} label="${lang`Country name`}:" .dataSource=${this.countryDataSource} .value=${this.item?.city?.region?.country} @input=${this.countryChange}></simple-select>
                 <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="${lang`Region name`}:" .dataSource=${this.regionDataSource} .value=${this.item?.city?.region} @input=${this.regionChange}></simple-select>
-                <simple-select id="city" .showValue=${this.cityShowValue} .listStatus=${this.cityListStatus}  .listLabel=${this.cityListLabel} icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="${lang`City name`}:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-select id="city" .showValue=${this.cityShowValue} .listStatus=${this.cityListStatus} .listLabel=${this.cityListLabel} icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="${lang`City name`}:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-select id="type" icon-name="club-type-solid" @icon-click=${() => this.showPage('my-club-types')} label="${lang`Club type name`}:" .dataSource=${this.clubTypesDataSource} .value=${this.item?.type} @input=${this.validateInput}></simple-select>
             </div>
         `;
     }
@@ -97,6 +105,7 @@ class MyClubsSection1Page1 extends BaseElement {
         this.countryDataSource = new CountryDataSource(this, await CountryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
+        this.clubTypesDataSource = new ClubTypesDataSource(this, await ClubTypesDataset.getDataSet())
     }
 }
 
