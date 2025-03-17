@@ -224,10 +224,10 @@ class MyCompetitionSection2Page1 extends BaseElement {
 
     changeAgeGroup() {
         const gender = this.$id('gender').value
-        const year = this.$id('birthday').value.split('.')[2]
+        const year = new Date(this.$id('birthday').value).getFullYear()
         if ((gender || gender === 0) && year) {
             const ageGroupComponent = this.$id('ageGroup')
-            const nowYear = this.parent.startDate.split("-")[0]
+            const nowYear = new Date(this.parent.startDate).getFullYear()
             const age = nowYear - year
             const item = this.parent.ageGroups.find( item => item.gender == gender && age >= item.minAge && age <= item.maxAge)
             if (item) {

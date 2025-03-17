@@ -11,6 +11,7 @@ import { States } from "../../../utils.js"
 
 import './my-sportsmen-section-1-page-1.mjs'
 import './my-sportsmen-section-1-page-2.mjs'
+import './my-sportsmen-section-1-page-3.mjs'
 
 import DataSet from './my-sportsmen-dataset.mjs'
 import DataSource from './my-sportsmen-datasource.mjs'
@@ -35,6 +36,7 @@ class MySportsmenSection1 extends BaseElement {
             currentPage: { type: BigInt, default: 0 },
             currentSection: { type: BigInt, default: 0, local: true},
             currentFilter: { type: Object, default: {} },
+            currentSearch: { type: Object, default: {} },
         }
     }
 
@@ -213,8 +215,9 @@ class MySportsmenSection1 extends BaseElement {
         this.pageNames = [lang`Information`, lang`Search`]
         this.oldValues = new Map();
         this.pages = [
-            {iconName: 'sportsman-solid', page: 0, title: lang`Sportsman`, click: () => this.gotoPage(0)},
-            {iconName: 'search-regular', page: 1, title: lang`Search`, click: () => this.gotoPage(1)},
+            {iconName: 'sportsman-solid', page: () => this.#page1(), title: lang`Sportsman`, click: () => this.gotoPage(0)},
+            {iconName: 'search-regular', page: () => this.#page2(), title: lang`Search`, click: () => this.gotoPage(1)},
+            {iconName: 'filter-regular', page: () => this.#page3(), title: lang`Filter`, click: () => this.gotoPage(2)},
         ]
         this.buttons = [
             {iconName: 'qrcode-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
@@ -534,7 +537,7 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     get #page() {
-        return this.currentPage === 0 ? this.#page1() : this.#page2();
+        return this.pages[this.currentPage].page();
     }
 
     #page1() {
@@ -545,7 +548,13 @@ class MySportsmenSection1 extends BaseElement {
 
     #page2() {
         return html`
-            <my-sportsmen-section-1-page-2 .item=${this.currentFilter}></my-sportsmen-section-1-page-2>
+            <my-sportsmen-section-1-page-2 .item=${this.currentSearch}></my-sportsmen-section-1-page-2>
+        `;
+    }
+
+    #page3() {
+        return html`
+            <my-sportsmen-section-1-page-3 .item=${this.currentFilter}></my-sportsmen-section-1-page-3>
         `;
     }
 
@@ -573,19 +582,22 @@ class MySportsmenSection1 extends BaseElement {
     makeList() {
         if (!this.dataSource?.items || this.dataSource?.items.length === 0)
             return;
-        for( let i = 0; i < 20; i++) {
-            const item = this.dataSource?.items[this.listStart + i]
-            this.itemTemplates[i] =
-                html `<icon-button
-                    label=${ item.key + (item.value?.category ? ' (' + item.value?.category + ')' : '')}
-                    title=${ item.id }
-                    image-name=${ item.value?.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg" }
-                    ?selected=${ this.currentItem?._id === item.id }
-                    .status=${{ name: item.value?.sportsmanId || item?.id, icon: 'id-number-solid'} }
-                    @click=${() => this.showItem(item)}
-                >
-                </icon-button>
-            `
+        const size = this.dataSource?.items.length < 20 ? this.dataSource?.items.length : 20
+        for( let i = 0; i < size; i++) {
+            if (i < this.dataSource?.items.length) {
+                const item = this.dataSource?.items[this.listStart + i]
+                this.itemTemplates[i] =
+                    html `<icon-button
+                        label=${ item.key + (item.value?.category ? ' (' + item.value?.category + ')' : '')}
+                        title=${ item.id }
+                        image-name=${ item.value?.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg" }
+                        ?selected=${ this.currentItem?._id === item.id }
+                        .status=${{ name: item.value?.sportsmanId || item?.id, icon: 'id-number-solid'} }
+                        @click=${() => this.showItem(item)}
+                    >
+                    </icon-button>
+                `
+            }
         }
         return this.itemTemplates
     }
@@ -650,10 +662,18 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     find() {
-        // alert(JSON.stringify(this.dataSource.findIndex(this.currentFilter)))
-        const result = this.dataSource.find(this.currentFilter)
+        // alert(JSON.stringify(this.dataSource.findIndex(this.currentSearch)))
+        const result = this.dataSource.find(this.currentSearch)
         this.currentPage = 0
         this.dataSource.setCurrentItem(result)
+    }
+
+    async filter() {
+        // alert(JSON.stringify(this.dataSource.findIndex(this.currentSearch)))
+        const result = await this.dataSource.filter(this.currentFilter)
+        this.currentPage = 0
+        this.requestUpdate()
+        // this.dataSource.setCurrentItem(result)
     }
 
     get #findFooter() {
@@ -665,12 +685,24 @@ class MySportsmenSection1 extends BaseElement {
         `
     }
 
+    get #filterFooter() {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.filter}>${lang`To filter`}</simple-button>
+                <simple-button @click=${this.cancelFilter}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
     get #rightFooter() {
+        if (!this.dataSource?.items)
+            return ''
         if (this.currentPage === 1) {
             return this.#findFooter
         }
-        if (!this.dataSource?.items)
-            return ''
+        if (this.currentPage === 2) {
+            return this.#filterFooter
+        }
         if (this.dataSource.items.length) {
             if (this.dataSource.state === States.NEW) {
                 return this.#newItemFooter
@@ -722,7 +754,7 @@ class MySportsmenSection1 extends BaseElement {
                 <div class="left-aside">
                     ${this.sections.map( (section, index) =>
                         html `
-                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "sportsman-solid" : "sportswoman-solid") || section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "sportsman-solid" : "sportswoman-solid") || section.iconName || nothing} label=${this.pages[this.currentPage].title} @click=${() => this.gotoSelection(index)}></icon-button>
                         `
                     )}
                 </div>
@@ -763,8 +795,13 @@ class MySportsmenSection1 extends BaseElement {
     }
 
     searchPage() {
-        this.currentFilter = {}
+        this.currentSearch = {}
         this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
+
+    filterPage() {
+        this.currentFilter = {}
+        this.currentPage = this.currentPage === 2 ? 0 : 2
     }
 
     sortPage() {

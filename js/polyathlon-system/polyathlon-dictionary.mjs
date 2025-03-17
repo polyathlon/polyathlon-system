@@ -719,6 +719,14 @@ const dictionary = {
         "ru-RU": 'Обновить',
         "en-EN": 'Refresh'
     },
+    'Filter': {
+        "ru-RU": 'Фильтр',
+        "en-EN": 'Filter'
+    },
+    'To filter': {
+        "ru-RU": 'Фильтровать',
+        "en-EN": 'Filter'
+    },
 }
 
 //const language = navigator.language

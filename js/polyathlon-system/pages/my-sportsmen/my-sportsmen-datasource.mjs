@@ -34,11 +34,18 @@ export default class DataSource {
         }
     }
 
-    filter(value) {
-        this.items = this.dataSet.filter(item => {
-            return item?.country?.name === value?.name;
-        }).sort( (a, b) => a.name.localeCompare(b.name) )
+    async filter(value) {
+        this.items = (await DataSet.getDataSet()).filter(item => {
+            return value?.lastName && item?.key.includes(value.lastName) ||
+                   value?.lastName && item?.key.includes(value.lastName)
+        }).sort( (a, b) => a.key.localeCompare(b.key) )
     }
+
+    // filter(value) {
+    //     this.items = this.dataSet.filter(item => {
+    //         return item?.country?.name === value?.name;
+    //     }).sort( (a, b) => a.name.localeCompare(b.name) )
+    // }
 
     find(value) {
         return this.items.find(item =>
