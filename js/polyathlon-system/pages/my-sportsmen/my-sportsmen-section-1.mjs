@@ -602,6 +602,22 @@ class MySportsmenSection1 extends BaseElement {
         return this.itemTemplates
     }
 
+    get #simpleList() {
+        return html`
+            ${this.dataSource?.items?.map((item, index) =>
+                html `<icon-button
+                        label=${ item.key + (item.value?.category ? ' (' + item.value?.category + ')' : '')}
+                        title=${item.id}
+                        image-name=${ item.value?.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg" }
+                        ?selected=${ this.currentItem?._id === item.id }
+                        .status=${ { name: item.value?.sportsmanId || item?.id, icon: 'id-number-solid'} }
+                        @click=${() => this.showItem(item)}
+                    ></icon-button>
+                `
+            )}
+        `
+    }
+
     listTopHeight() {
         return this.listStart*40;
     }
@@ -614,9 +630,16 @@ class MySportsmenSection1 extends BaseElement {
     }
     // .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'id-number-solid'} : '' }
     get #list() {
-        console.log(this.listTopHeight(),this.listBottomHeight(), this.listTopHeight() + this.listBottomHeight())
+        // console.log(this.listTopHeight(),this.listBottomHeight(), this.listTopHeight() + this.listBottomHeight())
+        // return html`
+        //     <div style="min-height: ${this.listStart*40 + 'px'}" data-a=${this.listStart}> </div>
+        //     ${this.makeList()}
+        //     <div style="min-height: ${this.listEnd*40 + 'px'}"> </div>
+        // `
+        if (this.dataSource?.items?.length < 20 )
+            return this.#simpleList
         return html`
-            <div style="min-height: ${this.listStart*40 + 'px'}" data-a=${this.listStart}> </div>
+            <div style="min-height: ${this.listStart*40 + 'px'}" data-a=${this.listEnd1}> </div>
             ${this.makeList()}
             <div style="min-height: ${this.listEnd*40 + 'px'}"> </div>
         `
@@ -673,7 +696,14 @@ class MySportsmenSection1 extends BaseElement {
         const result = await this.dataSource.filter(this.currentFilter)
         this.currentPage = 0
         this.requestUpdate()
-        // this.dataSource.setCurrentItem(result)
+        this.dataSource.setCurrentItem(result)
+    }
+
+    async clearFilter() {
+        const result = await this.dataSource.clearFilter()
+        this.currentPage = 0
+        this.dataSource.setCurrentItem(this.listItem || result)
+        this.requestUpdate()
     }
 
     get #findFooter() {
@@ -689,7 +719,7 @@ class MySportsmenSection1 extends BaseElement {
         return html`
             <nav class='save'>
                 <simple-button @click=${this.filter}>${lang`To filter`}</simple-button>
-                <simple-button @click=${this.cancelFilter}>${lang`Cancel`}</simple-button>
+                <simple-button @click=${this.clearFilter}>${lang`Clear`}</simple-button>
             </nav>
         `
     }
@@ -764,9 +794,10 @@ class MySportsmenSection1 extends BaseElement {
             </header>
             <div class="left-layout" @scroll=${this.listScroll} a=${this.listStart}>
                 ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
-                <div id="a1" style="min-height: ${this.listStart*40 + 'px'}" .data-a=${this.listEnd1}> </div>
+                <!-- <div id="a1" style="min-height: ${this.listStart*40 + 'px'}" .data-a=${this.listEnd1}> </div>
                 ${this.makeList()}
-                <div id="a2" style="min-height: ${this.listEnd*40 + 'px'}"> </div>
+                <div id="a2" style="min-height: ${this.listEnd*40 + 'px'}"> </div> -->
+                ${this.#list}
             </div>
             <div class="right-layout">
                 ${this.#page}

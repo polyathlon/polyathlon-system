@@ -1,12 +1,8 @@
-import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
-
-import '../icon/icon.mjs'
-
-import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
+import { BaseElement, html, css } from '../../js/base-element.mjs';
 
 import styles from './input-css.mjs'
 
-customElements.define("gender-input", class GenderInput extends BaseElement {
+customElements.define("groupbox-input", class GroupboxInput extends BaseElement {
     static get properties() {
         return {
             type: { type: String, default: 'text'},
@@ -16,8 +12,8 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
             iconName: { type: String, default: '', attribute: 'icon-name'},
             buttonName: { type: String, default: '', attribute: 'button-name' },
             placeholder: { type: String, default: '' },
-            value: { type: String, default: ''},
-            oldValue: { type: String, default: ''},
+            value: { type: Array, default: []},
+            oldValue: { type: Array, default: null},
         }
     }
 
@@ -36,23 +32,23 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
                     display: flex;
                     justify-content: space-evenly;
                     align-items: center;
+                    flex-wrap: wrap;
                 }
-
                 label {
                     display: inline-flex;
                     line-height: 1rem;
                     align-items: center;
                     gap: 10px;
                     cursor: pointer;
-                    font-weight: bold;
+                    flex-basis: 50%;
                     margin: 8px 0;
                 }
                 input {
                     appearance: none;
                     width: 1rem;
                     aspect-ratio: 1;
-                    border: 2px solid white;
-                    border-radius: 50%;
+                    border: 1px solid white;
+
                     cursor: pointer;
                     margin: 0;
                     transition: .3s easy-in;
@@ -73,31 +69,14 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
         return html`<legend>${this.label}</legend>`;
     }
 
-    setValue(value) {
-        this.value = value;
-        this.fire('input')
-    }
-
-    setChecked(gender) {
-        const input = this.renderRoot.getElementById(gender);
-        if (!input) {
-            return false
-        }
-        input.checked = this.value == gender
-        return input.checked;
-    }
-
     render() {
         return html`
             <fieldset class="fieldset">
-                ${this.label ? this.#legend : ''}
-                <label><input type="radio" name="gender" ?checked=${this.setChecked("0")} id="0" value="0" @input=${this.changeValue}>${lang`Male`}</label>
-                <label><input type="radio" name="gender" ?checked=${this.setChecked("1")} id="1" value="1" @input=${this.changeValue}>${lang`Female`}</label>
+                ${ this.label ? this.#legend : '' }
+                <slot>
+                </slot>
             </fieldset>
         `;
     }
 
-    changeValue(e) {
-        this.value = e.target.value
-    }
 });

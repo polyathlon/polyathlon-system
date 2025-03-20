@@ -111,10 +111,10 @@ export default class DataSet {
     static createListItem(newItem) {
         let key = newItem.lastName
         if (newItem.firstName) {
-            key += ' ' + newItem.firstName[0] + '.'
+            key += ' ' + newItem.firstName
         }
         if (newItem.middleName) {
-            key += newItem.middleName[0] + '.'
+            key += ' ' + newItem.middleName[0] + '.'
         }
         return {
             id: newItem._id,

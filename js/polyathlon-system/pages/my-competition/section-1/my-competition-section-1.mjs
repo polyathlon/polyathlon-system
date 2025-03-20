@@ -244,11 +244,11 @@ class MyCompetitionSection1 extends BaseElement {
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
         ]
         this.pages = [
-            {iconName: 'competition-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
-            {iconName: 'age-group-solid', page: 1, title: lang`Age groups`, click: () => this.gotoPage(1)},
-            {iconName: 'location-circle-solid', page: 2, title: lang`Location`, click: () => this.gotoPage(2)},
+            {iconName: 'competition-solid', page: () => this.#page1(), title: lang`Competition`, click: () => this.gotoPage(0)},
+            {iconName: 'age-group-solid', page: () => this.#page2(), title: lang`Age groups`, click: () => this.gotoPage(1)},
+            {iconName: 'location-circle-solid', page: () => this.#page3(), title: lang`Location`, click: () => this.gotoPage(2)},
             // {iconName: 'map-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
-            {iconName: 'registration-solid', page: 5, title: lang`Registration`, click: () => this.gotoPage(5)},
+            {iconName: 'registration-solid', page: () => this.#page4, title: lang`Registration`, click: () => this.gotoPage(5)},
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
         ]
     }
@@ -345,13 +345,7 @@ class MyCompetitionSection1 extends BaseElement {
     // }
 
     get #page() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#page1())
-            case 1: return cache(this.#page2())
-            case 2: return cache(this.#page3())
-            case 3: return cache(this.#page4())
-            default: return cache(this.#page1())
-        }
+        return this.pages[this.currentPage].page()
     }
 
     #page1() {

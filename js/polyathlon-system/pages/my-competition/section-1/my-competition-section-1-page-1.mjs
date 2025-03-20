@@ -86,20 +86,28 @@ class MyCompetitionSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-select id="name" label="${lang`Competition name`}:" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
+                <simple-input id="ekpNumber" label="${lang`EKP Number`}:" icon-name="ekp-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
                 <simple-select id="stage" label="${lang`Stage`}:" icon-name="order-number-solid" @icon-click=${() => this.showPage('my-competition-stages')} .dataSource=${this.competitionStageDataSource} .value=${this.item?.stage} @input=${this.validateInput}></simple-select>
                 <simple-select id="sportsDiscipline1" label="${lang`Sports discipline`} 1:" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline1} @input=${this.validateInput}></simple-select>
                 <simple-select id="sportsDiscipline2" label="${lang`Sports discipline`} 2:" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-input id="competitionPC" label="${lang`Competition PC`}:" icon-name="competition-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionPC} .value=${this.item?.competitionPC} @input=${this.validateInput}></simple-input>
-                <simple-input id="ekpNumber" label="${lang`EKP Number`}:" icon-name="ekp-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input type="date" label="${lang`Дата начала`}:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
-                    <simple-input type="date" label="${lang`Дата окончания`}:" id="endDate" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="startDate" type="date" label="${lang`Дата начала`}:" icon-name="start-competition-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="endDate" type="date" label="${lang`Дата окончания`}:" icon-name="end-competition-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="startRegistration" type="date" label="${lang`Начало регистрации`}:" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
-                    <simple-input id="endRegistration" type="date" label="${lang`Окончание регистрации`}:" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="startRegistration" type="date" label="${lang`Start registration`}:" icon-name="start-registration-solid" .value=${this.item?.startRegistration} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="endRegistration" type="date" label="${lang`End registration`}:" icon-name="end-registration-solid" .value=${this.item?.endRegistration} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                </div>
+                <div class="name-group">
+                    <simple-input id="maxTeamComposition" label="${lang`Max team composition`}:" icon-name="max-team-composition-solid" .value=${this.item?.maxTeamComposition} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="bestTeamComposition" label="${lang`Best team composition`}:" icon-name="team-championship-solid" .value=${this.item?.bestTeamComposition} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                </div>
+                <div class="name-group">
+                    <simple-input id="maxClubComposition" label="${lang`Max club composition`}:" icon-name="max-club-composition-solid" .value=${this.item?.maxClubComposition} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="bestClubComposition" label="${lang`Best club composition`}:" icon-name="club-championship-solid" .value=${this.item?.bestClubComposition} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 </div>
                 <simple-input id="regulationsLink" label="${lang`Regulations link`}:" icon-name="regulations-solid" @icon-click=${this.myLinkClick} .value=${this.item?.regulationsLink} @input=${this.validateInput}></simple-input>
                 <simple-input id="protocolLink" label="${lang`Protocol link`}:" icon-name="protocol-solid" @icon-click=${this.myLinkClick} .value=${this.item?.protocolLink} @input=${this.validateInput}></simple-input>

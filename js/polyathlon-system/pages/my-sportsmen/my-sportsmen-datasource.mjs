@@ -9,7 +9,7 @@ export default class DataSource {
     #newItem
     #oldItem
     #oldListItem
-
+    sortDirection = true
     constructor(component, dataSet) {
         this.component = component
         this.items = [...dataSet]
@@ -36,9 +36,16 @@ export default class DataSource {
 
     async filter(value) {
         this.items = (await DataSet.getDataSet()).filter(item => {
-            return value?.lastName && item?.key.includes(value.lastName) ||
-                   value?.lastName && item?.key.includes(value.lastName)
-        }).sort( (a, b) => a.key.localeCompare(b.key) )
+            return value?.lastName && item?.key.includes(value.lastName)
+                || value?.gender && item?.value?.gender == value?.gender
+                || value?.category && item?.value?.category.shortName == value?.category
+        }).sort( (a, b) => this.sortDirection ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key))
+        return this.items?.[0]
+    }
+
+    async clearFilter() {
+        this.items = (await DataSet.getDataSet()).sort( (a, b) => this.sortDirection ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key))
+        return this.items?.[0]
     }
 
     // filter(value) {
@@ -60,6 +67,7 @@ export default class DataSource {
     }
 
     sort(sortDirection) {
+        this.sortDirection = sortDirection
         this.items.sort( (a, b) =>
             sortDirection ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key)
         )
@@ -70,6 +78,9 @@ export default class DataSource {
     }
 
     async setCurrentItem(listItem) {
+        if (!listItem) {
+            return
+        }
         const item = await DataSet.getItem(listItem.id)
         sessionStorage.setItem('currentSportsman', listItem.id)
         this.component.currentItem = item

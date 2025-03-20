@@ -98,15 +98,7 @@ class MyCompetitionSection5Page1 extends BaseElement {
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
-            if (e.target.id === 'birthday' || e.target.id === 'gender') {
-                try {
-                    this.changeAgeGroup()
-                    this.requestUpdate()
-                }
-                catch {
 
-                }
-            }
             this.isModified = this.oldValues.size !== 0;
         }
     }
@@ -199,24 +191,6 @@ class MyCompetitionSection5Page1 extends BaseElement {
 
     async errorDialog(message) {
         return this.showDialog(message, 'error', 'Ошибка')
-    }
-
-    changeAgeGroup() {
-        const gender = this.$id('gender').value
-        const year = this.$id('birthday').value.split('.')[2]
-        if ((gender || gender === 0) && year) {
-            const ageGroupComponent = this.$id('ageGroup')
-            const nowYear = this.parent.startDate.split("-")[0]
-            const age = nowYear - year
-            const item = this.parent.ageGroups.find( item => item.gender == gender && age >= item.minAge && age <= item.maxAge)
-            if (item) {
-                ageGroupComponent.setValue(item)
-            } else {
-                this.errorDialog("Такая возрастная группа в соревновании не найдена")
-                delete this.item.ageGroup
-                ageGroupComponent.setValue('')
-            }
-        }
     }
 
     startEdit() {

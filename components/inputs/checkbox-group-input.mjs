@@ -61,6 +61,7 @@ customElements.define("checkbox-group-input", class CheckboxGroupInput extends B
                 }
                 input:checked {
                     border-width: 8px;
+                    outline: -webkit-focus-ring-color auto 1px;
                 }
             `
         ]

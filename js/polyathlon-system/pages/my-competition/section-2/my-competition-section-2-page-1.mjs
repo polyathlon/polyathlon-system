@@ -4,6 +4,9 @@ import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/gender-input.mjs'
 import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
+import '../../../../../components/inputs/checkbox-group-input.mjs'
+import '../../../../../components/inputs/groupbox-input.mjs'
+import '../../../../../components/inputs/checkbox-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
@@ -94,6 +97,10 @@ class MyCompetitionSection2Page1 extends BaseElement {
                 <simple-select id="category" label="${lang`Sports category`}:" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+                <groupbox-input label="${lang`National team member`}:">
+                    <checkbox-input id="clubMember" label="${lang`Club member`}" .value=${this.item?.clubMember} .checked=${this.item?.clubMember} @input=${this.validateInput}></checkbox-input>
+                    <checkbox-input id="teamMember" label="${lang`Team member`}" .value=${this.item?.teamMember} .checked=${this.item?.teamMember} @input=${this.validateInput}></checkbox-input>
+                </groupbox-input>
                 <!-- <simple-input id="sportsmanUlid" label="${lang`Sportsman Ulid`}:" icon-name=${+this.item?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${() => this.showPage('my-sportsman')} .value=${this.item?.sportsmanUlid} @input=${this.validateInput}></simple-input> -->
             </div>
         `;
@@ -252,6 +259,10 @@ class MyCompetitionSection2Page1 extends BaseElement {
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
         this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
+        this.teamMemberDataSource = {items: [
+            {name: 'region'},
+            {name: 'club'},
+        ]}
     }
 
 }

@@ -727,6 +727,60 @@ const dictionary = {
         "ru-RU": 'Фильтровать',
         "en-EN": 'Filter'
     },
+    'Clear': {
+        "ru-RU": 'Очистить',
+        "en-EN": 'Clear'
+    },
+    'Personal championship': {
+        "ru-RU": 'Личное первенство',
+        "en-EN": 'Personal championship'
+    },
+    'Club championship': {
+        "ru-RU": 'Клубное первенство',
+        "en-EN": 'Club championship'
+    },
+    'Team championship': {
+        "ru-RU": 'Командное первенство',
+        "en-EN": 'Team championship'
+    },
+    'Start registration': {
+        "ru-RU": 'Начало регистрации',
+        "en-EN": 'Start of registration'
+    },
+    'End registration': {
+        "ru-RU": 'Окончание регистрации',
+        "en-EN": 'End of registration'
+    },
+    'Max team composition': {
+        "ru-RU": 'Состав сборной команды',
+        "en-EN": 'Max team composition'
+    },
+    'Best team composition': {
+        "ru-RU": 'Командный зачет',
+        "en-EN": 'Best team composition'
+    },
+    'Max club composition': {
+        "ru-RU": 'Состав сборной клуба',
+        "en-EN": 'Max club composition'
+    },
+    'Best club composition': {
+        "ru-RU": 'Клубный зачет',
+        "en-EN": 'Best club composition'
+    },
+    'National team member': {
+        "ru-RU": 'Член сборной команды',
+        "en-EN": 'National team member'
+    },
+    'Team member': {
+        "ru-RU": 'Субъекта РФ',
+        "en-EN": 'Team member'
+    },
+    'Club member': {
+        "ru-RU": 'Клуба',
+        "en-EN": 'Club member'
+    },
+
+
 }
 
 //const language = navigator.language

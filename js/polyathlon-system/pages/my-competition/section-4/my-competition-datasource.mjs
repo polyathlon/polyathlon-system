@@ -20,6 +20,18 @@ export default class DataSource {
         return this.item;
     }
 
+    async getTeams() {
+        const id = localStorage.getItem('currentCompetition')
+        if (id === 'new') {
+            this.item = {};
+            this.component.currentItem = this.item;
+        } else {
+            this.item = await DataSet.getItem(id)
+            this.setCurrentItem(this.item)
+        }
+        return this.item;
+    }
+
     setCurrentItem(item) {
         localStorage.setItem('currentCompetition', item._id)
         this.component.currentItem = item;

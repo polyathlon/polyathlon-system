@@ -5,7 +5,7 @@ import '../../../../../../components/tables/simple-table.mjs'
 import '../../../../../../components/tables/simple-table-header.mjs'
 import lang from '../../../polyathlon-dictionary.mjs'
 
-class MyCompetitionSection4Page2 extends BaseElement {
+class MyCompetitionSection4Page4 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -240,7 +240,7 @@ class MyCompetitionSection4Page2 extends BaseElement {
                     place: item.place ?? 0,
                     sportsman: `${item.lastName} ${item.firstName}`,
                     category: item.category.shortName,
-                    year: new Date(item.birthday).getFullYear(),
+                    year: item.birthday.split('.')[2],
                     region: item.region.shortName ?? item.region.name,
                     club: item.club.name,
                     points: +(item.shooting?.points ?? 0) + +(item.pushUps?.points ?? 0) + +(item.skiing?.points ?? 0),
@@ -281,4 +281,4 @@ class MyCompetitionSection4Page2 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-4-page-2", MyCompetitionSection4Page2);
+customElements.define("my-competition-section-4-page-4", MyCompetitionSection4Page4);

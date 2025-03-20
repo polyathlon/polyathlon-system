@@ -14,6 +14,9 @@ import lang from '../../../polyathlon-dictionary.mjs'
 import './my-competition-section-4-page-1.mjs'
 import './my-competition-section-4-list-1.mjs'
 import './my-competition-section-4-page-2.mjs'
+import './my-competition-section-4-page-3.mjs'
+import './my-competition-section-4-page-4.mjs'
+import './my-competition-section-4-page-5.mjs'
 //import './my-competition-section-4-page-2.mjs'
 // import './my-competition-section-2-page-1.mjs'
 // import './my-competition-section-2-list-1.mjs'
@@ -32,6 +35,7 @@ class MyCompetitionSection4 extends BaseElement {
             dataSource: { type: Object, default: null },
             competitionDataSource: { type: Object, default: null },
             sportsmenDataSource: { type: Object, default: null },
+            sportsCategoriesDataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null },
@@ -248,10 +252,11 @@ class MyCompetitionSection4 extends BaseElement {
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
         ]
         this.pages = [
-            {iconName: 'chart-pie-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
-            {iconName: 'person-championship-solid', page: 1, title: lang`Location`, click: () => this.gotoPage(1)},
-            {iconName: 'club-solid2', page: 2, title: lang`Location`, click: () => this.gotoPage(2)},
-            {iconName: 'region-championship-solid', page: 3, title: lang`Location`, click: () => this.gotoPage(3)},
+            {title: lang`Competition`, page: () => this.#page1(), iconName: 'chart-pie-solid', click: () => this.gotoPage(0)},
+            {title: lang`Sport categories`, page: () => this.#page5(), iconName: 'sports-category-solid', click: () => this.gotoPage(1)},
+            {title: lang`Personal championship`, page: () => this.#page2(), iconName: 'person-championship-solid', click: () => this.gotoPage(2)},
+            {title: lang`Club championship`, page: () => this.#page3(), iconName: 'club-championship-solid', click: () => this.gotoPage(3)},
+            {title: lang`Team championship`, page: () => this.#page4(), iconName: 'team-championship-solid', click: () => this.gotoPage(4)},
         ]
     }
     pdfMethod() {
@@ -350,12 +355,7 @@ class MyCompetitionSection4 extends BaseElement {
     // }
 
     get #page() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#page1())
-            case 1: return cache(this.#page2())
-            case 2: return cache(this.#page3())
-            default: return cache(this.#page1())
-        }
+        return this.pages[this.currentPage].page()
     }
 
     #page1() {
@@ -372,7 +372,19 @@ class MyCompetitionSection4 extends BaseElement {
 
     #page3() {
         return html`
-            <my-competition-section-4-page-3 .item=${this.currentItem}></my-competition-section-4-page-3>
+            <my-competition-section-4-page-3 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource}></my-competition-section-4-page-3>
+        `;
+    }
+
+    #page4() {
+        return html`
+            <my-competition-section-4-page-4 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource}></my-competition-section-4-page-4>
+        `;
+    }
+
+    #page5() {
+        return html`
+            <my-competition-section-4-page-5 .parent=${this.parent} .categoryDataSource=${this.sportsCategoriesDataSource}></my-competition-section-4-page-5>
         `;
     }
 
@@ -450,7 +462,7 @@ class MyCompetitionSection4 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoPage(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -468,6 +480,10 @@ class MyCompetitionSection4 extends BaseElement {
             </footer>
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
+    }
+
+    gotoSelection(index) {
+        this.currentSection = index
     }
 
     gotoPage(index) {
@@ -561,6 +577,9 @@ class MyCompetitionSection4 extends BaseElement {
         this.competitionDataSource = new CompetitionDataSource(this)
         this.parent = await this.competitionDataSource.getItem()
         this.sportsmenDataSource = new SportsmenDataSource(this, await SportsmenDataSet.getDataSet(parentId))
+        this.teamDataSource = { items: this.sportsmenDataSource.getTeamResults() }
+        this.sportsCategoriesDataSource = this.sportsmenDataSource.sportsCategories()
+
     }
 }
 
