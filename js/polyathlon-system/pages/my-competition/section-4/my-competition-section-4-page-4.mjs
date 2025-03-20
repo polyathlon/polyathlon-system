@@ -279,6 +279,154 @@ class MyCompetitionSection4Page4 extends BaseElement {
         }
     }
 
+    pdfMethod() {
+        const docInfo = {
+          info: {
+            title: "subjects",
+            author: "Polyathlon systems",
+          },
+
+          pageSize: "A4",
+          pageOrientation: 'portrait',
+          pageMargins: [80, 30, 70, 60],
+
+          content: [
+            {
+                text: "Министерство спорта Российской Федерации",
+                fontSize: 10,
+                alignment: "center",
+                margin: [10, 0, 0, 0],
+            },
+            {
+                text: "Всероссийская Федерация Полиатлона",
+                fontSize: 10,
+                alignment: "center",
+                margin: [10, 0, 0, 0],
+            },
+            {
+                text: "(Вид) (этап) этап по полиатлону",
+                fontSize: 12,
+                bold:true,
+                alignment: "center",
+                margin: [10, 10, 0, 0],
+            },
+            {
+                text: " в спортивной дисциплине (дисциплина)",
+                fontSize: 12,
+                bold:true,
+                alignment: "center",
+                margin: [10, 0, 0, 5],
+            },
+            {
+                columns: [
+                    {
+                        text: "(дата)",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                        alignment: "left",
+                    },
+                    {
+                        text: "г. (город), (область)",
+                        alignment: "right",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+            {
+                text: "Протокол командного зачета среди субъектов Российской Федерации",
+                fontSize: 12,
+                bold:true,
+                alignment: "center",
+                margin: [10, 10, 0, 5],
+            },
+            {
+                table:{
+                    widths: [ 40, 340, 40],
+                    body: [
+                    [ {fontSize: 11, text: 'Место', alignment: "center", margin: [0, 6, 0, 0]}, {fontSize: 11, text: 'Субъект Российской Федерации', alignment: "center", margin: [0, 6, 0, 0]}, {fontSize: 11, text: 'Сумма очков', alignment: "center"} ],
+                    [ {fontSize: 11, text: '1', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "center"} ],
+                    ],
+                    headerRows: 1,
+                }
+            },
+            {
+                columns: [
+                    {
+                        text: "(position.name)",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 10,
+                    },
+                    {
+                        text: "(name)",
+                        alignment: "left",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+            {
+                columns: [
+
+                    {
+                        text: "(category.name)",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                    {
+                        text: "`(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`",
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+            {
+                columns: [
+                    {
+                        text: "(position.name)",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 10,
+                    },
+                    {
+                        text: "(name)",
+                        alignment: "left",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+            {
+                columns: [
+
+                    {
+                        text: "(category.name)",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                    {
+                        text: "`(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`",
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+          ],
+
+          styles: {
+            header0:{
+            }
+          }
+        };
+
+        pdfMake.createPdf(docInfo).open();
+    }
 }
 
 customElements.define("my-competition-section-4-page-4", MyCompetitionSection4Page4);
