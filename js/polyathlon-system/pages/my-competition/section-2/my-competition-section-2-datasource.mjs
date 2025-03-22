@@ -93,7 +93,64 @@ export default class DataSource {
         return categories
     }
 
+    async clubTypes() {
+        const ClubTypesDataset = await import('../../my-club-types/my-club-types-dataset.mjs');
+        const clubTypes = await ClubTypesDataset.default.getDataSet()
+
+        let categories = {
+            columns: ['Вид', 'Мужчины', 'Женщины', 'Итого'],
+            indexes: clubTypes.map(item => item.name),
+            rows: Array(clubTypes.length).fill(0).map(item => Array(4).fill(0)),
+            footer: ['Всего:', 0, 0, 0]
+        }
+        this.items.forEach(athlete => {
+            const column = categories.columns.indexOf(athlete.gender == 0 ? 'Мужчины' : 'Женщины')
+            const index = categories.indexes.indexOf(athlete?.club?.type?.name)
+            if (index != -1) {
+                categories.rows[index][column]++
+            }
+        })
+        categories.rows.forEach(element => {
+            element[categories.columns.length - 1] = element[1] + element[2]
+            categories.footer[1] += element[1]
+            categories.footer[2] += element[2]
+            categories.footer[3] += element[categories.columns.length - 1]
+        });
+        categories.rows = categories.rows.filter( (item, index) => {
+            if (item.at(-1) == 0) {
+                categories.indexes[index] = ''
+                return false
+            }
+            return true
+        })
+        categories.indexes = categories.indexes.filter(value => value)
+        return categories
+    }
+
     getTeamPoints(team) {
+        let sum = 0
+        let gold = 0
+        let silver = 0
+        let bronze = 0
+        // let categories = new Map()
+        const sportDisciplines = ["shooting", "pullUps", "pushUps", "swimming", "throwing", "sprinting", "running", "skiing", "rollerSkiing", "jumping"]
+        team.forEach(athlete => {
+            sportDisciplines.forEach(discipline => {
+                sum += +(athlete[discipline]?.points ?? 0)
+                gold += athlete[discipline]?.place == 1 ? 1 : 0
+                silver += athlete[discipline]?.place == 2 ? 1 : 0
+                bronze += athlete[discipline]?.place == 3 ? 1 : 0
+                // let category = categories.get(athlete.category.shortName) ?? 0
+                // category++
+                // categories.set(athlete.category.shortName, category)
+            })
+        })
+        team.medals = { gold, silver, bronze}
+        // team.categories = categories
+        return sum;
+    }
+
+    getClubPoints(team) {
         let sum = 0
         let gold = 0
         let silver = 0
@@ -126,17 +183,38 @@ export default class DataSource {
             }
         })
         const result = Array.from(teams.values(), team => ({
+            place: 1,
             region: team[0].region,
             points: this.getTeamPoints(team),
             team: team,
             categories: this.getTeamCategories(team),
         }))
+        result.sort((a, b) => b.points - a.points).forEach( (value, index) => value.place = index + 1)
+        return result
+    }
+
+    getClubResults() {
+        const teams = new Map()
+        this.items.forEach(item => {
+            const team = teams.get(item.club._id) ?? []
+            team.push(item)
+            if (team.length === 1) {
+                teams.set(item.club._id, team)
+            }
+        })
+        const result = Array.from(teams.values(), team => ({
+            place: 1,
+            club: team[0].club,
+            points: this.getClubPoints(team),
+            team: team,
+        }))
+        result.sort((a, b) => b.points - a.points).forEach( (value, index) => value.place = index + 1)
         return result
     }
 
     filter(value) {
         this.items = this.dataSet.filter(item => {
-            return item?.country?.name === value?.name;
+            return item?.country?.name === value?.name
         }).sort( (a, b) => a.name.localeCompare(b.name) )
     }
 
@@ -144,8 +222,7 @@ export default class DataSource {
         const item = sessionStorage.getItem('currentCompetitionSportsman')
         if (item) {
             return this.items.find(p => p._id === item)
-        }
-        else {
+        } else {
             sessionStorage.setItem('currentCompetitionSportsman', this.items[0]?._id)
             return this.items?.[0]
         }

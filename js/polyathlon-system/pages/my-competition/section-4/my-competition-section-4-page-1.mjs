@@ -77,7 +77,7 @@ class MyCompetitionSection4Page1 extends BaseElement {
                     <simple-input label="Количество женщин:" id="womenNumber" icon-name="sportsman-woman-solid" .value=${this.womenCount()} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input label="Количество регионов:" id="regionNumber" icon-name="region-solid" .value=${this.regionCount()} @input=${this.validateInput}></simple-input>
+                    <simple-input label="Количество субъектов РФ:" id="regionNumber" icon-name="region-solid" .value=${this.regionCount()} @input=${this.validateInput}></simple-input>
                     <simple-input label="Количество клубов:" id="clubNumber" icon-name="club-solid" .value=${this.clubCount()} @input=${this.validateInput}></simple-input>
                 </div>
                 <canvas id="chart"></canvas>

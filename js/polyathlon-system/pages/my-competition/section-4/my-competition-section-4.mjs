@@ -17,6 +17,8 @@ import './my-competition-section-4-page-2.mjs'
 import './my-competition-section-4-page-3.mjs'
 import './my-competition-section-4-page-4.mjs'
 import './my-competition-section-4-page-5.mjs'
+import './my-competition-section-4-page-6.mjs'
+import './my-competition-section-4-page-7.mjs'
 //import './my-competition-section-4-page-2.mjs'
 // import './my-competition-section-2-page-1.mjs'
 // import './my-competition-section-2-list-1.mjs'
@@ -25,6 +27,8 @@ import './my-competition-section-4-page-5.mjs'
 import CompetitionDataSource from '../section-1/my-competition-datasource.mjs'
 import SportsmenDataSet from '../section-2/my-competition-section-2-dataset.mjs'
 import SportsmenDataSource from '../section-2/my-competition-section-2-datasource.mjs'
+import RefereeDataSource from '../section-3/my-competition-section-3-datasource.mjs'
+import RefereeDataSet from '../section-3/my-competition-section-3-dataset.mjs'
 //import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
@@ -254,9 +258,11 @@ class MyCompetitionSection4 extends BaseElement {
         this.pages = [
             {title: lang`Competition`, page: () => this.#page1(), iconName: 'chart-pie-solid', click: () => this.gotoPage(0)},
             {title: lang`Sport categories`, page: () => this.#page5(), iconName: 'sports-category-solid', click: () => this.gotoPage(1)},
-            {title: lang`Personal championship`, page: () => this.#page2(), iconName: 'person-championship-solid', click: () => this.gotoPage(2)},
-            {title: lang`Club championship`, page: () => this.#page3(), iconName: 'club-championship-solid', click: () => this.gotoPage(3)},
-            {title: lang`Team championship`, page: () => this.#page4(), iconName: 'team-championship-solid', click: () => this.gotoPage(4)},
+            {title: lang`Club types statistic`, page: () => this.#page6(), iconName: 'club-type-solid', click: () => this.gotoPage(2)},
+            {title: lang`Referee categories statistic`, page: () => this.#page7(), iconName: 'referee-category-solid', click: () => this.gotoPage(3)},
+            {title: lang`Personal championship`, page: () => this.#page2(), iconName: 'person-championship-solid', click: () => this.gotoPage(4)},
+            {title: lang`Club championship`, page: () => this.#page3(), iconName: 'club-championship-solid', click: () => this.gotoPage(5)},
+            {title: lang`Team championship`, page: () => this.#page4(), iconName: 'team-championship-solid', click: () => this.gotoPage(6)},
         ]
     }
     pdfMethod() {
@@ -372,19 +378,31 @@ class MyCompetitionSection4 extends BaseElement {
 
     #page3() {
         return html`
-            <my-competition-section-4-page-3 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource}></my-competition-section-4-page-3>
+            <my-competition-section-4-page-3 .parent=${this.parent} .dataSource=${this.clubDataSource}></my-competition-section-4-page-3>
         `;
     }
 
     #page4() {
         return html`
-            <my-competition-section-4-page-4 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource}></my-competition-section-4-page-4>
+            <my-competition-section-4-page-4 .parent=${this.parent} .dataSource=${this.teamDataSource}></my-competition-section-4-page-4>
         `;
     }
 
     #page5() {
         return html`
             <my-competition-section-4-page-5 .parent=${this.parent} .categoryDataSource=${this.sportsCategoriesDataSource}></my-competition-section-4-page-5>
+        `;
+    }
+
+    #page6() {
+        return html`
+            <my-competition-section-4-page-6 .parent=${this.parent} .clubTypesDataSource=${this.clubTypesDataSource}></my-competition-section-4-page-6>
+        `;
+    }
+
+    #page7() {
+        return html`
+            <my-competition-section-4-page-7 .parent=${this.parent} .clubTypesDataSource=${this.refereeCategoryDataSource}></my-competition-section-4-page-7>
         `;
     }
 
@@ -435,7 +453,7 @@ class MyCompetitionSection4 extends BaseElement {
             return html`
                 <nav class="buttons">
                     ${this.pages.map( (button, index) =>
-                        html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                        html`<aside-button size="34" icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
                     }
                 </nav>
             `
@@ -577,8 +595,12 @@ class MyCompetitionSection4 extends BaseElement {
         this.competitionDataSource = new CompetitionDataSource(this)
         this.parent = await this.competitionDataSource.getItem()
         this.sportsmenDataSource = new SportsmenDataSource(this, await SportsmenDataSet.getDataSet(parentId))
+        this.refereeDataSource = new RefereeDataSource(this, await RefereeDataSet.getDataSet(parentId))
         this.teamDataSource = { items: this.sportsmenDataSource.getTeamResults() }
+        this.clubDataSource = { items: this.sportsmenDataSource.getClubResults() }
         this.sportsCategoriesDataSource = this.sportsmenDataSource.sportsCategories()
+        this.clubTypesDataSource = await this.sportsmenDataSource.clubTypes()
+        this.refereeCategoryDataSource = await this.refereeDataSource.refereeCategories()
 
     }
 }

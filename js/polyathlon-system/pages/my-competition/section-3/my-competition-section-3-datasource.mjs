@@ -125,4 +125,38 @@ export default class DataSource {
         this.items.splice(currentIndex, 1)
         this.state = States.BROWSE
     }
+
+     async refereeCategories() {
+        const Dataset = await import('../../my-referee-categories/my-referee-categories-dataset.mjs');
+        const dataset = await Dataset.default.getDataSet()
+
+        let categories = {
+            columns: ['Вид', 'Мужчины', 'Женщины', 'Итого'],
+            indexes: dataset.map(item => item.name),
+            rows: Array(dataset.length).fill(0).map(item => Array(4).fill(0)),
+            footer: ['Всего:', 0, 0, 0]
+        }
+        this.items.forEach(athlete => {
+            const column = categories.columns.indexOf(athlete.gender == 0 ? 'Мужчины' : 'Женщины')
+            const index = categories.indexes.indexOf(athlete?.category?.name)
+            if (index != -1) {
+                categories.rows[index][column]++
+            }
+        })
+        categories.rows.forEach(element => {
+            element[categories.columns.length - 1] = element[1] + element[2]
+            categories.footer[1] += element[1]
+            categories.footer[2] += element[2]
+            categories.footer[3] += element[categories.columns.length - 1]
+        });
+        categories.rows = categories.rows.filter( (item, index) => {
+            if (item.at(-1) == 0) {
+                categories.indexes[index] = ''
+                return false
+            }
+            return true
+        })
+        categories.indexes = categories.indexes.filter(value => value)
+        return categories
+    }
 }

@@ -12,45 +12,8 @@ class MyCompetitionSection4Page4 extends BaseElement {
             items: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
-            sportsmenDataSource: { type: Object, default: null },
+            dataSource: { type: Object, default: null },
         }
-    }
-    constructor() {
-        super()
-        this.columns = [
-            {
-                name: "place",
-                label: lang`Place`,
-            },
-            {
-                name: "sportsman",
-                label: lang`Sportsman`,
-            },
-            {
-                name: "category",
-                label: lang`Short sports category`,
-            },
-            {
-                name: "year",
-                label: lang`Year of birth`,
-            },
-            {
-                name: "region",
-                label: lang`Region RF`,
-            },
-            {
-                name: "club",
-                label: lang`Sports club`,
-            },
-            {
-                name: "points",
-                label: lang`Total points`,
-            },
-            {
-                name: "completedCategory",
-                label: lang`Completed category`,
-            },
-        ]
     }
 
     static get styles() {
@@ -224,6 +187,24 @@ class MyCompetitionSection4Page4 extends BaseElement {
         ]
     }
 
+    constructor() {
+        super()
+        this.columns = [
+            {
+                name: "place",
+                label: lang`Place`,
+            },
+            {
+                name: "region",
+                label: lang`Region RF`,
+            },
+            {
+                name: "points",
+                label: lang`Total points`,
+            },
+        ]
+    }
+
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
@@ -234,17 +215,12 @@ class MyCompetitionSection4Page4 extends BaseElement {
         if (changedProps.has('currentCountryItem')) {
             this.currentPage = 0;
         }
-        if (changedProps.has('sportsmenDataSource')) {
-            this.items = this.sportsmenDataSource.items.map(item => {
+        if (changedProps.has('dataSource')) {
+            this.items = this.dataSource.items.map(item => {
                 return {
                     place: item.place ?? 0,
-                    sportsman: `${item.lastName} ${item.firstName}`,
-                    category: item.category.shortName,
-                    year: item.birthday.split('.')[2],
-                    region: item.region.shortName ?? item.region.name,
-                    club: item.club.name,
-                    points: +(item.shooting?.points ?? 0) + +(item.pushUps?.points ?? 0) + +(item.skiing?.points ?? 0),
-                    completedCategory: item.completedCategory ?? item.category.shortName,
+                    region: item.region.name ?? item.region.shortName,
+                    points: item.points ?? 0,
                 }
             });
         }
@@ -252,9 +228,9 @@ class MyCompetitionSection4Page4 extends BaseElement {
 
     render() {
         return html`
-            <simple-table-header .columns=${this.columns}></simple-table-header>
+            <!-- <simple-table-header .columns=${this.columns}></simple-table-header> -->
             <div class="table">
-                <simple-table @click=${this.tableClick} .hideHead=${true} .columns=${this.columns} .rows=${this.items}></simple-table>
+                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.items}></simple-table>
             </div>
         `;
     }

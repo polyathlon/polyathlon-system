@@ -12,7 +12,7 @@ class MyCompetitionSection4Page3 extends BaseElement {
             items: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
-            sportsmenDataSource: { type: Object, default: null },
+            dataSource: { type: Object, default: null },
         }
     }
     constructor() {
@@ -23,32 +23,16 @@ class MyCompetitionSection4Page3 extends BaseElement {
                 label: lang`Place`,
             },
             {
-                name: "sportsman",
-                label: lang`Sportsman`,
-            },
-            {
-                name: "category",
-                label: lang`Short sports category`,
-            },
-            {
-                name: "year",
-                label: lang`Year of birth`,
+                name: "club",
+                label: lang`Sports club`,
             },
             {
                 name: "region",
                 label: lang`Region RF`,
             },
             {
-                name: "club",
-                label: lang`Sports club`,
-            },
-            {
                 name: "points",
                 label: lang`Total points`,
-            },
-            {
-                name: "completedCategory",
-                label: lang`Completed category`,
             },
         ]
     }
@@ -224,6 +208,12 @@ class MyCompetitionSection4Page3 extends BaseElement {
         ]
     }
 
+    clubShowValue(club) {
+        if (club?.name)
+            return `${club?.name}, ${club?.city?.type?.shortName || ''} ${club?.city?.name}`
+        return ''
+    }
+
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
@@ -234,17 +224,13 @@ class MyCompetitionSection4Page3 extends BaseElement {
         if (changedProps.has('currentCountryItem')) {
             this.currentPage = 0;
         }
-        if (changedProps.has('sportsmenDataSource')) {
-            this.items = this.sportsmenDataSource.items.map(item => {
+        if (changedProps.has('dataSource')) {
+            this.items = this.dataSource.items.map(item => {
                 return {
                     place: item.place ?? 0,
-                    sportsman: `${item.lastName} ${item.firstName}`,
-                    category: item.category.shortName,
-                    year: item.birthday.split('.')[2],
-                    region: item.region.shortName ?? item.region.name,
-                    club: item.club.name,
-                    points: +(item.shooting?.points ?? 0) + +(item.pushUps?.points ?? 0) + +(item.skiing?.points ?? 0),
-                    completedCategory: item.completedCategory ?? item.category.shortName,
+                    club: this.clubShowValue(item.club),
+                    region: item.club?.city?.region?.name ?? '',
+                    points: item.points,
                 }
             });
         }
@@ -252,9 +238,9 @@ class MyCompetitionSection4Page3 extends BaseElement {
 
     render() {
         return html`
-            <simple-table-header .columns=${this.columns}></simple-table-header>
+            <!-- <simple-table-header .columns=${this.columns}></simple-table-header> -->
             <div class="table">
-                <simple-table @click=${this.tableClick} .hideHead=${true} .columns=${this.columns} .rows=${this.items}></simple-table>
+                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.items}></simple-table>
             </div>
         `;
     }
@@ -278,7 +264,6 @@ class MyCompetitionSection4Page3 extends BaseElement {
             this.isModified = this.oldValues.size !== 0;
         }
     }
-
 }
 
 customElements.define("my-competition-section-4-page-3", MyCompetitionSection4Page3);

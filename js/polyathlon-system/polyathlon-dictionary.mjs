@@ -204,7 +204,7 @@ const dictionary = {
         "en-EN": 'Year of birth'
     },
     'Sports club': {
-        "ru-RU": 'Спортклуб, населенный пункт',
+        "ru-RU": 'Спортивный клуб',
         "en-EN": 'Sports club'
     },
     'Total points': {
@@ -778,6 +778,14 @@ const dictionary = {
     'Club member': {
         "ru-RU": 'Клуба',
         "en-EN": 'Club member'
+    },
+    'Referee categories statistic': {
+        "ru-RU": 'Категории судей',
+        "en-EN": 'Referee categories statistic'
+    },
+    'Club types statistic': {
+        "ru-RU": 'Виды клубов',
+        "en-EN": 'Club types statistic'
     },
 
 

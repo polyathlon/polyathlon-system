@@ -25,7 +25,7 @@ import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs
 
 import DataSet from './my-competition-dataset.mjs'
 
-class MyCompetitionSection4Page5 extends BaseElement {
+class MyCompetitionSection4Page7 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -248,25 +248,6 @@ class MyCompetitionSection4Page5 extends BaseElement {
 
 //     return gradient;
 //   }
-
-    menCount() {
-        return this.sportsmenDataSource?.items?.reduce( (a, item) => item.gender == 0 ? a + 1 : a, 0)
-    }
-
-    womenCount() {
-        return this.sportsmenDataSource?.items?.reduce( (a, item) => item.gender == 1 ? a + 1 : a, 0)
-    }
-
-    regionCount() {
-        const a = new Set(this.sportsmenDataSource?.items.map(item => item.region?.name))
-
-        return a.size
-    }
-
-    clubCount() {
-        const a = new Map(this.sportsmenDataSource?.items.map(item => [item.club?._id, item.club?.name]))
-        return a.size
-    }
 
     pdfMethod() {
         const docInfo = {
@@ -519,41 +500,27 @@ class MyCompetitionSection4Page5 extends BaseElement {
         pdfMake.createPdf(docInfo).open();
     }
 
-
-    chartLabels() {
-        return ['МСМК', 'МС', 'КМС', 'I', 'II', 'III', 'I юн', 'II юн', 'III юн', 'б/р']
-    }
-
-    chartMenDataset() {
-        const categoryNames = ['МСМК', 'МС', 'КМС', 'I', 'II', 'III', 'I юн', 'II юн', 'III юн', 'б/р']
-        const dataset = Array(categoryNames.length)
-        categoryNames.forEach((category, index) => {
-            dataset[index] = this.teamDataSource.items.men.get(category)
-        });
-        return dataset
-    }
-
     drawChart(){
         this.chart = new Chart(this.$id('chart'), {
             type: 'bar',
             data: {
-              labels: this.categoryDataSource.indexes,
+              labels: this.clubTypesDataSource.indexes,
               datasets: [{
-                data: this.categoryDataSource.rows.map(value => value[1]),
+                data: this.clubTypesDataSource.rows.map(value => value[1]),
                 label: 'Мужчины',
                 hidden: true,
                 borderWidth: 1,
                 backgroundColor: 'rgba(30, 144, 255, 0.9)',
               },
               {
-                data: this.categoryDataSource.rows.map(value => value[2]),
+                data: this.clubTypesDataSource.rows.map(value => value[2]),
                 label: 'Женщины',
                 hidden: true,
                 borderWidth: 1,
                 backgroundColor: 'rgba(255, 179, 217, 0.9)',
               },
               {
-                data: this.categoryDataSource.rows.map(value => value[3]),
+                data: this.clubTypesDataSource.rows.map(value => value[3]),
                 label: 'Итого',
                 borderWidth: 1,
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -573,7 +540,7 @@ class MyCompetitionSection4Page5 extends BaseElement {
                     tooltip: true,
                     title: {
                         display: true,
-                        text: 'Уровень подготовки спортсменов',
+                        text: 'Уровень подготовки судей',
                         color: 'rgba(255, 255, 255, 0.9)',
                     }
                 },
@@ -616,7 +583,7 @@ class MyCompetitionSection4Page5 extends BaseElement {
         if (changedProps.has('currentCountryItem')) {
             this.currentPage = 0;
         }
-        if (changedProps.has('teamDataSource') && this.teamDataSource) {
+        if (changedProps.has('clubTypesDataSource') && this.clubTypesDataSource) {
             this.drawChart();
         }
     }
@@ -657,4 +624,4 @@ class MyCompetitionSection4Page5 extends BaseElement {
     }
 }
 
-customElements.define("my-competition-section-4-page-5", MyCompetitionSection4Page5);
+customElements.define("my-competition-section-4-page-7", MyCompetitionSection4Page7);
