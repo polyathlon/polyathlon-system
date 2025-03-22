@@ -264,7 +264,27 @@ class MyCompetitionSection4Page3 extends BaseElement {
             this.isModified = this.oldValues.size !== 0;
         }
     }
-    pdfMethod() {
+
+    #competitionDate(parent) {
+        const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+
+        if (parent.startDate) {
+            const start = parent.startDate.split("-")
+            const end = parent.endDate.split("-")
+            if (start[2] === end[2] && start[1] === end[1]) {
+                return `${start[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
+            }
+            if (start[1] === end[1]) {
+                return `${start[2]}-${end[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
+            }
+            return `${start[2]} ${monthNames[start[1]-1]} - ${end[2]} ${monthNames[end[1] - 1]} ${start[0]} года`
+        }
+        return ''
+    }
+
+    pdfMethod(refereeDataSource) {
+        const mainReferee = refereeDataSource.items.find((item) => item.position.name === "Главный судья")
+        const mainSecretary = refereeDataSource.items.find((item) => item.position.name === "Главный секретарь")
         const docInfo = {
           info: {
             title: "clubs",
@@ -289,14 +309,21 @@ class MyCompetitionSection4Page3 extends BaseElement {
                 margin: [10, 0, 0, 0],
             },
             {
-                text: "(Вид) (этап) этап по полиатлону",
+                text: `${this.parent.name.name}${this.parent.stage ? ' ' + this.parent.stage.name: ''} по полиатлону`,
                 fontSize: 12,
                 bold:true,
                 alignment: "center",
                 margin: [10, 10, 0, 0],
             },
             {
-                text: " в спортивной дисциплине (дисциплина)",
+                text: ` в спортивной дисциплине ${this.parent?.sportsDiscipline1?.name}`,
+                fontSize: 12,
+                bold:true,
+                alignment: "center",
+                margin: [10, 0, 0, 5],
+            },
+            {
+                text: `№ СМ ${this.parent?.ekpNumber} в ЕКП`,
                 fontSize: 12,
                 bold:true,
                 alignment: "center",
@@ -305,13 +332,13 @@ class MyCompetitionSection4Page3 extends BaseElement {
             {
                 columns: [
                     {
-                        text: "(дата)",
+                        text: this.#competitionDate(this.parent),
                         margin: [0, 0, 0, 0],
                         fontSize: 10,
                         alignment: "left",
                     },
                     {
-                        text: "г. (город), (область)",
+                        text: `г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`,
                         alignment: "right",
                         margin: [0, 0, 0, 0],
                         fontSize: 10,
@@ -330,21 +357,22 @@ class MyCompetitionSection4Page3 extends BaseElement {
                 table:{
                     widths: [40, 210, 130, 40],
                     body: [
-                    [ {fontSize: 10, text: 'Место', alignment: "center", margin: [0, 5.5, 0, 0]}, {fontSize: 10, text: 'Спортивный клуб', alignment: "center", margin: [0, 5.5, 0, 0]}, {fontSize: 10, text: 'Субъект РФ', alignment: "center", margin: [0, 5.5, 0, 0]}, {fontSize: 10, text: 'Сумма очков', alignment: "center"} ],
-                    [ {fontSize: 10, text: '1', alignment: "center"}, {fontSize: 10, text: 'Value', alignment: "center"}, {fontSize: 10, text: 'Калужская область', alignment: "center"}, {fontSize: 10, text: 'Value', alignment: "center"} ],
-                    ],
+                        [ {fontSize: 10, text: 'Место', alignment: "center", margin: [0, 5.5, 0, 0]}, {fontSize: 10, text: 'Спортивный клуб', alignment: "center", margin: [0, 5.5, 0, 0]}, {fontSize: 10, text: 'Субъект РФ', alignment: "center", margin: [0, 5.5, 0, 0]}, {fontSize: 10, text: 'Сумма очков', alignment: "center"} ]
+                    ].concat( this.dataSource.items.map( (item, index) => [
+                        {fontSize: 10, text: item.place, alignment: "center"}, {fontSize: 10, text: this.clubShowValue(item.club), alignment: "center"}, {fontSize: 10, text: item.club?.city?.region?.name ?? '', alignment: "center"}, {fontSize: 10, text: item.points, alignment: "center"}
+                    ])),
                     headerRows: 1,
                 }
             },
             {
                 columns: [
                     {
-                        text: "(position.name)",
+                        text: mainReferee?.position.name,
                         margin: [0, 20, 0, 0],
                         fontSize: 10,
                     },
                     {
-                        text: "(name)",
+                        text: `${mainReferee?.firstName[0]}.${mainReferee?.middleName[0]}. ${mainReferee?.lastName}`,
                         alignment: "left",
                         margin: [0, 20, 0, 0],
                         fontSize: 10,
@@ -356,12 +384,12 @@ class MyCompetitionSection4Page3 extends BaseElement {
                 columns: [
 
                     {
-                        text: "(category.name)",
+                        text: mainReferee?.category.name,
                         margin: [0, 0, 0, 0],
                         fontSize: 10,
                     },
                     {
-                        text: "`(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`",
+                        text: `(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`,
                         alignment: "left",
                         margin: [0, 0, 0, 0],
                         fontSize: 10,
@@ -372,12 +400,12 @@ class MyCompetitionSection4Page3 extends BaseElement {
             {
                 columns: [
                     {
-                        text: "(position.name)",
+                        text: mainSecretary?.position.name,
                         margin: [0, 20, 0, 0],
                         fontSize: 10,
                     },
                     {
-                        text: "(name)",
+                        text: `${mainSecretary?.firstName[0]}.${mainSecretary?.middleName[0]}. ${mainSecretary?.lastName}`,
                         alignment: "left",
                         margin: [0, 20, 0, 0],
                         fontSize: 10,
@@ -389,12 +417,12 @@ class MyCompetitionSection4Page3 extends BaseElement {
                 columns: [
 
                     {
-                        text: "(category.name)",
+                        text: mainSecretary?.category.name,
                         margin: [0, 0, 0, 0],
                         fontSize: 10,
                     },
                     {
-                        text: "`(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`",
+                        text: `(г. ${mainSecretary?.city?.name}, ${mainSecretary?.city?.region?.name})`,
                         alignment: "left",
                         margin: [0, 0, 0, 0],
                         fontSize: 10,

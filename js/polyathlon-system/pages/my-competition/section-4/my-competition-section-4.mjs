@@ -19,6 +19,7 @@ import './my-competition-section-4-page-4.mjs'
 import './my-competition-section-4-page-5.mjs'
 import './my-competition-section-4-page-6.mjs'
 import './my-competition-section-4-page-7.mjs'
+import './my-competition-section-4-page-8.mjs'
 //import './my-competition-section-4-page-2.mjs'
 // import './my-competition-section-2-page-1.mjs'
 // import './my-competition-section-2-list-1.mjs'
@@ -259,14 +260,16 @@ class MyCompetitionSection4 extends BaseElement {
             {title: lang`Competition`, page: () => this.#page1(), iconName: 'chart-pie-solid', click: () => this.gotoPage(0)},
             {title: lang`Sport categories`, page: () => this.#page5(), iconName: 'sports-category-solid', click: () => this.gotoPage(1)},
             {title: lang`Club types statistic`, page: () => this.#page6(), iconName: 'club-type-solid', click: () => this.gotoPage(2)},
-            {title: lang`Referee categories statistic`, page: () => this.#page7(), iconName: 'referee-category-solid', click: () => this.gotoPage(3)},
-            {title: lang`Personal championship`, page: () => this.#page2(), iconName: 'person-championship-solid', click: () => this.gotoPage(4)},
-            {title: lang`Club championship`, page: () => this.#page3(), iconName: 'club-championship-solid', click: () => this.gotoPage(5)},
-            {title: lang`Team championship`, page: () => this.#page4(), iconName: 'team-championship-solid', click: () => this.gotoPage(6)},
+            {title: lang`Region statistic`, page: () => this.#page8(), iconName: 'region-solid', click: () => this.gotoPage(3)},
+            {title: lang`Referee categories statistic`, page: () => this.#page7(), iconName: 'referee-category-solid', click: () => this.gotoPage(4)},
+            {title: lang`Personal championship`, page: () => this.#page2(), iconName: 'person-championship-solid', click: () => this.gotoPage(5)},
+            {title: lang`Club championship`, page: () => this.#page3(), iconName: 'club-championship-solid', click: () => this.gotoPage(6)},
+            {title: lang`Team championship`, page: () => this.#page4(), iconName: 'team-championship-solid', click: () => this.gotoPage(7)},
         ]
     }
+
     pdfMethod() {
-        this.renderRoot.querySelector("my-competition-section-4-page-3")?.pdfMethod()
+        this.renderRoot.querySelector(".right-layout > *").pdfMethod?.(this.refereeDataSource)
     }
 
         showPage(page) {
@@ -400,9 +403,16 @@ class MyCompetitionSection4 extends BaseElement {
         `;
     }
 
+
     #page7() {
         return html`
             <my-competition-section-4-page-7 .parent=${this.parent} .clubTypesDataSource=${this.refereeCategoryDataSource}></my-competition-section-4-page-7>
+            `;
+    }
+
+    #page8() {
+        return html`
+            <my-competition-section-4-page-8 .parent=${this.parent} .dataSource=${this.teamDataSource}></my-competition-section-4-page-8>
         `;
     }
 
