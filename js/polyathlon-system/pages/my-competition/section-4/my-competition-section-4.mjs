@@ -266,7 +266,7 @@ class MyCompetitionSection4 extends BaseElement {
         ]
     }
     pdfMethod() {
-        this.renderRoot.querySelector("my-competition-section-4-page-1")?.pdfMethod()
+        this.renderRoot.querySelector("my-competition-section-4-page-3")?.pdfMethod()
     }
 
         showPage(page) {

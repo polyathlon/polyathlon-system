@@ -281,7 +281,7 @@ class MyCompetitionSection4Page5 extends BaseElement {
 
           content: [
             {
-                text: "Всероссийская федерация Полиатлона",
+                text: "Всероссийская федерация Полиатлонаыыыыыыыыыыыыыыыыыыыыыыыы",
                 fontSize: 14,
                 alignment: "center",
                 margin: [10, 0, 0, 0],
