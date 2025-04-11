@@ -17,7 +17,7 @@ class MyCompetitionSection4Page3 extends BaseElement {
     }
     constructor() {
         super()
-        this.columns = [
+        this.columns = [[
             {
                 name: "place",
                 label: lang`Place`,
@@ -34,7 +34,7 @@ class MyCompetitionSection4Page3 extends BaseElement {
                 name: "points",
                 label: lang`Total points`,
             },
-        ]
+        ]]
     }
 
     static get styles() {

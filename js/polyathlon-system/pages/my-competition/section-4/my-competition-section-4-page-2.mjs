@@ -17,7 +17,7 @@ class MyCompetitionSection4Page2 extends BaseElement {
     }
     constructor() {
         super()
-        this.columns = [
+        this.columns = [[
             {
                 name: "place",
                 label: lang`Place`,
@@ -50,7 +50,7 @@ class MyCompetitionSection4Page2 extends BaseElement {
                 name: "completedCategory",
                 label: lang`Completed category`,
             },
-        ]
+        ]]
     }
 
     static get styles() {
@@ -252,9 +252,10 @@ class MyCompetitionSection4Page2 extends BaseElement {
 
     render() {
         return html`
-            <simple-table-header .columns=${this.columns}></simple-table-header>
+            <!-- <simple-table-header .columns=${this.columns}></simple-table-header> -->
             <div class="table">
-                <simple-table @click=${this.tableClick} .hideHead=${true} .columns=${this.columns} .rows=${this.items}></simple-table>
+                <!-- <simple-table @click=${this.tableClick} .hideHead=${true} .columns=${this.columns} .rows=${this.items}></simple-table> -->
+                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.items}></simple-table>
             </div>
         `;
     }

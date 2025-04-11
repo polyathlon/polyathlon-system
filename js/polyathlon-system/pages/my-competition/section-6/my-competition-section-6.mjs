@@ -211,6 +211,8 @@ class MyCompetitionSection6 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'competition-solid', page: 'my-coach-categories', title: 'Sports place', click: () => this.sportsPlace()},
+            {iconName: 'drawing-lots-solid', page: 'my-coach-categories', title: 'Drawing lots', click: () => this.drawingLots()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
         ]
         this.pages = [
@@ -225,6 +227,23 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'page9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
             {name: 'page10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
         ]
+    }
+
+    allPoints() {
+
+    }
+
+    sportsPlace() {
+        const item = this.dataSource.items.map(item => item).sort( (a, b) =>
+            a.points - b.points
+        )
+        item.reduce((a, b) => {
+            if (b.place != a + 1) {
+                b.place = a + 1
+                this.dataSource.saveItem(b);
+            }
+            return a + 1
+        }, 0)
     }
 
     showPage(page) {

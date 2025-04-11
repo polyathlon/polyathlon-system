@@ -66,6 +66,7 @@ class MyCompetitionSection6Page6 extends BaseElement {
             <modal-dialog></modal-dialog>
             <div class="container">
                 <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
+                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 <div class="name-group">
                     <simple-input id="sprint" icon-name="sprint-solid" label="${lang`Race`}:" .currentObject=${this.item?.sprinting} .value=${this.item?.sprinting?.sprint} @input=${this.validateInput}></simple-input>
                     <simple-input id="track" icon-name="race-track-solid" label="${lang`Track`}:" .currentObject=${this.item?.sprinting} .value=${this.item?.sprinting?.track} @input=${this.validateInput}></simple-input>

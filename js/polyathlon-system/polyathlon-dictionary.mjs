@@ -780,12 +780,76 @@ const dictionary = {
         "en-EN": 'Club member'
     },
     'Referee categories statistic': {
-        "ru-RU": 'Категории судей',
+        "ru-RU": 'Уровень подготовки судей',
         "en-EN": 'Referee categories statistic'
     },
     'Club types statistic': {
-        "ru-RU": 'Виды клубов',
+        "ru-RU": 'Принадлежность к спортивной школе',
         "en-EN": 'Club types statistic'
+    },
+    'Competition statistic': {
+        "ru-RU": 'Статистика соревнования',
+        "en-EN": 'Competition statistic'
+    },
+    'Region statistic': {
+        "ru-RU": 'Состав участвующих команд',
+        "en-EN": 'Region statistic'
+    },
+    'Sport categories statistic': {
+        "ru-RU": 'Уровень подготовки спортсменов',
+        "en-EN": 'Club types statistic'
+    },
+    'Sports number': {
+        "ru-RU": 'Номер спортсмена',
+        "en-EN": 'Sports number'
+    },
+    'Medal counts': {
+        "ru-RU": 'Медальный зачет',
+        "en-EN": 'Medal counts'
+    },
+    'Medals count': {
+        "ru-RU": 'Количество медалей',
+        "en-EN": 'Medals count'
+    },
+    'Gold': {
+        "ru-RU": 'Золото',
+        "en-EN": 'Gold'
+    },
+    'Silver': {
+        "ru-RU": 'Серебро',
+        "en-EN": 'Silver'
+    },
+    'Bronze': {
+        "ru-RU": 'Бронза',
+        "en-EN": 'Bronze'
+    },
+    'Winners': {
+        "ru-RU": 'Победители',
+        "en-EN": 'Winners'
+    },
+    'Stadium statistic': {
+        "ru-RU": 'Спортивные сооружения',
+        "en-EN": 'Stadium statistic'
+    },
+    'Men': {
+        "ru-RU": 'Мужчины',
+        "en-EN": 'Men'
+    },
+    'Women': {
+        "ru-RU": 'Женщины',
+        "en-EN": 'Women'
+    },
+    'Total': {
+        "ru-RU": 'Итого',
+        "en-EN": 'Total'
+    },
+    'All': {
+        "ru-RU": 'Всего',
+        "en-EN": 'All'
+    },
+    'Drawing lots': {
+        "ru-RU": 'Жеребьевка',
+        "en-EN": 'Drawing lots'
     },
 
 

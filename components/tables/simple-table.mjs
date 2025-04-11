@@ -182,22 +182,31 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                     )}
                 </colgroup>
                 <thead ?hidden=${this.hideHead}>
-                    <tr>
-                        ${this.columns?.map((column, index) =>
-                            html`
-                                <th data-dt-column=${index} rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc    dt-ordering-asc" aria-sort="ascending" aria-label="Name: Activate to invert sorting" tabindex=${index}>
-                                    ${column.label}
-                                </th>
-                            `
-                        )}
-                    </tr>
+                    ${this.columns?.map((row, index) =>
+                        html`
+                            <tr>
+                                ${row.map( (column, index) =>
+                                    html`
+                                        <th data-dt-column=${index} rowspan=${column.rowspan ? column.rowspan : "1"} colspan=${column.colspan ? column.colspan : "1"} class="dt-orderable-asc dt-orderable-desc    dt-ordering-asc" aria-sort="ascending" aria-label="Name: Activate to invert sorting" tabindex=${index}>
+                                            ${column.label}
+                                        </th>
+                                    `
+                                )}
+                            </tr>
+                        `
+                    )}
                 </thead>
                 <tbody>
                     ${this.rows?.map((row, index) =>
                         html`
                             <tr @click=${(e) => e.details = index}>
-                                ${this.columns?.map((column, index) => html`
-                                    <td>${typeof row[column.name] === 'object' ? row[this.column.name].name : row[column.name]}</td>`
+                                ${this.columns[0]?.map((column, index) => (column?.colspan ?? 1) > 1 ? this.columns?.[1].filter(item => item.parent === column.name).map(item =>
+                                html`
+                                    <td>${typeof row[item.name] === 'object' ? row[this.item.name].name : row[item.name]}</td>
+                                `) :
+                                html`
+                                    <td>${typeof row[column.name] === 'object' ? row[this.column.name].name : row[column.name]}</td>
+                                `
                                 )}
                             </tr>
                         `

@@ -5,7 +5,7 @@ import '../../../../../../components/tables/simple-table.mjs'
 import '../../../../../../components/tables/simple-table-header.mjs'
 import lang from '../../../polyathlon-dictionary.mjs'
 
-class MyCompetitionSection4Page8 extends BaseElement {
+class MyCompetitionSection4Page9 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -19,8 +19,8 @@ class MyCompetitionSection4Page8 extends BaseElement {
         super()
         this.columns = [ [
                 {
-                    name: "number",
-                    label: lang`№ п/п`,
+                    name: "place",
+                    label: lang`Place`,
                     rowspan: 2,
                 },
                 {
@@ -29,31 +29,26 @@ class MyCompetitionSection4Page8 extends BaseElement {
                     rowspan: 2,
                 },
                 {
-                    name: "sportsmen",
-                    label: lang`Sportsmen`,
+                    name: "medals",
+                    label: lang`Medals count`,
                     colspan: 3,
-                },
-                {
-                    name: "all",
-                    label: lang`All`,
-                    rowspan: 2,
                 },
             ],
             [
                 {
-                    name: "men",
-                    label: lang`Men`,
-                    parent: "sportsmen",
+                    name: "gold",
+                    label: lang`Gold`,
+                    parent: "medals",
                 },
                 {
-                    name: "women",
-                    label: lang`Women`,
-                    parent: "sportsmen",
+                    name: "silver",
+                    label: lang`Silver`,
+                    parent: "medals",
                 },
                 {
-                    name: "total",
-                    label: lang`Total`,
-                    parent: "sportsmen",
+                    name: "bronze",
+                    label: lang`Bronze`,
+                    parent: "medals",
                 },
             ],
         ]
@@ -249,12 +244,11 @@ class MyCompetitionSection4Page8 extends BaseElement {
         if (changedProps.has('dataSource')) {
             this.items = this.dataSource.items.sort( (a, b) => a.region.name.localeCompare(b.region.name)).map( (item, index) => {
                 return {
-                    number: index + 1,
+                    place: index + 1,
                     region: item.region?.name ?? '',
-                    men: item.team.reduce((count, item) => item.gender == 0 ? count + 1 : count, 0),
-                    women: item.team.reduce((count, item) => item.gender == 1 ? count + 1 : count, 0),
-                    total: item.team.length,
-                    all: item.team.length,
+                    gold: item.team.medals?.gold || '',
+                    silver: item.team.medals?.silver || '',
+                    bronze: item.team.medals?.bronze || '',
                 }
             })
         }
@@ -466,4 +460,4 @@ class MyCompetitionSection4Page8 extends BaseElement {
     }
 }
 
-customElements.define("my-competition-section-4-page-8", MyCompetitionSection4Page8);
+customElements.define("my-competition-section-4-page-9", MyCompetitionSection4Page9);

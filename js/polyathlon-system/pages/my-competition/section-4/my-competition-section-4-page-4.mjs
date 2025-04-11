@@ -189,7 +189,7 @@ class MyCompetitionSection4Page4 extends BaseElement {
 
     constructor() {
         super()
-        this.columns = [
+        this.columns = [ [
             {
                 name: "place",
                 label: lang`Place`,
@@ -202,7 +202,7 @@ class MyCompetitionSection4Page4 extends BaseElement {
                 name: "points",
                 label: lang`Total points`,
             },
-        ]
+        ]]
     }
 
     update(changedProps) {
@@ -222,7 +222,7 @@ class MyCompetitionSection4Page4 extends BaseElement {
                     region: item.region.name ?? item.region.shortName,
                     points: item.points ?? 0,
                 }
-            });
+            }).sort((a, b) => b.points > a.points ? 1 : b.points < a.points ? -1 : a.region.localeCompare(b.region));
         }
     }
 
