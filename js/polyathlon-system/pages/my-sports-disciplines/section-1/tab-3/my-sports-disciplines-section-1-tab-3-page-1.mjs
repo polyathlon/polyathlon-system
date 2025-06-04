@@ -40,16 +40,16 @@ class MySportsDisciplinesSection1Tab3Page1 extends BaseElement {
 
     constructor () {
         super()
-        this.columns = [
+        this.columns = [[
             {
                 name: "category",
-                label: "Sports category"
+                label: lang`Sports category`
             },
             {
                 name: "points",
-                label: "Points"
+                label: lang`Points`
             }
-        ]
+        ]]
     }
 
     render() {

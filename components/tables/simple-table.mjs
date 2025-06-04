@@ -202,10 +202,10 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                             <tr @click=${(e) => e.details = index}>
                                 ${this.columns[0]?.map((column, index) => (column?.colspan ?? 1) > 1 ? this.columns?.[1].filter(item => item.parent === column.name).map(item =>
                                 html`
-                                    <td>${typeof row[item.name] === 'object' ? row[this.item.name].name : row[item.name]}</td>
+                                    <td>${typeof row[item.name] === 'object' ? row[item.name].name : row[item.name]}</td>
                                 `) :
                                 html`
-                                    <td>${typeof row[column.name] === 'object' ? row[this.column.name].name : row[column.name]}</td>
+                                    <td>${typeof row[column.name] === 'object' ? row[column.name].name : row[column.name]}</td>
                                 `
                                 )}
                             </tr>

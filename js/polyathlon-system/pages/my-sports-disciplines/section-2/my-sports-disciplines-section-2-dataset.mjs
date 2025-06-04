@@ -136,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition-referee/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/sports-discipline-age-group/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -51,7 +51,7 @@ class MySportsDisciplineComponents extends BaseElement {
     get #section() {
         switch(this.currentSection) {
             case 0: return cache(this.#section1)
-            case 1: return cache(this.#section2)
+            case 1: return cache(this.#section1)
             default: return cache(this.#section1)
         }
     }

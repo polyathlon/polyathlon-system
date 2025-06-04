@@ -40,7 +40,7 @@ class MySportsDisciplineComponentsSection1Tab2Page1 extends BaseElement {
 
     constructor () {
         super()
-        this.columns = [
+        this.columns = [[
             {
                 name: "points",
                 label: lang`Points`,
@@ -49,13 +49,13 @@ class MySportsDisciplineComponentsSection1Tab2Page1 extends BaseElement {
                 name: "result",
                 label: lang`Results`,
             }
-        ]
+        ]]
     }
 
     render() {
         return html`
             <div class="container">
-                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.item.men}></simple-table>
+                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.item?.men}></simple-table>
             </div>
         `;
     }

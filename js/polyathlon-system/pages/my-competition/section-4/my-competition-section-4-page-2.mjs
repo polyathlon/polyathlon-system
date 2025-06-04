@@ -1,8 +1,8 @@
 import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
-import '../../../../../../components/tables/simple-table.mjs'
-import '../../../../../../components/tables/simple-table-header.mjs'
+import '../../../../../components/tables/simple-table.mjs'
+import '../../../../../components/tables/simple-table-header.mjs'
 import lang from '../../../polyathlon-dictionary.mjs'
 
 class MyCompetitionSection4Page2 extends BaseElement {
@@ -239,6 +239,7 @@ class MyCompetitionSection4Page2 extends BaseElement {
                 return {
                     place: item.place ?? 0,
                     sportsman: `${item.lastName} ${item.firstName}`,
+                    gender: item.gender,
                     category: item.category.shortName,
                     year: new Date(item.birthday).getFullYear(),
                     region: item.region.shortName ?? item.region.name,
@@ -246,7 +247,7 @@ class MyCompetitionSection4Page2 extends BaseElement {
                     points: +(item.shooting?.points ?? 0) + +(item.pushUps?.points ?? 0) + +(item.skiing?.points ?? 0),
                     completedCategory: item.completedCategory ?? item.category.shortName,
                 }
-            });
+            }).sort((a, b) => +(a.gender) - b.gender || b.points - a.points).map((item, index) => {item.place = index + 1; return item});
         }
     }
 

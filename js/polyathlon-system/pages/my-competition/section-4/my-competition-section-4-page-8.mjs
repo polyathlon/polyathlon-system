@@ -1,8 +1,8 @@
 import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
-import '../../../../../../components/tables/simple-table.mjs'
-import '../../../../../../components/tables/simple-table-header.mjs'
+import '../../../../../components/tables/simple-table.mjs'
+import '../../../../../components/tables/simple-table-header.mjs'
 import lang from '../../../polyathlon-dictionary.mjs'
 
 class MyCompetitionSection4Page8 extends BaseElement {

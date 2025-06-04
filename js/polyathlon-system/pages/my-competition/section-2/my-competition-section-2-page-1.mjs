@@ -241,7 +241,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
             if (item) {
                 ageGroupComponent.setValue(item)
             } else {
-                this.errorDialog("Такая возрастная группа в соревновании не найдена")
+                // this.errorDialog("Такая возрастная группа в соревновании не найдена")
                 delete this.item.ageGroup
                 ageGroupComponent.setValue('')
             }
