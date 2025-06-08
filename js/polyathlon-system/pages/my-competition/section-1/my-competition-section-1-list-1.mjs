@@ -129,9 +129,14 @@ class MyCompetitionSection1List1 extends BaseElement {
             ${this.#registration}
             ${this.regulationsLink && !this.protocolLink ? html`<fashion-button class="regulations-link" @click=${this.regulationsLinkClick}>Регламент</fashion-button>` : ''}
             ${this.protocolLink ? html`<fashion-button @click=${this.protocolLinkClick}>Протоколы</fashion-button>` : ''}
+            <fashion-button @click=${this.showPage}>Зарегистрироваться</fashion-button>
         `
     }
 
+    showPage() {
+        location.hash = "my-registrations";
+    }
+    
     registration() {
         this.currentPage = 3
     }

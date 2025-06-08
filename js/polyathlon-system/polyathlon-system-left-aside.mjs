@@ -52,7 +52,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
             {iconName: 'trainer-solid', page: 'my-trainers', title: lang`Trainers`, click: () => this.showPage('my-trainers')},
             {iconName: 'sportsmen-solid', page: 'my-sportsmen', title: lang`Sportsmen`, click: () => this.showPage('my-sportsmen')},
             {iconName: 'competition-solid', page: 'my-competitions', title: lang`Competition`, click: () => this.showPage('my-competitions')},
-            // {iconName: 'registration-solid', page: 'my-sportsman-registrations', title: 'Registration', click: () => this.showPage('my-sportsman-registrations')},
+            {iconName: 'registration-solid', page: 'my-registrations', title: lang`Registration`, click: () => this.showPage('my-registrations')},
             // {iconName: 'registration-solid', page: 'my-sportsman-registrations', title: 'Registration', click: () => this.showPage('my-discipline-names')},
             // {name: 'square-list-sharp-solid', title: 'Project', click: () => this.showPage('my-projects')},
             // {name: 'chart-pie-simple-circle-dollar-solid', title: 'tariff plan', click: () => this.showPage('traffic-plan')},

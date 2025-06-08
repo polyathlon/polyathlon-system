@@ -105,10 +105,12 @@ class MyCompetitionSection4List1 extends BaseElement {
             <div class="label">
                 ${this.#competitionDate}
             </div>
-            <fashion-button>Зарегистрироваться</fashion-button>
+            <fashion-button @click=${this.showPage}>Зарегистрироваться</fashion-button>
         `
     }
-
+    showPage() {
+        location.hash = "my-registrations";
+    }
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;

@@ -80,7 +80,7 @@ const dictionary = {
         "en-EN": 'Forgot password?'
     },
     'Registration': {
-        "ru-RU": 'Зарегистрироваться',
+        "ru-RU": 'Регистрация',
         "en-EN": 'Registration'
     },
     'E-mail': {
@@ -222,6 +222,22 @@ const dictionary = {
     'Send request': {
         "ru-RU": 'Отправить заявку',
         "en-EN": 'Send request'
+    },
+    'Request': {
+        "ru-RU": 'Заявка',
+        "en-EN": 'Request'
+    },
+    'Requests': {
+        "ru-RU": 'Заявки',
+        "en-EN": 'Requests'
+    },
+    'Application for participation': {
+        "ru-RU": 'Заявка на участие',
+        "en-EN": 'Application for participation'
+    },
+    'Create Request': {
+        "ru-RU": 'Создать заявку',
+        "en-EN": 'Create Request'
     },
     'Competition name': {
         "ru-RU": 'Наименование соревнования',

@@ -1,33 +1,30 @@
 import { BaseElement, html, css, cache, nothing } from '../../../base-element.mjs'
 
-import '../../../../components/dialogs/confirm-dialog.mjs'
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/inputs/upload-input.mjs'
-import '../../../../components/inputs/download-input.mjs'
+import '../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../components/buttons/icon-button.mjs'
-import '../../../../components/inputs/avatar-input.mjs'
-import '../../../../components/buttons/aside-button.mjs';
+import '../../../../components/buttons/aside-button.mjs'
+import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import './my-sportsman-registrations-section-1-page-1.mjs'
+import './my-registrations-section-1-page-1.mjs'
 
-import DataSet from './my-sportsman-registrations-dataset.mjs'
-import DataSource from './my-sportsman-registrations-datasource.mjs'
+import DataSet from './my-registrations-dataset.mjs'
+import DataSource from './my-registrations-datasource.mjs'
 
-class MySportsmanRegistrationsSection1 extends BaseElement {
+class MyRegistrationsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Object, default: null},
-            statusDataSet: {type: Map, default: null },
-            oldValues: {type: Map, default: null },
-            currentItem: {type: Object, default: null},
-            isModified: {type: Boolean, default: "", local: true},
-            isReady: {type: Boolean, default: true},
+            dataSource: { type: Object, default: null },
+            statusDataSet: { type: Map, default: null },
+            oldValues: { type: Map, default: null },
+            currentItem: { type: Object, default: null },
+            isModified: { type: Boolean, default: "", local: true },
+            isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: {type: BigInt, default: 0},
+            currentPage: { type: BigInt, default: 0 },
         }
     }
 
@@ -48,28 +45,24 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
                     background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
                 }
 
-                header{
+                header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
 
-                .left-header{
+                .left-header {
                     grid-area: header1;
                     overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     p {
-                    width: 100%;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    font-size: 1rem;
-                    margin: 0;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        margin: 0;
                     }
                 }
 
-                .right-header{
+                .right-header {
                     grid-area: header2;
                 }
 
@@ -82,9 +75,10 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
                     overflow-x: hidden;
                     background: var(--layout-background-color);
                     icon-button {
-                    width: 100%;
-                    height: 40px;
+                        width: 100%;
+                        height: 40px;
                         flex: 0 0 40px;
+                        --image-height: 100%;
                     }
                 }
 
@@ -95,17 +89,11 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
-                    align-items: center;
+                    align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
                     /* overflow: hidden; */
                     gap: 10px;
-                }
-
-                p {
-                    font-size: 1.25rem;
-                    margin: 20px 207px 20px 0;
-                    overflow-wrap: break-word;
                 }
 
                 .left-footer {
@@ -131,11 +119,18 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
                     display: flex;
                     align-items: center;
                     justify-content: end;
-                    margin-right: 20px;
                     gap: 10px;
-
-                    simple-button {
-                        height: 100%;
+                    nav {
+                        width: 100%;
+                        height: 70%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        padding: 0 10px;
+                        gap: 1vw;
+                        simple-button {
+                            height: 100%;
+                        }
                     }
                 }
 
@@ -147,8 +142,8 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
                     background: rgba(255, 255, 255, 0.1)
                 }
 
-                 /* width */
-                 ::-webkit-scrollbar {
+                /* width */
+                ::-webkit-scrollbar {
                     width: 10px;
                 }
 
@@ -174,15 +169,10 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = ['Information']
+        this.pageNames = [lang`Application for participation`]
         this.oldValues = new Map();
         this.buttons = [
-            // {iconName: 'region-solid', page: 'my-regions', title: 'Regions', click: () => this.showPage('my-regions')},
-            // {iconName: 'club-solid', page: 'my-clubs', title: 'Clubs', click: () => this.showPage('my-clubs')},
-            // {iconName: 'sports-category-solid', page: 'my-sports-categories', title: 'Sports Categories', click: () => this.showPage('my-sports-categories')},
-
-            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
         ]
     }
 
@@ -194,62 +184,6 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
         history.back();
     }
 
-    async getNewFileHandle() {
-        const options = {
-          types: [
-            {
-              description: 'Excel files',
-              accept: {
-                'application/octet-stream': ['.xslx'],
-              },
-            },
-            {
-              description: 'Neural Models',
-              accept: {
-                'application/octet-stream': ['.pkl'],
-              },
-            },
-
-          ],
-        };
-        const handle = await window.showSaveFilePicker(options);
-        return handle;
-    }
-
-    ExcelFile() {
-        this.renderRoot.getElementById("fileInput").click();
-    }
-
-    async importFromExcel(e) {
-        const file = e.target.files[0];
-        const workbook = XLSX.read(await file.arrayBuffer());
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
-        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
-        const regionDataset = await RegionDataset.RegionDataset()
-        raw_data.forEach((r, index) => {
-            if(index !== 0){
-                const newItem = {
-                    lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
-                    firstName: r[1].split(' ')[1],
-                    middleName: r[1].split(' ')[2],
-                    category: {
-                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
-                        "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
-                        "name": "Судья всероссийской категории",
-                    },
-                    region: regionDataset.find("name", r[4]),
-                    order: {
-                        number: r[5],
-                        link: r[6]
-                    },
-                    link: r[7],
-                }
-                this.dataSource.addItem(newItem);
-            }
-        });
-    }
-
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
@@ -257,12 +191,22 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentSportsmanRegistrationItem')) {
+        if (changedProps.has('currentRegistrationItem')) {
             this.currentPage = 0;
         }
     }
 
-    async showItem(index, itemId) {
+    copyToClipboard(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text)
+        }
+    }
+
+    async showItem(item) {
+        if (this.currentItem?._id === item._id) {
+            this.copyToClipboard(item.id || item._id)
+            return
+        }
         if (this.isModified) {
             const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
@@ -273,23 +217,23 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
             }
         }
         else {
-            this.dataSource.setCurrentItem(this.dataSource.items[index])
+            this.dataSource.setCurrentItem(item)
         }
     }
 
-    #page() {
+    get #page() {
         return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
     }
 
     #page1() {
         return html`
-            <my-sportsman-registrations-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-sportsman-registrations-section-1-page-1>
+            <my-registrations-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-registrations-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-sportsman-registrations-section-1-page-2 .item=${this.currentItem}></my-sportsman-registrations-section-1-page-2>
+            <my-registrations-section-1-page-2 .item=${this.currentItem}></my-registrations-section-1-page-2>
         `;
     }
 
@@ -311,18 +255,18 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
         return result
     }
 
+    //                        icon-name="judge1-solid"
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
                 html `<icon-button
-                        label=${ this.fio(item) }
-                        title=${ item._id }
-                        icon-name=${ item.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
-                        .status=${ item.hashNumber ? { name: item.hashNumber, icon: 'id-number-solid'} : '' }
-                        ?selected=${ this.currentItem === item }
-                        @click=${() => this.showItem(index, item._id)}
-                    >
-                    </icon-button>
+                        label=${this.fio(item)}
+                        title=${item._id}
+                        image-name="images/request-white.svg"
+                        ?selected=${this.currentItem === item}
+                        .status=${ { name: item.category?.name || item?._id, icon: 'request-white-solid'} }
+                        @click=${() => this.showItem(item)}
+                    ></icon-button>
                 `
             )}
         `
@@ -336,25 +280,44 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
         `
     }
 
+    get #rightFooter() {
+        if (this.isModified) {
+            return html`
+                <nav>
+                    <simple-button @click=${this.saveItem}>${lang`Send request`}</simple-button>
+                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
+        } else {
+            return html`
+                <nav>
+                    <simple-button @click=${this.addItem}>${lang`Create Request`}</simple-button>
+                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
+                </nav>
+            `
+        }
+
+    }
+
     render() {
         return html`
-            <confirm-dialog></confirm-dialog>
-            <header class="left-header"><p>${lang`Requests`}</p></header>
-            <header class="right-header">${this.#pageName}</header>
+            <modal-dialog></modal-dialog>
+            <header class="left-header"><p>${lang`Requests`}<p></header>
+            <header class="right-header">
+                ${this.#pageName}
+            </header>
             <div class="left-layout">
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.#page()}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
             </footer>
             <footer class="right-footer">
-                <simple-button @click=${this.isModified ? this.saveItem: this.deleteItem}>${this.isModified ? lang`Save`: lang`Delete`}</simple-button>
-                <simple-button @click=${this.isModified ? this.cancelItem: this.addItem}>${this.isModified ? lang`Cancel`: lang`Add`}</simple-button>
+                ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
@@ -366,12 +329,18 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
-        return await this.renderRoot.querySelector('confirm-dialog').show(message);
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
     }
 
     async addItem() {
-        const newItem = { name: "Новая заявка" }
+        const newItem = { name: "Новый регион" }
         this.dataSource.addItem(newItem);
     }
 
@@ -382,7 +351,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все сделанные изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
@@ -404,7 +373,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого судью?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)
@@ -416,4 +385,4 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-sportsman-registrations-section-1", MySportsmanRegistrationsSection1)
+customElements.define("my-registrations-section-1", MyRegistrationsSection1)

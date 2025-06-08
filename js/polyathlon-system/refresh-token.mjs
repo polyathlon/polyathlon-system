@@ -17,7 +17,7 @@ export default async function refreshToken() {
     return token
 }
 
-export function  getToken() {
+export function getToken() {
     return localStorage.getItem('rememberMe') ? localStorage.getItem('accessUserToken') : sessionStorage.getItem('accessUserToken')
 }
 
