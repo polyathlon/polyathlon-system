@@ -300,156 +300,151 @@ class MyCompetitionSection4Page2 extends BaseElement {
         return ''
     }
     pdfMethod(refereeDataSource) {
-        //const mainReferee = refereeDataSource.items.find((item) => item.position.name === "Главный судья")
-        //const mainSecretary = refereeDataSource.items.find((item) => item.position.name === "Главный секретарь")
-        const docInfo = {
-          info: {
-            title: "clubs",
+    const mainReferee = refereeDataSource.items.find((item) => item.position.name === "Главный судья");
+    const mainSecretary = refereeDataSource.items.find((item) => item.position.name === "Главный секретарь");
+
+    const tableBody = [
+        [
+            { text: 'Место', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+            { text: 'Спортсмен', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+            { text: 'Год рожд', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+            { text: 'Звание, разряд', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+            { text: 'Субъект РФ', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+            { text: 'Спортивный клуб', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+            { text: 'Очки', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+            { text: 'Вып. разряд', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+        ],
+        [
+            '', '', '', '', '', '', '', ''
+        ].map(cell => ({ text: cell, fillColor: '#eeeeee' })),
+    ];
+
+    tableBody.push(...this.items.map((item, index) => ([
+        { text: item.place ?? index + 1, fontSize: 8 },
+        { text: item.sportsman ?? '', fontSize: 8 },
+        { text: item.year ?? '', fontSize: 8 },
+        { text: item.category ?? '', fontSize: 8 },
+        { text: item.region ?? '', fontSize: 8 },
+        { text: item.club ?? '', fontSize: 8 },
+        { text: item.points ?? '', fontSize: 8 },
+        { text: item.completedCategory ?? '', fontSize: 8 }
+    ])));
+
+    const docInfo = {
+        info: {
+            title: "sportsmen",
             author: "Polyathlon systems",
-          },
-
-          pageSize: "A4",
-          pageOrientation: 'landscape',
-          pageMargins: [10, 20, 30, 60],
-
-          content: [
+        },
+        pageSize: "A4",
+        pageOrientation: 'landscape',
+        pageMargins: [20, 15, 20, 40],
+        content: [
+            { text: "Министерство спорта Российской Федерации", fontSize: 9, alignment: "center", margin: [0, 2, 0, 2] },
+            { text: "Всероссийская Федерация Полиатлона", fontSize: 9, alignment: "center", margin: [0, 2, 0, 2] },
             {
-                text: "Министерство спорта Российской Федерации",
-                fontSize: 10,
-                alignment: "center",
-                margin: [10, 0, 0, 0],
+                text: `${this.parent.name.name}${this.parent.stage ? ' ' + this.parent.stage.name : ''} по полиатлону в спортивной дисциплине ${this.parent?.sportsDiscipline1?.name}`,
+                fontSize: 11, bold: true, alignment: "center", margin: [0, 4, 0, 2]
             },
             {
-                text: "Всероссийская Федерация Полиатлона",
-                fontSize: 10,
-                alignment: "center",
-                margin: [10, 0, 0, 0],
-            },
-            {
-                text: "`${this.parent.name.name}${this.parent.stage ? ' ' + this.parent.stage.name: ''} по полиатлону` в спортивной дисциплине ${this.parent?.sportsDiscipline1?.name}`",
-                fontSize: 12,
-                bold:true,
-                alignment: "center",
-                margin: [10, 10, 0, 0],
-            },
-            {
-                text: "`№ СМ ${this.parent?.ekpNumber} в ЕКП`",
-                fontSize: 12,
-                bold:true,
-                alignment: "center",
-                margin: [10, 0, 0, 5],
+                text: `№ СМ ${this.parent?.ekpNumber} в ЕКП`,
+                fontSize: 11, bold: true, alignment: "center", margin: [0, 0, 0, 4]
             },
             {
                 columns: [
                     {
-                        text: "this.#competitionDate(this.parent)",
-                        margin: [70, 0, 0, 0],
-                        fontSize: 10,
+                        text: this.#competitionDate(this.parent),
+                        margin: [20, 0, 0, 0],
+                        fontSize: 9,
                         alignment: "left",
                     },
                     {
-                        text: "`г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`",
+                        text: `г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`,
                         alignment: "right",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 10,
+                        margin: [0, 0, 20, 0],
+                        fontSize: 9,
                     },
-                ],
-                columnGap: 90
+                ]
             },
             {
                 text: "Протокол командного зачета среди команд спортивных клубов",
-                fontSize: 12,
-                bold:true,
+                fontSize: 11,
+                bold: true,
                 alignment: "center",
-                margin: [10, 10, 0, 5],
+                margin: [0, 6, 0, 6],
             },
             {
-                table:{
-                    widths: [15, 100, 25, 30, 90, 130, 25,25,25,25,25,25,25,25,25,15],
-                    body:[
-                        [{text: 'Место', rowSpan: 2, fontSize: 8}, {text: 'Спортсмен', rowSpan: 2, fontSize: 10}, {text: 'Год рожд', rowSpan: 2, fontSize: 8}, {text: 'Звание, разряд', rowSpan: 2, fontSize: 8}, {text: 'Суъект РФ', rowSpan: 2, fontSize: 10}, {text: 'Спортивный клуб', rowSpan: 2, fontSize: 10}, {text: 'Бег 60м', colSpan: 2, fontSize: 9}, '', {text: 'Стрельба - упражнение lll-ВП', colSpan: 2, fontSize: 8}, '', {text: 'Плавание 100 м', colSpan: 2, fontSize: 9}, '', {text: 'Бег 2000 м', colSpan: 2, fontSize: 9}, '', {text: 'Сумма очков', rowSpan: 2, fontSize: 8}, {text: 'Вып. разряд', rowSpan: 2, fontSize: 8}],
-                        ['', '', '', '', '', '', {text: 'рез-т', fontSize: 10}, {text: 'очки', fontSize: 10}, {text: 'рез-т', fontSize: 10}, {text: 'очки', fontSize: 10}, {text: 'рез-т', fontSize: 10}, {text: 'очки', fontSize: 10}, {text: 'рез-т', fontSize: 10}, {text: 'очки', fontSize: 10}, '', ''],
-                        [{text: '(пол)', colSpan: 16, fontSize: 10, alignment: "center"}, '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-                      ],
-                    headerRows: 1,
-                }
+                table: {
+                    widths: [25, 150, 35, 60, 120, 170, 75, 90],
+                    body: tableBody,
+                    headerRows: 2
+                },
             },
             {
                 columns: [
                     {
-                        text: "mainReferee?.position.name",
-                        margin: [70, 20, 0, 0],
-                        fontSize: 10,
+                        text: mainReferee?.position.name ?? '',
+                        margin: [50, 20, 0, 0],
+                        fontSize: 9,
                     },
                     {
-                        text: "`${mainReferee?.firstName[0]}.${mainReferee?.middleName[0]}. ${mainReferee?.lastName}`",
+                        text: `${mainReferee?.firstName?.[0] ?? ''}.${mainReferee?.middleName?.[0] ?? ''}. ${mainReferee?.lastName ?? ''}`,
                         alignment: "left",
-                        margin: [70, 20, 0, 0],
-                        fontSize: 10,
+                        margin: [50, 20, 0, 0],
+                        fontSize: 9,
                     },
-                ],
-                columnGap: 90
-            },
-            {
-                columns: [
-
-                    {
-                        text: "mainReferee?.category.name",
-                        margin: [70, 0, 0, 0],
-                        fontSize: 10,
-                    },
-                    {
-                        text: "`(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`",
-                        alignment: "left",
-                        margin: [70, 0, 0, 0],
-                        fontSize: 10,
-                    },
-                ],
-                columnGap: 90
+                ]
             },
             {
                 columns: [
                     {
-                        text: "mainSecretary?.position.name",
-                        margin: [70, 20, 0, 0],
-                        fontSize: 10,
+                        text: mainReferee?.category?.name ?? '',
+                        margin: [50, 0, 0, 0],
+                        fontSize: 9,
                     },
                     {
-                        text: "`${mainSecretary?.firstName[0]}.${mainSecretary?.middleName[0]}. ${mainSecretary?.lastName}`",
+                        text: `(г. ${mainReferee?.city?.name ?? ''}, ${mainReferee?.city?.region?.name ?? ''})`,
                         alignment: "left",
-                        margin: [70, 20, 0, 0],
-                        fontSize: 10,
+                        margin: [50, 0, 0, 0],
+                        fontSize: 9,
                     },
-                ],
-                columnGap: 90
+                ]
             },
             {
                 columns: [
-
                     {
-                        text: "mainSecretary?.category.name",
-                        margin: [70, -10, 0, 0],
-                        fontSize: 10,
+                        text: mainSecretary?.position.name ?? '',
+                        margin: [50, 20, 0, 0],
+                        fontSize: 9,
                     },
                     {
-                        text: "`(г. ${mainSecretary?.city?.name}, ${mainSecretary?.city?.region?.name})",
+                        text: `${mainSecretary?.firstName?.[0] ?? ''}.${mainSecretary?.middleName?.[0] ?? ''}. ${mainSecretary?.lastName ?? ''}`,
                         alignment: "left",
-                        margin: [70, -10, 0, 0],
-                        fontSize: 10,
+                        margin: [50, 20, 0, 0],
+                        fontSize: 9,
                     },
-                ],
-                columnGap: 90
+                ]
             },
-          ],
+            {
+                columns: [
+                    {
+                        text: mainSecretary?.category?.name ?? '',
+                        margin: [50, 0, 0, 0],
+                        fontSize: 9,
+                    },
+                    {
+                        text: `(г. ${mainSecretary?.city?.name ?? ''}, ${mainSecretary?.city?.region?.name ?? ''})`,
+                        alignment: "left",
+                        margin: [50, 0, 0, 0],
+                        fontSize: 9,
+                    },
+                ]
+            },
+        ]
+    };
 
-          styles: {
-            header0:{
-            }
-          }
-        };
+    pdfMake.createPdf(docInfo).open();
+}
 
-        pdfMake.createPdf(docInfo).open();
-    }
 }
 
 customElements.define("my-competition-section-4-page-2", MyCompetitionSection4Page2);
