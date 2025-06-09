@@ -169,14 +169,29 @@ class MyCompetitionSection1List1 extends BaseElement {
   }
 
   async showPage() {
-    const dataSource = new DataSource(properties);
-    const myRegistrationsSection1 = new MyRegistrationsSection1(dataSource);
-    await myRegistrationsSection1.addItem2(
-      this.#competitionName,
-      this.regulationsLink
-    );
+    // 1. Переходим на страницу регистраций
     location.hash = "my-registrations";
-  }
+    
+    // 2. Создаем экземпляр страницы регистраций
+    const registrationsPage = document.querySelector('my-registrations-items-section-1');
+    
+    // 3. Если страница уже есть в DOM - используем её, иначе ждём появления
+    if (!registrationsPage) {
+        await new Promise(resolve => {
+            const observer = new MutationObserver(() => {
+                const page = document.querySelector('my-registrations-items-section-1');
+                if (page) {
+                    observer.disconnect();
+                    resolve(page);
+                }
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        });
+    }
+    
+    // 4. Инициируем создание заявки с предзаполненным названием
+    registrationsPage.autoCreateRegistration(this.#competitionName);
+}
 
   registration() {
     this.currentPage = 3;
