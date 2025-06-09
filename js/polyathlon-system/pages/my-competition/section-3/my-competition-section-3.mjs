@@ -238,7 +238,7 @@ class MyCompetitionSection3 extends BaseElement {
               text: "Министерство спорта Российской федерации",
               fontSize: 14,
               alignment: "center",
-              //margin: [0, 0, 0, 0], //левый, верхний, правый, нижний
+              margin: [0, -30, 0, 0],
             },
             {
                 text: "Всероссийская федерация Полиатлона",
@@ -283,14 +283,14 @@ class MyCompetitionSection3 extends BaseElement {
                 columnGap: 20
             },
             {
-                text: "СПРАВКА О СОСТАВЕ И КВАЛИФИКАЦИИ",
-                fontSize: 18,
+                text: "Справка о составе и квалификации",
+                fontSize: 16,
                 bold:true,
                 alignment: "center",
-                margin: [0, 30, 0, 0],
+                margin: [0, 20, 0, 0],
             },
             {
-                text: "ГЛАВНОЙ СУДЕЙСКОЙ КОЛЛЕГИИ",
+                text: "Главной судейской коллегии",
                 fontSize: 18,
                 bold:true,
                 alignment: "center",
@@ -300,9 +300,7 @@ class MyCompetitionSection3 extends BaseElement {
                 table:{
                     width:['auto','*'],
                     body: this.dataSource.items.map( (item, index) => [
-                        item.position.name, `${item.category.name} ${item.lastName} ${item.firstName} ${item.middleName} (${item?.city?.name}, ${item?.city?.region?.name})`
-                        // ['Первая ячейка второй строки','Вторая ячейка второй строки'],
-                        // [{text:'текстовое содержимое',bold:true},'Текст']
+                        {margin: [0, 5, 0, 0], text: item.position.name, alignment: "center"}, `${item.category.name} ${item.lastName} ${item.firstName} ${item.middleName} (${item?.city?.name}, ${item?.city?.region?.name})`
                     ]),
                     headerRows:1
                 },
@@ -312,14 +310,14 @@ class MyCompetitionSection3 extends BaseElement {
                     {
                         width: 300,
                         text: mainReferee?.position.name,
-                        margin: [20, 40, 0, 0],
+                        margin: [20, 20, 0, 0],
                         fontSize: 12,
                     },
                     {
                         width: '*',
                         text: `${mainReferee?.firstName[0]}.${mainReferee?.middleName[0]}. ${mainReferee?.lastName}`,
                         alignment: "left",
-                        margin: [0, 40, 0, 0],
+                        margin: [0, 20, 0, 0],
                         fontSize: 12,
                     },
                 ],
@@ -350,14 +348,14 @@ class MyCompetitionSection3 extends BaseElement {
                     {
                         width: 300,
                         text: mainSecretary?.position.name,
-                        margin: [20, 50, 0, 0],
+                        margin: [20, 15, 0, 0],
                         fontSize: 12,
                     },
                     {
                         width: '*',
                         text: `${mainSecretary?.firstName[0]}.${mainSecretary?.middleName[0]}. ${mainSecretary?.lastName}`,
                         alignment: "left",
-                        margin: [0, 50, 0, 0],
+                        margin: [0, 20, 0, 0],
                         fontSize: 12,
                     },
                 ],

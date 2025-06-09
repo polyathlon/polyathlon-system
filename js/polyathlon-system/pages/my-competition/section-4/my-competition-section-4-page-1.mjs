@@ -267,256 +267,196 @@ class MyCompetitionSection4Page1 extends BaseElement {
         return a.size
     }
 
-    pdfMethod() {
-        const docInfo = {
-          info: {
-            title: "Referees",
-            author: "Polyathlon systems",
-          },
+    #competitionDate(parent) {
+        const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 
-          pageSize: "A4",
-          pageOrientation: 'portrait',
-          pageMargins: [80, 30, 70, 60],
-
-          content: [
-            {
-                text: "Всероссийская федерация Полиатлона",
-                fontSize: 14,
-                alignment: "center",
-                margin: [10, 0, 0, 0],
-            },
-            {
-                text: "Справка о проведённом общероссийской спортивной федерацией всероссийских и межрегиональных спортивных мероприятиях по полиатлону за (year) год",
-                fontSize: 14,
-                bold:true,
-                alignment: "center",
-                margin: [10, 20, 0, 0],
-            },
-            {
-                text: `${this.parent?.name.name} - (year) по полиатлону в спортивной дисциплине ${this.parent?.sportsDiscipline1?.name}`,
-                fontSize: 14,
-                bold:true,
-                alignment: "center",
-                margin: [60, 20, 50, 0],
-            },
-            {
-                text: `Сроки и место проведения: ${this.parent?.sportsDiscipline1?.name}, г.${this.parent?.city.name} ${this.parent?.region.name}`,
-                fontSize: 11,
-                alignment: "left",
-                margin: [10, 20, 0, 0],
-            },
-            {
-                text: "(gender)",
-                fontSize: 11,
-                alignment: "left",
-                margin: [10, 0, 0, 0],
-            },
-            {
-                text: `Вид программы: ${this.parent?.sportsDiscipline1?.name}`,
-                fontSize: 11,
-                alignment: "left",
-                margin: [10, 0, 0, 0],
-            },
-            {
-                text: `Приняли участие: общее количество спортсменов - ${this.menNumber + this.womenNumber} чел., в том числе:`,
-                fontSize: 11,
-                alignment: "left",
-                margin: [10, 0, 0, 0],
-            },
-            {
-                columns: [
-                    {
-                        text: "мужчин",
-                        fontSize: 11,
-                        alignment: "left",
-                        margin: [85, 0, 0, 0],
-                    },
-                    {
-                        text: `- ${this.menNumber} чел.;`,
-                        alignment: "left",
-                        fontSize: 11,
-                    },
-                ],
-            },
-            {
-                columns: [
-                    {
-                        text: "женщин",
-                        fontSize: 11,
-                        alignment: "left",
-                        margin: [85, 0, 0, 0],
-                    },
-                    {
-                        text: `- ${this.womenNumber} чел.;`,
-                        alignment: "left",
-                        fontSize: 11,
-                    },
-                ],
-            },
-            {
-                columns: [
-                    {
-                        text: "количество субъектов РФ",
-                        fontSize: 11,
-                        alignment: "left",
-                        margin: [85, 0, 0, 0],
-                    },
-                    {
-                        text: `- ${this.regionNumber};`,
-                        alignment: "left",
-                        fontSize: 11,
-                    },
-                ],
-            },
-            {
-                columns: [
-                    {
-                        text: "количество клубов",
-                        fontSize: 11,
-                        alignment: "left",
-                        margin: [85, 0, 0, 0],
-                    },
-                    {
-                        text: `- ${this.clubNumber}.`,
-                        alignment: "left",
-                        fontSize: 11,
-                    },
-                ],
-            },
-            {
-                text: "Награждены медалями Минспорта России за:",
-                fontSize: 11,
-                alignment: "left",
-                margin: [10, 0, 0, 0],
-            },
-            {
-                text: "1 место мужчины - (sportsman)",
-                fontSize: 11,
-                alignment: "left",
-                margin: [85, 0, 0, 0],
-            },
-            {
-                text: "2 место мужчины - (sportsman)",
-                fontSize: 11,
-                alignment: "left",
-                margin: [85, 0, 0, 0],
-            },
-            {
-                text: "3 место мужчины - (sportsman)",
-                fontSize: 11,
-                alignment: "left",
-                margin: [85, 0, 0, 0],
-            },
-            {
-                text: "1 место женщины - (sportsman)",
-                fontSize: 11,
-                alignment: "left",
-                margin: [85, 0, 0, 0],
-            },
-            {
-                text: "2 место женщины - (sportsman)",
-                fontSize: 11,
-                alignment: "left",
-                margin: [85, 0, 0, 0],
-            },
-            {
-                text: "3 место женщины - (sportsman)",
-                fontSize: 11,
-                alignment: "left",
-                margin: [85, 0, 0, 0],
-            },
-            {
-                text: "Сведения о командном зачёте среди субъектов РФ",
-                fontSize: 11,
-                alignment: "left",
-                margin: [10, 10, 0, 5],
-            },
-            {
-                table:{
-                    widths: [ 20, 140, 50, 67, 67, 67 ],
-                    body: [
-                    [ {fontSize: 11, text: 'Место', alignment: "center"}, {fontSize: 11, text: 'Субъект РФ', alignment: "center"}, {fontSize: 11, text: 'Количество медалей', alignment: "center"}, {fontSize: 11, text: 'Сумма очков, набранная медалистами', alignment: "center"}, {fontSize: 11, text: 'Количество спортсменов в сборной команде', alignment: "center"}, {fontSize: 11, text: 'Количество спортсменов-медалистов', alignment: "center"} ],
-                    [ {fontSize: 11, text: '1', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "left"}, {fontSize: 11, text: 'Value', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "center"}, {fontSize: 11, text: 'Value', alignment: "center"} ],
-                    ],
-                    headerRows: 1,
-                }
-            },
-            {
-                columns: [
-                    {
-                        text: "(position.name)",
-                        margin: [0, 20, 0, 0],
-                        fontSize: 10,
-                    },
-                    {
-                        text: "(name)",
-                        alignment: "left",
-                        margin: [0, 20, 0, 0],
-                        fontSize: 10,
-                    },
-                ],
-                columnGap: 90
-            },
-            {
-                columns: [
-
-                    {
-                        text: "(category.name)",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 10,
-                    },
-                    {
-                        text: "`(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`",
-                        alignment: "left",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 10,
-                    },
-                ],
-                columnGap: 90
-            },
-            {
-                columns: [
-                    {
-                        text: "(position.name)",
-                        margin: [0, 20, 0, 0],
-                        fontSize: 10,
-                    },
-                    {
-                        text: "(name)",
-                        alignment: "left",
-                        margin: [0, 20, 0, 0],
-                        fontSize: 10,
-                    },
-                ],
-                columnGap: 90
-            },
-            {
-                columns: [
-
-                    {
-                        text: "(category.name)",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 10,
-                    },
-                    {
-                        text: "`(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`",
-                        alignment: "left",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 10,
-                    },
-                ],
-                columnGap: 90
-            },
-          ],
-
-          styles: {
-            header0:{
+        if (parent.startDate) {
+            const start = parent.startDate.split("-")
+            const end = parent.endDate.split("-")
+            if (start[2] === end[2] && start[1] === end[1]) {
+                return `${start[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
             }
-          }
-        };
-
-        pdfMake.createPdf(docInfo).open();
+            if (start[1] === end[1]) {
+                return `${start[2]}-${end[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
+            }
+            return `${start[2]} ${monthNames[start[1]-1]} - ${end[2]} ${monthNames[end[1] - 1]} ${start[0]} года`
+        }
+        return ''
     }
+
+    pdfMethod(refereeDataSource) {
+  const data = this;
+
+  const totalParticipants = Number(data.menNumber) + Number(data.womenNumber);
+
+  const sportsRanks = data.sportsDisciplineDataSource?.ranks || [
+    { title: "MCMK", men: 2, women: 1 },
+    { title: "MC", men: 5, women: 5 },
+    { title: "KMC", men: 9, women: 7 },
+    { title: "I", men: 6, women: 1 },
+  ];
+
+  const mainReferee = refereeDataSource.items.find((item) => item.position.name === "Главный судья");
+    const mainSecretary = refereeDataSource.items.find((item) => item.position.name === "Главный секретарь");
+
+  const docInfo = {
+    info: {
+      title: "Competition Report",
+      author: "Polyathlon systems",
+    },
+    pageSize: "A4",
+    pageOrientation: "portrait",
+    pageMargins: [80, 30, 70, 60],
+
+    content: [
+      { text: "Министерство спорта Российской Федерации", fontSize: 14, alignment: "center", margin: [10, 0, 0, 0] },
+      { text: "Всероссийская Федерация Полиатлона", fontSize: 14, alignment: "center", margin: [10, 5, 0, 20] },
+
+      {
+                text: `${this.parent.name.name}${this.parent.stage ? ' ' + this.parent.stage.name: ''} по полиатлону`,
+                fontSize: 12,
+                bold:true,
+                alignment: "center",
+                margin: [10, 10, 0, 0],
+            },
+            {
+                text: ` в спортивной дисциплине ${this.parent?.sportsDiscipline1?.name}`,
+                fontSize: 12,
+                bold:true,
+                alignment: "center",
+                margin: [10, 0, 0, 5],
+            },
+      {
+                columns: [
+                    {
+                        text: this.#competitionDate(this.parent),
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                        alignment: "left",
+                    },
+                    {
+                        text: `г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`,
+                        alignment: "right",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 10,
+                    },
+                ],
+                columnGap: 90
+            },
+      { text: "Справка о соревновании", fontSize: 14, bold: true, alignment: "center", margin: [10, 0, 0, 20] },
+
+      { text: "Комиссией по допуску к соревнованию допущено:", fontSize: 11, margin: [10, 0, 0, 5] },
+      { text: `- ${data.regionNumber || 7} субъектов Российской Федерации;`, fontSize: 11, margin: [30, 0, 0, 0] },
+      { text: `- ${data.clubNumber || 13} команд спортивных клубов в том числе СШ, СШОР и т. п.`, fontSize: 11, margin: [30, 0, 0, 10] },
+
+      { text: `Всего участников - ${totalParticipants} спортсмена, в том числе:`, fontSize: 11, margin: [10, 0, 0, 5] },
+      { text: `- мужчин - ${data.menNumber}`, fontSize: 11, margin: [30, 0, 0, 0] },
+      { text: `- женщин - ${data.womenNumber}`, fontSize: 11, margin: [30, 0, 0, 20] },
+
+      { text: "По спортивной квалификации к соревнованию допущено:", fontSize: 11, margin: [10, 0, 0, 10] },
+
+      {
+        table: {
+          widths: [150, 60, 60, 60],
+          body: [
+            [
+              { text: "Спортивное звание, разряд", style: "tableHeader", alignment: "center" },
+              { text: "Мужчины", style: "tableHeader", alignment: "center" },
+              { text: "Женщины", style: "tableHeader", alignment: "center" },
+              { text: "Итого", style: "tableHeader", alignment: "center" }
+            ],
+            ...sportsRanks.map(rank => ([
+              { text: rank.title, alignment: "left" },
+              { text: String(rank.men), alignment: "center" },
+              { text: String(rank.women), alignment: "center" },
+              { text: String(rank.men + rank.women), alignment: "center" }
+            ])),
+            [
+              { text: "Итого", alignment: "left", bold: true },
+              { text: String(data.menNumber), alignment: "center", bold: true },
+              { text: String(data.womenNumber), alignment: "center", bold: true },
+              { text: String(totalParticipants), alignment: "center", bold: true }
+            ]
+          ]
+        },
+        margin: [10, 0, 0, 40]
+      },
+
+      {
+        columns: [
+          {
+            text: mainReferee?.position?.name ?? '',
+            margin: [20, 20, 0, 0],
+            fontSize: 9,
+          },
+          {
+            text: `${mainReferee?.firstName?.[0] ?? ''}.${mainReferee?.middleName?.[0] ?? ''}. ${mainReferee?.lastName ?? ''}`,
+            alignment: "left",
+            margin: [20, 20, 0, 0],
+            fontSize: 9,
+          },
+        ]
+      },
+      {
+        columns: [
+          {
+            text: mainReferee?.category?.name ?? '',
+            margin: [20, 0, 0, 0],
+            fontSize: 9,
+          },
+          {
+            text: `(г. ${mainReferee?.city?.name ?? ''}, ${mainReferee?.city?.region?.name ?? ''})`,
+            alignment: "left",
+            margin: [20, 0, 0, 0],
+            fontSize: 9,
+          },
+        ]
+      },
+      {
+        columns: [
+          {
+            text: mainSecretary?.position?.name ?? '',
+            margin: [20, 20, 0, 0],
+            fontSize: 9,
+          },
+          {
+            text: `${mainSecretary?.firstName?.[0] ?? ''}.${mainSecretary?.middleName?.[0] ?? ''}. ${mainSecretary?.lastName ?? ''}`,
+            alignment: "left",
+            margin: [20, 20, 0, 0],
+            fontSize: 9,
+          },
+        ]
+      },
+      {
+        columns: [
+          {
+            text: mainSecretary?.category?.name ?? '',
+            margin: [20, 0, 0, 0],
+            fontSize: 9,
+          },
+          {
+            text: `(г. ${mainSecretary?.city?.name ?? ''}, ${mainSecretary?.city?.region?.name ?? ''})`,
+            alignment: "left",
+            margin: [20, 0, 0, 0],
+            fontSize: 9,
+          },
+        ]
+      },
+    ],
+
+    styles: {
+      tableHeader: {
+        bold: true,
+        fontSize: 11,
+        fillColor: "#ffffff"
+      }
+    }
+  };
+
+  pdfMake.createPdf(docInfo).open();
+}
+
+
 
 
     drawChart(){
