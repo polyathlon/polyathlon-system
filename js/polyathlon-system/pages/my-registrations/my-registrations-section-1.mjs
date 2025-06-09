@@ -184,6 +184,28 @@ class MyRegistrationsSection1 extends BaseElement {
         history.back();
     }
 
+    async getNewFileHandle() {
+        const options = {
+          types: [
+            {
+              description: 'Excel files',
+              accept: {
+                'application/octet-stream': ['.xslx'],
+              },
+            },
+            {
+              description: 'Neural Models',
+              accept: {
+                'application/octet-stream': ['.pkl'],
+              },
+            },
+
+          ],
+        };
+        const handle = await window.showSaveFilePicker(options);
+        return handle;
+    }
+    
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
@@ -241,26 +263,20 @@ class MyRegistrationsSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    fio(item) {
+    competitionName(item) {
         if (!item) {
             return item
         }
-        let result = item.lastName
-        if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
-        }
-        if (item.middleName) {
-            result += `${item.middleName[0]}.`
-        }
+        let result = item.name
         return result
     }
 
-    //                        icon-name="judge1-solid"
+    // label=${this.fio(item)}
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
                 html `<icon-button
-                        label=${this.fio(item)}
+                        label=${this.competitionName(item)}
                         title=${item._id}
                         image-name="images/request-white.svg"
                         ?selected=${this.currentItem === item}
@@ -340,7 +356,7 @@ class MyRegistrationsSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новый регион" }
+        const newItem = { name: "" }
         this.dataSource.addItem(newItem);
     }
 
@@ -373,7 +389,7 @@ class MyRegistrationsSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого судью?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить эту заявку?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)

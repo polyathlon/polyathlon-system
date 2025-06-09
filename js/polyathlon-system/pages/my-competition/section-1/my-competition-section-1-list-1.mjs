@@ -3,158 +3,199 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/avatar-input.mjs'
 
+import {MyRegistrationsSection1} from '../../my-registration-items/my-registration-items-section-1.mjs'
+import  DataSource  from '../../my-registration-items/my-registration-items-datasource.mjs'
+
 class MyCompetitionSection1List1 extends BaseElement {
-    static get properties() {
-        return {
-            version: { type: String, default: '1.0.0', save: true },
-            avatar: {type: Object, default: null},
-            name: {type: String, default: null},
-            regulationsLink: {type: String, default: null},
-            protocolLink: {type: String, default: null},
-            startDate: {type: String, default: null},
-            endDate: {type: String, default: null},
-            startRegistration: {type: String, default: null},
-            endRegistration: {type: String, default: null},
-            stage: {type: String, default: null},
-            isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null},
-            isFirst: { type: Boolean, default: false },
-            currentPage: { type: Boolean, default: false, local: true },
-            currentItem: {type: Object, default: null},
+  static get properties() {
+    return {
+      version: { type: String, default: "1.0.0", save: true },
+      avatar: { type: Object, default: null },
+      name: { type: String, default: null },
+      regulationsLink: { type: String, default: null },
+      protocolLink: { type: String, default: null },
+      startDate: { type: String, default: null },
+      endDate: { type: String, default: null },
+      startRegistration: { type: String, default: null },
+      endRegistration: { type: String, default: null },
+      stage: { type: String, default: null },
+      isModified: { type: Boolean, default: false, local: true },
+      oldValues: { type: Map, default: null },
+      isFirst: { type: Boolean, default: false },
+      currentPage: { type: Boolean, default: false, local: true },
+      currentItem: { type: Object, default: null },
+    };
+  }
+
+  static get styles() {
+    return [
+      BaseElement.styles,
+      css`
+        :host {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          width: 100%;
+          icon-button {
+            width: 100%;
+            height: 40px;
+            flex: 0 0 40px;
+          }
         }
-    }
-
-    static get styles() {
-        return [
-            BaseElement.styles,
-            css`
-                :host {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 10px;
-                    width: 100%;
-                    icon-button {
-                        width: 100%;
-                        height: 40px;
-                        flex: 0 0 40px;
-                    }
-
-                }
-                .avatar {
-                    width: 100%
-                }
-                .label {
-                    text-align: center;
-                }
-                avatar-input {
-                    width: 80%;
-                    margin: auto;
-                    aspect-ratio: 1 / 1;
-                    overflow: hidden;
-                    border-radius: 50%;
-                }
-                fashion-button {
-                    border-radius: 8px;
-                    padding: 10px 10px;
-                    &.regulations-link {
-                        --button-background-color: white;
-                        --native-color: red;
-                    }
-                }
-
-
-            `
-        ]
-    }
-
-    get #loginInfo() {
-        if (localStorage.getItem('rememberMe')) {
-            return localStorage.getItem('userInfo')
+        .avatar {
+          width: 100%;
         }
-        else {
-            return sessionStorage.getItem('userInfo')
+        .label {
+          text-align: center;
         }
-    }
-
-    get #competitionName() {
-        if (!this.name) {
-            return ''
+        avatar-input {
+          width: 80%;
+          margin: auto;
+          aspect-ratio: 1 / 1;
+          overflow: hidden;
+          border-radius: 50%;
         }
-        if (this.stage) {
-            return `${this.name.name} ${this.stage?.name}`
+        fashion-button {
+          border-radius: 8px;
+          padding: 10px 10px;
+          &.regulations-link {
+            --button-background-color: white;
+            --native-color: red;
+          }
         }
-        return this.name.name
-    }
+      `,
+    ];
+  }
 
-    static monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+  get #loginInfo() {
+    if (localStorage.getItem("rememberMe")) {
+      return localStorage.getItem("userInfo");
+    } else {
+      return sessionStorage.getItem("userInfo");
+    }
+  }
 
-    get #competitionDate() {
-        if (this.startDate) {
-            const start = this.startDate.split("-")
-            const end = this.endDate.split("-")
-            if (start[2] === end[2] && start[1] === end[1]) {
-                return `${start[2]} ${MyCompetitionSection1List1.monthNames[start[1] - 1]}`
-            }
-            if (start[1] === end[1]) {
-                return `${start[2]}-${end[2]} ${MyCompetitionSection1List1.monthNames[start[1] - 1]}`
-            }
-            return `${start[2]} ${MyCompetitionSection1List1.monthNames[start[1]-1]} - ${end[2]} ${MyCompetitionSection1List1.monthNames[end[1] - 1]}`
-        }
-        return ''
+  get #competitionName() {
+    if (!this.name) {
+      return "";
     }
+    if (this.stage) {
+      return `${this.name.name} ${this.stage?.name}`;
+    }
+    return this.name.name;
+  }
 
-    get #registration() {
-        const currentDate = new Date(Date.now())
-        const startDate = new Date(this.startRegistration)
-        const endDate = new Date(this.endRegistration)
-        if (currentDate >= startDate && currentDate <= endDate ) {
-            return html`<fashion-button @click=${this.registration}>Зарегистрироваться</fashion-button>`
-        }
-        return ''
-    }
+  static monthNames = [
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+  ];
 
-    render() {
-        return html`
-            <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/competition.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
-            </div>
-            <div class="label">
-                ${this.#competitionName}
-            </div>
-            <div class="label">
-                ${this.#competitionDate}
-            </div>
-            ${this.#registration}
-            ${this.regulationsLink && !this.protocolLink ? html`<fashion-button class="regulations-link" @click=${this.regulationsLinkClick}>Регламент</fashion-button>` : ''}
-            ${this.protocolLink ? html`<fashion-button @click=${this.protocolLinkClick}>Протоколы</fashion-button>` : ''}
-            <fashion-button @click=${this.showPage}>Зарегистрироваться</fashion-button>
-        `
+  get #competitionDate() {
+    if (this.startDate) {
+      const start = this.startDate.split("-");
+      const end = this.endDate.split("-");
+      if (start[2] === end[2] && start[1] === end[1]) {
+        return `${start[2]} ${
+          MyCompetitionSection1List1.monthNames[start[1] - 1]
+        }`;
+      }
+      if (start[1] === end[1]) {
+        return `${start[2]}-${end[2]} ${
+          MyCompetitionSection1List1.monthNames[start[1] - 1]
+        }`;
+      }
+      return `${start[2]} ${
+        MyCompetitionSection1List1.monthNames[start[1] - 1]
+      } - ${end[2]} ${MyCompetitionSection1List1.monthNames[end[1] - 1]}`;
     }
+    return "";
+  }
 
-    showPage() {
-        location.hash = "my-registrations";
+  get #registration() {
+    const currentDate = new Date(Date.now());
+    const startDate = new Date(this.startRegistration);
+    const endDate = new Date(this.endRegistration);
+    if (currentDate >= startDate && currentDate <= endDate) {
+      return html`<fashion-button @click=${this.registration}
+        >Зарегистрироваться</fashion-button
+      >`;
     }
-    
-    registration() {
-        this.currentPage = 3
-    }
+    return "";
+  }
 
-    regulationsLinkClick() {
-        window.open(this.regulationsLink);
-    }
+  render() {
+    return html`
+      <div class="avatar">
+        ${this.isFirst
+          ? html`<avatar-input
+              id="avatar"
+              .currentObject=${this}
+              .avatar=${this.avatar || "images/competition.svg"}
+              @input=${this.validateAvatar}
+            ></avatar-input>`
+          : ""}
+      </div>
+      <div class="label">${this.#competitionName}</div>
+      <div class="label">${this.#competitionDate}</div>
+      ${this.#registration}
+      ${this.regulationsLink && !this.protocolLink
+        ? html`<fashion-button
+            class="regulations-link"
+            @click=${this.regulationsLinkClick}
+            >Регламент</fashion-button
+          >`
+        : ""}
+      ${this.protocolLink
+        ? html`<fashion-button @click=${this.protocolLinkClick}
+            >Протоколы</fashion-button
+          >`
+        : ""}
+      <fashion-button @click=${this.showPage}
+        >Зарегистрироваться</fashion-button
+      >
+    `;
+  }
 
-    protocolLinkClick() {
-        window.open(this.protocolLink);
-    }
+  async showPage() {
+    const dataSource = new DataSource(properties);
+    const myRegistrationsSection1 = new MyRegistrationsSection1(dataSource);
+    await myRegistrationsSection1.addItem2(
+      this.#competitionName,
+      this.regulationsLink
+    );
+    location.hash = "my-registrations";
+  }
 
-    async firstUpdated() {
-        super.firstUpdated();
-        this.isFirst  = false;
-        this.avatar = null; // await this.downloadAvatar();
-        this.isFirst = true;
-    }
+  registration() {
+    this.currentPage = 3;
+  }
+
+  regulationsLinkClick() {
+    window.open(this.regulationsLink);
+  }
+
+  protocolLinkClick() {
+    window.open(this.protocolLink);
+  }
+
+  async firstUpdated() {
+    super.firstUpdated();
+    this.isFirst = false;
+    this.avatar = null; // await this.downloadAvatar();
+    this.isFirst = true;
+  }
 }
 
 customElements.define("my-competition-section-1-list-1", MyCompetitionSection1List1);

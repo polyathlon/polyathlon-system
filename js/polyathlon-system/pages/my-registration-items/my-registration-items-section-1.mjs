@@ -7,12 +7,12 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import './my-registrations-section-1-page-1.mjs'
+import './my-registration-items-section-1-page-1.mjs'
 
-import DataSet from './my-registrations-dataset.mjs'
-import DataSource from './my-registrations-datasource.mjs'
+import DataSet from './my-registration-items-dataset.mjs'
+import DataSource from './my-registration-items-datasource.mjs'
 
-class MyRegistrationsSection1 extends BaseElement {
+export class MyRegistrationsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -171,188 +171,11 @@ class MyRegistrationsSection1 extends BaseElement {
         this.statusDataSet = new Map()
         this.pageNames = [lang`Application for participation`]
         this.oldValues = new Map();
+        this.dataSource = dataSource;
         this.buttons = [
-            // {iconName: 'registration-solid', page: 'my-registration-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
-            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            // {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
         ]
     }
-
-    pdfMethod() {
-        var docInfo = {
-          info: {
-            title: "Referees",
-            author: "Polyathlon systems",
-          },
-
-          pageSize: "A4",
-          pageOrientation: 'portrait',
-          pageMargins: [50, 50, 30, 60],
-
-          content: [
-            {
-              text: "Министерство спорта Российской федерации",
-              fontSize: 14,
-              alignment: "center",
-              //margin: [0, 0, 0, 0], //левый, верхний, правый, нижний
-            },
-            {
-                text: "Всероссийская федерация Полиатлона",
-                fontSize: 14,
-                alignment: "center",
-              },
-            {
-                text: "I-ый этап КУБКА РОССИИ — 2023",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-                margin: [0, 15, 0, 0],
-            },
-            {
-                text: "по полиатлону в спортивной дисциплине",
-                fontSize: 18,
-                alignment: "center",
-            },
-            {
-                text: "3-борье с лыжной гонкой",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-            },
-              {
-                  columns: [
-
-                      {
-                          width: 'auto',
-                          text: '12-15 января 2023 года',
-                          margin: [0, 15, 0, 0],
-                          fontSize: 12,
-                      },
-                      {
-                          width: '*',
-                          text: 'г.Ковров, Владимирская обл.',
-                          alignment: "right",
-                          margin: [0, 15, 0, 0],
-                          fontSize: 12,
-                      },
-                  ],
-                  columnGap: 20
-              },
-
-            {
-                text: "СПРАВКА О СОСТАВЕ И КВАЛИФИКАЦИИ",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-                margin: [0, 30, 0, 0],
-            },
-            {
-                text: "ГЛАВНОЙ СУДЕЙСКОЙ КОЛЛЕГИИ",
-                fontSize: 18,
-                bold:true,
-                alignment: "center",
-                margin: [0, 0, 0, 15],
-            },
-            {
-                table:{
-                    widths:['auto','*'],
-
-                    body:[
-                        ['Первая ячейка первой строки','Вторая ячейка первой строки'],
-                        ['Первая ячейка второй строки','Вторая ячейка второй строки'],
-                        [{text:'текстовое содержимое',bold:true},'Текст']
-                    ],
-                    headerRows:1
-                },
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: 'Главный судья,',
-                        margin: [20, 40, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: 'Д.В.Ерёмкин',
-                        alignment: "left",
-                        margin: [0, 40, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: 'судья всероссийской категории',
-                        margin: [20, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: '(г.Ковров, Владимирская обл.)',
-                        alignment: "left",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: 'Главный секретарь,',
-                        margin: [20, 50, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: 'Е.В.Ерёмкина',
-                        alignment: "left",
-                        margin: [0, 50, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-            {
-                columns: [
-
-                    {
-                        width: 300,
-                        text: 'судья всероссийской категории',
-                        margin: [20, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                    {
-                        width: '*',
-                        text: '(г.Ковров, Владимирская обл.)',
-                        alignment: "left",
-                        margin: [0, 0, 0, 0],
-                        fontSize: 12,
-                    },
-                ],
-                columnGap: 20
-            },
-          ],
-
-          styles: {
-            header0:{
-            }
-          }
-        };
-
-        pdfMake.createPdf(docInfo).open();
-        }
 
     showPage(page) {
         location.hash = page;
@@ -425,7 +248,7 @@ class MyRegistrationsSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentRegistrationItem')) {
+        if (changedProps.has('currentRegistrationItemItem')) {
             this.currentPage = 0;
         }
     }
@@ -436,11 +259,7 @@ class MyRegistrationsSection1 extends BaseElement {
         }
     }
 
-    async showItem(item) {
-        if (this.currentItem?._id === item._id) {
-            this.copyToClipboard(item.id || item._id)
-            return
-        }
+    async showItem(index, itemId) {
         if (this.isModified) {
             const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
@@ -451,7 +270,7 @@ class MyRegistrationsSection1 extends BaseElement {
             }
         }
         else {
-            this.dataSource.setCurrentItem(item)
+            this.dataSource.setCurrentItem(this.dataSource.items[index])
         }
     }
 
@@ -475,31 +294,16 @@ class MyRegistrationsSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    fio(item) {
-        if (!item) {
-            return item
-        }
-        let result = item.lastName
-        if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
-        }
-        if (item.middleName) {
-            result += `${item.middleName[0]}.`
-        }
-        return result
-    }
-
-    //                        icon-name="judge1-solid"
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
-                        label=${this.fio(item)}
-                        title=${item._id}
-                        image-name=${item.gender == 0 ? "images/registration-man-solid.svg" : "images/registration-woman-solid.svg"}
+                html `
+                    <icon-button
+                        label=${item.name}
+                        title=${item.ekpNumber}
+                        icon-name="federation-member-category-solid"
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
-                        @click=${() => this.showItem(item)}
+                        @click=${() => this.showItem(index, item._id)}
                     ></icon-button>
                 `
             )}
@@ -564,12 +368,6 @@ class MyRegistrationsSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async getQRCode() {
-        const dataURI = await DataSet.getQRCode(this.currentItem._id)
-        const blob = await (await fetch(dataURI)).blob();
-        window.open(URL.createObjectURL(blob))
-    }
-
     async showDialog(message, type='message') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')
         modalDialog.type = type
@@ -581,7 +379,13 @@ class MyRegistrationsSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новый регион" }
+        const newItem = { name: "Новая заявка" }
+        this.dataSource.addItem(newItem);
+    }
+    
+    async addItem2(item, log) {
+        console.log("Получен объект:", item, log);
+        const newItem = { name: "Новая заявка" };
         this.dataSource.addItem(newItem);
     }
 
@@ -596,17 +400,8 @@ class MyRegistrationsSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            let id = key.id
-            let currentItem = this.currentItem
-            if (id == "order.number") {
-                id = "number"
-                currentItem = this.currentItem.order
-            }
-            if (id == "order.link") {
-                id = "link"
-                currentItem = this.currentItem.order
-            }
-            currentItem[id] = value;
+            const currentItem = key.currentObject ?? this.currentItem
+            currentItem[key.id] = value;
             key.value = value;
         });
         this.oldValues.clear();
@@ -614,7 +409,7 @@ class MyRegistrationsSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого судью?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить эту заявку?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)
@@ -626,4 +421,4 @@ class MyRegistrationsSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-registrations-section-1", MyRegistrationsSection1)
+customElements.define("my-registrations-items-section-1", MyRegistrationsSection1)

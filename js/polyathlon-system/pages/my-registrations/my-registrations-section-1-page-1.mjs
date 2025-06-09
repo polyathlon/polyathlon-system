@@ -56,8 +56,8 @@ class MyRegistrationsSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-select id="name" label="${lang`Competition name`}:" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
-                                <simple-input id="ekpNumber" label="${lang`EKP Number`}:" icon-name="ekp-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" label="${lang`Competition name`}:" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="ekpNumber" label="${lang`EKP Number`}:" icon-name="ekp-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input id="lastName" icon-name="user" label="${lang`Last name`}:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
                     <simple-input id="firstName" icon-name="user-group-solid" label="${lang`First name`}:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
@@ -68,7 +68,7 @@ class MyRegistrationsSection1Page1 extends BaseElement {
                 <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="${lang`Region name`}:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} label="${lang`Club name`}:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
                 <simple-input id="profileUlid" icon-name="hash-number-solid" @icon-click=${this.copyToClipboard} label="${lang`Sportsman Ulid`}:" .value=${this.item?.profileUlid} @input=${this.validateInput}></simple-input>
-                <simple-input id="hashNumber" icon-name="id-number-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createHashNumber} label="${lang`Sportsman number`}:" .value=${this.item?.hashNumber} @input=${this.validateInput}></simple-input>
+                <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" .dataSource=${this.findDataSource} icon-name="sportsman-pc-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.sportsmanPC} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="${lang`Sports category`}:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input id="order.number" icon-name="order-number-solid" @icon-click=${this.numberClick} label="${lang`Order number`}:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
@@ -79,15 +79,64 @@ class MyRegistrationsSection1Page1 extends BaseElement {
         `;
     }
 
-    async createRegistrationPC(e) {
+    async findSportsman(e) {
         const target = e.target
-        const id = await DataSet.createRegistrationPC({
-            countryCode: this.item?.region?.country?.flag.toUpperCase(),
-            regionCode: this.item?.region?.code,
-            ulid: this.item?.profileUlid,
-        })
-        target.setValue(id)
+        let sportsman
+        const value = target.value
+        if (target.isShowList)
+            target.isShowList = false
+        if (!value) {
+            const lastName = this.$id('lastName').value
+            if (!lastName) {
+                await this.errorDialog('Вы не задали фамилию для поиска')
+                return
+            }
+            sportsman = await SportsmanDataset.getItemByLastName(lastName)
+            if (sportsman.rows.length === 0) {
+                this.showDialog('Такой спортсмен не найден')
+                return
+            }
+            if (sportsman.rows.length >= 1) {
+                this.findDataSource = {}
+                this.findDataSource.items = sportsman.rows.map(item => item.doc)
+                target.isShowList = true
+                return
+            }
+            sportsman = sportsman.rows[0].doc
+        } else if (value.includes(":")) {
+            sportsman = await SportsmanDataset.getItem(value)
+        } else if (target.value.includes("-")) {
+            sportsman = await SportsmanDataset.getItemBySportsmanPC(value)
+            if (sportsman.rows.length === 0) {
+                this.showDialog('Такой спортсмен не найден')
+                return
+            }
+            if (sportsman.rows.length > 1) {
+                this.showDialog('Найдено несколько спортсменов с таким ID')
+                return
+            }
+            sportsman = sportsman.rows[0].doc
+        } else {
+            sportsman = await SportsmanDataset.getItemByLastName(value)
+            if (sportsman.rows.length >= 0) {
+                this.findDataSource = sportsman.rows
+            }
+        }
+        if (sportsman) {
+            const inputs = this.$id()
+            sportsman.sportsmanUlid = sportsman._id
+            inputs.forEach(input => {
+                if (input.id in sportsman) {
+                    input.setValue(sportsman[input.id])
+                }
+            })
+            // Object.assign(this.item, sportsman)
+            this.requestUpdate()
+        } else {
+            this.showDialog('Такой спортсмен не найден')
+        }
     }
+
 
     copyToClipboard(e) {
         if (navigator.clipboard) {
@@ -137,7 +186,7 @@ class MyRegistrationsSection1Page1 extends BaseElement {
 
             currentItem[id] = e.target.value
 
-            if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName') {
+            if (e.target.id === 'name' || e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;

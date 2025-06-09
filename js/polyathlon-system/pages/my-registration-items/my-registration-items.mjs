@@ -1,8 +1,8 @@
 import { BaseElement, html, css} from '../../../base-element.mjs'
 
-import './my-registrations-section-1.mjs';
+import './my-registrations-items-section-1.mjs';
 
-class MyRegistrations extends BaseElement {
+class MyRegistrationsItems extends BaseElement {
     static get styles() {
         return [
             BaseElement.styles,
@@ -28,9 +28,9 @@ class MyRegistrations extends BaseElement {
 
     render() {
         return html`
-            <my-registrations-section-1></my-registrations-section-1>
+            <my-registrations-items-section-1></my-registrations-items-section-1>
         `;
     }
 }
 
-customElements.define("my-registrations", MyRegistrations);
+customElements.define("my-registrations-items", MyRegistrationsItems);

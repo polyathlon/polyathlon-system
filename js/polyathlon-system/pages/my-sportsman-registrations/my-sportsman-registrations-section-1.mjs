@@ -371,7 +371,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новая заявка" }
+        const newItem = { name: "Новая" }
         this.dataSource.addItem(newItem);
     }
 

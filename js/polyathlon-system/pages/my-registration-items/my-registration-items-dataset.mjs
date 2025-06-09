@@ -19,7 +19,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/registrations', {
+        return fetch('https://localhost:4500/api/registration-categories', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -44,7 +44,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/registration`, {
+        return fetch(`https://localhost:4500/api/registration-category`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -77,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/registration/${itemId}`, {
+        return fetch(`https://localhost:4500/api/registration-category/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -102,60 +102,8 @@ export default class DataSet {
         return result
     }
 
-    static #fetchGetItemByRegistrationPC(token, itemId) {
-        return fetch(`https://localhost:4500/api/registration-pc/${itemId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    static async getItemByRegistrationPC(itemId) {
-        const token = getToken();
-
-        let response = await DataSet.#fetchGetItemByRegistrationPC(token, itemId)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.#fetchGetItemByRegistrationPC(token, itemId)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result
-    }
-
-    static #fetchGetItemByLastName(token, itemId) {
-        return fetch(`https://localhost:4500/api/registration/last-name/${itemId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    static async getItemByLastName(itemId) {
-        const token = getToken();
-
-        let response = await DataSet.#fetchGetItemByLastName(token, itemId)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.#fetchGetItemByLastName(token, itemId)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result
-    }
-
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/registration/${item._id}`, {
+        return fetch(`https://localhost:4500/api/registration-category/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -188,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/registration/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/registration-category/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -221,56 +169,5 @@ export default class DataSet {
             return
         }
         DataSet.#dataSet.splice(itemIndex, 1)
-    }
-
-    static fetchCreateRegistrationPC(token, item) {
-        return fetch(`https://localhost:4500/api/registration-pc`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(item)
-        })
-    }
-
-    static async createRegistrationPC(item) {
-        const token = getToken();
-        let response = await DataSet.fetchCreateRegistrationPC(token, item)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchCreateRegistrationPC(token, item)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result.number
-    }
-
-    static fetchGetQRCode(token, data) {
-        return fetch(`https://localhost:4500/api/qr-code?data=${data}`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-        })
-    }
-
-    static async getQRCode(data) {
-        const token = getToken();
-        let response = await DataSet.fetchGetQRCode(token, data)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchGetQRCode(token, data)
-        }
-        const result = await response.json()
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result.qr
     }
 }
