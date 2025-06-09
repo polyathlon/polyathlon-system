@@ -13,7 +13,7 @@ import "../../../../components/buttons/simple-button.mjs";
 
 import lang from "../../polyathlon-dictionary.mjs";
 
-import "./my-registration-items-section-1-page-1.mjs";
+//import MyCompetitionsSection1Page1 from "./my-registration-items-section-1-page-1.mjs";
 
 import DataSet from "./my-registration-items-dataset.mjs";
 import DataSource from "./my-registration-items-datasource.mjs";
@@ -420,33 +420,11 @@ export class MyRegistrationsSection1 extends BaseElement {
   }
 
   async addItem2(competitionName, log) {
-    if (!this.dataSource) {
-      await this.firstUpdated(); // Ждём инициализации
-    }
     console.log("Получен объект:", competitionName, log);
-    const newItem = { name: competitionName, regulationsLink };
-    this.dataSource.addItem(newItem);
+    //const newItem = { name: competitionName, regulationsLink };
+    this.addItem();
     console.log("Всё");
   }
-  autoCreateRegistration(competitionName) {
-    // 1. Находим кнопку "Создать заявку" и программно нажимаем её
-    const createButton = this.shadowRoot.querySelector('simple-button[label="Add"]');
-    if (createButton) {
-        createButton.click();
-    }
-    
-    // 2. Заполняем поле названия соревнования
-    requestAnimationFrame(() => {
-        const nameInput = this.shadowRoot.querySelector('simple-input[id="name"]');
-        if (nameInput) {
-            nameInput.value = competitionName;
-            
-            // Имитируем пользовательский ввод для триггера валидации
-            const event = new Event('input', { bubbles: true });
-            nameInput.dispatchEvent(event);
-        }
-    });
-}
 
   async saveItem() {
     await this.dataSource.saveItem(this.currentItem);
@@ -479,11 +457,6 @@ export class MyRegistrationsSection1 extends BaseElement {
   async firstUpdated() {
     super.firstUpdated();
     this.dataSource = new DataSource(this, await DataSet.getDataSet());
-
-    // Если было передано название соревнования, сразу создаем заявку
-    if (this.competitionName) {
-      await this.addItem2(this.competitionName, "");
-    }
   }
 }
 

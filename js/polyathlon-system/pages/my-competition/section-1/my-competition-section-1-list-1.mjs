@@ -169,28 +169,9 @@ class MyCompetitionSection1List1 extends BaseElement {
   }
 
   async showPage() {
-    // 1. Переходим на страницу регистраций
     location.hash = "my-registrations";
-    
-    // 2. Создаем экземпляр страницы регистраций
-    const registrationsPage = document.querySelector('my-registrations-items-section-1');
-    
-    // 3. Если страница уже есть в DOM - используем её, иначе ждём появления
-    if (!registrationsPage) {
-        await new Promise(resolve => {
-            const observer = new MutationObserver(() => {
-                const page = document.querySelector('my-registrations-items-section-1');
-                if (page) {
-                    observer.disconnect();
-                    resolve(page);
-                }
-            });
-            observer.observe(document.body, { childList: true, subtree: true });
-        });
-    }
-    
-    // 4. Инициируем создание заявки с предзаполненным названием
-    registrationsPage.autoCreateRegistration(this.#competitionName);
+    const myRegistration=new MyRegistrationsSection1()
+    myRegistration.addItem2(this.#competitionName, this.#registration)
 }
 
   registration() {

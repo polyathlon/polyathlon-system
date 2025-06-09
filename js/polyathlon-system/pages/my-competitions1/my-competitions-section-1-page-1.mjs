@@ -7,7 +7,7 @@ import '../../../../components/inputs/download-input.mjs'
 import '../../../../components/buttons/competition-button.mjs'
 import '../../../../components/inputs/avatar-input.mjs'
 
-class MyCompetitionsSection1Page1 extends BaseElement {
+export class MyCompetitionsSection1Page1 extends BaseElement {
         static get properties() {
             return {
                 version: { type: String, default: '1.0.0', save: true },
