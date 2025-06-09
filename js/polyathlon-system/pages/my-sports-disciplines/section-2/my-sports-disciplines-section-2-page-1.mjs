@@ -115,7 +115,9 @@ class MySportsDisciplinesSection2Page1 extends BaseElement {
                 if (Array.isArray(e.target.value)) {
                     this.oldValues.set(e.target, e.target.oldValue)
                 } else {
-                    this.oldValues.set(e.target.id, currentItem[e.target.id])
+                    if (currentItem[e.target.id] !== e.target.value) {
+                        this.oldValues.set(e.target, currentItem[e.target.id])
+                    }
                 }
             }
             else {

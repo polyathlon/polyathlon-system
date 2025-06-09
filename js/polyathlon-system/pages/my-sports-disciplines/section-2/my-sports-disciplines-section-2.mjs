@@ -536,11 +536,10 @@ class MySportsDisciplinesSection2 extends BaseElement {
 
     newRecord() {
         return html `<icon-button
-                label=${ this.fio(this.currentItem) || "Новый судья" }
+                label=${ this.fio(this.currentItem) || "Новая возрастная группа" }
                 title=''
-                icon-name=${ this.currentItem?.gender == 0 ? "referee-man-solid" : "referee-woman-solid" }
+                icon-name=${ this.currentItem?.gender == 0 ? "age-group-solid" : "age-group-solid" }
                 ?selected=${ true }
-                .status=${{ name: this.currentItem?.refereeId || this.currentItem?.refereeUlid || "referee:new", icon: 'id-number-solid'} }
             >
             </icon-button>
         `

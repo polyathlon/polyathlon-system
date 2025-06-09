@@ -238,13 +238,16 @@ class MyCompetitionSection4Page2 extends BaseElement {
             this.items = this.sportsmenDataSource.items.map(item => {
                 return {
                     place: item.place ?? 0,
-                    sportsman: `${item.lastName} ${item.firstName}`,
+                    sportsman: `${item.lastName} ${item.firstName} ${item.middleName}`,
                     gender: item.gender,
                     category: item.category.shortName,
                     year: new Date(item.birthday).getFullYear(),
                     region: item.region.shortName ?? item.region.name,
                     club: item.club.name,
-                    points: +(item.shooting?.points ?? 0) + +(item.pushUps?.points ?? 0) + +(item.skiing?.points ?? 0),
+                    points: +(item.shooting?.points ?? 0) + +(item.pushUps?.points ?? 0) + +(item.pullUps?.points ?? 0)
+                    + +(item.swimming?.points ?? 0) + +(item.throwing?.points ?? 0) + +(item.sprinting?.points ?? 0) + +(item.running?.points ?? 0)
+                     + +(item.skiing?.points ?? 0) + +(item.rollerSkiing?.points ?? 0)  + +(item.jumping?.points ?? 0)
+                     ,
                     completedCategory: item.completedCategory ?? item.category.shortName,
                 }
             }).sort((a, b) => +(a.gender) - b.gender || b.points - a.points).map((item, index) => {item.place = index + 1; return item});

@@ -55,9 +55,9 @@ class MyCompetitionSection6Page10 extends BaseElement {
         if (item.firstName) {
             result += ` ${item.firstName}`
         }
-        // if (item.middleName) {
-        //     result += ` ${item.middleName[0]}.`
-        // }
+        if (item.middleName) {
+            result += ` ${item.middleName}`
+        }
         return result
     }
 

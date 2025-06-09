@@ -51,6 +51,7 @@ customElements.define("checkbox-group-input", class CheckboxGroupInput extends B
                 }
                 input {
                     appearance: none;
+                    height: 1rem;
                     width: 1rem;
                     aspect-ratio: 1;
                     border: 1px solid white;

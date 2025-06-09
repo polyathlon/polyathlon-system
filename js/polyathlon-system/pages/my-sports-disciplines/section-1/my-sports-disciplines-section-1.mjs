@@ -415,7 +415,7 @@ class MySportsDisciplinesSection1 extends BaseElement {
         return html `<icon-button
                 label=${ this.currentItem?.name }
                 title=${ this.currentItem?.name }
-                icon-name=${ this.currentItem?.icon || "picture-circle-solid" }
+                icon-name=${ this.currentItem?.icon || "category-solid" }
                 ?selected=${ true }
             >
             </icon-button>
