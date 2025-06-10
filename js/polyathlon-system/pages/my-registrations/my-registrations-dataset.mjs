@@ -19,7 +19,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/registrations', {
+        return fetch(`https://localhost:4500/api/registrations`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

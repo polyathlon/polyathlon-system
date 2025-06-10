@@ -3,8 +3,9 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/avatar-input.mjs'
 
-import {MyRegistrationsSection1} from '../../my-registration-items/my-registration-items-section-1.mjs'
-import  DataSource  from '../../my-registration-items/my-registration-items-datasource.mjs'
+//import {MyRegistrationsSection1} from '../../my-registration-items/my-registration-items-section-1.mjs'
+import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
+//import  DataSource  from '../../my-registration-items/my-registration-items-datasource.mjs'
 
 class MyCompetitionSection1List1 extends BaseElement {
   static get properties() {
@@ -12,6 +13,7 @@ class MyCompetitionSection1List1 extends BaseElement {
       version: { type: String, default: "1.0.0", save: true },
       avatar: { type: Object, default: null },
       name: { type: String, default: null },
+      ekpNumber: { type: String, default: null },
       regulationsLink: { type: String, default: null },
       protocolLink: { type: String, default: null },
       startDate: { type: String, default: null },
@@ -85,6 +87,13 @@ class MyCompetitionSection1List1 extends BaseElement {
       return `${this.name.name} ${this.stage?.name}`;
     }
     return this.name.name;
+  }
+  get #ekpNumber() {
+    if (!this.ekpNumber) {
+      return "";
+    }
+
+    return this.ekpNumber;
   }
 
   static monthNames = [
@@ -169,9 +178,14 @@ class MyCompetitionSection1List1 extends BaseElement {
   }
 
   async showPage() {
-    location.hash = "my-registrations";
-    const myRegistration=new MyRegistrationsSection1()
-    myRegistration.addItem2(this.#competitionName, this.#registration)
+  location.hash = "my-registrations";
+  const myRegistrationsSection1 = new MyRegistrationsSection1();
+
+  // Ждём инициализации dataSource
+  await myRegistrationsSection1.ensureDataSourceInitialized();
+  myRegistrationsSection1.addItem2(this.#competitionName, this.#ekpNumber);
+
+  //await myRegistrationsSection1.addItem2(this.#competitionName,this.regulationsLink);
 }
 
   registration() {

@@ -367,8 +367,7 @@ export class MyRegistrationsSection1 extends BaseElement {
       return html`
         <nav>
           <simple-button @click=${this.addItem}>${lang`Add`}</simple-button>
-          <simple-button @click=${this.deleteItem}
-            >${lang`Delete`}</simple-button
+          <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button
           >
         </nav>
       `;
@@ -416,14 +415,7 @@ export class MyRegistrationsSection1 extends BaseElement {
 
   async addItem() {
     const newItem = { name: "Новая заявка" };
-    this.dataSource.addItem(newItem);
-  }
-
-  async addItem2(competitionName, log) {
-    console.log("Получен объект:", competitionName, log);
-    //const newItem = { name: competitionName, regulationsLink };
-    this.addItem();
-    console.log("Всё");
+    await this.dataSource.addItem(newItem);
   }
 
   async saveItem() {

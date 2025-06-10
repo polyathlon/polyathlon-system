@@ -12,7 +12,7 @@ import './my-registrations-section-1-page-1.mjs'
 import DataSet from './my-registrations-dataset.mjs'
 import DataSource from './my-registrations-datasource.mjs'
 
-class MyRegistrationsSection1 extends BaseElement {
+export class MyRegistrationsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -166,8 +166,9 @@ class MyRegistrationsSection1 extends BaseElement {
         ]
     }
 
-    constructor() {
+    constructor(competitionNamed = "Пока нет") {
         super();
+        this.competitionNamed = competitionNamed;
         this.statusDataSet = new Map()
         this.pageNames = [lang`Application for participation`]
         this.oldValues = new Map();
@@ -205,7 +206,7 @@ class MyRegistrationsSection1 extends BaseElement {
         const handle = await window.showSaveFilePicker(options);
         return handle;
     }
-    
+
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
@@ -216,6 +217,7 @@ class MyRegistrationsSection1 extends BaseElement {
         if (changedProps.has('currentRegistrationItem')) {
             this.currentPage = 0;
         }
+        //console.log("Я обновился")
     }
 
     copyToClipboard(text) {
@@ -241,6 +243,7 @@ class MyRegistrationsSection1 extends BaseElement {
         else {
             this.dataSource.setCurrentItem(item)
         }
+        //console.log("Я showItem")
     }
 
     get #page() {
@@ -356,10 +359,19 @@ class MyRegistrationsSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "" }
+        const newItem = { name: "New" }
         this.dataSource.addItem(newItem);
     }
-
+    async addItem2(competitionName, ekpNumber) {
+        const newItem = { name: competitionName, ekpNumber: ekpNumber}
+        this.dataSource.addItem(newItem);
+  }
+  async ensureDataSourceInitialized() {
+  if (!this.dataSource) {
+    await this.firstUpdated();
+    console.log("Я ensureDataSourceInitialized")
+  }
+}
     async saveItem() {
         await this.dataSource.saveItem(this.currentItem);
         this.oldValues?.clear();
