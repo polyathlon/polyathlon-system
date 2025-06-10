@@ -3,9 +3,8 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/avatar-input.mjs'
 
-//import {MyRegistrationsSection1} from '../../my-registration-items/my-registration-items-section-1.mjs'
 import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
-//import  DataSource  from '../../my-registration-items/my-registration-items-datasource.mjs'
+import {MyCompetitionSection1Page1} from './my-competition-section-1-page-1.mjs'
 
 class MyCompetitionSection1List1 extends BaseElement {
   static get properties() {
@@ -90,9 +89,10 @@ class MyCompetitionSection1List1 extends BaseElement {
   }
   get #ekpNumber() {
     if (!this.ekpNumber) {
+      console.log("Добро пожаловать в паблик пустота....")
       return "";
     }
-
+    console.log("Есть ЕКП")
     return this.ekpNumber;
   }
 
@@ -180,11 +180,12 @@ class MyCompetitionSection1List1 extends BaseElement {
   async showPage() {
   location.hash = "my-registrations";
   const myRegistrationsSection1 = new MyRegistrationsSection1();
-
   // Ждём инициализации dataSource
   await myRegistrationsSection1.ensureDataSourceInitialized();
-  myRegistrationsSection1.addItem2(this.#competitionName, this.#ekpNumber);
-
+  myRegistrationsSection1.addItem2(this.#competitionName, this.#competitionDate);
+  const myCompetitionSection1Page1=new MyCompetitionSection1Page1();
+  await myCompetitionSection1Page1.ensureDataSourceInitialized();
+  myCompetitionSection1Page1.sendEKPNumber();
   //await myRegistrationsSection1.addItem2(this.#competitionName,this.regulationsLink);
 }
 

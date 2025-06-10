@@ -25,6 +25,7 @@ export class MyRegistrationsSection1 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
+            ekpNumber: { type: String, default: null },
         }
     }
 
@@ -166,9 +167,8 @@ export class MyRegistrationsSection1 extends BaseElement {
         ]
     }
 
-    constructor(competitionNamed = "Пока нет") {
+    constructor() {
         super();
-        this.competitionNamed = competitionNamed;
         this.statusDataSet = new Map()
         this.pageNames = [lang`Application for participation`]
         this.oldValues = new Map();
@@ -362,8 +362,8 @@ export class MyRegistrationsSection1 extends BaseElement {
         const newItem = { name: "New" }
         this.dataSource.addItem(newItem);
     }
-    async addItem2(competitionName, ekpNumber) {
-        const newItem = { name: competitionName, ekpNumber: ekpNumber}
+    async addItem2(competitionName) {
+        const newItem = { name: competitionName, ekpNumber: this.ekpNumber}
         this.dataSource.addItem(newItem);
   }
   async ensureDataSourceInitialized() {
@@ -372,6 +372,10 @@ export class MyRegistrationsSection1 extends BaseElement {
     console.log("Я ensureDataSourceInitialized")
   }
 }
+    async acceptEKPNumber(ekp){
+        this.ekpNumber=ekp;
+        console.log("передал ЕКП")
+    }
     async saveItem() {
         await this.dataSource.saveItem(this.currentItem);
         this.oldValues?.clear();

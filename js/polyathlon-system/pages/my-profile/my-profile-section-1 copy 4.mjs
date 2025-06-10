@@ -255,7 +255,7 @@ class MyProfileSection1 extends BaseElement {
                     <simple-input label="Nickname:" id="nickName" icon-name="user-alien-solid" .value=${this.dataSet?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
                     <simple-input label="Email:" id="email" icon-name="envelope-regular" .value="${this.dataSet?.personalInfo?.email}" @input=${this.validateInput}></simple-input>
                     <gender-input label="Gender:" id="gender" icon-name="gender" .value="${this.dataSet?.personalInfo?.gender}" @input=${this.validateInput}></gender-input>
-                    <birthday-input label="Data of birth:" id="birthday" .value="${this.dataSet?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
+                    <birthday-input label="date of birth:" id="birthday" .value="${this.dataSet?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
                 </div>
             </div>
             <footer>

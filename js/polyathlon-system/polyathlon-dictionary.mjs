@@ -127,9 +127,9 @@ const dictionary = {
         "ru-RU": 'Женский',
         "en-EN": 'Female'
     },
-    'Data of birth': {
+    'Date of birth': {
         "ru-RU": 'Дата рождения',
-        "en-EN": 'Data of birth'
+        "en-EN": 'Date of birth'
     },
     'Region name': {
         "ru-RU": 'Регион',
@@ -242,6 +242,10 @@ const dictionary = {
     'Competition name': {
         "ru-RU": 'Наименование соревнования',
         "en-EN": 'Competition name'
+    },
+    'Competition date': {
+        "ru-RU": 'Дата соревнования',
+        "en-EN": 'Competition date'
     },
     'Stage': {
         "ru-RU": 'Этап',
@@ -680,7 +684,7 @@ const dictionary = {
         "en-EN": 'Find'
     },
     'Regulations link': {
-        "ru-RU": 'Регламент',
+        "ru-RU": 'Ссылка на правила',
         "en-EN": 'Regulations link'
     },
     'Regulations': {

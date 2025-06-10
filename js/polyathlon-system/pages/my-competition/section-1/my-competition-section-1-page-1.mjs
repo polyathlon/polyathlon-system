@@ -26,10 +26,12 @@ import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs
 
 import DataSet from './my-competition-dataset.mjs'
 
+import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
+
 import sportsDisciplineAgeGroupsDataSet from '../../my-sports-disciplines/section-2/my-sports-disciplines-section-2-dataset.mjs'
 // import sportsDisciplineAgeGroupsDataSource from '../../my-sports-disciplines/section-2/my-sports-disciplines-section-2-datasource.mjs'
 
-class MyCompetitionSection1Page1 extends BaseElement {
+export class MyCompetitionSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -114,12 +116,20 @@ class MyCompetitionSection1Page1 extends BaseElement {
             </div>
         `;
     }
-
+    async sendEKPNumber(){
+        const myRegistrationsSection1 = new MyRegistrationsSection1();
+        myRegistrationsSection1.acceptEKPNumber(this.ekpNumber)
+    }
     copyToClipboard(e) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(e.target.value)
         }
     }
+    async ensureDataSourceInitialized() {
+    if (!this.dataSource) {
+    await this.firstUpdated();
+    console.log("Я ensureDataSourceInitialized2")
+  }}
 
     myLinkClick(e) {
         window.open(e.target.value);

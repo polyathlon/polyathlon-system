@@ -47,7 +47,7 @@ class MyProfileSection1Page1 extends BaseElement {
                 <simple-input label="${lang`Nickname`}:" id="nickName" icon-name="user-alien-solid" .value=${this.item?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
                 <simple-input label="${lang`Email`}:" id="email" icon-name=${this.item?.emailVerified ? "envelope-solid" : "envelope-regular"} .value=${this.item?.email} button-name=${this.item?.emailVerified ? nothing : "envelope-dot-solid"} @button-click=${this.item?.emailVerified ? nothing : this.confirmEmail} @input=${this.validateInput}></simple-input>
                 <gender-input label="${lang`Gender`}:" id="gender" icon-name="gender" .value="${this.item?.personalInfo?.gender}" @input=${this.validateInput}></gender-input>
-                <birthday-input label="${lang`Data of birth`}:" id="birthday" .value="${this.item?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
+                <birthday-input label="${lang`date of birth`}:" id="birthday" .value="${this.item?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
             </div>
         `;
     }
