@@ -116,16 +116,21 @@ export class MyCompetitionSection1Page1 extends BaseElement {
             </div>
         `;
     }
-    async sendEKPNumber(){
+    async sendEKPNumber() {
+        const competition = await DataSet.getItem(this.item._id);
+        console.log("this.item._id: ", this.item._id);
+        console.log("competition.ekpNumber: ", competition.ekpNumber);
         const myRegistrationsSection1 = new MyRegistrationsSection1();
-        myRegistrationsSection1.acceptEKPNumber(this.ekpNumber)
-    }
+        myRegistrationsSection1.acceptEKPNumber(competition.ekpNumber);
+}
     copyToClipboard(e) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(e.target.value)
         }
     }
     async ensureDataSourceInitialized() {
+    const competition = await DataSet.getItem(this.currentItem);
+    console.log("Думайте", competition.ekpNumber); // Доступ к полю ekpNumber
     if (!this.dataSource) {
     await this.firstUpdated();
     console.log("Я ensureDataSourceInitialized2")

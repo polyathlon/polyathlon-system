@@ -191,7 +191,7 @@ class MyProfileSection1 extends BaseElement {
                         </fieldset>
 
                       <div>
-                        <label for="email">Date of Birth: </label>
+                        <label for="email">"${lang`Date of birth`}:"</label>
                         <simple-input type="date" id="date" .value="${this.email}" @input="${(e) => this.email = e.target.value}"/>
                       </div>
 

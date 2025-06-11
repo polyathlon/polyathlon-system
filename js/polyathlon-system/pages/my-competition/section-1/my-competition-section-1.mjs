@@ -24,8 +24,9 @@ import DataSet from './my-competition-dataset.mjs'
 //import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
+import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
 
-class MyCompetitionSection1 extends BaseElement {
+export class MyCompetitionSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -252,6 +253,22 @@ class MyCompetitionSection1 extends BaseElement {
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
         ]
     }
+    async sendEKPNumber() {
+            const competition = await DataSet.getItem(this.item._id);
+            console.log("this.item._id: ", this.item._id);
+            console.log("competition.ekpNumber: ", competition.ekpNumber);
+            const myRegistrationsSection1 = new MyRegistrationsSection1();
+            myRegistrationsSection1.acceptEKPNumber(competition.ekpNumber);
+    }
+    async ensureDataSourceInitialized() {
+        await this.firstUpdated();
+        console.log("this.currentItem: ", this.currentItem.ekpNumber)
+        //const competition = await DataSet.getItem(this.currentItem.ekpNumber);
+        //console.log("Думайте", competition.ekpNumber); // Доступ к полю ekpNumber
+        // if (!this.dataSource) {
+        // await this.firstUpdated();
+        console.log("Я ensureDataSourceInitialized2")
+      }
 
     showPage(page) {
         location.hash = page;

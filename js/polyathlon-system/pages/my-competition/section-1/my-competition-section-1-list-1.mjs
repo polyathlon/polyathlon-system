@@ -5,6 +5,7 @@ import '../../../../../components/inputs/avatar-input.mjs'
 
 import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
 import {MyCompetitionSection1Page1} from './my-competition-section-1-page-1.mjs'
+import {MyCompetitionSection1} from './my-competition-section-1.mjs'
 
 class MyCompetitionSection1List1 extends BaseElement {
   static get properties() {
@@ -12,7 +13,7 @@ class MyCompetitionSection1List1 extends BaseElement {
       version: { type: String, default: "1.0.0", save: true },
       avatar: { type: Object, default: null },
       name: { type: String, default: null },
-      ekpNumber: { type: String, default: null },
+      ekpNumber: { type: String, default: "TEST_EKP_12345" },
       regulationsLink: { type: String, default: null },
       protocolLink: { type: String, default: null },
       startDate: { type: String, default: null },
@@ -86,14 +87,6 @@ class MyCompetitionSection1List1 extends BaseElement {
       return `${this.name.name} ${this.stage?.name}`;
     }
     return this.name.name;
-  }
-  get #ekpNumber() {
-    if (!this.ekpNumber) {
-      console.log("Добро пожаловать в паблик пустота....")
-      return "";
-    }
-    console.log("Есть ЕКП")
-    return this.ekpNumber;
   }
 
   static monthNames = [
@@ -178,15 +171,24 @@ class MyCompetitionSection1List1 extends BaseElement {
   }
 
   async showPage() {
-  location.hash = "my-registrations";
-  const myRegistrationsSection1 = new MyRegistrationsSection1();
-  // Ждём инициализации dataSource
-  await myRegistrationsSection1.ensureDataSourceInitialized();
-  myRegistrationsSection1.addItem2(this.#competitionName, this.#competitionDate);
-  const myCompetitionSection1Page1=new MyCompetitionSection1Page1();
-  await myCompetitionSection1Page1.ensureDataSourceInitialized();
-  myCompetitionSection1Page1.sendEKPNumber();
-  //await myRegistrationsSection1.addItem2(this.#competitionName,this.regulationsLink);
+    location.hash = "my-registrations";
+    const myRegistrationsSection1 = new MyRegistrationsSection1();
+    await myRegistrationsSection1.ensureDataSourceInitialized();
+
+    const competition = {
+        name: this.#competitionName,
+        //ekpNumber: this.#ekpNumber
+    };
+
+    console.log("Передаем в addItem2:", competition);
+    myRegistrationsSection1.addItem2(competition);
+
+    // const myCompetitionSection1Page1 = new MyCompetitionSection1Page1();
+    // await myCompetitionSection1Page1.ensureDataSourceInitialized();
+    // myCompetitionSection1Page1.sendEKPNumber();
+    const myCompetitionSection1 = new MyCompetitionSection1();
+    await myCompetitionSection1.ensureDataSourceInitialized();
+    myCompetitionSection1.sendEKPNumber();
 }
 
   registration() {
@@ -206,6 +208,15 @@ class MyCompetitionSection1List1 extends BaseElement {
     this.isFirst = false;
     this.avatar = null; // await this.downloadAvatar();
     this.isFirst = true;
+    console.log("Все полученные данные:", this);
+    console.log("Структура name:", this.name);
+    console.log("Структура ekpNumber:", this.ekpNumber);
+
+  // 1. Сначала загружаем основные данные
+  await this.loadCompetitionData();
+
+  // 2. Затем пытаемся получить ЕКП
+  await this.fetchRealEkpNumber();
   }
 }
 

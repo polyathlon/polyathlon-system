@@ -25,7 +25,7 @@ export class MyRegistrationsSection1 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
-            ekpNumber: { type: String, default: null },
+            ekpNumber: { type: String, default: null }
         }
     }
 
@@ -362,9 +362,11 @@ export class MyRegistrationsSection1 extends BaseElement {
         const newItem = { name: "New" }
         this.dataSource.addItem(newItem);
     }
-    async addItem2(competitionName) {
-        const newItem = { name: competitionName, ekpNumber: this.ekpNumber}
+    async addItem2(competition){
+        console.log("Получены данные в addItem2:", competition);
+        const newItem = { name: competition.name, ekpNumber: this.ekpNumber};
         this.dataSource.addItem(newItem);
+        //this.ekpNumber = competition.ekpNumber;
   }
   async ensureDataSourceInitialized() {
   if (!this.dataSource) {
@@ -374,7 +376,7 @@ export class MyRegistrationsSection1 extends BaseElement {
 }
     async acceptEKPNumber(ekp){
         this.ekpNumber=ekp;
-        console.log("передал ЕКП")
+        console.log("ЕКП номер принят:", this.ekpNumber);
     }
     async saveItem() {
         await this.dataSource.saveItem(this.currentItem);
