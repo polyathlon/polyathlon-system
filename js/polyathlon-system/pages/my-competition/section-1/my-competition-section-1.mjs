@@ -253,21 +253,28 @@ export class MyCompetitionSection1 extends BaseElement {
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
         ]
     }
-    async sendEKPNumber() {
-            const competition = await DataSet.getItem(this.item._id);
-            console.log("this.item._id: ", this.item._id);
-            console.log("competition.ekpNumber: ", competition.ekpNumber);
+    async sendCompetition() {
+            // const competition = await DataSet.getItem(this.item._id);
+            // console.log("this.item._id: ", this.item._id);
+            // console.log("competition.ekpNumber: ", competition.ekpNumber);
             const myRegistrationsSection1 = new MyRegistrationsSection1();
-            myRegistrationsSection1.acceptEKPNumber(competition.ekpNumber);
+            const competition = {
+                name: this.currentItem.name.name,
+                ekpNumber:this.currentItem.ekpNumber,
+                stage: this.currentItem.stage?.name,
+                competitionPC: this.currentItem?.competitionPC,
+                startDate: this.currentItem.startDate,
+                endDate: this.currentItem.endDate
+            }
+            console.log("competition: ", competition);
+            console.log("Вызываю acceptCompetition.");
+            myRegistrationsSection1.acceptCompetition(competition);
+            console.log("Вызвал acceptCompetition.");
     }
     async ensureDataSourceInitialized() {
         await this.firstUpdated();
         console.log("this.currentItem: ", this.currentItem.ekpNumber)
-        //const competition = await DataSet.getItem(this.currentItem.ekpNumber);
-        //console.log("Думайте", competition.ekpNumber); // Доступ к полю ekpNumber
-        // if (!this.dataSource) {
-        // await this.firstUpdated();
-        console.log("Я ensureDataSourceInitialized2")
+        console.log("Я ensureDataSourceInitialized")
       }
 
     showPage(page) {

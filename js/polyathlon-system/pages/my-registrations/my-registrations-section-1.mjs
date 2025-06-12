@@ -25,7 +25,9 @@ export class MyRegistrationsSection1 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
-            ekpNumber: { type: String, default: null }
+            ekpNumber: { type: String, default: null },
+            stage: { type: String, default: null },
+            competitionPC: { type: String, default: null }
         }
     }
 
@@ -362,21 +364,32 @@ export class MyRegistrationsSection1 extends BaseElement {
         const newItem = { name: "New" }
         this.dataSource.addItem(newItem);
     }
-    async addItem2(competition){
-        console.log("Получены данные в addItem2:", competition);
-        const newItem = { name: competition.name, ekpNumber: this.ekpNumber};
-        this.dataSource.addItem(newItem);
-        //this.ekpNumber = competition.ekpNumber;
-  }
   async ensureDataSourceInitialized() {
   if (!this.dataSource) {
     await this.firstUpdated();
     console.log("Я ensureDataSourceInitialized")
   }
 }
-    async acceptEKPNumber(ekp){
-        this.ekpNumber=ekp;
-        console.log("ЕКП номер принят:", this.ekpNumber);
+    async acceptCompetition(competition){
+        console.log("competition принят:", competition);
+        // console.log("competition.name :", competition.name);
+        // this.name=competition.name;
+        // this.ekpNumber=competition.ekpNumber;
+        // console.log("Имя принят:", this.name);
+        // console.log("ЕКП номер принят:", this.ekpNumber);
+        const newItem = {
+            name: competition.name,
+            ekpNumber: competition.ekpNumber,
+            stage: competition.stage?.name,
+            competitionPC: competition?.competitionPC,
+            startDate: competition?.startDate,
+            endDate: competition?.endDate
+        };
+        console.log("Создал newItem:", newItem);
+        await this.firstUpdated();
+        await this.dataSource.addItem(newItem);
+        this.requestUpdate();
+        location.reload(); //другими способами не получается
     }
     async saveItem() {
         await this.dataSource.saveItem(this.currentItem);

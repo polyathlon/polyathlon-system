@@ -58,6 +58,12 @@ class MyRegistrationsSection1Page1 extends BaseElement {
             <div class="container">
                 <simple-input id="name" label="${lang`Competition name`}:" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-input>
                 <simple-input id="ekpNumber" label="${lang`EKP Number`}:" icon-name="ekp-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
+                <simple-select id="stage" label="${lang`Stage`}:" icon-name="order-number-solid" @icon-click=${() => this.showPage('my-competition-stages')} .dataSource=${this.competitionStageDataSource} .value=${this.item?.stage} @input=${this.validateInput}></simple-select>
+                <simple-input id="competitionPC" label="${lang`Competition PC`}:" icon-name="competition-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionPC} .value=${this.item?.competitionPC} @input=${this.validateInput}></simple-input>
+                <div class="name-group">
+                    <simple-input id="startRegistration" type="date" label="${lang`Start registration`}:" icon-name="start-registration-solid" .value=${this.item?.startRegistration} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="endRegistration" type="date" label="${lang`End registration`}:" icon-name="end-registration-solid" .value=${this.item?.endRegistration} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                </div>
                 <div class="name-group">
                     <simple-input id="lastName" icon-name="user" label="${lang`Last name`}:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
                     <simple-input id="firstName" icon-name="user-group-solid" label="${lang`First name`}:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>

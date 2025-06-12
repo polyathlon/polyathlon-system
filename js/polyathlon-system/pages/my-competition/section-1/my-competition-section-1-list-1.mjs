@@ -3,8 +3,8 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/avatar-input.mjs'
 
-import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
-import {MyCompetitionSection1Page1} from './my-competition-section-1-page-1.mjs'
+// import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
+// import {MyCompetitionSection1Page1} from './my-competition-section-1-page-1.mjs'
 import {MyCompetitionSection1} from './my-competition-section-1.mjs'
 
 class MyCompetitionSection1List1 extends BaseElement {
@@ -172,23 +172,11 @@ class MyCompetitionSection1List1 extends BaseElement {
 
   async showPage() {
     location.hash = "my-registrations";
-    const myRegistrationsSection1 = new MyRegistrationsSection1();
-    await myRegistrationsSection1.ensureDataSourceInitialized();
-
-    const competition = {
-        name: this.#competitionName,
-        //ekpNumber: this.#ekpNumber
-    };
-
-    console.log("Передаем в addItem2:", competition);
-    myRegistrationsSection1.addItem2(competition);
-
-    // const myCompetitionSection1Page1 = new MyCompetitionSection1Page1();
-    // await myCompetitionSection1Page1.ensureDataSourceInitialized();
-    // myCompetitionSection1Page1.sendEKPNumber();
     const myCompetitionSection1 = new MyCompetitionSection1();
     await myCompetitionSection1.ensureDataSourceInitialized();
-    myCompetitionSection1.sendEKPNumber();
+    console.log("Вызываю sendCompetition.")
+    myCompetitionSection1.sendCompetition();
+    console.log("Вызвал sendCompetition.")
 }
 
   registration() {
@@ -208,15 +196,15 @@ class MyCompetitionSection1List1 extends BaseElement {
     this.isFirst = false;
     this.avatar = null; // await this.downloadAvatar();
     this.isFirst = true;
-    console.log("Все полученные данные:", this);
-    console.log("Структура name:", this.name);
-    console.log("Структура ekpNumber:", this.ekpNumber);
+    // console.log("Все полученные данные:", this);
+    // console.log("Структура name:", this.name);
+    // console.log("Структура ekpNumber:", this.ekpNumber);
 
   // 1. Сначала загружаем основные данные
-  await this.loadCompetitionData();
+  //await this.loadCompetitionData();
 
   // 2. Затем пытаемся получить ЕКП
-  await this.fetchRealEkpNumber();
+  //await this.fetchRealEkpNumber();
   }
 }
 
