@@ -96,7 +96,7 @@ class MyCompetitionSection1List1 extends BaseElement {
             this.isModified = this.oldValues.size !== 0;
         }
     }
-
+    
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;

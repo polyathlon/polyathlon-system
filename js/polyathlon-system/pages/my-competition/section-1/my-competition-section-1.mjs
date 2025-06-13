@@ -24,6 +24,8 @@ import DataSet from './my-competition-dataset.mjs'
 //import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
+import DataSetSportsman from '../../my-sportsmen/my-sportsmen-dataset.mjs';
+
 import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
 
 export class MyCompetitionSection1 extends BaseElement {
@@ -254,22 +256,57 @@ export class MyCompetitionSection1 extends BaseElement {
         ]
     }
     async sendCompetition() {
-            // const competition = await DataSet.getItem(this.item._id);
-            // console.log("this.item._id: ", this.item._id);
-            // console.log("competition.ekpNumber: ", competition.ekpNumber);
-            const myRegistrationsSection1 = new MyRegistrationsSection1();
-            const competition = {
-                name: this.currentItem.name.name,
-                ekpNumber:this.currentItem.ekpNumber,
-                stage: this.currentItem.stage?.name,
-                competitionPC: this.currentItem?.competitionPC,
-                startDate: this.currentItem.startDate,
-                endDate: this.currentItem.endDate
-            }
-            console.log("competition: ", competition);
-            console.log("Вызываю acceptCompetition.");
-            myRegistrationsSection1.acceptCompetition(competition);
-            console.log("Вызвал acceptCompetition.");
+        console.log('Тестирование getItemsByOwner()...');
+        console.log('Запрашиваю токен...');
+        const token = sessionStorage.getItem('accessUserToken');
+        if (!token) {
+            console.error('Токен не найден в sessionStorage');
+            return;
+        }
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Данные из токена:', payload);
+        console.log('payload.ulid:', payload.ulid);
+        //console.log('Тип payload.ulid:', typeof payload.ulid);
+        const item = await DataSetSportsman.getItemsByOwner(payload.ulid); //поиск спортсмена по номеру. по логике системы, каждый пользователь может стать только одним спортсменом
+
+        // Проверяем результаты
+        console.log('Успешно! Получены данные:');
+        console.log(item);
+
+        // if (!Array.isArray(item)) {
+        //     throw new Error('Метод не вернул массив');
+        // }
+
+        console.log(`Найдено спортсменов: ${item.length}`);
+        console.log("currentItem: ", this.currentItem);
+        const competitionAndSportsman= {
+            name: this.currentItem?.name?.name,
+            ekpNumber: this.currentItem?.ekpNumber,
+            stage: this.currentItem.stage,
+            competitionPC: this.currentItem?.competitionPC,
+            startDate: this.currentItem?.startDate,
+            endDate: this.currentItem?.endDate,
+            lastName: item.rows[0]?.doc.lastName,
+            firstName: item.rows[0]?.doc.firstName,
+            middleName: item.rows[0]?.doc?.middleName,
+            birthday: item.rows[0]?.doc?.birthday,
+            gender: item.rows[0]?.doc?.gender,
+            region: item.rows[0]?.doc?.region,
+            club: item.rows[0]?.doc?.club,
+            profileUlid: item.rows[0]?.doc?.owner, //возможно это неправильно, но по логике системы эти записи создает сам пользователь, а к его спортсмену прикрепляется его ulid
+            sportsmanPC: item.rows[0]?.doc?.sportsmanPC,
+            category: item.rows[0]?.doc?.category,
+            order: {
+                number: item.rows[0]?.doc?.order?.number,
+                link: item.rows[0]?.doc?.order?.link
+            },
+            personLink: item.rows[0]?.doc?.link //тут проблема, в справочнике спортсменов личная ссылка не сохраняется, поэтому на данный момент не могу протестировать это поле
+        }
+        console.log("competition: ", competitionAndSportsman);
+        const myRegistrationsSection1 = new MyRegistrationsSection1();
+        console.log("Вызываю acceptCompetition.");
+        myRegistrationsSection1.acceptCompetition(competitionAndSportsman);
+        console.log("Вызвал acceptCompetition.");
     }
     async ensureDataSourceInitialized() {
         await this.firstUpdated();

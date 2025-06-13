@@ -243,6 +243,14 @@ const dictionary = {
         "ru-RU": 'Наименование соревнования',
         "en-EN": 'Competition name'
     },
+    'Start date': {
+        "ru-RU": 'Дата начала',
+        "en-EN": 'Start date'
+    },
+    'End date': {
+        "ru-RU": 'Дата завершения',
+        "en-EN": 'End date'
+    },
     'Competition date': {
         "ru-RU": 'Дата соревнования',
         "en-EN": 'Competition date'

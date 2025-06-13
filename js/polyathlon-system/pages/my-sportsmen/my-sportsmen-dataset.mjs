@@ -209,6 +209,31 @@ export default class DataSet {
         }
         return result
     }
+    static #fetchGetItemsByOwner(token, itemId) {
+        return fetch(`https://localhost:4500/api/sportsman/owner/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getItemsByOwner(itemId) {
+        const token = getToken();
+        let response = await DataSet.#fetchGetItemsByOwner(token, itemId);
+
+        if (response.status === 419) {
+            const token = await refreshToken();
+            response = await DataSet.#fetchGetItemsByOwner(token, itemId);
+        }
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error);
+        }
+
+        return result;
+    }
 
     static #fetchSaveItem(token, item) {
         return fetch(`https://localhost:4500/api/sportsman/${item._id}`, {

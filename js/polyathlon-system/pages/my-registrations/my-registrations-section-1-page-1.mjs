@@ -6,7 +6,10 @@ import '../../../../components/inputs/gender-input.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import DataSet from './my-registrations-dataset.mjs'
+//import DataSet from './my-registrations-dataset.mjs'
+
+import CompetitionStageDataset from '../my-competition-stages/my-competition-stages-dataset.mjs'
+import CompetitionStageDataSource from '../my-competition-stages/my-competition-stages-datasource.mjs'
 
 import RegistrationCategoryDataset from '../my-registration-items/my-registration-items-dataset.mjs'
 import RegistrationCategoryDataSource from '../my-registration-items/my-registration-items-datasource.mjs'
@@ -27,6 +30,7 @@ class MyRegistrationsSection1Page1 extends BaseElement {
             item: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
             oldValues: { type: Map, default: null},
+            competitionStageDataSource: { type: Object, default: null},
         }
     }
 
@@ -61,15 +65,15 @@ class MyRegistrationsSection1Page1 extends BaseElement {
                 <simple-select id="stage" label="${lang`Stage`}:" icon-name="order-number-solid" @icon-click=${() => this.showPage('my-competition-stages')} .dataSource=${this.competitionStageDataSource} .value=${this.item?.stage} @input=${this.validateInput}></simple-select>
                 <simple-input id="competitionPC" label="${lang`Competition PC`}:" icon-name="competition-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionPC} .value=${this.item?.competitionPC} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="startRegistration" type="date" label="${lang`Start registration`}:" icon-name="start-registration-solid" .value=${this.item?.startRegistration} @input=${this.validateInput} lang="ru-Ru"></simple-input>
-                    <simple-input id="endRegistration" type="date" label="${lang`End registration`}:" icon-name="end-registration-solid" .value=${this.item?.endRegistration} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="startDate" type="date" label="${lang`Start date`}:" icon-name="start-competition-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="endDate" type="date" label="${lang`End date`}:" icon-name="end-competition-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 </div>
                 <div class="name-group">
                     <simple-input id="lastName" icon-name="user" label="${lang`Last name`}:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
                     <simple-input id="firstName" icon-name="user-group-solid" label="${lang`First name`}:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input id="middleName" icon-name="users-solid" label="${lang`Middle name`}:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <birthday-input id="birthday" label="${lang`Date of birth`}:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
+                <simple-input id="birthday" label="${lang`Date of birth`}:" icon-name="cake-candles-solid" .value=${this.item?.birthday} @input=${this.validateInput} lang="ru-Ru" type="date" ></simple-input>
                 <gender-input id="gender" icon-name="gender" label="${lang`Gender`}:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="${lang`Region name`}:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} label="${lang`Club name`}:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
@@ -163,6 +167,7 @@ class MyRegistrationsSection1Page1 extends BaseElement {
     }
 
     validateInput(e) {
+        //console.log({ ...sessionStorage });
         // if (e.target.value !== "") {
             let id = e.target.id
             let currentItem = this.item
@@ -204,6 +209,7 @@ class MyRegistrationsSection1Page1 extends BaseElement {
         this.registrationCategoryDataSource = new RegistrationCategoryDataSource(this, await RegistrationCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
+        this.competitionStageDataSource = new CompetitionStageDataSource(this, await CompetitionStageDataset.getDataSet())
     }
 }
 

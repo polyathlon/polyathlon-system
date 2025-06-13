@@ -5,7 +5,9 @@ import '../../../../../components/inputs/avatar-input.mjs'
 
 // import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
 // import {MyCompetitionSection1Page1} from './my-competition-section-1-page-1.mjs'
+
 import {MyCompetitionSection1} from './my-competition-section-1.mjs'
+import { getToken } from '../../../refresh-token.mjs';
 
 class MyCompetitionSection1List1 extends BaseElement {
   static get properties() {
@@ -13,7 +15,7 @@ class MyCompetitionSection1List1 extends BaseElement {
       version: { type: String, default: "1.0.0", save: true },
       avatar: { type: Object, default: null },
       name: { type: String, default: null },
-      ekpNumber: { type: String, default: "TEST_EKP_12345" },
+      ekpNumber: { type: String, default: null },
       regulationsLink: { type: String, default: null },
       protocolLink: { type: String, default: null },
       startDate: { type: String, default: null },
@@ -78,6 +80,19 @@ class MyCompetitionSection1List1 extends BaseElement {
       return sessionStorage.getItem("userInfo");
     }
   }
+  get #parsedUserInfo() {
+    const userInfo = this.#loginInfo;
+    return userInfo ? JSON.parse(userInfo) : null;
+}
+  get #userData() {
+  const token = getToken();
+  if (!token) return null;
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch {
+    return null;
+  }
+}
 
   get #competitionName() {
     if (!this.name) {
@@ -136,6 +151,8 @@ class MyCompetitionSection1List1 extends BaseElement {
     }
     return "";
   }
+
+  // <div>${this.#parsedUserInfo?.name || "Гость"}</div>
 
   render() {
     return html`

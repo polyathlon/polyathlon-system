@@ -12,6 +12,8 @@ import './my-registrations-section-1-page-1.mjs'
 import DataSet from './my-registrations-dataset.mjs'
 import DataSource from './my-registrations-datasource.mjs'
 
+import DataSetSportsman from '../my-sportsmen/my-sportsmen-dataset.mjs';
+
 export class MyRegistrationsSection1 extends BaseElement {
     static get properties() {
         return {
@@ -319,6 +321,30 @@ export class MyRegistrationsSection1 extends BaseElement {
         }
 
     }
+    async testOwner() {
+        console.log('Тестирование getItemsByOwner()...');
+        console.log('Запрашиваю токен...');
+        const token = sessionStorage.getItem('accessUserToken');
+        if (!token) {
+            console.error('Токен не найден в sessionStorage');
+            return;
+        }
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Данные из токена:', payload);
+        console.log('payload.ulid:', payload.ulid);
+        console.log('Тип payload.ulid:', typeof payload.ulid);
+        const item = await DataSetSportsman.getItemsByOwner(payload.ulid);
+
+        // Проверяем результаты
+        console.log('Успешно! Получены данные:');
+        console.log(item);
+
+        if (!Array.isArray(item)) {
+            throw new Error('Метод не вернул массив');
+        }
+
+        console.log(`Найдено спортсменов: ${item.length}`);
+    }
 
     render() {
         return html`
@@ -370,26 +396,38 @@ export class MyRegistrationsSection1 extends BaseElement {
     console.log("Я ensureDataSourceInitialized")
   }
 }
-    async acceptCompetition(competition){
-        console.log("competition принят:", competition);
-        // console.log("competition.name :", competition.name);
-        // this.name=competition.name;
-        // this.ekpNumber=competition.ekpNumber;
-        // console.log("Имя принят:", this.name);
-        // console.log("ЕКП номер принят:", this.ekpNumber);
+    async acceptCompetition(competitionAndSportsman){
+        //console.log("currentItem в методе acceptCompetition: ", this.currentItem);
+        console.log("competitionAndSportsman принят:", competitionAndSportsman);
+
         const newItem = {
-            name: competition.name,
-            ekpNumber: competition.ekpNumber,
-            stage: competition.stage?.name,
-            competitionPC: competition?.competitionPC,
-            startDate: competition?.startDate,
-            endDate: competition?.endDate
+            name: competitionAndSportsman.name,
+            ekpNumber: competitionAndSportsman.ekpNumber,
+            stage: competitionAndSportsman.stage,
+            competitionPC: competitionAndSportsman?.competitionPC,
+            startDate: competitionAndSportsman?.startDate,
+            endDate: competitionAndSportsman?.endDate,
+            lastName: competitionAndSportsman?.lastName,
+            firstName: competitionAndSportsman?.firstName,
+            middleName: competitionAndSportsman?.middleName,
+            birthday: competitionAndSportsman?.birthday,
+            gender: competitionAndSportsman?.gender,
+            region: competitionAndSportsman?.region,
+            club: competitionAndSportsman?.club,
+            profileUlid: competitionAndSportsman?.profileUlid,
+            sportsmanPC: competitionAndSportsman?.sportsmanPC,
+            category: competitionAndSportsman?.category,
+            order: {
+                number: competitionAndSportsman?.order?.number,
+                link: competitionAndSportsman?.order?.link
+            },
+            personLink: competitionAndSportsman?.personLink
         };
         console.log("Создал newItem:", newItem);
         await this.firstUpdated();
         await this.dataSource.addItem(newItem);
-        this.requestUpdate();
-        location.reload(); //другими способами не получается
+        console.log("currentItem:", this.currentItem);
+        //location.reload(); //другими способами не получается
     }
     async saveItem() {
         await this.dataSource.saveItem(this.currentItem);

@@ -51,7 +51,6 @@ class MyProfileSection1Page1 extends BaseElement {
             </div>
         `;
     }
-
     async confirmEmail() {
 
         // const verifyEmail = this.renderRoot.querySelector('verify-email-form') ?? null;
