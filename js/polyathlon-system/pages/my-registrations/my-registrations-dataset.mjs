@@ -153,8 +153,31 @@ export default class DataSet {
         }
         return result
     }
+    static #fetchFindByUserAndCompetition(token, userUlid, ekpNumber) {
+        return fetch(`https://localhost:4500/api/registration/by-user-competition/${userUlid}/${ekpNumber}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
+
+    static async getItemByUserAndCompetition(userUlid, ekpNumber) {
+        const token = getToken();
+        let response = await DataSet.#fetchFindByUserAndCompetition(token, userUlid, ekpNumber);
+
+        if (response.status === 419) {
+            const token = await refreshToken();
+            response = await DataSet.#fetchFindByUserAndCompetition(token, userUlid, ekpNumber);
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
 
     static #fetchSaveItem(token, item) {
+        
         return fetch(`https://localhost:4500/api/registration/${item._id}`, {
             method: "PUT",
             headers: {

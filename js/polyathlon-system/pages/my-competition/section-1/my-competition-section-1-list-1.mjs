@@ -15,7 +15,6 @@ class MyCompetitionSection1List1 extends BaseElement {
       version: { type: String, default: "1.0.0", save: true },
       avatar: { type: Object, default: null },
       name: { type: String, default: null },
-      ekpNumber: { type: String, default: null },
       regulationsLink: { type: String, default: null },
       protocolLink: { type: String, default: null },
       startDate: { type: String, default: null },
@@ -188,14 +187,14 @@ class MyCompetitionSection1List1 extends BaseElement {
   }
 
   async showPage() {
-    location.hash = "my-registrations";
     const myCompetitionSection1 = new MyCompetitionSection1();
     await myCompetitionSection1.ensureDataSourceInitialized();
     console.log("Вызываю sendCompetition.")
     myCompetitionSection1.sendCompetition();
     console.log("Вызвал sendCompetition.")
-}
-
+    location.hash = "my-registrations";
+  }
+  
   registration() {
     this.currentPage = 3;
   }
@@ -213,16 +212,6 @@ class MyCompetitionSection1List1 extends BaseElement {
     this.isFirst = false;
     this.avatar = null; // await this.downloadAvatar();
     this.isFirst = true;
-    // console.log("Все полученные данные:", this);
-    // console.log("Структура name:", this.name);
-    // console.log("Структура ekpNumber:", this.ekpNumber);
-
-  // 1. Сначала загружаем основные данные
-  //await this.loadCompetitionData();
-
-  // 2. Затем пытаемся получить ЕКП
-  //await this.fetchRealEkpNumber();
-  }
 }
-
+}
 customElements.define("my-competition-section-1-list-1", MyCompetitionSection1List1);

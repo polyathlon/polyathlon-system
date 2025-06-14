@@ -274,7 +274,7 @@ export class MyRegistrationsSection1 extends BaseElement {
         if (!item) {
             return item
         }
-        let result = item.name
+        let result = item.name.name
         return result
     }
 
@@ -287,7 +287,7 @@ export class MyRegistrationsSection1 extends BaseElement {
                         title=${item._id}
                         image-name="images/request-white.svg"
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'request-white-solid'} }
+                        .status=${ { name: item.lastName, icon: 'request-white-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>
                 `
@@ -427,7 +427,7 @@ export class MyRegistrationsSection1 extends BaseElement {
         await this.firstUpdated();
         await this.dataSource.addItem(newItem);
         console.log("currentItem:", this.currentItem);
-        //location.reload(); //другими способами не получается
+        location.reload(); //другими способами не получается
     }
     async saveItem() {
         await this.dataSource.saveItem(this.currentItem);

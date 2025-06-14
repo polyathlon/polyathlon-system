@@ -21,12 +21,14 @@ import './page-4/my-competition-section-1-page-4.mjs'
 // import './my-competition-section-2-list-1.mjs'
 
 import DataSet from './my-competition-dataset.mjs'
-//import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
+
 import DataSource from './my-competition-datasource.mjs'
 
 import DataSetSportsman from '../../my-sportsmen/my-sportsmen-dataset.mjs';
 
 import {MyRegistrationsSection1} from '../../my-registrations/my-registrations-section-1.mjs'
+
+import RegistrationDataset from '../../my-registrations/my-registrations-dataset.mjs'
 
 export class MyCompetitionSection1 extends BaseElement {
     static get properties() {
@@ -256,7 +258,25 @@ export class MyCompetitionSection1 extends BaseElement {
         ]
     }
     async sendCompetition() {
-        console.log('Тестирование getItemsByOwner()...');
+        console.log('Проверяем совпадения...');
+        const userUlid = this.getCurrentUserUlid();
+        const ekpNumber = this.currentItem?.ekpNumber;
+        console.log("userUlid: ", userUlid)
+        console.log("ekpNumber: ", ekpNumber)
+
+        const existingRegistration = await RegistrationDataset.getItemByUserAndCompetition(
+            userUlid,
+            ekpNumber
+        );
+        console.log("existingRegistration:", existingRegistration)
+        console.log("existingRegistration.rows.length:", existingRegistration.rows.length)
+
+        if (existingRegistration.rows.length != 0) {
+            console.log("Вызвал showDialog")
+            await this.showDialog('Вы уже зарегистрированы на это соревнование');//не получается вывести
+            return;
+        }
+
         console.log('Запрашиваю токен...');
         const token = sessionStorage.getItem('accessUserToken');
         if (!token) {
@@ -280,7 +300,7 @@ export class MyCompetitionSection1 extends BaseElement {
         console.log(`Найдено спортсменов: ${item.length}`);
         console.log("currentItem: ", this.currentItem);
         const competitionAndSportsman= {
-            name: this.currentItem?.name?.name,
+            name: this.currentItem?.name,
             ekpNumber: this.currentItem?.ekpNumber,
             stage: this.currentItem.stage,
             competitionPC: this.currentItem?.competitionPC,
@@ -312,7 +332,19 @@ export class MyCompetitionSection1 extends BaseElement {
         await this.firstUpdated();
         console.log("this.currentItem: ", this.currentItem.ekpNumber)
         console.log("Я ensureDataSourceInitialized")
-      }
+    }
+
+    getCurrentUserUlid() {
+        const token = sessionStorage.getItem('accessUserToken');
+        if (!token) {
+            console.error('Токен не найден в sessionStorage');
+            return;
+        }
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Данные из токена:', payload);
+        console.log('payload.ulid:', payload.ulid);
+        return payload.ulid
+    }
 
     showPage(page) {
         location.hash = page;
@@ -566,9 +598,20 @@ export class MyCompetitionSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async showDialog(message, type='message') {
-        const modalDialog = this.renderRoot.querySelector('modal-dialog')
-        modalDialog.type = type
+    async showDialog(message, type = 'message') {
+        // 1. Дожидаемся обновления DOM
+        await this.updateComplete; // Для LitElement
+
+        // 2. Безопасный поиск элемента
+        const modalDialog = this.shadowRoot?.querySelector('modal-dialog');
+
+        if (!modalDialog) {
+            console.error('Modal dialog element not found');
+            return Promise.reject('Dialog not available');
+        }
+
+        // 3. Устанавливаем параметры и показываем
+        modalDialog.type = type;
         return modalDialog.show(message);
     }
 

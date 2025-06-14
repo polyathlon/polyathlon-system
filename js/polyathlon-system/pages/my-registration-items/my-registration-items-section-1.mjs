@@ -185,7 +185,7 @@ export class MyRegistrationsSection1 extends BaseElement {
     this.buttons = [
       {
         iconName: "arrow-left-solid",
-        page: "my-referee-categories",
+        page: "my-registrations",
         title: "Back",
         click: () => this.gotoBack(),
       },
@@ -321,7 +321,7 @@ export class MyRegistrationsSection1 extends BaseElement {
         (item, index) =>
           html`
             <icon-button
-              label=${item.name}
+              label=${item.name.name}
               title=${item.ekpNumber}
               icon-name="federation-member-category-solid"
               ?selected=${this.currentItem === item}
@@ -336,19 +336,19 @@ export class MyRegistrationsSection1 extends BaseElement {
     return html`
       <nav>
         ${this.buttons.map(
-          (button, index) =>
-            html`<aside-button
+      (button, index) =>
+        html`<aside-button
               blink=${(button.blink &&
-                this.notificationMaxOffset &&
-                +this.notificationMaxOffset >
-                  +this.notificationCurrentOffset) ||
-              nothing}
+            this.notificationMaxOffset &&
+            +this.notificationMaxOffset >
+            +this.notificationCurrentOffset) ||
+          nothing}
               icon-name=${button.iconName}
               title=${button.title}
               @click=${button.click}
               ?active=${this.activePage === button.page}
             ></aside-button>`
-        )}
+    )}
       </nav>
     `;
   }

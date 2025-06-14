@@ -7,6 +7,8 @@ import '../../../../components/inputs/gender-input.mjs'
 import lang from '../../polyathlon-dictionary.mjs'
 
 //import DataSet from './my-registrations-dataset.mjs'
+import CompetitionTypeDataset from '../my-competition-types/my-competition-types-dataset.mjs'
+import CompetitionTypeDataSource from '../my-competition-types/my-competition-types-datasource.mjs'
 
 import CompetitionStageDataset from '../my-competition-stages/my-competition-stages-dataset.mjs'
 import CompetitionStageDataSource from '../my-competition-stages/my-competition-stages-datasource.mjs'
@@ -19,6 +21,12 @@ import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 
 import CityDataSource from '../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../my-cities/my-cities-dataset.mjs'
+
+import ClubDataSource from '../my-clubs/my-clubs-datasource.mjs'
+import ClubDataset from '../my-clubs/my-clubs-dataset.mjs'
+
+import SportsCategoryDataSource from '../my-sports-categories/my-sports-categories-datasource.mjs'
+import SportsCategoryDataset from '../my-sports-categories/my-sports-categories-dataset.mjs'
 
 class MyRegistrationsSection1Page1 extends BaseElement {
     static get properties() {
@@ -60,7 +68,7 @@ class MyRegistrationsSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" label="${lang`Competition name`}:" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-select id="name" label="${lang`Competition name`}:" icon-name="competition-solid" @icon-click=${() => this.showPage('my-competition-types')} .dataSource=${this.competitionTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
                 <simple-input id="ekpNumber" label="${lang`EKP Number`}:" icon-name="ekp-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.ekpNumber} @input=${this.validateInput}></simple-input>
                 <simple-select id="stage" label="${lang`Stage`}:" icon-name="order-number-solid" @icon-click=${() => this.showPage('my-competition-stages')} .dataSource=${this.competitionStageDataSource} .value=${this.item?.stage} @input=${this.validateInput}></simple-select>
                 <simple-input id="competitionPC" label="${lang`Competition PC`}:" icon-name="competition-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createCompetitionPC} .value=${this.item?.competitionPC} @input=${this.validateInput}></simple-input>
@@ -78,7 +86,7 @@ class MyRegistrationsSection1Page1 extends BaseElement {
                 <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="${lang`Region name`}:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} label="${lang`Club name`}:" .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
                 <simple-input id="profileUlid" icon-name="hash-number-solid" @icon-click=${this.copyToClipboard} label="${lang`Sportsman Ulid`}:" .value=${this.item?.profileUlid} @input=${this.validateInput}></simple-input>
-                <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" .dataSource=${this.findDataSource} icon-name="sportsman-pc-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.sportsmanPC} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" .dataSource=${this.findDataSource} icon-name="id-number-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.sportsmanPC} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="${lang`Sports category`}:" .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input id="order.number" icon-name="order-number-solid" @icon-click=${this.numberClick} label="${lang`Order number`}:" .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
@@ -147,6 +155,20 @@ class MyRegistrationsSection1Page1 extends BaseElement {
         }
     }
 
+    sportsmanChoose(e) {
+        let sportsman = e.detail
+        if (sportsman) {
+            sportsman.sportsmanUlid = sportsman._id
+            const inputs = this.$id()
+            inputs.forEach(input => {
+                if (input.id in sportsman) {
+                    input.setValue(sportsman[input.id])
+                }
+            })
+            //Object.assign(this.item, sportsman)
+            this.requestUpdate()
+        }
+    }
 
     copyToClipboard(e) {
         if (navigator.clipboard) {
@@ -206,10 +228,13 @@ class MyRegistrationsSection1Page1 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
+        this.competitionTypeDataSource = new CompetitionTypeDataSource(this, await CompetitionTypeDataset.getDataSet())
         this.registrationCategoryDataSource = new RegistrationCategoryDataSource(this, await RegistrationCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
         this.competitionStageDataSource = new CompetitionStageDataSource(this, await CompetitionStageDataset.getDataSet())
+        this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
+        this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
     }
 }
 
