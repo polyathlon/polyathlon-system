@@ -235,6 +235,22 @@ const dictionary = {
         "ru-RU": 'Заявка на участие',
         "en-EN": 'Application for participation'
     },
+    'Accepting Applications': {
+        "ru-RU": 'Прием заявок',
+        "en-EN": 'Accepting Applications'
+    },
+    'Selected application': {
+        "ru-RU": 'Выбранная заявка',
+        "en-EN": 'Selected application'
+    },
+    'Accept': {
+        "ru-RU": 'Принять',
+        "en-EN": 'Accept'
+    },
+    'Reject': {
+        "ru-RU": 'Отклонить',
+        "en-EN": 'Reject'
+    },
     'Create Request': {
         "ru-RU": 'Создать заявку',
         "en-EN": 'Create Request'

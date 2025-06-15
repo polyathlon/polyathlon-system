@@ -7,10 +7,10 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import './my-registrations-section-1-page-1.mjs'
+import './my-accepting-applications-section-1-page-1.mjs'
 
-import DataSet from './my-registrations-dataset.mjs'
-import DataSource from './my-registrations-datasource.mjs'
+import DataSet from './my-accepting-applications-dataset.mjs'
+import DataSource from './my-accepting-applications-datasource.mjs'
 
 import DataSetSportsman from '../my-sportsmen/my-sportsmen-dataset.mjs';
 
@@ -174,7 +174,7 @@ export class MyRegistrationsSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = [lang`Application for participation`]
+        this.pageNames = [lang`Accepting Applications`]
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
@@ -256,13 +256,13 @@ export class MyRegistrationsSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-registrations-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-registrations-section-1-page-1>
+            <my-accepting-applications-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-accepting-applications-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-registrations-section-1-page-2 .item=${this.currentItem}></my-registrations-section-1-page-2>
+            <my-accepting-applications-section-1-page-2 .item=${this.currentItem}></my-accepting-applications-section-1-page-2>
         `;
     }
 
@@ -304,22 +304,12 @@ export class MyRegistrationsSection1 extends BaseElement {
     }
 
     get #rightFooter() {
-        if (this.isModified) {
             return html`
                 <nav>
-                    <simple-button @click=${this.saveItem}>${lang`Send request`}</simple-button>
-                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+                    <simple-button @click=${this.acceptItem}>${lang`Accept`}</simple-button>
+                    <simple-button @click=${this.rejectItem}>${lang`Reject`}</simple-button>
                 </nav>
             `
-        } else {
-            return html`
-                <nav>
-                    <simple-button @click=${this.addItem}>${lang`Create Request`}</simple-button>
-                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
-                </nav>
-            `
-        }
-
     }
     // async testOwner() {
     //     console.log('Тестирование getItemsByOwner()...');
@@ -386,16 +376,25 @@ export class MyRegistrationsSection1 extends BaseElement {
         return this.showDialog(message, 'confirm')
     }
 
-    async addItem() {
-        const newItem = { name: "New" }
-        this.dataSource.addItem(newItem);
+    async acceptItem() {
+        //далее идет ручное добавление спортсмена на соревнование
+        this.dataSource.deleteItem(this.currentItem)
     }
-  async ensureDataSourceInitialized() {
-  if (!this.dataSource) {
-    await this.firstUpdated();
-    console.log("Я ensureDataSourceInitialized")
-  }
-}
+
+    async rejectItem() {
+        //const modalResult = await this.confirmDialog('Вы действительно хотите удалить эту заявку?')
+        // if (modalResult !== 'Ok')
+        //     return;
+        this.dataSource.deleteItem(this.currentItem)
+        //отправляем уведомление об отклонении заявки
+    }
+
+    async ensureDataSourceInitialized() {
+        if (!this.dataSource) {
+            await this.firstUpdated();
+            console.log("Я ensureDataSourceInitialized")
+        }
+    }
     async acceptCompetition(competitionAndSportsman){
         //console.log("currentItem в методе acceptCompetition: ", this.currentItem);
         console.log("competitionAndSportsman принят:", competitionAndSportsman);
@@ -457,12 +456,7 @@ export class MyRegistrationsSection1 extends BaseElement {
         this.isModified = false;
     }
 
-    async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить эту заявку?')
-        if (modalResult !== 'Ok')
-            return;
-        this.dataSource.deleteItem(this.currentItem)
-    }
+
 
     async firstUpdated() {
         super.firstUpdated();
@@ -470,4 +464,4 @@ export class MyRegistrationsSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-registrations-section-1", MyRegistrationsSection1)
+customElements.define("my-accepting-applications-section-1", MyRegistrationsSection1)

@@ -12,6 +12,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
             activePage: { type: String, default: '', local: true },
             notificationMaxOffset: { type: String, default: '', local: true },
             notificationCurrentOffset: { type: String, default: '', local: true },
+            isAdmin: { type: Boolean, default: false }
         }
     }
 
@@ -45,7 +46,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
     constructor() {
         super();
         this.version = "1.0.0";
-        this.buttons = [
+        this.baseButtons = [
             {iconName: 'house-sharp-solid', title: 'Home', page: 'home-page', click: () => this.showPage('')},
             {iconName: 'user', title: 'Profile', page: 'my-profile', click: () => this.showPage('my-profile')},
             {iconName: 'judge1-solid', page: 'my-referees', title: lang`Referees`, click: () => this.showPage('my-referees')},
@@ -68,15 +69,23 @@ class PolyathlonSystemLeftAside extends BaseElement {
             // {iconName: 'user', page: 'my-referee', title: 'Settings', click: () => this.showPage('my-referee')},
             // {iconName: 'trainer-solid', page: 'my-trainer', title: 'My Trainer', click: () => this.showPage('my-trainer')},
         ]
+        this.adminButtons = [
+            {iconName: 'registration-solid', page: 'my-accepting-applications', title: lang`Accepting Applications`, click: () => this.showPage('my-accepting-applications')},
+    ];
     }
 
     showPage(page) {
         location.hash = page;
     }
-
+    get allButtons() {
+        return [
+            ...this.baseButtons,
+            ...(this.isAdmin ? this.adminButtons : [])
+        ];
+    }
     render() {
         return html`
-            <nav>${this.buttons.map((button, index) =>
+            <nav>${this.allButtons.map((button, index) =>
                 html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
             </nav>
             <aside-button icon-name="right-from-bracket-solid" title="Sign Out" @click=${this.signOut}></aside-button>
@@ -106,8 +115,16 @@ class PolyathlonSystemLeftAside extends BaseElement {
         window.location.hash = '';
     }
 
+    loadUserData(){
+        const userData =JSON.parse(atob(sessionStorage.getItem('accessUserToken').split('.')[1]));
+        //console.log("userData", userData)
+        console.log("userData.admin", userData.admin)
+        return userData.admin
+    }
+
     firstUpdated() {
         super.firstUpdated();
+        this.isAdmin = this.loadUserData()
     }
 }
 
