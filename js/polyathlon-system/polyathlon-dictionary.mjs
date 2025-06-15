@@ -243,6 +243,10 @@ const dictionary = {
         "ru-RU": 'Выбранная заявка',
         "en-EN": 'Selected application'
     },
+    'No applications': {
+        "ru-RU": 'Нет заявок',
+        "en-EN": 'No applications'
+    },
     'Accept': {
         "ru-RU": 'Принять',
         "en-EN": 'Accept'

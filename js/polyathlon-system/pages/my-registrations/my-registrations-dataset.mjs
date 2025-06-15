@@ -153,6 +153,36 @@ export default class DataSet {
         }
         return result
     }
+    static #fetchGetItemsByOwner(token, itemId) {
+        return fetch(`https://localhost:4500/api/registration/owner/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+    static async getItemsByOwner(itemId) {
+        const token = getToken();
+        console.log('Original token:', token);
+
+        let response = await DataSet.#fetchGetItemsByOwner(token, itemId);
+        console.log('First response status:', response.status); // Должно быть 200
+        
+        if (response.status === 419) {
+            console.log('Token expired, refreshing...');
+            const newToken = await refreshToken(); // Проверьте, что возвращает НОВЫЙ токен
+            console.log('New token:', newToken);
+            response = await DataSet.#fetchGetItemsByOwner(newToken, itemId);
+        }
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error);
+        }
+
+        return result;
+    }
+
     static #fetchFindByUserAndCompetition(token, userUlid, ekpNumber) {
         return fetch(`https://localhost:4500/api/registration/by-user-competition/${userUlid}/${ekpNumber}`, {
             headers: {
@@ -177,7 +207,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        
+
         return fetch(`https://localhost:4500/api/registration/${item._id}`, {
             method: "PUT",
             headers: {

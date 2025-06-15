@@ -177,7 +177,7 @@ export class MyRegistrationsSection1 extends BaseElement {
         this.pageNames = [lang`Application for participation`]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
+            { iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode() },
         ]
     }
 
@@ -191,21 +191,21 @@ export class MyRegistrationsSection1 extends BaseElement {
 
     async getNewFileHandle() {
         const options = {
-          types: [
-            {
-              description: 'Excel files',
-              accept: {
-                'application/octet-stream': ['.xslx'],
-              },
-            },
-            {
-              description: 'Neural Models',
-              accept: {
-                'application/octet-stream': ['.pkl'],
-              },
-            },
+            types: [
+                {
+                    description: 'Excel files',
+                    accept: {
+                        'application/octet-stream': ['.xslx'],
+                    },
+                },
+                {
+                    description: 'Neural Models',
+                    accept: {
+                        'application/octet-stream': ['.pkl'],
+                    },
+                },
 
-          ],
+            ],
         };
         const handle = await window.showSaveFilePicker(options);
         return handle;
@@ -255,9 +255,11 @@ export class MyRegistrationsSection1 extends BaseElement {
     }
 
     #page1() {
-        return html`
-            <my-registrations-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-registrations-section-1-page-1>
+        if (this.filteredItems.length > 0) {
+            return html`
+            <my-registrations-section-1-page-1 .items=${this.filteredItems} .oldValues=${this.oldValues} .item=${this.currentItem}></my-registrations-section-1-page-1>
         `;
+        }
     }
 
     #page2() {
@@ -280,25 +282,64 @@ export class MyRegistrationsSection1 extends BaseElement {
 
     // label=${this.fio(item)}
     get #list() {
-        return html`
-            ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
+        const token = sessionStorage.getItem('accessUserToken');
+        if (!token) {
+            console.error('Токен не найден в sessionStorage');
+            return nothing; // Возвращаем nothing вместо undefined для Lit
+        }
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentUserUlid = payload.ulid;
+
+            const filteredItems = this.dataSource?.items?.filter(item => {
+                return item && item.owner === currentUserUlid;
+            });
+
+            if (!filteredItems || filteredItems.length === 0) {
+                return html`<p style="padding: 10px;">${lang`No applications`}</p>`;
+            }
+
+            return html`
+            ${filteredItems?.map((item, index) =>
+                html`<icon-button
                         label=${this.competitionName(item)}
                         title=${item._id}
                         image-name="images/request-white.svg"
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.lastName, icon: 'request-white-solid'} }
+                        .status=${{ name: item.startDate, icon: 'request-white-solid' }}
                         @click=${() => this.showItem(item)}
                     ></icon-button>
                 `
             )}
-        `
+        `;
+        } catch (error) {
+            console.error('Ошибка при обработке токена:', error);
+            return nothing;
+        }
+    }
+
+    get filteredItems() {
+        const token = sessionStorage.getItem('accessUserToken');
+        if (!token) return [];
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentUserUlid = payload.ulid;
+
+            return this.dataSource?.items?.filter(item => {
+                return item && item.owner === currentUserUlid;
+            }) || [];
+        } catch (error) {
+            console.error('Ошибка фильтрации:', error);
+            return [];
+        }
     }
 
     get #task() {
         return html`
             <nav>${this.buttons.map((button, index) =>
-                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
+            html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
             </nav>
         `
     }
@@ -312,10 +353,17 @@ export class MyRegistrationsSection1 extends BaseElement {
                 </nav>
             `
         } else {
-            return html`
+            if (this.filteredItems.length > 0) {
+                return html`
                 <nav>
                     <simple-button @click=${this.addItem}>${lang`Create Request`}</simple-button>
                     <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
+                </nav>
+            `
+            }
+            return html`
+                <nav>
+                    <simple-button @click=${this.addItem}>${lang`Create Request`}</simple-button>
                 </nav>
             `
         }
@@ -376,7 +424,7 @@ export class MyRegistrationsSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async showDialog(message, type='message') {
+    async showDialog(message, type = 'message') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')
         modalDialog.type = type
         return modalDialog.show(message);
@@ -390,13 +438,13 @@ export class MyRegistrationsSection1 extends BaseElement {
         const newItem = { name: "New" }
         this.dataSource.addItem(newItem);
     }
-  async ensureDataSourceInitialized() {
-  if (!this.dataSource) {
-    await this.firstUpdated();
-    console.log("Я ensureDataSourceInitialized")
-  }
-}
-    async acceptCompetition(competitionAndSportsman){
+    async ensureDataSourceInitialized() {
+        if (!this.dataSource) {
+            await this.firstUpdated();
+            console.log("Я ensureDataSourceInitialized")
+        }
+    }
+    async acceptCompetition(competitionAndSportsman) {
         //console.log("currentItem в методе acceptCompetition: ", this.currentItem);
         console.log("competitionAndSportsman принят:", competitionAndSportsman);
 
@@ -439,7 +487,7 @@ export class MyRegistrationsSection1 extends BaseElement {
         const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
             return
-        this.oldValues.forEach( (value, key) => {
+        this.oldValues.forEach((value, key) => {
             let id = key.id
             let currentItem = this.currentItem
             if (id == "order.number") {

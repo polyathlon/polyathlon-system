@@ -117,8 +117,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
 
     loadUserData(){
         const userData =JSON.parse(atob(sessionStorage.getItem('accessUserToken').split('.')[1]));
-        //console.log("userData", userData)
-        console.log("userData.admin", userData.admin)
+        //console.log("userData.admin", userData.admin)
         return userData.admin
     }
 
