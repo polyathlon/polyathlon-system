@@ -277,28 +277,13 @@ export class MyCompetitionSection1 extends BaseElement {
             return;
         }
 
-        console.log('Запрашиваю токен...');
         const token = sessionStorage.getItem('accessUserToken');
         if (!token) {
             console.error('Токен не найден в sessionStorage');
             return;
         }
         const payload = JSON.parse(atob(token.split('.')[1]));
-        console.log('Данные из токена:', payload);
-        console.log('payload.ulid:', payload.ulid);
-        //console.log('Тип payload.ulid:', typeof payload.ulid);
-        const item = await DataSetSportsman.getItemsByOwner(payload.ulid); //поиск спортсмена по номеру. по логике системы, каждый пользователь может стать только одним спортсменом
-
-        // Проверяем результаты
-        console.log('Успешно! Получены данные:');
-        console.log(item);
-
-        // if (!Array.isArray(item)) {
-        //     throw new Error('Метод не вернул массив');
-        // }
-
-        console.log(`Найдено спортсменов: ${item.length}`);
-        console.log("currentItem: ", this.currentItem);
+        const item = await DataSetSportsman.getItemsByOwner(payload.ulid);//поиск спортсмена по номеру. по логике системы, каждый пользователь может стать только одним спортсменом
         const competitionAndSportsman= {
             name: this.currentItem?.name,
             ekpNumber: this.currentItem?.ekpNumber,
@@ -313,20 +298,17 @@ export class MyCompetitionSection1 extends BaseElement {
             gender: item.rows[0]?.doc?.gender,
             region: item.rows[0]?.doc?.region,
             club: item.rows[0]?.doc?.club,
-            profileUlid: item.rows[0]?.doc?.owner, //возможно это неправильно, но по логике системы эти записи создает сам пользователь, а к его спортсмену прикрепляется его ulid
+            profileUlid: item.rows[0]?.doc?.owner,//возможно это неправильно, но по логике системы эти записи создает сам пользователь, а к его спортсмену прикрепляется его ulid
             sportsmanPC: item.rows[0]?.doc?.sportsmanPC,
             category: item.rows[0]?.doc?.category,
             order: {
                 number: item.rows[0]?.doc?.order?.number,
                 link: item.rows[0]?.doc?.order?.link
             },
-            personLink: item.rows[0]?.doc?.link //тут проблема, в справочнике спортсменов личная ссылка не сохраняется, поэтому на данный момент не могу протестировать это поле
+            personLink: item.rows[0]?.doc?.link//тут проблема, в справочнике спортсменов личная ссылка не сохраняется, поэтому на данный момент не могу протестировать это поле
         }
-        console.log("competition: ", competitionAndSportsman);
         const myRegistrationsSection1 = new MyRegistrationsSection1();
-        console.log("Вызываю acceptCompetition.");
         myRegistrationsSection1.acceptCompetition(competitionAndSportsman);
-        console.log("Вызвал acceptCompetition.");
     }
     async ensureDataSourceInitialized() {
         await this.firstUpdated();

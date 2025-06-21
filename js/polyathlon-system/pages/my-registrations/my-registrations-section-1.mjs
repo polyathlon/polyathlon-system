@@ -285,21 +285,17 @@ export class MyRegistrationsSection1 extends BaseElement {
         const token = sessionStorage.getItem('accessUserToken');
         if (!token) {
             console.error('Токен не найден в sessionStorage');
-            return nothing; // Возвращаем nothing вместо undefined для Lit
+            return nothing;
         }
-
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             const currentUserUlid = payload.ulid;
-
             const filteredItems = this.dataSource?.items?.filter(item => {
                 return item && item.owner === currentUserUlid;
             });
-
             if (!filteredItems || filteredItems.length === 0) {
                 return html`<p style="padding: 10px;">${lang`No applications`}</p>`;
             }
-
             return html`
             ${filteredItems?.map((item, index) =>
                 html`<icon-button
@@ -445,9 +441,6 @@ export class MyRegistrationsSection1 extends BaseElement {
         }
     }
     async acceptCompetition(competitionAndSportsman) {
-        //console.log("currentItem в методе acceptCompetition: ", this.currentItem);
-        console.log("competitionAndSportsman принят:", competitionAndSportsman);
-
         const newItem = {
             name: competitionAndSportsman.name,
             ekpNumber: competitionAndSportsman.ekpNumber,
@@ -471,11 +464,9 @@ export class MyRegistrationsSection1 extends BaseElement {
             },
             personLink: competitionAndSportsman?.personLink
         };
-        console.log("Создал newItem:", newItem);
         await this.firstUpdated();
         await this.dataSource.addItem(newItem);
-        console.log("currentItem:", this.currentItem);
-        location.reload(); //другими способами не получается
+        location.reload();//других способов не нашел
     }
     async saveItem() {
         await this.dataSource.saveItem(this.currentItem);
