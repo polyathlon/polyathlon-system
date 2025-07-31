@@ -212,8 +212,8 @@ class MyDisciplineNamesSection1 extends BaseElement {
             {label: lang`Points Table`, iconName: 'sportsman-woman-solid'},
         ]
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
         this.pages = [
             {iconName: 'competition-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},

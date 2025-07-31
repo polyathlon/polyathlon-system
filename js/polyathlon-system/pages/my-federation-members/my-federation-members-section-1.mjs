@@ -7,6 +7,8 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
+import { States } from "../../../utils.js"
+
 import './my-federation-members-section-1-page-1.mjs'
 
 import DataSet from './my-federation-members-dataset.mjs'
@@ -15,16 +17,19 @@ import DataSource from './my-federation-members-datasource.mjs'
 class MyFederationMembersSection1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             dataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null },
-            isModified: { type: Boolean, default: "", local: true },
+            isModified: { type: Boolean, default: false, local: true },
+            sortDirection: { type: Boolean, default: true},
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
+            currentSection: { type: BigInt, default: 0, local: true},
             currentPage: { type: BigInt, default: 0 },
+            currentFilter: { type: Object, default: {} },
         }
     }
 
@@ -39,10 +44,11 @@ class MyFederationMembersSection1 extends BaseElement {
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
                         "header1 header2"
-                        "sidebar content"
-                        "footer1  footer2";
+                        "aside main"
+                        "footer1 footer2";
                     gap: 0 20px;
-                    background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
+                    width: 100%;
+                    height: 100%;
                 }
 
                 header {
@@ -59,15 +65,58 @@ class MyFederationMembersSection1 extends BaseElement {
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         margin: 0;
+                        font-weight: 700;
+                    }
+                    icon-button {
+                        height: 100%;
+                        padding: 0 1vw;
+                        font-weight: 400;
+                        &:not(:only-child):active {
+                            background-color: var(--layout-background-color);
+                        }
+                        &:not(:only-child):hover {
+                            background-color: var(--layout-background-color);
+                        }
                     }
                 }
 
                 .right-header {
                     grid-area: header2;
+                    display: flex;
+                    justify-content: space-between;
+                    .left-aside {
+                        height: 100%;
+                        icon-button {
+                            height: 100%;
+                            padding: 0 1vw;
+                            /* --icon-height: 100%; */
+                            &[active] {
+                                background-color: var(--layout-background-color);
+                                font-weight: bold;
+                            }
+                            &:hover {
+                                background-color: var(--layout-background-color);
+                                &:only-of-type {
+                                    background-color: inherit;
+                                }
+                            }
+                            &:first-of-type {
+                                padding-left: 0;
+                                font-weight: 700;
+                            }
+                        }
+                    }
+                    .right-aside {
+                        display: flex;
+                        justify-content: right;
+                        align-items: center;
+                        height: 100%;
+                        padding-right: 10px;
+                    }
                 }
 
                 .left-layout {
-                    grid-area: sidebar;
+                    grid-area: aside;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -78,21 +127,19 @@ class MyFederationMembersSection1 extends BaseElement {
                         width: 100%;
                         height: 40px;
                         flex: 0 0 40px;
-                        --image-height: 100%;
                     }
                 }
 
                 .right-layout {
+                    grid-area: main;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
                     align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    /* overflow: hidden; */
                     gap: 10px;
                 }
 
@@ -130,6 +177,9 @@ class MyFederationMembersSection1 extends BaseElement {
                         gap: 1vw;
                         simple-button {
                             height: 100%;
+                        }
+                        &.buttons {
+                            justify-content: center;
                         }
                     }
                 }
@@ -169,14 +219,15 @@ class MyFederationMembersSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.pageNames = [lang`Information`]
+        this.pageNames = [lang`Information`, lang`Search`]
         this.oldValues = new Map();
         this.buttons = [
-            // {iconName: 'federation-member-solid', page: 'my-federation-member-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
-            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
+            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-referee', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'arrow-rotate-right-solid', page: 'my-referee', title: lang`Refresh`, click: () => this.refresh()},
             // {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
-            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
     }
 
@@ -359,7 +410,9 @@ class MyFederationMembersSection1 extends BaseElement {
     }
 
     gotoBack(page) {
-        history.back();
+        location.search = '?federation-member=01JENRRMC6KTCX469JA3ASQB8R'
+        location.hash = "my-federation-member";
+        // history.back();
     }
 
     async getNewFileHandle() {
@@ -387,9 +440,76 @@ class MyFederationMembersSection1 extends BaseElement {
     ExcelFile() {
         this.renderRoot.getElementById("fileInput").click();
     }
+    async exportToExcel(e) {
+        const modalResult = await this.showDialog('Вы действительно хотите экспортировать всех судей в Excel?', 'confirm')
+        if (modalResult === 'Ok') {
+            const raw_data = await this.dataSource.items
+            const rows = raw_data.map(row => ({
+                lastName: row.lastName,
+                firstName: row.firstName,
+                middleName: row.middleName,
+                category: row.category?.shortName,
+                region: row.region?.name,
+                city: row.city?.name,
+                refereePC: row.refereePC,
+                orderNumber: row.order?.number,
+                link: row.link,
+                orderLink: row.order?.link,
+                gender: row.gender,
+            })).sort((l, r) => {
+                let a = l.lastName?.localeCompare(r.lastName)
+                if (a) {
+                    return a
+                }
+                a = l.firstName?.localeCompare(r.firstName)
+                if (a) {
+                    return a
+                }
+                a = l.middleName?.localeCompare(r.middleName)
+                if (a) {
+                    return a
+                }
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(rows);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Судьи");
+
+            /* fix headers */
+            XLSX.utils.sheet_add_aoa(worksheet, [[
+                "Фамилия",
+                "Имя",
+                "Отчество",
+                "Разряд",
+                "Регион",
+                "Населенный пункт",
+                "Персональный код судьи",
+                "Дата приказа",
+                "Персональная ссылка",
+                "Ссылка на приказ",
+                "Пол",
+            ]], { origin: "A1" });
+
+            /* calculate column width */
+            const max_width_1 = rows.reduce((w, r) => Math.max(w, r.lastName?.length), 10);
+            const max_width_2 = rows.reduce((w, r) => r.firstName?.length ? Math.max(w, r.firstName?.length) : w, 10);
+            const max_width_3 = rows.reduce((w, r) => r.middleName?.length ? Math.max(w, r.middleName?.length) : w, 10);
+            const max_width_4 = rows.reduce((w, r) => r.category?.length ? Math.max(w, r.category?.length) : w, 6);
+            const max_width_5 = rows.reduce((w, r) => r.region?.length ? Math.max(w, r.region?.length) : w, 10);
+
+            const LightBlue = {
+                fgColor: { rgb: "BDD7EE" }
+            };
+
+            worksheet["!cols"] = [ { wch: max_width_1 },  { wch: max_width_2 }, { wch: max_width_3 }, { wch: max_width_4 }, { wch: max_width_5 }, ];
+
+            XLSX.writeFile(workbook, "Referees.xlsx", { compression: true });
+        }
+    }
 
     async importFromExcel(e) {
-        const file = e.target.files[0];
+        const file = e.target.files[0]
+        const target = e.target
         const workbook = XLSX.read(await file.arrayBuffer());
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
@@ -401,6 +521,7 @@ class MyFederationMembersSection1 extends BaseElement {
                     lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
                     firstName: r[1].split(' ')[1],
                     middleName: r[1].split(' ')[2],
+                    gender: r[11],
                     category: {
                         "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
@@ -416,6 +537,56 @@ class MyFederationMembersSection1 extends BaseElement {
                 this.dataSource.addItem(newItem);
             }
         });
+    }
+
+    async refresh() {
+        const raw_data = await DataSet.getDataSet()
+        const CityDataset = await import('../my-cities/my-cities-dataset.mjs');
+        const cityDataset = CityDataset.default;
+        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const regionDataset = RegionDataset.default;
+        const CategoryDataset = await import('../my-referee-categories/my-referee-categories-dataset.mjs');
+        const categoryDataset = CategoryDataset.default;
+        const promises = Array()
+        raw_data.forEach(item => {
+            let save = false
+            if (item.region) {
+                const region = regionDataset.find("_id", item.region?._id)
+                if (region) {
+                    if (item.region?._rev !== region._rev) {
+                        item.region = region
+                        save = true
+                    }
+                }
+            }
+            if (item.city) {
+                const city = cityDataset.find("_id", item.city?._id)
+                if (city) {
+                    if (item.city?._rev !== city._rev) {
+                        item.city = city
+                        save = true
+                    }
+                }
+            }
+            if (item.category) {
+                const category = categoryDataset.find("_id", item.category?._id)
+                if (category) {
+                    if (item.category?._rev !== category._rev) {
+                        item.category = category
+                        save = true
+                    }
+                }
+            }
+            if (save) {
+                promises.push(this.dataSource.saveItem(item))
+            }
+        })
+        try {
+            await Promise.allSettled(promises)
+            this.showDialog('Все данные были успешно обновлены!')
+        } catch(e) {
+            this.showDialog('Не все данные успешно обновлены')
+        }
     }
 
     update(changedProps) {
@@ -437,26 +608,29 @@ class MyFederationMembersSection1 extends BaseElement {
     }
 
     async showItem(item) {
+        if (this.currentPage != 0) {
+            this.currentPage = 0
+        }
         if (this.currentItem?._id === item._id) {
             this.copyToClipboard(item.id || item._id)
             return
         }
         if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
-                await this.dataSource.saveItem(this.currentItem);
+                await this.dataSource.saveItem(item);
             }
             else {
                 await this.cancelItem()
             }
         }
-        else {
+        else if (this.currentItem !== item) {
             this.dataSource.setCurrentItem(item)
         }
     }
 
     get #page() {
-        return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
+        return this.currentPage === 0 ? this.#page1() : this.#page2();
     }
 
     #page1() {
@@ -493,16 +667,34 @@ class MyFederationMembersSection1 extends BaseElement {
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
+                html `
+                    <icon-button
                         label=${this.fio(item)}
                         title=${item._id}
                         image-name=${item.gender == 0 ? "images/federation-member-man-solid.svg" : "images/federation-member-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
+                        .status=${ { name: item.category?.name || item?._id, icon: 'federation-member-category-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>
                 `
             )}
+        `
+    }
+
+    newRecord() {
+        //  label=${this.fio(item)}
+        //                 title=${item._id}
+        //                 image-name=${item.gender == 0 ? "images/federation-member-man-solid.svg" : "images/federation-member-woman-solid.svg"}
+        //                 ?selected=${this.currentItem === item}
+        //                 @click=${() => this.showItem(item)}
+        return html `<icon-button
+                label=${ this.currentItem?.name || "Новый представитель"}
+                title=${ this.currentItem?.name || "Новый представитель"}
+                icon-name=${ this.currentItem?.icon || "federation-member-solid" }
+                .status=${ { name: this.currentItem?.category?.name || '', icon: 'federation-category-solid'} }
+                ?selected=${ true }
+            >
+            </icon-button>
         `
     }
 
@@ -514,33 +706,92 @@ class MyFederationMembersSection1 extends BaseElement {
         `
     }
 
+    cancelFind() {
+        this.currentPage = 0
+    }
+
+    find() {
+        // alert(JSON.stringify(this.dataSource.findIndex(this.currentFilter)))
+        const result = this.dataSource.find(this.currentFilter)
+        this.currentPage = 0
+        this.dataSource.setCurrentItem(result)
+    }
+
+    async saveNewItem() {
+        this.dataSource.saveNewItem(this.currentItem);
+        this.oldValues?.clear();
+        this.isModified = false;
+    }
+
+    get #newItemFooter() {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.saveNewItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelNewItem}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
+    async cancelNewItem() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить добавление?')
+        if (modalResult !== 'Ok')
+            return
+        this.dataSource.cancelNewItem()
+        this.oldValues.clear();
+        this.isModified = false;
+    }
+
+    get #itemFooter() {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.isModified ? this.saveItem: this.addNewItem}>${this.isModified ? lang`Save`: lang`Add`}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.deleteItem}>${this.isModified ? lang`Cancel`: lang`Delete`}</simple-button>
+            </nav>
+        `
+    }
+
+    async addNewItem() {
+        this.dataSource.addNewItem(this.currentItem);
+        // const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
+        // page.startEdit()
+    }
+
     get #rightFooter() {
-        if (this.isModified) {
-            return html`
-                <nav>
-                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
-                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
-                </nav>
-            `
-        } else {
-            return html`
-                <nav>
-                    <simple-button @click=${this.addItem}>${lang`Add`}</simple-button>
-                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
-                </nav>
-            `
+        if (!this.dataSource?.items)
+            return ''
+        if (this.dataSource.items.length) {
+            return (this.dataSource.state === States.NEW) ? this.#newItemFooter : this.#itemFooter
         }
 
+        if (this.isModified) {
+            return this.#newItemFooter
+        }
     }
+
+
 
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>${lang`Federation members`}<p></header>
+            <header class="left-header">
+                <p>${lang`Federation members` + (this.dataSource?.items?.length ? ' ('+ this.dataSource?.items?.length +')': '')}<p>
+                <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
+                <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
+            </header>
             <header class="right-header">
-                ${this.#pageName}
+                <div class="left-aside">
+                    ${this.sections.map( (section, index) =>
+                        html `
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "federation-member-man-solid" : "federation-member-woman-solid") || section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
+                        `
+                    )}
+                </div>
+                <div class="right-aside">
+                    <aside-button icon-name="search-regular" @click=${this.searchPage}></aside-button>
+                </div>
             </header>
             <div class="left-layout">
+                ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
                 ${this.#list}
             </div>
             <div class="right-layout">
@@ -564,6 +815,20 @@ class MyFederationMembersSection1 extends BaseElement {
         this.currentPage--;
     }
 
+    searchPage() {
+        this.currentFilter = {}
+        this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
+
+    sortPage() {
+        this.sortDirection = !this.sortDirection
+        this.dataSource.sort(this.sortDirection)
+    }
+
+    filterPage() {
+
+    }
+
     async getQRCode() {
         const dataURI = await DataSet.getQRCode(this.currentItem._id)
         const blob = await (await fetch(dataURI)).blob();
@@ -581,7 +846,7 @@ class MyFederationMembersSection1 extends BaseElement {
     }
 
     async addItem() {
-        const newItem = { name: "Новый регион" }
+        const newItem = { name: "Новый член федерации" }
         this.dataSource.addItem(newItem);
     }
 
@@ -614,7 +879,7 @@ class MyFederationMembersSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого судью?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого представителя федерации?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)
@@ -623,6 +888,7 @@ class MyFederationMembersSection1 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.dataSource = new DataSource(this, await DataSet.getDataSet())
+        await this.dataSource.init();
     }
 }
 

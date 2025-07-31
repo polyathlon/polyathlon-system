@@ -300,8 +300,8 @@ class MyCompetitionSection4Page2 extends BaseElement {
         return ''
     }
     pdfMethod(refereeDataSource) {
-    const mainReferee = refereeDataSource.items.find((item) => item.position.name === "Главный судья");
-    const mainSecretary = refereeDataSource.items.find((item) => item.position.name === "Главный секретарь");
+    const mainReferee = refereeDataSource.items.find( item => item.position.name === "Главный судья");
+    const mainSecretary = refereeDataSource.items.find(item => item.position.name === "Главный секретарь");
 
     const tableBody = [
         [

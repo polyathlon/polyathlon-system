@@ -26,7 +26,8 @@ class MySportsDisciplinesSection1 extends BaseElement {
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null },
-            isModified: { type: Boolean, default: "", local: true },
+            isModified: { type: Boolean, default: false, local: true },
+            sortDirection: { type: Boolean, default: true},
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
@@ -214,8 +215,8 @@ class MySportsDisciplinesSection1 extends BaseElement {
             {label: lang`Categories table`, iconName: 'sportsman-woman-solid'},
         ]
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
         this.pages = [
             {iconName: 'competition-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
@@ -479,7 +480,6 @@ class MySportsDisciplinesSection1 extends BaseElement {
         // page.startEdit()
     }
 
-
     get #rightFooterTab1Page1() {
         if (!this.dataSource?.items)
             return ''
@@ -740,7 +740,7 @@ class MySportsDisciplinesSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить эти дисциплину?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить эту дисциплину?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)

@@ -200,8 +200,9 @@ class MyCompetitionSection2 extends BaseElement {
         this.currentPage = 0;
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'pdf-make',  page: 'my-coach-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
+            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
         this.pages = [
             {iconName: 'sportsmen-solid', page: 0, title: lang`Sportsmen`, click: () => this.gotoPage(0)},
@@ -216,6 +217,176 @@ class MyCompetitionSection2 extends BaseElement {
         history.back();
     }
 
+    pdfMethod() {
+        const mainReferee = this.dataSource.items.find((item) => item.position.name === "Главный судья")
+        const mainSecretary = this.dataSource.items.find((item) => item.position.name === "Главный секретарь")
+        const docInfo = {
+          info: {
+            title: "Referees",
+            author: "Polyathlon systems",
+          },
+
+          pageSize: "A4",
+          pageOrientation: 'portrait',
+          pageMargins: [50, 50, 30, 60],
+
+          content: [
+            {
+              text: "Министерство спорта Российской федерации",
+              fontSize: 14,
+              alignment: "center",
+              margin: [0, -30, 0, 0],
+            },
+            {
+                text: "Всероссийская федерация Полиатлона",
+                fontSize: 14,
+                alignment: "center",
+            },
+            {
+                text: this.parent.name.name,
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+                margin: [0, 15, 0, 0],
+            },
+            {
+                text: "по полиатлону в спортивной дисциплине",
+                fontSize: 18,
+                alignment: "center",
+            },
+            {
+                text: this.parent?.sportsDiscipline1?.name,
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+            },
+            {
+                columns: [
+
+                    {
+                        width: 'auto',
+                        text: 1,//this.#competitionDate(this.parent),
+                        margin: [0, 15, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: `г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`,
+                        alignment: "right",
+                        margin: [0, 15, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                text: "Справка о составе и квалификации",
+                fontSize: 16,
+                bold:true,
+                alignment: "center",
+                margin: [0, 20, 0, 0],
+            },
+            {
+                text: "Главной судейской коллегии",
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+                margin: [0, 0, 0, 15],
+            },
+            {
+                table:{
+                    width:['auto','*'],
+                    body: this.dataSource.items.map( (item, index) => [
+                        {margin: [0, 5, 0, 0], text: item.position.name, alignment: "center"}, `${item.category.name} ${item.lastName} ${item.firstName} ${item.middleName} (${item?.city?.name}, ${item?.city?.region?.name})`
+                    ]),
+                    headerRows:1
+                },
+            },
+            {
+                columns: [
+                    {
+                        width: 300,
+                        text: mainReferee?.position.name,
+                        margin: [20, 20, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: `${mainReferee?.firstName[0]}.${mainReferee?.middleName[0]}. ${mainReferee?.lastName}`,
+                        alignment: "left",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                columns: [
+
+                    {
+                        width: 300,
+                        text: mainReferee?.category.name,
+                        margin: [20, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: `(г. ${mainReferee?.city?.name}, ${mainReferee?.city?.region?.name})`,
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                columns: [
+
+                    {
+                        width: 300,
+                        text: mainSecretary?.position.name,
+                        margin: [20, 15, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: `${mainSecretary?.firstName[0]}.${mainSecretary?.middleName[0]}. ${mainSecretary?.lastName}`,
+                        alignment: "left",
+                        margin: [0, 20, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                columns: [
+
+                    {
+                        width: 300,
+                        text: mainSecretary?.category.name,
+                        margin: [20, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: `(г. ${mainSecretary?.city?.name}, ${mainSecretary?.city?.region?.name})`,
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+          ],
+
+          styles: {
+            header0:{
+            }
+          }
+        };
+
+        pdfMake.createPdf(docInfo).open();
+    }
     async getNewFileHandle() {
         const options = {
           types: [

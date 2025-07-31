@@ -81,6 +81,8 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
     setChecked(gender) {
         const input = this.renderRoot.getElementById(gender);
         if (!input) {
+            if (this.value)
+                return this.value == gender
             return false
         }
         input.checked = this.value == gender

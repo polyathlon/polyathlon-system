@@ -336,11 +336,11 @@ class MyCompetitionsSection1 extends BaseElement {
         ]
         this.competitionStatus = this.competitionStatusDateSource.items[0];
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
-            {iconName: 'type-solid', page: 'my-competition-types', title: 'Competition Types', click: () => this.showPage('my-competition-types')},
-            {iconName: 'category-solid', page: 'my-competition-kinds', title: 'Competition Kinds', click: () => this.showPage('my-competition-kinds')},
-            {iconName: 'swimming-solid', page: 'my-countries', title: 'Countries', click: () => this.showPage('my-countries')},
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: lang`Back`, click: () => this.gotoBack()},
+            {iconName: 'type-solid', page: 'my-competition-types', title: lang`Competition Types`, click: () => this.showPage('my-competition-types')},
+            {iconName: 'category-solid', page: 'my-competition-kinds', title: lang`Competition Kinds`, click: () => this.showPage('my-competition-kinds')},
+            {iconName: 'swimming-solid', page: 'my-countries', title: lang`Countries`, click: () => this.showPage('my-countries')},
         ]
     }
 

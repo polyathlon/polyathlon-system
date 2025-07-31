@@ -2,6 +2,7 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 import '../../../../components/inputs/simple-input.mjs'
+import '../../../../components/inputs/checkbox-input.mjs'
 
 class MyCompetitionTypesSection1Page1 extends BaseElement {
     static get properties() {
@@ -36,6 +37,7 @@ class MyCompetitionTypesSection1Page1 extends BaseElement {
         return html`
             <div class="container">
                 <simple-input id="name" icon-name="competition-solid" label="${lang`Competition name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <checkbox-input id="championship" label="${lang`Championship`}" .value=${this.item?.championship} .checked=${this.item?.championship} @input=${this.validateInput}></checkbox-input>
             </div>
         `;
     }

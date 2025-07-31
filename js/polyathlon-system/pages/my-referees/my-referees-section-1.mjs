@@ -16,7 +16,7 @@ import DataSource from './my-referees-datasource.mjs'
 class MyRefereesSection1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             dataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
@@ -117,9 +117,9 @@ class MyRefereesSection1 extends BaseElement {
                 }
 
                 .right-layout {
+                    grid-area: content;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
@@ -161,7 +161,7 @@ class MyRefereesSection1 extends BaseElement {
                         align-items: center;
                         justify-content: flex-end;
                         padding: 0 10px;
-                        gap: 1vw;
+                        gap: 1.5vw;
                         simple-button {
                             height: 100%;
                         }
@@ -206,14 +206,14 @@ class MyRefereesSection1 extends BaseElement {
         this.pageNames = [lang`Information`, lang`Search`]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'referee-solid', page: 'my-referee-positions', title: 'Referee Positions', click: () => this.showPage('my-referee-positions')},
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.getQRCode()},
+            {iconName: 'referee-solid', page: 'my-referee-positions', title: lang`Referee positions`, click: () => this.showPage('my-referee-positions')},
+            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
 
             {iconName: 'excel-import-solid', page: 'my-referee', title: lang`Export to Excel`, click: () => this.exportToExcel()},
-            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-referee', title: 'Export from Excel', click: () => this.ExcelFile()},
+            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-referee', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-rotate-right-solid', page: 'my-referee', title: lang`Refresh`, click: () => this.refresh()},
             // {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
-            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
     }
 

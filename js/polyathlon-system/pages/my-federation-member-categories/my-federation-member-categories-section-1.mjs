@@ -170,8 +170,8 @@ class MyFederationMemberCategoriesSection1 extends BaseElement {
         this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-federation-member-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-federation-member-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-federation-member-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-federation-member-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
     }
 

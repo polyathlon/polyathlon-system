@@ -92,7 +92,7 @@ customElements.define('icon-button', class IconButton extends BaseElement {
                     line-height: 0;
                     border-radius: 50%;
                     position: relative;
-                    height: 70%;
+                    height: var(--simple-icon-height, 70%);
                     aspect-ratio: 1 / 1;
                 }
                 .status {

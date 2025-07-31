@@ -24,7 +24,6 @@ import DataSet from './my-competition-dataset.mjs'
 //import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-competition-datasource.mjs'
 
-
 class MyCompetitionSection1 extends BaseElement {
     static get properties() {
         return {
@@ -37,7 +36,7 @@ class MyCompetitionSection1 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: { type: BigInt, default: 0, local: true  },
+            currentPage: { type: BigInt, default: 0, local: true },
             isFirst: { type: Boolean, default: false },
             currentSection: { type: BigInt, default: 0, local: true},
             currentList: { type: BigInt, default: 0, local: true},
@@ -240,8 +239,8 @@ class MyCompetitionSection1 extends BaseElement {
         ]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
         this.pages = [
             {iconName: 'competition-solid', page: () => this.#page1(), title: lang`Competition`, click: () => this.gotoPage(0)},
@@ -433,8 +432,7 @@ class MyCompetitionSection1 extends BaseElement {
                     <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
                 </nav>
             `
-        }
-        else {
+        } else {
             return html`
                 <nav class="buttons">
                     ${this.pages.map( (button, index) =>

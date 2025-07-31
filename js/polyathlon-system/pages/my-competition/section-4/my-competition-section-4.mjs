@@ -40,6 +40,7 @@ class MyCompetitionSection4 extends BaseElement {
             version: { type: String, default: '1.0.0' },
             dataSource: { type: Object, default: null },
             competitionDataSource: { type: Object, default: null },
+            refereeDataSource: { type: Object, default: null },
             sportsmenDataSource: { type: Object, default: null },
             sportsCategoriesDataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
@@ -253,9 +254,9 @@ class MyCompetitionSection4 extends BaseElement {
         ]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'pdf-make',  page: 'my-referee-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'pdf-make',  page: 'my-referee-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
+            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
         this.pages = [
             {title: lang`Competition statistic`, page: () => this.#page1(), iconName: 'chart-pie-solid', click: () => this.gotoPage(0)},
@@ -267,8 +268,8 @@ class MyCompetitionSection4 extends BaseElement {
             {title: lang`Stadium statistic`, page: () => this.#page11(), iconName: 'stadium-solid', click: () => this.gotoPage(6)},
             {title: lang`Referee categories statistic`, page: () => this.#page7(), iconName: 'referee-category-solid', click: () => this.gotoPage(7)},
             {title: lang`Personal championship`, page: () => this.#page2(), iconName: 'person-championship-solid', click: () => this.gotoPage(8)},
-            {title: lang`Club championship`, page: () => this.#page3(), iconName: 'club-championship-solid', click: () => this.gotoPage(9)},
             {title: lang`Team championship`, page: () => this.#page4(), iconName: 'team-championship-solid', click: () => this.gotoPage(10)},
+            {title: lang`Club championship`, page: () => this.#page3(), iconName: 'club-championship-solid', click: () => this.gotoPage(9)},
         ]
     }
 

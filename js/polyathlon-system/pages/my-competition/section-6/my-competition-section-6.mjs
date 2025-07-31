@@ -22,16 +22,36 @@ import './my-competition-section-6-page-8.mjs'
 import './my-competition-section-6-page-9.mjs'
 import './my-competition-section-6-page-10.mjs'
 
+import './my-competition-section-6-table-1.mjs'
+import './my-competition-section-6-table-2.mjs'
+import './my-competition-section-6-table-3.mjs'
+import './my-competition-section-6-table-4.mjs'
+import './my-competition-section-6-table-5.mjs'
+import './my-competition-section-6-table-6.mjs'
+import './my-competition-section-6-table-7.mjs'
+import './my-competition-section-6-table-8.mjs'
+import './my-competition-section-6-table-9.mjs'
+import './my-competition-section-6-table-10.mjs'
+
+import './my-competition-section-6-lot-1.mjs'
+
 import DataSet from './my-competition-section-6-dataset.mjs'
 import DataSource from './my-competition-section-6-datasource.mjs'
 
 import CompetitionDataSource from '../section-1/my-competition-datasource.mjs'
+
+import SportsmenDataSet from '../section-2/my-competition-section-2-dataset.mjs'
+import SportsmenDataSource from '../section-2/my-competition-section-2-datasource.mjs'
+
+import RefereeDataSource from '../section-3/my-competition-section-3-datasource.mjs'
+import RefereeDataSet from '../section-3/my-competition-section-3-dataset.mjs'
 
 class MyCompetitionSection6 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
             dataSource: { type: Object, default: null },
+            sportsmenDataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null, local: true },
@@ -41,6 +61,9 @@ class MyCompetitionSection6 extends BaseElement {
             currentPage: { type: BigInt, default: 0 },
             currentSection: { type: BigInt, default: 1, local: true},
             parent: { type: Object, default: {} },
+            refereeDataSource: { type: Object, default: null },
+            isTable: { type: Boolean, default: false, local: true },
+            isLot: { type: Boolean, default: false, local: true },
         }
     }
 
@@ -53,9 +76,9 @@ class MyCompetitionSection6 extends BaseElement {
                     grid-template-columns: 3fr 9fr;
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
-                    "header1 header2"
-                    "aside main"
-                    "footer1 footer2";
+                        "header1 header2"
+                        "aside main"
+                        "footer1 footer2";
                     gap: 0 20px;
                     width: 100%;
                     height: 100%;
@@ -85,7 +108,6 @@ class MyCompetitionSection6 extends BaseElement {
                     icon-button {
                         height: 100%;
                         padding: 0 1vw;
-
                         &[active] {
                             background-color: var(--layout-background-color);
                             font-weight: bold;
@@ -210,10 +232,11 @@ class MyCompetitionSection6 extends BaseElement {
         this.currentPage = 0;
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'competition-solid', page: 'my-coach-categories', title: 'Sports place', click: () => this.sportsPlace()},
-            {iconName: 'drawing-lots-solid', page: 'my-coach-categories', title: 'Drawing lots', click: () => this.drawingLots()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'calculator-solid', page: 'my-coach-categories', title: lang`Sports place`, click: () => this.sportsPlace()},
+            {iconName: 'drawing-lots-solid', page: 'my-coach-categories', title: lang`Drawing lots`, click: () => this.drawingLots()},
+            {iconName: 'pdf-make',  page: 'my-coach-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
+            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
         this.pages = [
             {name: 'page1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
@@ -227,6 +250,38 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'page9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
             {name: 'page10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
         ]
+        this.tables = [
+            {name: 'table1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
+            {name: 'table2', iconName: 'swimming-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
+            {name: 'table3', iconName: 'sprinting-solid', page: 5, title: lang`Sprinting`, click: () => this.gotoPage(5)},
+            {name: 'table4', iconName: 'throwing-solid', page: 4, title: lang`Throwing`, click: () => this.gotoPage(4)},
+            {name: 'table5', iconName: 'running-solid', page: 6, title: lang`Running`, click: () => this.gotoPage(6)},
+            {name: 'table6', iconName: 'pull-ups-solid', page: 1, title: lang`Pull-ups`, click: () => this.gotoPage(1)},
+            {name: 'table7', iconName: 'push-ups-solid', page: 2, title: lang`Push-ups`, click: () => this.gotoPage(2)},
+            {name: 'table8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
+            {name: 'table9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
+            {name: 'table10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
+        ]
+        this.lots = [
+            {name: 'lot1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
+            {name: 'lot2', iconName: 'swimming-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
+            {name: 'lot3', iconName: 'sprinting-solid', page: 5, title: lang`Sprinting`, click: () => this.gotoPage(5)},
+            {name: 'lot4', iconName: 'throwing-solid', page: 4, title: lang`Throwing`, click: () => this.gotoPage(4)},
+            {name: 'lot5', iconName: 'running-solid', page: 6, title: lang`Running`, click: () => this.gotoPage(6)},
+            {name: 'lot6', iconName: 'pull-ups-solid', page: 1, title: lang`Pull-ups`, click: () => this.gotoPage(1)},
+            {name: 'lot7', iconName: 'push-ups-solid', page: 2, title: lang`Push-ups`, click: () => this.gotoPage(2)},
+            {name: 'lot8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
+            {name: 'lot9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
+            {name: 'lot10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
+        ]
+    }
+
+    pdfMethod() {
+        this.renderRoot.querySelector(".right-layout > *").pdfMethod?.(this.refereeDataSource)
+    }
+
+    drawingLots() {
+        this.isLot = !this.isLot
     }
 
     allPoints() {
@@ -338,7 +393,7 @@ class MyCompetitionSection6 extends BaseElement {
     // }
 
     get page() {
-        return cache(this[this.pages[this.currentPage].name])
+        return cache(this[(this.isLot ? this.lots : (this.isTable ? this.tables : this.pages))[this.currentPage].name])
     }
 
     get page1() {
@@ -398,6 +453,72 @@ class MyCompetitionSection6 extends BaseElement {
     get page10() {
         return html`
             <my-competition-section-6-page-10 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-10>
+        `;
+    }
+
+    get table1() {
+        return html`
+            <my-competition-section-6-table-1 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-1>
+        `;
+    }
+
+    get table2() {
+        return html`
+            <my-competition-section-6-table-2 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-2>
+        `;
+    }
+
+    get table3() {
+        return html`
+            <my-competition-section-6-table-3 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-3>
+        `;
+    }
+
+    get table4() {
+        return html`
+            <my-competition-section-6-table-4 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-4>
+        `;
+    }
+
+    get table5() {
+        return html`
+            <my-competition-section-6-table-5 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-5>
+        `;
+    }
+
+    get table6() {
+        return html`
+            <my-competition-section-6-table-6 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-6>
+        `;
+    }
+
+    get table7() {
+        return html`
+            <my-competition-section-6-table-7 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-7>
+        `;
+    }
+
+    get table8() {
+        return html`
+            <my-competition-section-6-table-8 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-8>
+        `;
+    }
+
+    get table9() {
+        return html`
+            <my-competition-section-6-table-9 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-9>
+        `;
+    }
+
+    get table10() {
+        return html`
+            <my-competition-section-6-table-10 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-10>
+        `;
+    }
+
+    get lot1() {
+        return html`
+            <my-competition-section-6-lot-1 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-lot-1>
         `;
     }
 
@@ -550,25 +671,35 @@ class MyCompetitionSection6 extends BaseElement {
     }
 
     gotoSelection(index) {
-        this.currentSection = index
+        if (this.currentSection == index) {
+            this.isTable = !this.isTable
+        }
+        else {
+            this.currentSection = index
+        }
     }
 
     gotoPage(index) {
-        this.currentPage = index
+        if (this.currentPage == index) {
+            this.isTable = !this.isTable
+        }
+        else {
+            this.currentPage = index
+        }
     }
 
     nextPage() {
-        this.currentPage++;
+        this.currentPage++
     }
 
     prevPage() {
-        this.currentPage--;
+        this.currentPage--
     }
 
     async showDialog(message, type='message') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')
         modalDialog.type = type
-        return modalDialog.show(message);
+        return modalDialog.show(message)
     }
 
     async confirmDialog(message) {
@@ -576,19 +707,19 @@ class MyCompetitionSection6 extends BaseElement {
     }
 
     async addNewItem() {
-        this.dataSource.addNewItem(this.currentItem);
+        this.dataSource.addNewItem(this.currentItem)
         // const page = this.renderRoot.querySelector('my-sportsmen-section-6-page-1')
         // page.startEdit()
     }
 
 
     async addItem() {
-        this.dataSource.addItem(this.currentItem);
+        this.dataSource.addItem(this.currentItem)
     }
 
     saveFirstItem() {
-        this.dataSource.addItem(this.currentItem);
-        this.oldValues?.clear();
+        this.dataSource.addItem(this.currentItem)
+        this.oldValues?.clear()
         this.isModified = false;
     }
 
@@ -672,7 +803,9 @@ class MyCompetitionSection6 extends BaseElement {
         const parentId = localStorage.getItem('currentCompetition').split(':')[1]
         this.competitionDataSource = new CompetitionDataSource(this)
         this.parent = await this.competitionDataSource.getItem()
+        this.refereeDataSource = new RefereeDataSource(this, await RefereeDataSet.getDataSet(parentId))
         this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))
+        this.sportsmenDataSource = new SportsmenDataSource(this, await SportsmenDataSet.getDataSet(parentId))
     }
 }
 

@@ -28,7 +28,7 @@ class MySportsmenSection1 extends BaseElement {
             listStart: { type: BigInt, default: 0},
             listEnd: { type: BigInt, default: 0},
             listEnd1: { type: String, default: ''},
-            isModified: { type: Boolean, default: "", local: true },
+            isModified: { type: Boolean, default: false, local: true },
             sortDirection: { type: Boolean, default: true},
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
@@ -126,9 +126,9 @@ class MySportsmenSection1 extends BaseElement {
                 }
 
                 .right-layout {
+                    grid-area: content;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;

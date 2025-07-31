@@ -12,10 +12,9 @@ export default class DataSet {
     }
 
     static find(name, value) {
-        const index = DataSet.#dataSet.findIndex(element =>
+        return DataSet.#dataSet.find(element =>
             element[name] === value || element[name].toLowerCase() === value
         )
-        return index === -1 ? null : DataSet.#dataSet[index]
     }
 
     static #fetchGetItems(token) {
@@ -63,6 +62,7 @@ export default class DataSet {
             response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
+
         if (!response.ok) {
             throw new Error(result.error)
         }

@@ -23,7 +23,7 @@ class MyRefereesSection1Page1 extends BaseElement {
             version: { type: String, default: '1.0.0', save: true },
             refereeCategorySource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
-            cityDataSource: {type: Object, default: null},
+            cityDataSource: { type: Object, default: null },
             item: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
             oldValues: { type: Map, default: null},

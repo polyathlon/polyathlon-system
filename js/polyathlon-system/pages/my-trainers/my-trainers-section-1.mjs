@@ -171,10 +171,10 @@ class MyTrainersSection1 extends BaseElement {
         this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-trainers', title: lang`Import to Excel`, click: () => this.importToExcel()},
-            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-trainers', title: 'Export from Excel', click: () => this.ExcelFile()},
-            {iconName: 'pdf-make',  page: 'my-trainer-categories', title: 'Make in PDF', click: () => this.pdfMethod()},
-            {iconName: 'arrow-left-solid', page: 'my-trainer-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-trainers', title: lang`Export to Excel`, click: () => this.ExportToExcel()},
+            {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-trainers', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'pdf-make',  page: 'my-trainer-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
+            {iconName: 'arrow-left-solid', page: 'my-trainer-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
     }
 
@@ -253,8 +253,8 @@ class MyTrainersSection1 extends BaseElement {
         this.renderRoot.getElementById("fileInput").click();
     }
 
-    async importToExcel(e) {
-        const modalResult = await this.showDialog('Вы действительно хотите импортировать всех тренеров в файл?', 'confirm')
+    async exportToExcel(e) {
+        const modalResult = await this.showDialog('Вы действительно хотите экспортировать всех тренеров в файл Excel?', 'confirm')
         if (modalResult === 'Ok') {
             const raw_data = await this.dataSource.items
             const rows = raw_data.map(row => ({

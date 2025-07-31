@@ -23,6 +23,7 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
             imageName: { type: String, default: '', attribute: 'image-name'},
             listLabel: { type: Function, default: null, attribute: 'list-name'},
             columns: {type: Object, default: null},
+            groups: {type: Object, default: null},
             rows: {type: Object, default: null},
             hideHead: {type: Boolean, default: false},
         }
@@ -103,6 +104,12 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                         height: calc(100vh - 300px);
                     }
                 }
+
+                .group {
+                    height: 2em;
+                    background-color: var(--layout-background-color);
+                }
+
                 thead[hidden] {
                     display: none;
                 }
@@ -198,6 +205,20 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                 </thead>
                 <tbody>
                     ${this.rows?.map((row, index) =>
+                        index === 0 ?
+                        html`
+                            <tr class="group"><td colspan="${this.columns[0].length}">${index + ' смена'}</td></tr>
+                            <tr @click=${(e) => e.details = index}>
+                                ${this.columns[0]?.map((column, index) => (column?.colspan ?? 1) > 1 ? this.columns?.[1].filter(item => item.parent === column.name).map(item =>
+                                html`
+                                    <td>${typeof row[item.name] === 'object' ? row[item.name].name : row[item.name]}</td>
+                                `) :
+                                html`
+                                    <td>${typeof row[column.name] === 'object' ? row[column.name].name : row[column.name]}</td>
+                                `
+                                )}
+                            </tr>
+                        `:
                         html`
                             <tr @click=${(e) => e.details = index}>
                                 ${this.columns[0]?.map((column, index) => (column?.colspan ?? 1) > 1 ? this.columns?.[1].filter(item => item.parent === column.name).map(item =>

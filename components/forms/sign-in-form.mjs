@@ -274,9 +274,9 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     async sendVKToken() {
         const token = await this.getVKToken()
-        window.history.replaceState(null, '', window.location.pathname);
-        this.saveToken(token)
-        this.getSimpleUserInfo(token)
+        // window.history.replaceState(null, '', window.location.pathname);
+        // this.saveToken(token)
+        // this.getSimpleUserInfo(token)
     }
 
     firstUpdated() {

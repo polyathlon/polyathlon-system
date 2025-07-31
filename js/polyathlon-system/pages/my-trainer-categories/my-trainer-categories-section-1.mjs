@@ -170,8 +170,8 @@ class MyTrainerCategoriesSection1 extends BaseElement {
         this.pageNames = ['Information']
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-trainer-categories', title: 'Import from Excel', click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-trainer-categories', title: 'Back', click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-trainer-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-trainer-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
     }
 

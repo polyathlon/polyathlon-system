@@ -203,6 +203,10 @@ const dictionary = {
         "ru-RU": 'Год рожд.',
         "en-EN": 'Year of birth'
     },
+    'Birthday': {
+        "ru-RU": 'Дата рожд.',
+        "en-EN": 'Birthday'
+    },
     'Sports club': {
         "ru-RU": 'Спортивный клуб',
         "en-EN": 'Sports club'
@@ -222,6 +226,18 @@ const dictionary = {
     'Send request': {
         "ru-RU": 'Отправить заявку',
         "en-EN": 'Send request'
+    },
+    'Send': {
+        "ru-RU": 'Отправить',
+        "en-EN": 'Send'
+    },
+    'Requests': {
+        "ru-RU": 'Заявки',
+        "en-EN": 'Requests'
+    },
+    'Request': {
+        "ru-RU": 'Заявка',
+        "en-EN": 'Request'
     },
     'Competition name': {
         "ru-RU": 'Наименование соревнования',
@@ -480,8 +496,16 @@ const dictionary = {
         "en-EN": 'Referee Ulid'
     },
     'Federation members': {
-        "ru-RU": 'Члены федерации',
+        "ru-RU": 'Представители федерации',
         "en-EN": 'Federation members'
+    },
+    'Federation member': {
+        "ru-RU": 'Представитель федерации',
+        "en-EN": 'Federation member'
+    },
+    'Federation member PC': {
+        "ru-RU": 'Персональный код представителя федерации',
+        "en-EN": 'Federation member personal code'
     },
     'Federation member PC': {
         "ru-RU": 'Персональный код представителя федерации',
@@ -675,13 +699,13 @@ const dictionary = {
         "ru-RU": 'Протоколы',
         "en-EN": 'Protocol link'
     },
-    'Import to Excel': {
-        "ru-RU": 'Импорт в Excel',
-        "en-EN": 'Import to Excel'
+    'Import from Excel': {
+        "ru-RU": 'Импорт из Excel',
+        "en-EN": 'Import from Excel'
     },
-    'Export from Excel': {
-        "ru-RU": 'Экспорт из Excel',
-        "en-EN": 'Export from Excel'
+    'Export to Excel': {
+        "ru-RU": 'Экспорт в Excel',
+        "en-EN": 'Export to Excel'
     },
     'QR code': {
         "ru-RU": 'QR-код',
@@ -730,6 +754,10 @@ const dictionary = {
     'Clear': {
         "ru-RU": 'Очистить',
         "en-EN": 'Clear'
+    },
+    'Championship': {
+        "ru-RU": 'Чемпионат',
+        "en-EN": 'Championship'
     },
     'Personal championship': {
         "ru-RU": 'Личное первенство',
@@ -803,6 +831,10 @@ const dictionary = {
         "ru-RU": 'Номер спортсмена',
         "en-EN": 'Sports number'
     },
+    'Number': {
+        "ru-RU": 'Номер',
+        "en-EN": 'Number'
+    },
     'Medal counts': {
         "ru-RU": 'Медальный зачет',
         "en-EN": 'Medal counts'
@@ -851,8 +883,30 @@ const dictionary = {
         "ru-RU": 'Жеребьевка',
         "en-EN": 'Drawing lots'
     },
-
-
+    'Make in PDF': {
+        "ru-RU": 'Экспорт в PDF',
+        "en-EN": 'Export to PDF'
+    },
+    'Sports place': {
+        "ru-RU": 'Расчет мест',
+        "en-EN": 'Sports place'
+    },
+    'Become a sportsman': {
+        "ru-RU": 'Стать спортсменом',
+        "en-EN": 'Become a sportsman'
+    },
+    'Become a referee': {
+        "ru-RU": 'Стать судьей',
+        "en-EN": 'Become a referee'
+    },
+    'Become a trainer': {
+        "ru-RU": 'Стать тренером',
+        "en-EN": 'Become a trainer'
+    },
+    'Become a federation member': {
+        "ru-RU": 'Стать представителем федерации',
+        "en-EN": 'Become a federation member'
+    },
 }
 
 //const language = navigator.language

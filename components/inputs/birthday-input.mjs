@@ -84,7 +84,7 @@ customElements.define("birthday-input", class BirthdayInput extends BaseElement 
         const month = this.renderRoot.getElementById("month").value;
         const year = this.renderRoot.getElementById("year").value;
         if (day&&month&&year) {
-            return (new Date(year, month - 1, day)).toLocaleDateString()
+            return `${year}-${month.toString().padStart(2,0)}-${day.toString().padStart(2,0)}`
         }
         return undefined
     }
@@ -108,10 +108,10 @@ customElements.define("birthday-input", class BirthdayInput extends BaseElement 
             }
             return;
         }
-        const date = value.split('.')
-        day.value = +date[0];
+        const date = value.split('-')
+        day.value = date[2];
         month.value = +date[1];
-        year.value = +date[2];
+        year.value = +date[0];
     }
 
     setValue(value) {
