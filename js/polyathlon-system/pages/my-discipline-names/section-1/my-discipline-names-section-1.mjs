@@ -641,8 +641,8 @@ class MyDisciplineNamesSection1 extends BaseElement {
         `;
     }
 
-    gotoSelection(index) {
-        this.currentSection = index
+    gotoSection(index) {
+        this.parentNode.host.currentSection = index;
     }
 
     gotoTab(index) {

@@ -7,7 +7,7 @@ import '../../../../../components/forms/verify-email-form.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
-class MyProfileSection3Page1 extends BaseElement {
+class MyProfileSection2Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -90,4 +90,4 @@ class MyProfileSection3Page1 extends BaseElement {
     }
 }
 
-customElements.define("my-profile-section-3-page-1", MyProfileSection3Page1);
+customElements.define("my-profile-section-2-page-1", MyProfileSection2Page1);

@@ -27,7 +27,6 @@ class MyFederationMembersSection1 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentSection: { type: BigInt, default: 0, local: true},
             currentPage: { type: BigInt, default: 0 },
             currentFilter: { type: Object, default: {} },
         }
@@ -782,7 +781,7 @@ class MyFederationMembersSection1 extends BaseElement {
                 <div class="left-aside">
                     ${this.sections.map( (section, index) =>
                         html `
-                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "federation-member-man-solid" : "federation-member-woman-solid") || section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
+                            <icon-button ?active=${index === 0 && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "federation-member-man-solid" : "federation-member-woman-solid") || section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
                         `
                     )}
                 </div>
@@ -805,6 +804,10 @@ class MyFederationMembersSection1 extends BaseElement {
             </footer>
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
+    }
+
+    gotoSection(index) {
+        this.parentNode.host.currentSection = index
     }
 
     nextPage() {

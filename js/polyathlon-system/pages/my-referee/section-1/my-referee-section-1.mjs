@@ -33,7 +33,6 @@ class MyRefereeSection1 extends BaseElement {
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             isFirst: { type: Boolean, default: false },
-            currentSection: { type: BigInt, default: 0, local: true},
         }
     }
 
@@ -388,7 +387,7 @@ class MyRefereeSection1 extends BaseElement {
             <header class="right-header">
                 ${this.sectionNames.map( (page, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -408,8 +407,12 @@ class MyRefereeSection1 extends BaseElement {
         `;
     }
 
+    gotoSection(index) {
+        this.parentNode.host.currentSection = index;
+    }
+
     gotoPage(index) {
-        this.currentSection = index
+        this.currentPage = index
     }
 
     nextPage() {

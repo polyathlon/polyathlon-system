@@ -7,7 +7,7 @@ import lang from '../../polyathlon-dictionary.mjs'
 class MyReferees extends BaseElement {
     static get properties() {
         return {
-            currentSection: { type: BigInt, default: 0, local: true},
+            currentSection: { type: BigInt, default: 0 },
             sections: { type: Array, default: null },
             version: { type: String, default: '1.0.0', save: true },
         }
@@ -35,7 +35,7 @@ class MyReferees extends BaseElement {
 
     render() {
         return html`
-            <my-referees-section-1 .sections=${this.sections}></my-referees-section-1>
+            <my-referees-section-1 .sections=${this.sections} .currentSection=0></my-referees-section-1>
         `;
     }
 }

@@ -9,7 +9,7 @@ import './section-1/my-sports-discipline-components-section-1.mjs';
 class MySportsDisciplineComponents extends BaseElement {
     static get properties() {
         return {
-            currentSection: { type: BigInt, default: 0, local: true},
+            currentSection: { type: BigInt, default: 0 },
             sectionNames: { type: Array, default: 0 },
             version: { type: String, default: '1.0.0', save: true },
         }
@@ -29,31 +29,27 @@ class MySportsDisciplineComponents extends BaseElement {
     constructor() {
         super()
         this.version = "1.0.0"
-        this.sectionNames = [
-            {label: lang`Discipline`, iconName: 'competition-solid'},
-            {label: lang`Points Table`, iconName: 'sportsmen-solid'},
+        this.sections = [
+            {name: 'section1', label: lang`Discipline`, iconName: 'competition-solid'},
+            {name: 'section1', label: lang`Points Table`, iconName: 'sportsmen-solid'},
         ]
     }
 
-    get #section1() {
+    get section1() {
         return html`
-            <my-sports-discipline-components-section-1 .sectionNames=${this.sectionNames}></my-sports-discipline-components-section-1>
+            <my-sports-discipline-components-section-1 .sections=${this.sections}></my-sports-discipline-components-section-1>
         `;
     }
 
-    get #section2() {
+    get section2() {
         import('./section-2/my-sports-discipline-components-section-2.mjs');
         return html`
-            <my-sports-discipline-components-section-2 .sectionNames=${this.sectionNames}></my-sports-discipline-components-section-2>
+            <my-sports-discipline-components-section-2 .sections=${this.sections}></my-sports-discipline-components-section-2>
         `;
     }
 
     get #section() {
-        switch(this.currentSection) {
-            case 0: return cache(this.#section1)
-            case 1: return cache(this.#section1)
-            default: return cache(this.#section1)
-        }
+        return cache(this[this.sections[this.currentSection].name])
     }
 
     render() {

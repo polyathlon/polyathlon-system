@@ -34,7 +34,6 @@ class MySportsmenSection1 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
-            currentSection: { type: BigInt, default: 0, local: true},
             currentFilter: { type: Object, default: {} },
             currentSearch: { type: Object, default: {} },
         }
@@ -784,7 +783,7 @@ class MySportsmenSection1 extends BaseElement {
                 <div class="left-aside">
                     ${this.sections.map( (section, index) =>
                         html `
-                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "sportsman-solid" : "sportswoman-solid") || section.iconName || nothing} label=${this.pages[this.currentPage].title} @click=${() => this.gotoSelection(index)}></icon-button>
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "sportsman-solid" : "sportswoman-solid") || section.iconName || nothing} label=${this.pages[this.currentPage].title} @click=${() => this.gotoSection(index)}></icon-button>
                         `
                     )}
                 </div>
@@ -815,6 +814,10 @@ class MySportsmenSection1 extends BaseElement {
     addFirstItem() {
         const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
         page.startEdit()
+    }
+
+    gotoSection(index) {
+        this.parentNode.host.currentSection = index;
     }
 
     nextPage() {

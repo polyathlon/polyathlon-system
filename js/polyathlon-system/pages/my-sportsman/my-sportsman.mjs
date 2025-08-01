@@ -7,7 +7,7 @@ import lang from '../../polyathlon-dictionary.mjs'
 class MySportsman extends BaseElement {
     static get properties() {
         return {
-            currentSection: { type: BigInt, default: 0, local: true},
+            currentSection: { type: BigInt, default: 0 },
             sections: { type: Array, default: null },
             version: { type: String, default: '1.0.0', save: true },
         }
@@ -36,14 +36,14 @@ class MySportsman extends BaseElement {
 
     get section1() {
         return html`
-            <my-sportsman-section-1 .sections=${this.sections}></my-sportsman-section-1>
+            <my-sportsman-section-1 .sections=${this.sections} .currentSection=0></my-sportsman-section-1>
         `;
     }
 
     get section2() {
         import('./section-2/my-sportsman-section-2.mjs');
         return html`
-            <my-sportsman-section-2 .sections=${this.sections}></my-sportsman-section-2>
+            <my-sportsman-section-2 .sections=${this.sections} .currentSection=1></my-sportsman-section-2>
         `;
     }
 

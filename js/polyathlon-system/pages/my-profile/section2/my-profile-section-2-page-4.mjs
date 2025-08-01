@@ -8,8 +8,8 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 // import DataSet from './my-sportsmen-dataset.mjs'
 
-import FederationMemberCategoryDataSource from '../../my-federation-member-categories/my-federation-member-categories-datasource.mjs'
-import FederationMemberCategoryDataset from '../../my-federation-member-categories/my-federation-member-categories-dataset.mjs'
+import TrainerCategoryDataSource from '../../my-trainer-categories/my-trainer-categories-datasource.mjs'
+import TrainerCategoryDataset from '../../my-trainer-categories/my-trainer-categories-dataset.mjs'
 
 import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
@@ -17,12 +17,12 @@ import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 
-class MyProfileSection3Page5 extends BaseElement {
+class MyProfileSection2Page4 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
-            federationMemberCategorySource: { type: Object, default: null },
+            trainerCategorySource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
@@ -57,6 +57,7 @@ class MyProfileSection3Page5 extends BaseElement {
         ]
     }
 
+    // <simple-input id="profileUlid" label="${lang`Sportsman Ulid`}:" icon-name="hash-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?._id} @input=${this.validateInput}></simple-input>
     cityShowValue(item) {
         return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
     }
@@ -81,10 +82,10 @@ class MyProfileSection3Page5 extends BaseElement {
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="category" label="${lang`Category`}:" icon-name="federation-member-category-solid" @icon-click=${() => this.showPage('my-federation-member-categories')} .dataSource=${this.federationMemberCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="category" label="${lang`Category`}:" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
-                <simple-input id="federationMemberPC" label="${lang`Federation member PC`}:" icon-name="federation-member-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createFederationMemberPC} .value=${this.item?.payload?.federationMemberPC} @input=${this.validateInput}></simple-input>
+                <simple-input id="trainerPC" label="${lang`Referee PC`}:" icon-name="trainer-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createTrainerPC} .value=${this.item?.payload?.refereePC} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.link} @input=${this.validateInput}></simple-input>
@@ -94,9 +95,9 @@ class MyProfileSection3Page5 extends BaseElement {
         `;
     }
 
-    async createFederationMemberPC(e) {
+    async createTrainerPC(e) {
         const target = e.target
-        const id = await DataSet.createFederationMemberPC({
+        const id = await DataSet.createTrainerPC({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code,
             ulid: this.item?.profileUlid,
@@ -167,10 +168,10 @@ class MyProfileSection3Page5 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.federationMemberCategoryDataSource = new FederationMemberCategoryDataSource(this, await FederationMemberCategoryDataset.getDataSet())
+        this.trainerCategoryDataSource = new TrainerCategoryDataSource(this, await TrainerCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }
 }
 
-customElements.define("my-profile-section-3-page-5", MyProfileSection3Page5);
+customElements.define("my-profile-section-2-page-4", MyProfileSection2Page4);

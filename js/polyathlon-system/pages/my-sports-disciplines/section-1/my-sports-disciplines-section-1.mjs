@@ -31,10 +31,9 @@ class MySportsDisciplinesSection1 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentSection: { type: BigInt, default: 0, local: true},
-            currentPage: { type: BigInt, default: 0, local: true },
-            currentTab: { type: BigInt, default: 0, local: true},
-            currentRow: { type: BigInt, default: 0, local: true },
+            currentPage: { type: BigInt, default: 0 },
+            currentTab: { type: BigInt, default: 0 },
+            currentRow: { type: BigInt, default: 0 },
         }
     }
     newRow
@@ -676,8 +675,8 @@ class MySportsDisciplinesSection1 extends BaseElement {
         `;
     }
 
-    gotoSelection(index) {
-        this.currentSection = index
+    gotoSection(index) {
+        this.parentNode.host.currentSection = index
     }
 
     gotoTab(index) {

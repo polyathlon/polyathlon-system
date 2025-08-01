@@ -30,7 +30,6 @@ class MyProfileSection1 extends BaseElement {
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             isFirst: { type: Boolean, default: false },
-            currentSection: { type: BigInt, default: 0, local: true},
         }
     }
 
@@ -455,7 +454,7 @@ class MyProfileSection1 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
+                        <icon-button ?active=${index === 0} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -475,8 +474,8 @@ class MyProfileSection1 extends BaseElement {
         `;
     }
 
-    gotoSelection(index) {
-        this.currentSection = index
+    gotoSection(index) {
+        this.parentNode.host.currentSection = index
     }
 
     gotoPage(index) {

@@ -59,7 +59,6 @@ class MyCompetitionSection6 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
-            currentSection: { type: BigInt, default: 1, local: true},
             parent: { type: Object, default: {} },
             refereeDataSource: { type: Object, default: null },
             isTable: { type: Boolean, default: false, local: true },
@@ -644,7 +643,7 @@ class MyCompetitionSection6 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (page, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSelection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -670,12 +669,12 @@ class MyCompetitionSection6 extends BaseElement {
         page.startEdit()
     }
 
-    gotoSelection(index) {
+    gotoSection(index) {
         if (this.currentSection == index) {
             this.isTable = !this.isTable
         }
         else {
-            this.currentSection = index
+            this.parentNode.host.currentSection = index;
         }
     }
 

@@ -12,6 +12,9 @@ import '../../../../../components/buttons/simple-button.mjs';
 import lang from '../../../polyathlon-dictionary.mjs'
 
 import './my-federation-member-section-2-page-1.mjs'
+import './my-federation-member-section-2-page-2.mjs'
+import './my-federation-member-section-2-page-3.mjs'
+import './my-federation-member-section-2-page-4.mjs'
 import './my-federation-member-section-2-list-1.mjs'
 //import './my-competition-section-1-page-2.mjs'
 // import './my-competition-section-2-page-1.mjs'
@@ -33,9 +36,8 @@ class MyFederationMemberSection2 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: { type: BigInt, default: 0, local: true },
+            currentPage: { type: BigInt, default: 0 },
             isFirst: { type: Boolean, default: false },
-            currentSection: { type: BigInt, default: 0, local: true},
             currentList: { type: BigInt, default: 0, local: true},
         }
     }
@@ -108,7 +110,7 @@ class MyFederationMemberSection2 extends BaseElement {
                     grid-area: aside;
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
+                    /* justify-content: center; */
                     align-items: center;
                     overflow-y: auto;
                     overflow-x: hidden;
@@ -240,12 +242,10 @@ class MyFederationMemberSection2 extends BaseElement {
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
         this.pages = [
-            {iconName: 'competition-solid', page: () => this.#page1(), title: lang`Competition`, click: () => this.gotoPage(0)},
-            {iconName: 'age-group-solid', page: () => this.#page2(), title: lang`Age groups`, click: () => this.gotoPage(1)},
-            {iconName: 'location-circle-solid', page: () => this.#page3(), title: lang`Location`, click: () => this.gotoPage(2)},
-            // {iconName: 'map-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
-            {iconName: 'registration-solid', page: () => this.#page1, title: lang`Registration`, click: () => this.gotoPage(5)},
-            {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
+            {name: 'page1', iconName: 'sportsman-man-solid', page: 0, title: lang`Sportsman`, click: () => this.gotoPage(0)},
+            {name: 'page2', iconName: 'judge1-solid', page: 1, title: lang`Referee`, click: () => this.gotoPage(1)},
+            {name: 'page3', iconName: 'trainer-solid', page: 2, title: lang`Trainer`, click: () => this.gotoPage(2)},
+            {name: 'page4',iconName: 'federation-member-solid', page: 4, title: lang`Federation member`, click: () => this.gotoPage(3)},
         ]
     }
 
@@ -320,8 +320,8 @@ class MyFederationMemberSection2 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        // if (changedProps.has('currentCountryItem')) {
-        //     this.currentPage = 0;
+        // if (changedProps.has('dataSource')) {
+        //     this.requestUpdate()
         // }
     }
 
@@ -341,38 +341,42 @@ class MyFederationMemberSection2 extends BaseElement {
     // }
 
     get #page() {
-        return this.pages[this.currentPage].page()
+        return this[this.pages[this.currentPage].name]
     }
 
-    #page1() {
+    get page1() {
         return html`
-            <my-federation-member-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-1-page-1>
+            <my-federation-member-section-2-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-1>
         `;
     }
 
-    #page2() {
+    get page2() {
         return html`
-            <my-federation-member-section-1-page-2 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-1-page-2>
+            <my-federation-member-section-2-page-2 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-2>
         `;
     }
 
-    #page3() {
+    get page3() {
         return html`
-            <my-federation-member-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-1-page-1>
+            <my-federation-member-section-2-page-3 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-3>
         `;
     }
 
-
+    get page4() {
+        return html`
+            <my-federation-member-section-2-page-4 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-4>
+        `;
+    }
 
     #list1() {
         return html`
-            <my-federation-member-section-1-list-1 .avatar=${this.avatar} .item=${this.currentItem}></my-federation-member-section-1-list-1>
+            <my-federation-member-section-2-list-1 .item=${this.dataSource} .currentItem=${this.currentItem} ></my-federation-member-section-2-list-1>
         `;
     }
 
     #list2() {
         return html`
-            <my-federation-member-section-1-list-2 .parent=${this.currentItem}></my-federation-member-section-1-list-2>
+            <my-federation-member-section-2-list-2 .parent=${this.currentItem}></my-federation-member-section-2-list-2>
         `;
     }
 
@@ -401,7 +405,43 @@ class MyFederationMemberSection2 extends BaseElement {
             </nav>
         `
         }
-        else return ''
+        else {
+        //     ${this.pages.map( (button, index) =>
+        //         button.visible ? '' : html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+        //     }
+        // </nav>
+            return html`
+                <nav class="buttons">
+                    <aside-button icon-name=${"verified-status-solid"} title=${'Принять'} @click=${this.verified}></aside-button>
+                    <aside-button icon-name=${"clock-status-solid"} title=${'Отложить'} @click=${this.clock}></aside-button>
+                    <aside-button icon-name=${"add-status-solid"} title=${'Создать'} @click=${this.add}></aside-button>
+                    <aside-button icon-name=${"reject-status-solid"} title=${'Отклонить'} @click=${this.reject}></aside-button>
+                    <aside-button icon-name=${"accept-status-solid"} title=${'Завершить'} @click=${this.accept}></aside-button>
+                </nav>
+            `
+        }
+    }
+
+    verified(){
+      this.currentItem.status = { name: 'Рассматривается' }
+      this.saveItem()
+    }
+
+    clock(){
+      this.currentItem.status = { name: 'Отложено' }
+      this.saveItem()
+    }
+
+    reject(){
+      this.currentItem.status = { name: 'Отклонено' }
+      this.currentItem.active = false
+      this.saveItem()
+    }
+
+    accept(){
+      this.currentItem.status = { name: 'Выполнено' }
+      this.currentItem.active = false
+      this.saveItem()
     }
 
     render() {
@@ -417,7 +457,7 @@ class MyFederationMemberSection2 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -437,8 +477,8 @@ class MyFederationMemberSection2 extends BaseElement {
         `;
     }
 
-    gotoSelection(index) {
-        this.currentSection = index
+    gotoSection(index) {
+        this.parentNode.host.currentSection = index
     }
 
     gotoPage(index) {
@@ -529,17 +569,10 @@ class MyFederationMemberSection2 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;
-        // this.dataSource = new DataSource(this)
-        // await this.dataSource.getItem()
-
-        const parentId = localStorage.getItem('federationMember').split(':')[1]
-        // this.competitionDataSource = new CompetitionDataSource(this)
-        // this.parent = await this.competitionDataSource.getItem()
+        const parentId = localStorage.getItem('federationMember')
         this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))
-        // if (this.currentItem._id) {
-        //     this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
-        // }
-        this.isFirst = true;
+        await this.dataSource.init();
+        this.currentPage = this.currentItem.type - 1
     }
 }
 

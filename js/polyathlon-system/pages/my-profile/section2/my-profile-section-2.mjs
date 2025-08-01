@@ -8,11 +8,11 @@ import '../../../../../components/buttons/simple-button.mjs'
 import lang from '../../../polyathlon-dictionary.mjs';
 import { States } from "../../../../utils.js"
 
-import './my-profile-section-3-page-1.mjs'
-import './page2/my-profile-section-3-page-2.mjs'
-import './my-profile-section-3-page-3.mjs'
-import './my-profile-section-3-page-4.mjs'
-import './my-profile-section-3-page-5.mjs'
+import './my-profile-section-2-page-1.mjs'
+import './page2/my-profile-section-2-page-2.mjs'
+import './my-profile-section-2-page-3.mjs'
+import './my-profile-section-2-page-4.mjs'
+import './my-profile-section-2-page-5.mjs'
 
 
 import DataSet from './my-requests-dataset.mjs'
@@ -21,7 +21,7 @@ import DataSource from './my-requests-datasource.mjs'
 import ProfileDataSet from '../section1/my-profile-dataset.mjs'
 import ProfileDataSource from '../section1/my-profile-datasource.mjs'
 
-class MyProfileSection3 extends BaseElement {
+class MyProfileSection2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -34,7 +34,6 @@ class MyProfileSection3 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentSection: { type: BigInt, default: 0, local: true},
             currentPage: { type: BigInt, default: 0 },
             currentFilter: { type: Object, default: {} },
         }
@@ -567,7 +566,7 @@ class MyProfileSection3 extends BaseElement {
                 <div class="left-aside">
                     ${this.sections.map( (section, index) =>
                         html `
-                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName || nothing} label=${section.name === 'section3'? lang`Request`: section.label} @click=${() => this.gotoSelection(index)}></icon-button>
+                            <icon-button ?active=${index === 2 && this.sections.length !== 1} icon-name=${section.iconName || nothing} label=${section.name === 'section2'? lang`Request`: section.label} @click=${() => this.gotoSection(index)}></icon-button>
                         `
                     )}
                 </div>
@@ -592,8 +591,8 @@ class MyProfileSection3 extends BaseElement {
         `;
     }
 
-    gotoSelection(index) {
-        this.currentSection = index
+    gotoSection(index) {
+        this.parentNode.host.currentSection = index;
     }
 
     gotoPage(index) {
@@ -698,4 +697,4 @@ class MyProfileSection3 extends BaseElement {
     }
 }
 
-customElements.define("my-profile-section-3", MyProfileSection3);
+customElements.define("my-profile-section-2", MyProfileSection2);

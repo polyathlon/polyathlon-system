@@ -725,7 +725,7 @@ class MyRefereesSection1 extends BaseElement {
                 <div class="left-aside">
                     ${this.sections.map( (section, index) =>
                         html `
-                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "referee-man-solid" : "referee-woman-solid") || section.iconName || nothing} label=${section.label} @click=${() => this.gotoSelection(index)}></icon-button>
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "referee-man-solid" : "referee-woman-solid") || section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
                         `
                     )}
                 </div>

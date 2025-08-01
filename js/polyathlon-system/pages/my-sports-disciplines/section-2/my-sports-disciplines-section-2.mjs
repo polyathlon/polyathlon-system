@@ -30,8 +30,7 @@ class MySportsDisciplinesSection2 extends BaseElement {
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
-            currentSection: { type: BigInt, default: 1, local: true},
-            currentTab: { type: BigInt, default: 0, local: true},
+            currentTab: { type: BigInt, default: 0 },
             parent: { type: Object, default: {} },
         }
     }
@@ -637,7 +636,7 @@ class MySportsDisciplinesSection2 extends BaseElement {
                 <p>${lang`Components`}</p>
             </header>
             <header class="right-header">
-                ${this.sectionNames.map( (page, index) =>
+                ${this.sections.map( (page, index) =>
                     html `
                         <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
                     `
@@ -667,7 +666,7 @@ class MySportsDisciplinesSection2 extends BaseElement {
 
     gotoPage(index) {
         if (index !== 1) {
-            this.currentSection = 0
+            this.parentNode.host.currentSection = index
             this.currentTab = index
         }
     }

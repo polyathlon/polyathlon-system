@@ -1,32 +1,34 @@
-import { BaseElement, html, css } from '../../../../base-element.mjs'
+import { BaseElement, html, css } from '../../../../../base-element.mjs'
 
-import '../../../../../components/inputs/simple-input.mjs'
-import '../../../../../components/selects/simple-select.mjs'
-import '../../../../../components/inputs/gender-input.mjs'
+import '../../../../../../components/inputs/simple-input.mjs'
+import '../../../../../../components/selects/simple-select.mjs'
+import '../../../../../../components/inputs/gender-input.mjs'
+import '../../../../../../components/inputs/birthday-input.mjs'
 
-import lang from '../../../polyathlon-dictionary.mjs'
+
+import lang from '../../../../polyathlon-dictionary.mjs'
 
 // import DataSet from './my-sportsmen-dataset.mjs'
 
-import TrainerCategoryDataSource from '../../my-trainer-categories/my-trainer-categories-datasource.mjs'
-import TrainerCategoryDataset from '../../my-trainer-categories/my-trainer-categories-dataset.mjs'
+import SportsCategoryDataSource from '../../../my-sports-categories/my-sports-categories-datasource.mjs'
+import SportsCategoryDataset from '../../../my-sports-categories/my-sports-categories-dataset.mjs'
 
-import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
-import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
+import RegionDataSource from '../../../my-regions/my-regions-datasource.mjs'
+import RegionDataset from '../../../my-regions/my-regions-dataset.mjs'
 
-import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
-import CityDataset from '../../my-cities/my-cities-dataset.mjs'
+import ClubDataSource from '../../../my-clubs/my-clubs-datasource.mjs'
+import ClubDataset from '../../../my-clubs/my-clubs-dataset.mjs'
 
-class MyProfileSection3Page4 extends BaseElement {
+class MyProfileSection2Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
             item: {type: Object, default: null},
-            trainerCategorySource: { type: Object, default: null },
-            regionDataSource: { type: Object, default: null },
-            cityDataSource: { type: Object, default: null },
-            isModified: { type: Boolean, default: false, local: true },
-            oldValues: { type: Map, default: null },
+            sportsCategorySource: {type: Object, default: null},
+            regionDataSource: {type: Object, default: null},
+            clubDataSource: {type: Object, default: null},
+            isModified: {type: Boolean, default: false, local: true},
+            oldValues: {type: Map, default: null},
         }
     }
 
@@ -58,19 +60,20 @@ class MyProfileSection3Page4 extends BaseElement {
     }
 
     // <simple-input id="profileUlid" label="${lang`Sportsman Ulid`}:" icon-name="hash-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?._id} @input=${this.validateInput}></simple-input>
-    cityShowValue(item) {
-        return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
-    }
 
-    cityListLabel(item) {
-        if (item?.name) {
-            return item?.type?.shortName ? `${item?.type?.shortName} ${item?.name}` : item?.name
-        }
+    clubShowValue(item) {
+        if (item?.name)
+            return `${item?.name}, ${item?.city?.type?.shortName || ''} ${item?.city?.name}`
         return ''
     }
 
-    cityListStatus(item) {
-        return { name: item?.region?.name ?? ''}
+    clubListLabel(item) {
+        // return item?.type?.shortName + ' ' + item?.name
+        return item?.city?.name ? `${item?.name}, ${item?.city?.type?.shortName || ''} ${item?.city?.name}` : item?.name
+    }
+
+    clubListStatus(item) {
+        return { name: item?.city?.region?.name }
     }
 
     render() {
@@ -82,10 +85,11 @@ class MyProfileSection3Page4 extends BaseElement {
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="category" label="${lang`Category`}:" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="birthday" label="${lang`Data of birth`}:" icon-name="cake-candles-solid" .value=${this.item?.payload?.birthday} @input=${this.validateInput} lang="ru-Ru" type="date" ></simple-input>
+                <simple-select id="category" label="${lang`Sports category`}:" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" icon-name="sportsman-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createSportsmanPC} .value=${this.item?.payload?.sportsmanPC} @input=${this.validateInput}></simple-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
-                <simple-input id="trainerPC" label="${lang`Referee PC`}:" icon-name="trainer-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createTrainerPC} .value=${this.item?.payload?.refereePC} @input=${this.validateInput}></simple-input>
+                <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.payload?.club} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.link} @input=${this.validateInput}></simple-input>
@@ -95,14 +99,23 @@ class MyProfileSection3Page4 extends BaseElement {
         `;
     }
 
-    async createTrainerPC(e) {
+    async createSportsmanPC(e) {
         const target = e.target
-        const id = await DataSet.createTrainerPC({
-            countryCode: this.item?.region?.country?.flag.toUpperCase(),
-            regionCode: this.item?.region?.code,
-            ulid: this.item?.profileUlid,
-        })
-        target.setValue(id)
+        // const spc = await DataSet.createSportsmanPC({
+        //     countryCode: this.item?.region?.country?.flag.toUpperCase(),
+        //     regionCode: this.item?.region?.code,
+        //     ulid: this.item?.profileUlid,
+        // })
+        target.setValue(spc);
+    }
+
+    async getQRCode() {
+        // const hashNumber = await DataSet.getQRCode({
+        //     countryCode: this.item?.region?.country?.flag.toUpperCase(),
+        //     regionCode: this.item?.region?.code,
+        //     ulid: this.item?.profileUlid,
+        // })
+        e.target.setValue(hashNumber);
     }
 
     copyToClipboard(e) {
@@ -168,10 +181,10 @@ class MyProfileSection3Page4 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.trainerCategoryDataSource = new TrainerCategoryDataSource(this, await TrainerCategoryDataset.getDataSet())
+        this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
-        this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
+        this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
     }
 }
 
-customElements.define("my-profile-section-3-page-4", MyProfileSection3Page4);
+customElements.define("my-profile-section-2-page-2", MyProfileSection2Page2);

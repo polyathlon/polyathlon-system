@@ -9,7 +9,7 @@ import './section-1/my-sports-disciplines-section-1.mjs';
 class MySportsDisciplines extends BaseElement {
     static get properties() {
         return {
-            currentSection: { type: BigInt, default: 0, local: true},
+            currentSection: { type: BigInt, default: 0 },
             sectionNames: { type: Array, default: 0 },
             version: { type: String, default: '1.0.0', save: true },
         }
@@ -29,33 +29,31 @@ class MySportsDisciplines extends BaseElement {
     constructor() {
         super()
         this.version = "1.0.0"
-        this.sectionNames = [
-            {label: lang`Sports discipline`, iconName: 'category-solid'},
-            {label: lang`Component`, iconName: 'puzzle-solid'},
-            {label: lang`Categories table`, iconName: 'sportsman-man-solid'},
-            {label: lang`Categories table`, iconName: 'sportsman-woman-solid'},
+                    {name: "section1", label: lang`User`, iconName: 'user'},
+                    {name: "section2", label: lang`Requests`, iconName: 'registration-solid'},
+        this.sections = [
+            {name: "section1", label: lang`Sports discipline`, iconName: 'category-solid'},
+            {name: "section2", label: lang`Component`, iconName: 'puzzle-solid'},
+            {name: "section3", label: lang`Categories table`, iconName: 'sportsman-man-solid'},
+            {name: "section4", label: lang`Categories table`, iconName: 'sportsman-woman-solid'},
         ]
     }
 
-    get #section1() {
+    get section1() {
         return html`
-            <my-sports-disciplines-section-1 .sectionNames=${this.sectionNames}></my-sports-disciplines-section-1>
+            <my-sports-disciplines-section-1 .sections=${this.sections}></my-sports-disciplines-section-1>
         `;
     }
 
-    get #section2() {
+    get section2() {
         import('./section-2/my-sports-disciplines-section-2.mjs');
         return html`
-            <my-sports-disciplines-section-2 .sectionNames=${this.sectionNames}></my-sports-disciplines-section-2>
+            <my-sports-disciplines-section-2 .sections=${this.sections}></my-sports-disciplines-section-2>
         `;
     }
 
     get #section() {
-        switch(this.currentSection) {
-            case 0: return cache(this.#section1)
-            case 1: return this.#section2
-            default: return cache(this.#section1)
-        }
+       return cache(this[this.sections[this.currentSection].name])
     }
 
     render() {

@@ -2,27 +2,31 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
+import '../../../../../components/inputs/gender-input.mjs'
 
-import FederationMemberCategoryDataset from '../my-federation-member-categories/my-federation-member-categories-dataset.mjs'
-import FederationMemberCategoryDataSource from '../my-federation-member-categories/my-federation-member-categories-datasource.mjs'
+import lang from '../../../polyathlon-dictionary.mjs'
 
-import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
-import RegionDataset from '../my-regions/my-regions-dataset.mjs'
+// import DataSet from './my-sportsmen-dataset.mjs'
+
+import RefereeCategoryDataSource from '../../my-referee-categories/my-referee-categories-datasource.mjs'
+import RefereeCategoryDataset from '../../my-referee-categories/my-referee-categories-dataset.mjs'
+
+import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
+import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 
 import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
-
 
 class MyFederationMemberSection2Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            federationMemberCategoryDataSource: { type: Object, default: null },
-            regionDataSource: { type: Object, default: null },
-            cityDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
-            isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null},
+            refereeCategorySource: { type: Object, default: null },
+            regionDataSource: { type: Object, default: null },
+            cityDataSource: { type: Object, default: null },
+            isModified: { type: Boolean, default: false, local: true },
+            oldValues: { type: Map, default: null },
         }
     }
 
@@ -45,57 +49,128 @@ class MyFederationMemberSection2Page2 extends BaseElement {
                     display: flex;
                     gap: 10px;
                 }
+
+                #birthday {
+                    --text-align: center;
+                }
             `
         ]
+    }
+
+    cityShowValue(item) {
+        return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
+    }
+
+    cityListLabel(item) {
+        if (item?.name) {
+            return item?.type?.shortName ? `${item?.type?.shortName} ${item?.name}` : item?.name
+        }
+        return ''
+    }
+
+    cityListStatus(item) {
+        return { name: item?.region?.name ?? ''}
     }
 
     render() {
         return html`
             <div class="container">
-                <simple-select id="name" icon-name="referee-solid" @icon-click=${() => this.showPage('my-referee-types')} label="Name:" .dataSource=${this.refereeTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
-                <simple-select id="stage" icon-name="order-number-solid" @icon-click=${() => this.showPage('my-referee-stages')} label="Stage:" .dataSource=${this.refereeStageDataSource} .value=${this.item?.stage} @input=${this.validateInput}></simple-select>
-                <simple-select id="sportsDiscipline1" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 1:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline1} @input=${this.validateInput}></simple-select>
-                <simple-select id="sportsDiscipline2" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 2:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
-                <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.payload?.lastName} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input type="date" label="Дата начала:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
-                    <simple-input type="date" label="Дата окончания:" id="endDate" icon-name="calendar-days-solid" .value=${this.item?.endDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.payload?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
+                <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
+                <simple-select id="category" label="${lang`Category`}:" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-referee-categories')} .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
+                <simple-input id="refereePC" label="${lang`Referee PC`}:" icon-name="referee-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createRefereePC} .value=${this.item?.payload?.refereePC} @input=${this.validateInput}></simple-input>
+                <div class="name-group">
+                    <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.number} @input=${this.validateInput}></simple-input>
+                    <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.link} @input=${this.validateInput}></simple-input>
+                </div>
+                <simple-input id="personLink" label="${lang`Person link`}:" icon-name="user-link" @icon-click=${this.linkClick} .value=${this.item?.payload?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
+    }
+
+    async createRefereePC(e) {
+        const target = e.target
+        const id = await DataSet.createRefereePC({
+            countryCode: this.item?.region?.country?.flag.toUpperCase(),
+            regionCode: this.item?.region?.code,
+            ulid: this.item?.profileUlid,
+        })
+        target.setValue(id)
+    }
+
+    copyToClipboard(e) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(e.target.value)
+        }
     }
 
     showPage(page) {
         location.hash = page;
     }
 
+    linkClick(e) {
+        window.open(e.target.value);
+    }
+
+    numberClick(e) {
+        window.open(this.$id('order.link').value);
+    }
+
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item
+            let id = e.target.id
+            let currentItem = this.item.payload
+            if (id == "order.number") {
+                id = "number"
+                if (!currentItem.order) {
+                    currentItem.order = {}
+                }
+                currentItem = currentItem.order
+            }
+            if (id == "order.link") {
+                id = "link"
+                if (!currentItem.order) {
+                    currentItem.order = {}
+                }
+                currentItem = currentItem.order
+            }
+
             if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
+                if (currentItem[id] !== e.target.value) {
+                    this.oldValues.set(e.target, currentItem[id])
                 }
             }
             else if (this.oldValues.get(e.target) === e.target.value) {
                     this.oldValues.delete(e.target)
             }
 
-            currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
+            currentItem[id] = e.target.value
+
+            if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
             this.isModified = this.oldValues.size !== 0;
         }
     }
 
+    startEdit() {
+        let input = this.$id("lastName")
+        input.focus()
+        this.isModified = true
+    }
+
     async firstUpdated() {
         super.firstUpdated();
-        this.federationMemberCategoryDataSource = new FederationMemberCategoryDataSource(this, await FederationMemberCategoryDataset.getDataSet())
+        this.refereeCategoryDataSource = new RefereeCategoryDataSource(this, await RefereeCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }
-
 }
 
 customElements.define("my-federation-member-section-2-page-2", MyFederationMemberSection2Page2);

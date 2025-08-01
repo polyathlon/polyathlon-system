@@ -20,7 +20,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token, id) {
-        return fetch(`https://localhost:4500/api/federation-members/${id}`, {
+        return fetch(`https://localhost:4500/api/requests/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -45,7 +45,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item, id) {
-        return fetch(`https://localhost:4500/api/competition-sportsman/${id}`, {
+        return fetch(`https://localhost:4500/api/requests/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -77,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/federation-member/${itemId}`, {
+        return fetch(`https://localhost:4500/api/request/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -103,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/federation-member`, {
+        return fetch(`https://localhost:4500/api/request/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -128,15 +128,20 @@ export default class DataSet {
         if (!response.ok) {
             throw new Error(result.error)
         }
-        DataSet.#afterSave(item, result)
+        return await DataSet.#afterSave(item, result)
     }
 
-    static #afterSave(item, itemHeader) {
-        item._rev = itemHeader.rev;
+    static async #afterSave(item, itemHeader) {
+        const newItem = await DataSet.getItem(itemHeader.id)
+        const index = DataSet.#dataSet.indexOf(item)
+        DataSet.#dataSet[index] = newItem
+        return newItem
+
+        // DataSet.#dataSet[index] = newItem
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/federation-member/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://localhost:4500/api/request/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`

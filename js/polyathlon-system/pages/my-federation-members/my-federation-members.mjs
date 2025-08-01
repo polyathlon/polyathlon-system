@@ -7,7 +7,7 @@ import lang from '../../polyathlon-dictionary.mjs'
 class MyFederationMembers extends BaseElement {
     static get properties() {
         return {
-            currentSection: { type: BigInt, default: 0, local: true},
+            currentSection: { type: BigInt, default: 0 },
             sections: { type: Array, default: null },
             version: { type: String, default: '1.0.0', save: true },
         }

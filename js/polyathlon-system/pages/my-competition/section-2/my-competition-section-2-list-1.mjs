@@ -25,6 +25,7 @@ class MyCompetitionSection2List1 extends BaseElement {
                     icon-button {
                         flex: 0 0 40px;
                     }
+
                     icon-button[selected] {
                        background: rgba(255, 255, 255, 0.1)
                     }
@@ -54,15 +55,16 @@ class MyCompetitionSection2List1 extends BaseElement {
     render() {
         return html`
             ${this.item.dataSource?.items?.map((item, index) =>
-                html `<icon-button
+                html `
+                    <icon-button
                         label=${this.sportsmanName(item)}
                         title=${item._id}
                         image-name=${item.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
                         .status=${ { name: item.category?.name || item?._id, icon: 'sports-category-solid'} }
                         @click=${() => this.showItem(item)}
-                    ></icon-button>                `
-
+                    ></icon-button>
+                `
             )}
         `
     }
