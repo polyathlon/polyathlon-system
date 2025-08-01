@@ -36,14 +36,14 @@ class MyDisciplineNames extends BaseElement {
 
     get section1() {
         return html`
-            <my-discipline-names-section-1 .sections=${this.sections} .currentSection=0></my-discipline-names-section-1>
+            <my-discipline-names-section-1 .sections=${this.sections} .currentSection=${0}></my-discipline-names-section-1>
         `;
     }
 
     get section2() {
-        import('./section-2/my-my-discipline-names-section-2.mjs');
+        import('./section-2/my-discipline-names-section-2.mjs');
         return html`
-            <my-discipline-names-section-2 .sections=${this.sections} .currentSection=1></my-discipline-names-section-2>
+            <my-discipline-names-section-2 .sections=${this.sections} .currentSection=${1}></my-discipline-names-section-2>
         `;
     }
 

@@ -29,8 +29,6 @@ class MySportsDisciplines extends BaseElement {
     constructor() {
         super()
         this.version = "1.0.0"
-                    {name: "section1", label: lang`User`, iconName: 'user'},
-                    {name: "section2", label: lang`Requests`, iconName: 'registration-solid'},
         this.sections = [
             {name: "section1", label: lang`Sports discipline`, iconName: 'category-solid'},
             {name: "section2", label: lang`Component`, iconName: 'puzzle-solid'},

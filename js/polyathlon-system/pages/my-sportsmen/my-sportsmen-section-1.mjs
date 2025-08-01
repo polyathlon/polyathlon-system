@@ -65,6 +65,7 @@ class MySportsmenSection1 extends BaseElement {
                 .left-header {
                     grid-area: header1;
                     overflow: hidden;
+                    min-width: 230px;
                     p {
                         overflow: hidden;
                         white-space: nowrap;

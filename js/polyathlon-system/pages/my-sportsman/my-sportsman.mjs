@@ -36,14 +36,14 @@ class MySportsman extends BaseElement {
 
     get section1() {
         return html`
-            <my-sportsman-section-1 .sections=${this.sections} .currentSection=0></my-sportsman-section-1>
+            <my-sportsman-section-1 .sections=${this.sections} .currentSection=${0}></my-sportsman-section-1>
         `;
     }
 
     get section2() {
         import('./section-2/my-sportsman-section-2.mjs');
         return html`
-            <my-sportsman-section-2 .sections=${this.sections} .currentSection=1></my-sportsman-section-2>
+            <my-sportsman-section-2 .sections=${this.sections} .currentSection=${1}></my-sportsman-section-2>
         `;
     }
 

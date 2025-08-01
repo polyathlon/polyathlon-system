@@ -37,14 +37,14 @@ class MyCompetition extends BaseElement {
 
     get section1() {
         return html`
-            <my-trainer-section-1 .sections=${this.sections} .currentSection=0></my-trainer-section-1>
+            <my-trainer-section-1 .sections=${this.sections} .currentSection=${0}></my-trainer-section-1>
         `;
     }
 
     get section2() {
         import('./section-2/my-trainer-section-2.mjs');
         return html`
-            <my-trainer-section-2 .sections=${this.sections} .currentSection=1></my-trainer-section-2>
+            <my-trainer-section-2 .sections=${this.sections} .currentSection=${1}></my-trainer-section-2>
         `;
     }
 

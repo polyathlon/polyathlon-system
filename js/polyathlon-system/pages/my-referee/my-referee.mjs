@@ -37,14 +37,14 @@ class MyReferee extends BaseElement {
 
     get section1() {
         return html`
-            <my-referee-section-1 .sections=${this.sections} .currentSection=0></my-referee-section-1>
+            <my-referee-section-1 .sections=${this.sections} .currentSection=${0}></my-referee-section-1>
         `;
     }
 
     get section2() {
         import('./section-2/my-referee-section-2.mjs');
         return html`
-            <my-referee-section-2 .sections=${this.sections} .currentSection=1></my-referee-section-2>
+            <my-referee-section-2 .sections=${this.sections} .currentSection=${1}></my-referee-section-2>
         `;
     }
 

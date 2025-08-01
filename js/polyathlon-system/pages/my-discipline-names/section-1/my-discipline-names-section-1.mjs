@@ -64,6 +64,7 @@ class MyDisciplineNamesSection1 extends BaseElement {
                     grid-area: header1;
                     overflow: hidden;
                     justify-content: flex-start;
+                    min-width: 230px;
                     p {
                         overflow: hidden;
                         white-space: nowrap;

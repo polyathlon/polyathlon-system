@@ -59,6 +59,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
+                    min-width: 230px;
                     p {
                     width: 100%;
                     overflow: hidden;

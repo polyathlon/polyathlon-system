@@ -42,42 +42,42 @@ class MyCompetition extends BaseElement {
 
     get section1() {
         return html`
-            <my-competition-section-1 .sections=${this.sections} .currentSection=0></my-competition-section-1>
+            <my-competition-section-1 .sections=${this.sections} .currentSection=${0}></my-competition-section-1>
         `;
     }
 
     get section2() {
         import('./section-2/my-competition-section-2.mjs');
         return html`
-            <my-competition-section-2 .sections=${this.sections} .currentSection=1></my-competition-section-2>
+            <my-competition-section-2 .sections=${this.sections} .currentSection=${1}></my-competition-section-2>
         `;
     }
 
     get section3() {
         import('./section-3/my-competition-section-3.mjs');
         return html`
-            <my-competition-section-3 .sections=${this.sections} .currentSection=2></my-competition-section-3>
+            <my-competition-section-3 .sections=${this.sections} .currentSection=${2}></my-competition-section-3>
         `;
     }
 
     get section4() {
         import('./section-4/my-competition-section-4.mjs');
         return html`
-            <my-competition-section-4 .sections=${this.sections} .currentSection=3></my-competition-section-4>
+            <my-competition-section-4 .sections=${this.sections} .currentSection=${3}></my-competition-section-4>
         `;
     }
 
     get section5() {
         import('./section-5/my-competition-section-5.mjs');
         return html`
-            <my-competition-section-5 .sections=${this.sections} .currentSection=4></my-competition-section-5>
+            <my-competition-section-5 .sections=${this.sections} .currentSection=${4}></my-competition-section-5>
         `;
     }
 
     get section6() {
         import('./section-6/my-competition-section-6.mjs');
         return html`
-            <my-competition-section-6 .sections=${this.sections} .currentSection=5></my-competition-section-6>
+            <my-competition-section-6 .sections=${this.sections} .currentSection=${5}></my-competition-section-6>
         `;
     }
 

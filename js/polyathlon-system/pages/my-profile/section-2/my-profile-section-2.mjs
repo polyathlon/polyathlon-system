@@ -14,12 +14,11 @@ import './my-profile-section-2-page-3.mjs'
 import './my-profile-section-2-page-4.mjs'
 import './my-profile-section-2-page-5.mjs'
 
-
 import DataSet from './my-requests-dataset.mjs'
 import DataSource from './my-requests-datasource.mjs'
 
-import ProfileDataSet from '../section1/my-profile-dataset.mjs'
-import ProfileDataSource from '../section1/my-profile-datasource.mjs'
+import ProfileDataSet from '../section-1/my-profile-dataset.mjs'
+// import ProfileDataSource from '../section-1/my-profile-datasource.mjs'
 
 class MyProfileSection2 extends BaseElement {
     static get properties() {
@@ -360,31 +359,31 @@ class MyProfileSection2 extends BaseElement {
 
     get page1() {
         return html`
-            <my-profile-section-3-page-1 .oldValues=${this.oldValues} .item=${this.parent}></my-profile-section-3-page-1>
+            <my-profile-section-2-page-1 .oldValues=${this.oldValues} .item=${this.parent}></my-profile-section-2-page-1>
         `;
     }
 
     get page2() {
         return html`
-            <my-profile-section-3-page-2 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-3-page-2>
+            <my-profile-section-2-page-2 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-2-page-2>
         `;
     }
 
     get page3() {
         return html`
-            <my-profile-section-3-page-3 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-3-page-3>
+            <my-profile-section-2-page-3 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-2-page-3>
         `;
     }
 
     get page4() {
         return html`
-            <my-profile-section-3-page-4 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-3-page-4>
+            <my-profile-section-2-page-4 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-2-page-4>
         `;
     }
 
     get page5() {
         return html`
-            <my-profile-section-3-page-5 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-3-page-5>
+            <my-profile-section-2-page-5 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-2-page-5>
         `;
     }
 
@@ -566,7 +565,7 @@ class MyProfileSection2 extends BaseElement {
                 <div class="left-aside">
                     ${this.sections.map( (section, index) =>
                         html `
-                            <icon-button ?active=${index === 2 && this.sections.length !== 1} icon-name=${section.iconName || nothing} label=${section.name === 'section2'? lang`Request`: section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName || nothing} label=${section.name === 'section2'? lang`Request`: section.label} @click=${() => this.gotoSection(index)}></icon-button>
                         `
                     )}
                 </div>

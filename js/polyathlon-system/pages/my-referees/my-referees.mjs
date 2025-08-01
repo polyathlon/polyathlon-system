@@ -35,7 +35,7 @@ class MyReferees extends BaseElement {
 
     render() {
         return html`
-            <my-referees-section-1 .sections=${this.sections} .currentSection=0></my-referees-section-1>
+            <my-referees-section-1 .sections=${this.sections} .currentSection=${0}></my-referees-section-1>
         `;
     }
 }

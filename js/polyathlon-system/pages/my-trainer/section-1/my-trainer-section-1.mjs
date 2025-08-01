@@ -62,6 +62,7 @@ class MyCompetitionSection1 extends BaseElement {
                 .left-header {
                     grid-area: header1;
                     overflow: hidden;
+                    min-width: 230px;
                     p {
                         overflow: hidden;
                         white-space: nowrap;
@@ -406,7 +407,7 @@ class MyCompetitionSection1 extends BaseElement {
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
-    
+
     gotoSection(index) {
         this.parentNode.host.currentSection = index;
     }
