@@ -53,6 +53,7 @@ export default class DataSource {
 
     async addItem(item) {
         const newItem = await DataSet.addItem(item)
+        DataSet.addToDataset(newItem)
         this.addTo(newItem)
     }
 

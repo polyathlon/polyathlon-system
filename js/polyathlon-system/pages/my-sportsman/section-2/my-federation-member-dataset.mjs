@@ -183,11 +183,11 @@ export default class DataSet {
 
     static async getQRCode(data) {
         const token = getToken();
-        let response = await DataSet.fetchGetQRCode(token, data)
+        let response = await DataSet.fetchGetQRCode(token, btoa(data))
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchGetQRCode(token, data)
+            response = await DataSet.fetchGetQRCode(token, btoa(data))
         }
         const result = await response.json()
         if (!response.ok) {

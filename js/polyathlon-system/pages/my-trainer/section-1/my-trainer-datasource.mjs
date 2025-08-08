@@ -9,7 +9,7 @@ export default class DataSource {
     }
 
     async getItem() {
-        const id = localStorage.getItem('currentCompetition')
+        const id = localStorage.getItem('trainer')
         if (id === 'new') {
             this.item = {};
             this.component.currentItem = this.item;
@@ -21,7 +21,7 @@ export default class DataSource {
     }
 
     setCurrentItem(item) {
-        localStorage.setItem('currentCompetition', item._id)
+        localStorage.setItem('trainer', item._id)
         this.component.currentItem = item;
     }
 

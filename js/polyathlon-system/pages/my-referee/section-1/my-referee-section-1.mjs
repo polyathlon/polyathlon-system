@@ -9,14 +9,13 @@ import '../../../../../components/inputs/avatar-input.mjs'
 import '../../../../../components/buttons/aside-button.mjs';
 import '../../../../../components/buttons/simple-button.mjs';
 
+import lang from '../../../polyathlon-dictionary.mjs'
+
 import './my-referee-section-1-page-1.mjs'
 import './my-referee-section-1-list-1.mjs'
-//import './my-competition-section-1-page-2.mjs'
-// import './my-competition-section-2-page-1.mjs'
-// import './my-competition-section-2-list-1.mjs'
 
 import DataSet from './my-referee-dataset.mjs'
-//import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
+
 import DataSource from './my-referee-datasource.mjs'
 
 class MyRefereeSection1 extends BaseElement {
@@ -33,6 +32,7 @@ class MyRefereeSection1 extends BaseElement {
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             isFirst: { type: Boolean, default: false },
+            currentList: { type: BigInt, default: 0, local: true},
         }
     }
 
@@ -62,12 +62,24 @@ class MyRefereeSection1 extends BaseElement {
                 .left-header {
                     grid-area: header1;
                     overflow: hidden;
+                    justify-content: flex-start;
                     min-width: 230px;
                     p {
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         margin: 0;
+                    }
+                    icon-button {
+                        height: 100%;
+                        padding: 0 1vw;
+                        font-weight: 400;
+                        &:not(:only-child):active {
+                            background-color: var(--layout-background-color);
+                        }
+                        &:not(:only-child):hover {
+                            background-color: var(--layout-background-color);
+                        }
                     }
                 }
 
@@ -79,8 +91,9 @@ class MyRefereeSection1 extends BaseElement {
                         padding: 0 1vw;
                         &[active] {
                             background-color: var(--layout-background-color);
+                            font-weight: bold;
                         }
-                        &hover {
+                        &:hover {
                             background-color: var(--layout-background-color);
                         }
                     }
@@ -168,9 +181,12 @@ class MyRefereeSection1 extends BaseElement {
                         align-items: center;
                         justify-content: flex-end;
                         padding: 0 10px;
-                        gap: 1vw;
+                        gap: 1.5vw;
                         simple-button {
                             height: 100%;
+                        }
+                        &.buttons {
+                            justify-content: center;
                         }
                     }
                 }
@@ -211,10 +227,17 @@ class MyRefereeSection1 extends BaseElement {
         super();
         this.statusDataSet = new Map()
         this.currentPage = 0;
+        this.listNames = [
+            {label: lang`Personal page`, iconName: ''},
+        ]
         this.oldValues = new Map();
         this.buttons = [
+            {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
+        ]
+        this.pages = [
+            {name: 'page1', iconName: 'competition-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
         ]
     }
 
@@ -289,9 +312,9 @@ class MyRefereeSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCountryItem')) {
-            this.currentPage = 0;
-        }
+        // if (changedProps.has('currentCountryItem')) {
+        //     this.currentPage = 0;
+        // }
     }
 
     // async showItem(index, itemId) {
@@ -310,52 +333,38 @@ class MyRefereeSection1 extends BaseElement {
     // }
 
     get #page() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#page1())
-            case 1: return cache(this.#page2())
-            case 2: return cache(this.#page3())
-        }
+        return this[this.pages[this.currentPage].name]
     }
 
-    #page1() {
+    get page1() {
         return html`
             <my-referee-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-referee-section-1-page-1>
         `;
     }
 
-    #page2() {
+    get page2() {
         return html`
-            <my-referee-section-1-page-2 .item=${this.currentItem}></my-referee-section-1-page-2>
+            <my-referee-section-1-page-2 .oldValues=${this.oldValues} item=${this.currentItem}></my-referee-section-1-page-2>
         `;
-    }
-
-    #page3() {
-        return html`
-            <my-referee-section-1-page-3 .item=${this.currentItem}></my-referee-section-1-page-3>
-        `;
-    }
-
-    get #pageName() {
-        return this.pageNames[this.currentPage];
     }
 
     #list1() {
         return html`
-            <my-referee-section-1-list-1 .avatar=${this.avatar} .item=${this}></my-referee-section-1-list-1>
+            <my-referee-section-1-list-1 .avatar=${this.avatar} .item=${this.currentItem}></my-referee-section-1-list-1>
         `;
     }
 
-    #list3() {
+    #list2() {
         return html`
-            <my-referee-section-1-list-3 .parent=${this.currentItem}></my-referee-section-1-list-3>
+            <my-referee-section-1-list-2 .parent=${this.currentItem}></my-referee-section-1-list-2>
         `;
     }
 
     get #list() {
-        switch(this.currentPage) {
+        switch(this.currentList) {
             case 0: return cache(this.#list1())
-            case 1: return cache(this.#list1())
-            case 2: return cache(this.#list3())
+            case 1: return cache(this.#list2())
+            default: return cache(this.#list1())
         }
     }
 
@@ -383,12 +392,16 @@ class MyRefereeSection1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>Referee ${this.parent?.name}</p>
+                ${this.listNames.map( (list, index) =>
+                    html `
+                        <icon-button ?active=${index === this.currentList} icon-name=${list.iconName || nothing} label=${list.label} @click=${() => this.gotoList(index)}></icon-button>
+                    `
+                )}
             </header>
             <header class="right-header">
-                ${this.sectionNames.map( (page, index) =>
+                ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -409,11 +422,15 @@ class MyRefereeSection1 extends BaseElement {
     }
 
     gotoSection(index) {
-        this.parentNode.host.currentSection = index;
+        this.parentNode.host.currentSection = index
     }
 
     gotoPage(index) {
         this.currentPage = index
+    }
+
+    gotoList(index) {
+        this.currentList = index
     }
 
     nextPage() {
@@ -422,6 +439,68 @@ class MyRefereeSection1 extends BaseElement {
 
     prevPage() {
         this.currentPage--;
+    }
+
+    async saveToFile(blob, fileName) {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'sportsman-qr.svg');
+        } else {
+            const options = {
+                suggestedName: fileName,
+                types: [
+                    {
+                        description: 'SVG Files',
+                        accept: {
+                            'image/svg+xml': ['.svg']
+                        }
+                    },
+                ],
+                excludeAcceptAllOption: true
+            };
+            try {
+                // Для других браузеров
+                const fileHandle = await window.showSaveFilePicker(options);
+                const writable = await fileHandle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (err){
+                if (err.name === 'AbortError')
+                    return
+                console.error(err);
+                // Для других браузеров
+                const downloadUrl =  window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = fileName + '.svg';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(downloadUrl);
+                    document.body.removeChild(a);
+                }, 0);
+            }
+        }
+    }
+
+    fio(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName[0]}.`
+        }
+        if (item.middleName) {
+            result += `${item.middleName[0]}.`
+        }
+        return result
+    }
+
+    async getQRCode() {
+        const dataURI = await DataSet.getQRCode(location.origin+`?referee=${this.currentItem._id.split(':')[1]}#my-referee`)
+        const blob = await (await fetch(dataURI)).blob();
+        await this.saveToFile(blob, this.fio(this.currentItem).slice(0,-1))
+        window.open(URL.createObjectURL(blob))
     }
 
     async showDialog(message, type='message') {
@@ -446,6 +525,10 @@ class MyRefereeSection1 extends BaseElement {
             if (!result) return;
         }
         this.avatarFile = null;
+        this.oldValues.forEach( (value, key) => {
+            if (key.oldValue)
+                key.oldValue = null;
+        })
         this.oldValues?.clear();
         this.isModified = false;
     }
@@ -462,6 +545,7 @@ class MyRefereeSection1 extends BaseElement {
             } else {
                 const currentItem = key.currentObject ?? this.currentItem
                 currentItem[key.id] = value;
+                key.oldValue = null;
                 key.value = value;
             }
         });
@@ -493,9 +577,9 @@ class MyRefereeSection1 extends BaseElement {
         this.isFirst  = false;
         this.dataSource = new DataSource(this)
         await this.dataSource.getItem()
-        if (this.currentItem._id) {
-            this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
-        }
+        // if (this.currentItem._id) {
+        //     this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
+        // }
         this.isFirst = true;
     }
 }

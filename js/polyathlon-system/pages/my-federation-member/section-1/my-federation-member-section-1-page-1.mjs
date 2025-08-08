@@ -14,7 +14,6 @@ import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 
-
 class MyFederationMemberSection1Page1 extends BaseElement {
     static get properties() {
         return {

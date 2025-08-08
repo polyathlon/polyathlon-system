@@ -49,22 +49,19 @@ class MyRefereeSection1List1 extends BaseElement {
         ]
     }
 
-    get #loginInfo() {
-        if (localStorage.getItem('rememberMe')) {
-            return localStorage.getItem('userInfo')
-        }
-        else {
-            return sessionStorage.getItem('userInfo')
-        }
-    }
-
     render() {
         return html`
             <div class="avatar">
                 ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
             </div>
             <div class="label">
-                ${JSON.parse(this.#loginInfo).login}
+                ${this.item?.firstName + ' ' + this.item?.lastName}
+            </div>
+            <fashion-button @click=${this.startTelegramBot}>Telegram Bot</fashion-button>
+            <div class="statistic">
+                <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
             </div>
         `
     }

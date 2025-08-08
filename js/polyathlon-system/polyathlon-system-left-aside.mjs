@@ -48,9 +48,9 @@ class PolyathlonSystemLeftAside extends BaseElement {
         this.buttons = [
             {iconName: 'house-sharp-solid', title: 'Home', page: 'home-page', click: () => this.showPage('')},
             {iconName: 'user', title: 'Profile', page: 'my-profile', click: () => this.showPage('my-profile')},
-            {iconName: 'judge1-solid', page: 'my-referees', title: lang`Referees`, click: () => this.showPage('my-referees')},
+            {iconName: 'referee-man-solid', page: 'my-referees', title: lang`Referees`, click: () => this.showPage('my-referees')},
             {iconName: 'trainer-solid', page: 'my-trainers', title: lang`Trainers`, click: () => this.showPage('my-trainers')},
-            {iconName: 'sportsmen-solid', page: 'my-sportsmen', title: lang`Sportsmen`, click: () => this.showPage('my-sportsmen')},
+            {iconName: 'sportsman-man-solid', page: 'my-sportsmen', title: lang`Sportsmen`, click: () => this.showPage('my-sportsmen')},
             {iconName: 'competition-solid', page: 'my-competitions', title: lang`Competitions`, click: () => this.showPage('my-competitions')},
             // {iconName: 'registration-solid', page: 'my-sportsman-registrations', title: 'Registration', click: () => this.showPage('my-sportsman-registrations')},
             // {iconName: 'registration-solid', page: 'my-sportsman-registrations', title: 'Registration', click: () => this.showPage('my-discipline-names')},

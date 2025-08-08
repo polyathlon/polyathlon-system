@@ -188,11 +188,11 @@ export default class DataSet {
 
     static async getQRCode(data) {
         const token = getToken();
-        let response = await DataSet.fetchGetQRCode(token, data)
+        let response = await DataSet.fetchGetQRCode(token, btoa(data))
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchGetQRCode(token, data)
+            response = await DataSet.fetchGetQRCode(token, btoa(data))
         }
         const result = await response.json()
         if (!response.ok) {
@@ -200,4 +200,109 @@ export default class DataSet {
         }
         return result.qr
     }
+
+    static fetchAddSportsmanProfile(token, item) {
+        return fetch(`https://localhost:4500/api/sportsman-profile`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(item)
+        })
+    }
+
+    static async addSportsmanProfile(item) {
+        const token = getToken()
+        let response = await DataSet.fetchAddSportsmanProfile(token, { sportsman: item.sportsman._id.split(':')[1], request: item._id })
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchAddSportsmanProfile(token, { sportsman: item.sportsman._id.split(':')[1], request: item._id })
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+
+        // return await DataSet.getItem(result.id)
+    }
+
+    static fetchAddFederationMemberProfile(token, item) {
+        return fetch(`https://localhost:4500/api/federation-member-profile`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(item)
+        })
+    }
+
+    static async addFederationMemberProfile(item) {
+        const token = getToken()
+        let response = await DataSet.fetchAddFederationMemberProfile(token, { federationMember: item.federationMember._id.split(':')[1], request: item._id })
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchAddFederationMemberProfile(token, { federationMember: item.federationMember._id.split(':')[1], request: item._id })
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+
+        // return await DataSet.getItem(result.id)
+    }
+
+    static fetchAddTrainerProfile(token, item) {
+        return fetch(`https://localhost:4500/api/trainer-profile`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(item)
+        })
+    }
+
+    static async addTrainerProfile(item) {
+        const token = getToken()
+        let response = await DataSet.fetchAddTrainerProfile(token, { trainer: item.trainer._id.split(':')[1], request: item._id })
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchAddTrainerProfile(token, { trainer: item.trainer._id.split(':')[1], request: item._id })
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+
+        // return await DataSet.getItem(result.id)
+    }
+
+    static fetchAddRefereeProfile(token, item) {
+        return fetch(`https://localhost:4500/api/referee-profile`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(item)
+        })
+    }
+
+    static async addRefereeProfile(item) {
+        const token = getToken()
+        let response = await DataSet.fetchAddRefereeProfile(token, { referee: item.referee._id.split(':')[1], request: item._id })
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchAddRefereeProfile(token, { referee: item.referee._id.split(':')[1], request: item._id })
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+
+        // return await DataSet.getItem(result.id)
+    }
+
 }

@@ -2,7 +2,17 @@ import { BaseElement, html, css } from '../../../base-element.mjs'
 
 import './my-trainers-section-1.mjs';
 
+import lang from '../../polyathlon-dictionary.mjs'
+
 class MyTrainers extends BaseElement {
+    static get properties() {
+        return {
+            currentSection: { type: BigInt, default: 0 },
+            sections: { type: Array, default: null },
+            version: { type: String, default: '1.0.0', save: true },
+        }
+    }
+
     static get styles() {
         return [
             BaseElement.styles,
@@ -15,20 +25,17 @@ class MyTrainers extends BaseElement {
         ]
     }
 
-    static get properties() {
-        return {
-            version: { type: String, default: '1.0.0' },
-        }
-    }
-
     constructor() {
         super();
+        this.sections = [
+            {name: "section1", label: lang`Trainer`, iconName: 'trainer-solid'},
+        ]
         this.version = "1.0.0";
     }
 
     render() {
         return html`
-            <my-trainers-section-1></my-trainers-section-1>
+            <my-trainers-section-1 .sections=${this.sections} .currentSection=${0}></my-trainers-section-1>
         `;
     }
 }

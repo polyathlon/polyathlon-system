@@ -3,7 +3,7 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/avatar-input.mjs'
 
-class MyCompetitionSection1List1 extends BaseElement {
+class MyTrainerSection1List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -49,22 +49,19 @@ class MyCompetitionSection1List1 extends BaseElement {
         ]
     }
 
-    get #loginInfo() {
-        if (localStorage.getItem('rememberMe')) {
-            return localStorage.getItem('userInfo')
-        }
-        else {
-            return sessionStorage.getItem('userInfo')
-        }
-    }
-
     render() {
         return html`
             <div class="avatar">
                 ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
             </div>
             <div class="label">
-                ${JSON.parse(this.#loginInfo).login}
+                ${this.item?.firstName + ' ' + this.item?.lastName}
+            </div>
+            <fashion-button @click=${this.startTelegramBot}>Telegram Bot</fashion-button>
+            <div class="statistic">
+                <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
             </div>
         `
     }
@@ -96,4 +93,4 @@ class MyCompetitionSection1List1 extends BaseElement {
     }
 }
 
-customElements.define("my-trainer-section-1-list-1", MyCompetitionSection1List1);
+customElements.define("my-trainer-section-1-list-1", MyTrainerSection1List1);

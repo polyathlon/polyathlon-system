@@ -234,19 +234,13 @@ class MyProfileSection1 extends BaseElement {
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
-        // this.pageNames = [
-        //     {label: lang`User`, iconName: 'user'},
-        //     {label: lang`Passport`, iconName: 'judge1-solid'},
-        //     {label: lang`Sportsman`, iconName: 'user'},
-        //     {label: lang`Competition`, iconName: 'competition-solid'},
-        // ]
 
         this.pages = [
-            {name: 'page1', iconName: 'user', page: 0, title: lang`User`, click: () => this.gotoPage(0)},
-            {name: 'page2', iconName: 'sportsman-man-solid', page: 1, title: lang`Sportsman`, click: () => this.gotoPage(1)},
-            {name: 'page3', iconName: 'judge1-solid', page: 2, title: lang`Referee`, click: () => this.gotoPage(2)},
-            {name: 'page4', iconName: 'trainer-solid', page: 3, title: lang`Trainer`, click: () => this.gotoPage(3)},
-            {name: 'page5',iconName: 'federation-member-solid', page: 4, title: lang`Federation member`, click: () => this.gotoPage(4)},
+            {name: 'page1', iconName: 'user', page: 0, title: lang`User`, click: () => this.gotoPage(0), visible: true},
+            {name: 'page2', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'sportsman-woman-solid' : 'sportsman-man-solid', page: 1, title: lang`Sportsman`, click: () => this.gotoPage(1)},
+            {name: 'page3', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'referee-woman-solid' : 'referee-man-solid', page: 2, title: lang`Referee`, click: () => this.gotoPage(2)},
+            {name: 'page4', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'trainer-woman-solid' : 'trainer-man-solid', page: 3, title: lang`Trainer`, click: () => this.gotoPage(3)},
+            {name: 'page5', iconName: () => this.currentItem?.personalInfo?.gender  == true ? 'federation-member-woman-solid' : 'federation-member-man-solid', page: 4, title: lang`Federation member`, click: () => this.gotoPage(4)},
         ]
     }
 
@@ -407,7 +401,7 @@ class MyProfileSection1 extends BaseElement {
     get #task() {
         return html`
             <nav>${this.buttons.map((button, index) =>
-                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
+                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName instanceof Function ? button.iconName() : button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
             </nav>
         `
     }
@@ -433,7 +427,7 @@ class MyProfileSection1 extends BaseElement {
             return html`
                 <nav class="buttons">
                     ${this.pages.map( (button, index) =>
-                        html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                        button.visible ? html`<aside-button icon-name=${button.iconName instanceof Function ? button.iconName() : button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>` : '' )
                     }
                 </nav>
             `
@@ -479,7 +473,28 @@ class MyProfileSection1 extends BaseElement {
     }
 
     gotoPage(index) {
-        this.currentPage = index
+        switch (index) {
+            case 1:
+                location.hash = "#my-sportsman";
+                location.search = `?sportsman=${this.sportsman.sportsman}`
+                break;
+            case 2:
+                location.hash = "#my-referee";
+                location.search = `?referee=${this.referee.referee}`
+                break;
+            case 3:
+                location.hash = "#my-trainer";
+                location.search = `?trainer=${this.trainer.trainer}`
+                break;
+            case 4:
+                location.hash = "#my-federation-member";
+                location.search = `?federation-member=${this.federationMember.federationMember}`
+                break;
+
+            default:
+                break;
+        }
+
     }
 
     gotoList(index) {
@@ -562,6 +577,30 @@ class MyProfileSection1 extends BaseElement {
         super.firstUpdated();
         this.isFirst  = false;
         this.dataSource = new DataSource(this, await DataSet.getDataSet())
+        try {
+            this.sportsman = await DataSet.getSportsmanProfile()
+            this.pages[1].visible = '_id' in this.sportsman
+        } catch(e) {
+
+        }
+        try {
+            this.referee = await DataSet.getRefereeProfile()
+            this.pages[2].visible = '_id' in this.referee
+        } catch(e) {
+
+        }
+        try {
+            this.trainer = await DataSet.getTrainerProfile()
+            this.pages[3].visible = '_id' in this.trainer
+        } catch(e) {
+
+        }
+        try {
+            this.federationMember = await DataSet.getFederationMemberProfile()
+            this.pages[4].visible = '_id' in this.federationMember
+        } catch(e) {
+
+        }
         this.avatar = await DataSet.downloadAvatar();
         this.isFirst = true;
     }

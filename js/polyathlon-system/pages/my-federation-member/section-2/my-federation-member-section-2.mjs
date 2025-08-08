@@ -11,6 +11,11 @@ import '../../../../../components/buttons/simple-button.mjs';
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
+import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
+import RefereeDataset from '../../my-referees/my-referees-dataset.mjs'
+import TrainerDataset from '../../my-trainers/my-trainers-dataset.mjs'
+import FederationMemberDataset from '../../my-federation-members/my-federation-members-dataset.mjs'
+
 import './my-federation-member-section-2-page-1.mjs'
 import './my-federation-member-section-2-page-2.mjs'
 import './my-federation-member-section-2-page-3.mjs'
@@ -243,7 +248,7 @@ class MyFederationMemberSection2 extends BaseElement {
         ]
         this.pages = [
             {name: 'page1', iconName: 'sportsman-man-solid', page: 0, title: lang`Sportsman`, click: () => this.gotoPage(0)},
-            {name: 'page2', iconName: 'judge1-solid', page: 1, title: lang`Referee`, click: () => this.gotoPage(1)},
+            {name: 'page2', iconName: 'referee-man-solid', page: 1, title: lang`Referee`, click: () => this.gotoPage(1)},
             {name: 'page3', iconName: 'trainer-solid', page: 2, title: lang`Trainer`, click: () => this.gotoPage(2)},
             {name: 'page4',iconName: 'federation-member-solid', page: 4, title: lang`Federation member`, click: () => this.gotoPage(3)},
         ]
@@ -346,25 +351,25 @@ class MyFederationMemberSection2 extends BaseElement {
 
     get page1() {
         return html`
-            <my-federation-member-section-2-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-1>
+            <my-federation-member-section-2-page-1 id="page1" .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-1>
         `;
     }
 
     get page2() {
         return html`
-            <my-federation-member-section-2-page-2 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-2>
+            <my-federation-member-section-2-page-2 id="page2" .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-2>
         `;
     }
 
     get page3() {
         return html`
-            <my-federation-member-section-2-page-3 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-3>
+            <my-federation-member-section-2-page-3 id="page3" .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-3>
         `;
     }
 
     get page4() {
         return html`
-            <my-federation-member-section-2-page-4 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-4>
+            <my-federation-member-section-2-page-4 id="page4" .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-4>
         `;
     }
 
@@ -422,26 +427,75 @@ class MyFederationMemberSection2 extends BaseElement {
         }
     }
 
-    verified(){
+    verified() {
       this.currentItem.status = { name: 'Рассматривается' }
       this.saveItem()
     }
 
-    clock(){
+    clock() {
       this.currentItem.status = { name: 'Отложено' }
       this.saveItem()
     }
 
-    reject(){
+    reject() {
       this.currentItem.status = { name: 'Отклонено' }
       this.currentItem.active = false
       this.saveItem()
     }
 
-    accept(){
-      this.currentItem.status = { name: 'Выполнено' }
-      this.currentItem.active = false
-      this.saveItem()
+    async accept() {
+        this.currentItem.status = { name: 'Выполнено' }
+        this.currentItem.active = false
+        switch (this.currentPage) {
+            case 0:
+                await DataSet.addSportsmanProfile(this.currentItem)
+                break;
+            case 1:
+                await DataSet.addRefereeProfile(this.currentItem)
+                break;
+            case 2:
+                await DataSet.addTrainerProfile(this.currentItem)
+                break;
+            case 3:
+                await DataSet.addFederationMemberProfile(this.currentItem)
+                break;
+        }
+        this.saveItem()
+    }
+
+    async add() {
+        switch (this.currentPage) {
+            case 0:
+                if (this.currentItem?.payload) {
+                    this.currentItem.sportsman = await SportsmanDataset.addItem(this.currentItem?.payload)
+                    this.$id("page1").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            case 1:
+                if (this.currentItem?.payload) {
+                    this.currentItem.referee = await RefereeDataset.addItem(this.currentItem?.payload)
+                    this.$id("page2").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            case 2:
+                if (this.currentItem?.payload) {
+                    this.currentItem.trainer = await TrainerDataset.addItem(this.currentItem?.payload)
+                    this.$id("page3").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            case 3:
+                if (this.currentItem?.payload) {
+                    this.currentItem.federationMember = await FederationMemberDataset.addItem(this.currentItem?.payload)
+                    this.$id("page4").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     render() {

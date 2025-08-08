@@ -29,21 +29,21 @@ class MyFederationMember extends BaseElement {
         super();
         this.version = "1.0.0";
         this.sections = [
-            {name: "section1", label: lang`Information`, iconName: 'user'},
+            {name: "section1", label: lang`Member`, iconName: 'federation-member-solid'},
             {name: "section2", label: lang`Requests`, iconName: 'registration-solid'},
         ]
     }
 
     get section1() {
         return html`
-            <my-federation-member-section-1 .sections=${this.sections}></my-federation-member-section-1>
+            <my-federation-member-section-1 .sections=${this.sections} .currentSection=${0}></my-federation-member-section-1>
         `;
     }
 
     get section2() {
         import('./section-2/my-federation-member-section-2.mjs');
         return html`
-            <my-federation-member-section-2 .sections=${this.sections}></my-federation-member-section-2>
+            <my-federation-member-section-2 .sections=${this.sections} .currentSection=${1}></my-federation-member-section-2>
         `;
     }
 

@@ -1,20 +1,21 @@
 import { BaseElement, html, css, cache } from '../../../base-element.mjs'
 
 import './section-1/my-referee-section-1.mjs';
-// import './section-2/my-referee-section-2.mjs';
 
-import '../../../../components/buttons/icon-button.mjs'
+import lang from '../../polyathlon-dictionary.mjs'
 
 class MyReferee extends BaseElement {
     static get properties() {
         return {
             currentSection: { type: BigInt, default: 0 },
+            sections: { type: Array, default: null },
             version: { type: String, default: '1.0.0', save: true },
         }
     }
 
     static get styles() {
         return [
+            BaseElement.styles,
             css`
                 :host {
                     display: flex;
@@ -28,10 +29,7 @@ class MyReferee extends BaseElement {
         super()
         this.version = "1.0.0"
         this.sections = [
-            {label: 'Referee', iconName: 'referee-solid'},
-            {label: 'Sportsman', iconName: 'user'},
-            {label: 'Referee', iconName: 'judge1-solid'},
-            {label: 'Statistic', iconName: 'statistic-solid'},
+            {name: "section1", label: lang`Referee`, iconName: 'referee-man-solid'},
         ]
     }
 
@@ -48,13 +46,13 @@ class MyReferee extends BaseElement {
         `;
     }
 
-    get #section() {
+    get section() {
         return cache(this[this.sections[this.currentSection].name])
     }
 
     render() {
         return html`
-            ${this.#section}
+            ${this.section}
         `;
     }
 
@@ -62,7 +60,7 @@ class MyReferee extends BaseElement {
         super.firstUpdated();
         let params = new URLSearchParams(window.location.search)
         if (params.has('referee')) {
-            localStorage.setItem('currentReferee', params.get('referee'))
+            localStorage.setItem('referee', 'referee:' + params.get('referee'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
     }

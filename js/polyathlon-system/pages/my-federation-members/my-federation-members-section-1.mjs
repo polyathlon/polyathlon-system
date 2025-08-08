@@ -222,7 +222,8 @@ class MyFederationMembersSection1 extends BaseElement {
         this.pageNames = [lang`Information`, lang`Search`]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
+            {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
+            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Personal page`, click: () => this.gotoPersonalPage()},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-referee', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-rotate-right-solid', page: 'my-referee', title: lang`Refresh`, click: () => this.refresh()},
@@ -663,7 +664,6 @@ class MyFederationMembersSection1 extends BaseElement {
         return result
     }
 
-    //                        icon-name="judge1-solid"
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
@@ -833,10 +833,63 @@ class MyFederationMembersSection1 extends BaseElement {
 
     }
 
+    // async getQRCode() {
+    //     const dataURI = await DataSet.getQRCode(this.currentItem._id)
+    //     const blob = await (await fetch(dataURI)).blob();
+    //     window.open(URL.createObjectURL(blob))
+    // }
+
+    async saveToFile(blob, fileName) {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'sportsman-qr.svg');
+        } else {
+            const options = {
+                suggestedName: fileName,
+                types: [
+                    {
+                        description: 'SVG Files',
+                        accept: {
+                            'image/svg+xml': ['.svg']
+                        }
+                    },
+                ],
+                excludeAcceptAllOption: true
+            };
+            try {
+                // Для других браузеров
+                const fileHandle = await window.showSaveFilePicker(options);
+                const writable = await fileHandle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (err){
+                if (err.name === 'AbortError')
+                    return
+                console.error(err);
+                // Для других браузеров
+                const downloadUrl =  window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = fileName + '.svg';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(downloadUrl);
+                    document.body.removeChild(a);
+                }, 0);
+            }
+        }
+    }
+
     async getQRCode() {
-        const dataURI = await DataSet.getQRCode(this.currentItem._id)
+        const dataURI = await DataSet.getQRCode(location.origin+`?federation-member=${this.currentItem._id.split(':')[1]}#my-federation-member`)
         const blob = await (await fetch(dataURI)).blob();
+        await this.saveToFile(blob, this.fio(this.currentItem).slice(0,-1))
         window.open(URL.createObjectURL(blob))
+    }
+
+    gotoPersonalPage() {
+        location.hash = "#my-federation-member";
+        location.search = `?federation-member=${this.currentItem._id.split(':')[1]}`
     }
 
     async showDialog(message, type='message') {

@@ -12,10 +12,9 @@ export default class DataSet {
     }
 
     static find(name, value) {
-        const index = DataSet.#dataSet.findIndex(element =>
+        return DataSet.#dataSet.find(element =>
             element[name] === value || element[name].toLowerCase() === value
         )
-        return index === -1 ? null : DataSet.#dataSet[index]
     }
 
     static #fetchGetItems(token) {
@@ -68,7 +67,7 @@ export default class DataSet {
         }
 
         const newItem = await DataSet.getItem(result.id)
-        DataSet.addToDataset(newItem)
+        // DataSet.addToDataset(newItem)
         return newItem
     }
 
@@ -92,6 +91,58 @@ export default class DataSet {
         if (response.status === 419) {
             const token = await refreshToken()
             response = await DataSet.#fetchGetItem(token, itemId)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
+    static #fetchGetItemByTrainerPC(token, itemId) {
+        return fetch(`https://localhost:4500/api/trainer-pc/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getItemByTrainerPC(itemId) {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetItemByTrainerPC(token, itemId)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetItemByTrainerPC(token, itemId)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
+    static #fetchGetItemByLastName(token, itemId) {
+        return fetch(`https://localhost:4500/api/referee/last-name/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getItemByLastName(itemId) {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetItemByLastName(token, itemId)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetItemByLastName(token, itemId)
         }
 
         const result = await response.json()
@@ -170,6 +221,7 @@ export default class DataSet {
         }
         DataSet.#dataSet.splice(itemIndex, 1)
     }
+
     static fetchCreateTrainerPC(token, item) {
         return fetch(`https://localhost:4500/api/trainer-pc`, {
             method: "POST",
@@ -194,5 +246,30 @@ export default class DataSet {
             throw new Error(result.error)
         }
         return result.number
+    }
+
+    static fetchGetQRCode(token, data) {
+        return fetch(`https://localhost:4500/api/qr-code?data=${data}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        })
+    }
+
+    static async getQRCode(data) {
+        const token = getToken();
+        let response = await DataSet.fetchGetQRCode(token, btoa(data))
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchGetQRCode(token, btoa(data))
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result.qr
     }
 }

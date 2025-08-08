@@ -15,16 +15,18 @@ import DataSource from './my-trainers-datasource.mjs'
 class MyTrainersSection1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
-            dataSource: {type: Object, default: null},
-            statusDataSet: {type: Map, default: null },
-            oldValues: {type: Map, default: null },
-            currentItem: {type: Object, default: null},
-            isModified: {type: Boolean, default: "", local: true},
-            isReady: {type: Boolean, default: true},
+            version: { type: String, default: '1.0.0' },
+            dataSource: { type: Object, default: null },
+            statusDataSet: { type: Map, default: null },
+            oldValues: { type: Map, default: null },
+            currentItem: { type: Object, default: null },
+            isModified: { type: Boolean, default:  "", local: true },
+            sortDirection: { type: Boolean, default: true },
+            isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: {type: BigInt, default: 0},
+            currentPage: { type: BigInt, default: 0 },
+            currentFilter: { type: Object, default: {} },
         }
     }
 
@@ -60,11 +62,43 @@ class MyTrainersSection1 extends BaseElement {
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         margin: 0;
+                        font-weight: 700;
                     }
                 }
 
                 .right-header {
                     grid-area: header2;
+                    display: flex;
+                    justify-content: space-between;
+                    .left-aside {
+                        height: 100%;
+                        icon-button {
+                            height: 100%;
+                            padding: 0 1vw;
+                            /* --icon-height: 100%; */
+                            &[active] {
+                                background-color: var(--layout-background-color);
+                                font-weight: bold;
+                            }
+                            &:hover {
+                                background-color: var(--layout-background-color);
+                                &:only-of-type {
+                                    background-color: inherit;
+                                }
+                            }
+                            &:first-of-type {
+                                padding-left: 0;
+                                font-weight: 700;
+                            }
+                        }
+                    }
+                    .right-aside {
+                        display: flex;
+                        justify-content: right;
+                        align-items: center;
+                        height: 100%;
+                        padding-right: 10px;
+                    }
                 }
 
                 .left-layout {
@@ -83,9 +117,9 @@ class MyTrainersSection1 extends BaseElement {
                 }
 
                 .right-layout {
+                    grid-area: content;
                     overflow-y: auto;
                     overflow-x: hidden;
-                    grid-area: content;
                     display: flex;
                     /* justify-content: space-between; */
                     justify-content: center;
@@ -127,7 +161,7 @@ class MyTrainersSection1 extends BaseElement {
                         align-items: center;
                         justify-content: flex-end;
                         padding: 0 10px;
-                        gap: 1vw;
+                        gap: 1.5vw;
                         simple-button {
                             height: 100%;
                         }
@@ -172,6 +206,8 @@ class MyTrainersSection1 extends BaseElement {
         this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
+            {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
+            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Personal page`, click: () => this.gotoPersonalPage()},
             {iconName: 'excel-import-solid', page: 'my-trainers', title: lang`Export to Excel`, click: () => this.ExportToExcel()},
             {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-trainers', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'pdf-make',  page: 'my-trainer-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
@@ -180,45 +216,179 @@ class MyTrainersSection1 extends BaseElement {
     }
 
     pdfMethod() {
-
         var docInfo = {
+          info: {
+            title: "Trainers",
+            author: "Polyathlon systems",
+          },
 
-            info: {
-                title:'Referees',
-                author:'Polyathlon systems',
+          pageSize: "A4",
+          pageOrientation: 'portrait',
+          pageMargins: [50, 50, 30, 60],
+
+          content: [
+            {
+              text: "Министерство спорта Российской федерации",
+              fontSize: 14,
+              alignment: "center",
+              //margin: [0, 0, 0, 0], //левый, верхний, правый, нижний
             },
-
-            pageSize:'A4',
-            pageOrientation:'landscape',//'portrait'
-            pageMargins:[50,50,30,60],
-
-            header:function(currentPage,pageCount) {
-                return {
-                    text: currentPage.toString() + 'из' + pageCount,
-                    alignment:'right',
-                    margin:[0,30,10,50]
-                }
+            {
+                text: "Всероссийская федерация Полиатлона",
+                fontSize: 14,
+                alignment: "center",
+              },
+            {
+                text: "I-ый этап КУБКА РОССИИ — 2023",
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+                margin: [0, 15, 0, 0],
             },
+            {
+                text: "по полиатлону в спортивной дисциплине",
+                fontSize: 18,
+                alignment: "center",
+            },
+            {
+                text: "3-борье с лыжной гонкой",
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+            },
+              {
+                  columns: [
 
-            content: [
+                      {
+                          width: 'auto',
+                          text: '12-15 января 2023 года',
+                          margin: [0, 15, 0, 0],
+                          fontSize: 12,
+                      },
+                      {
+                          width: '*',
+                          text: 'г.Ковров, Владимирская обл.',
+                          alignment: "right",
+                          margin: [0, 15, 0, 0],
+                          fontSize: 12,
+                      },
+                  ],
+                  columnGap: 20
+              },
 
-                {
-                    text:'Дмитрий',
-                    fontSize:20,
-                    margin:[150, 80, 30,0]
-                    //pageBreak:'after'
+            {
+                text: "СПРАВКА О СОСТАВЕ И КВАЛИФИКАЦИИ",
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+                margin: [0, 30, 0, 0],
+            },
+            {
+                text: "ГЛАВНОЙ СУДЕЙСКОЙ КОЛЛЕГИИ",
+                fontSize: 18,
+                bold:true,
+                alignment: "center",
+                margin: [0, 0, 0, 15],
+            },
+            {
+                table:{
+                    widths:['auto','*'],
+
+                    body:[
+                        ['Первая ячейка первой строки','Вторая ячейка первой строки'],
+                        ['Первая ячейка второй строки','Вторая ячейка второй строки'],
+                        [{text:'текстовое содержимое',bold:true},'Текст']
+                    ],
+                    headerRows:1
                 },
+            },
+            {
+                columns: [
 
-                {
-                    text:'Гуськов',
-                    style:'header'
-                    //pageBreak:'before'
-                }
-            ]
-        }
+                    {
+                        width: 300,
+                        text: 'Главный судья,',
+                        margin: [20, 40, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: 'Д.В.Ерёмкин',
+                        alignment: "left",
+                        margin: [0, 40, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                columns: [
+
+                    {
+                        width: 300,
+                        text: 'судья всероссийской категории',
+                        margin: [20, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: '(г.Ковров, Владимирская обл.)',
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                columns: [
+
+                    {
+                        width: 300,
+                        text: 'Главный секретарь,',
+                        margin: [20, 50, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: 'Е.В.Ерёмкина',
+                        alignment: "left",
+                        margin: [0, 50, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+            {
+                columns: [
+
+                    {
+                        width: 300,
+                        text: 'судья всероссийской категории',
+                        margin: [20, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: '(г.Ковров, Владимирская обл.)',
+                        alignment: "left",
+                        margin: [0, 0, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
+          ],
+
+          styles: {
+            header0:{
+            }
+          }
+        };
+
         pdfMake.createPdf(docInfo).open();
 
-        }
+    }
 
     showPage(page) {
         location.hash = page;
@@ -264,7 +434,8 @@ class MyTrainersSection1 extends BaseElement {
                 middleName: row.middleName,
                 category: row.category?.shortName,
                 region: row.region?.name,
-                trainerId: row.trainerId,
+                city: row.city?.name,
+                trainerPC: row.trainerPC,
                 orderNumber: row.order?.number,
                 link: row.link,
                 orderLink: row.order?.link,
@@ -295,6 +466,7 @@ class MyTrainersSection1 extends BaseElement {
                 "Отчество",
                 "Разряд",
                 "Регион",
+                "Населенный пункт",
                 "Персональный код тренера",
                 "Дата приказа",
                 "Персональная ссылка",
@@ -319,7 +491,7 @@ class MyTrainersSection1 extends BaseElement {
         }
     }
 
-    async exportFromExcel(e) {
+    async importFromExcel(e) {
         const file = e.target.files[0];
         const workbook = XLSX.read(await file.arrayBuffer());
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -349,6 +521,56 @@ class MyTrainersSection1 extends BaseElement {
         });
     }
 
+    async refresh() {
+        const raw_data = await DataSet.getDataSet()
+        const CityDataset = await import('../my-cities/my-cities-dataset.mjs');
+        const cityDataset = CityDataset.default;
+        const RegionDataset = await import('../my-regions/my-regions-dataset.mjs');
+        const regionDataset = RegionDataset.default;
+        const CategoryDataset = await import('../my-trainer-categories/my-trainer-categories-dataset.mjs');
+        const categoryDataset = CategoryDataset.default;
+        const promises = Array()
+        raw_data.forEach(item => {
+            let save = false
+            if (item.region) {
+                const region = regionDataset.find("_id", item.region?._id)
+                if (region) {
+                    if (item.region?._rev !== region._rev) {
+                        item.region = region
+                        save = true
+                    }
+                }
+            }
+            if (item.city) {
+                const city = cityDataset.find("_id", item.city?._id)
+                if (city) {
+                    if (item.city?._rev !== city._rev) {
+                        item.city = city
+                        save = true
+                    }
+                }
+            }
+            if (item.category) {
+                const category = categoryDataset.find("_id", item.category?._id)
+                if (category) {
+                    if (item.category?._rev !== category._rev) {
+                        item.category = category
+                        save = true
+                    }
+                }
+            }
+            if (save) {
+                promises.push(this.dataSource.saveItem(item))
+            }
+        })
+        try {
+            await Promise.allSettled(promises)
+            this.showDialog('Все данные были успешно обновлены!')
+        } catch(e) {
+            this.showDialog('Не все данные успешно обновлены')
+        }
+    }
+
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
@@ -368,12 +590,15 @@ class MyTrainersSection1 extends BaseElement {
     }
 
     async showItem(item) {
+        if (this.currentPage == 1) {
+            this.currentPage = 0
+        }
         if (this.currentItem?._id === item._id) {
             this.copyToClipboard(item.id || item._id)
             return
         }
         if (this.isModified) {
-            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
+            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
                 await this.dataSource.saveItem(this.currentItem);
             }
@@ -426,9 +651,9 @@ class MyTrainersSection1 extends BaseElement {
                 html `<icon-button
                         label=${this.fio(item)}
                         title=${item._id}
-                        image-name=${ item.gender == 0 ? "images/trainer-boy-solid.svg" : "images/trainer-girl-solid.svg" }
+                        image-name=${ item.gender == 0 ? "images/trainer-man-solid.svg" : "images/trainer-woman-solid.svg" }
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
+                        .status=${ { name: item.category?.name || item?._id, icon: 'trainer-category-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>
                 `
@@ -444,7 +669,30 @@ class MyTrainersSection1 extends BaseElement {
         `
     }
 
+    cancelFind() {
+        this.currentPage = 0
+    }
+
+    find() {
+        // alert(JSON.stringify(this.dataSource.findIndex(this.currentFilter)))
+        const result = this.dataSource.find(this.currentFilter)
+        this.currentPage = 0
+        this.dataSource.setCurrentItem(result)
+    }
+
+    get #findFooter() {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.find}>${lang`Find`}</simple-button>
+                <simple-button @click=${this.cancelFind}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
     get #rightFooter() {
+        if (this.currentPage === 1) {
+            return this.#findFooter
+        }
         if (this.isModified) {
             return html`
                 <nav>
@@ -466,9 +714,22 @@ class MyTrainersSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>${lang`Trainers` + ' ('+ this.dataSource?.items?.length +')'}<p></header>
+            <header class="left-header">
+                <p>${lang`Trainers` + ' ('+ this.dataSource?.items?.length +')'}<p>
+                <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
+                <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
+            </header>
             <header class="right-header">
-                ${this.#pageName}
+                <div class="left-aside">
+                    ${this.sections.map( (section, index) =>
+                        html `
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "trainer-man-solid" : "trainer-woman-solid") || section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        `
+                    )}
+                </div>
+                <div class="right-aside">
+                    <aside-button icon-name="search-regular" @click=${this.searchPage}></aside-button>
+                </div>
             </header>
             <div class="left-layout">
                 ${this.#list}
@@ -482,7 +743,7 @@ class MyTrainersSection1 extends BaseElement {
             <footer class="right-footer">
                 ${this.#rightFooter}
             </footer>
-            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.exportFromExcel}/>
+            <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
@@ -492,6 +753,73 @@ class MyTrainersSection1 extends BaseElement {
 
     prevPage() {
         this.currentPage--;
+    }
+
+    searchPage() {
+        this.currentFilter = {}
+        this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
+
+    sortPage() {
+        this.sortDirection = !this.sortDirection
+        this.dataSource.sort(this.sortDirection)
+    }
+
+    filterPage() {
+
+    }
+
+    async saveToFile(blob, fileName) {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'trainer-qr.svg');
+        } else {
+            const options = {
+                suggestedName: fileName,
+                types: [
+                    {
+                        description: 'SVG Files',
+                        accept: {
+                            'image/svg+xml': ['.svg']
+                        }
+                    },
+                ],
+                excludeAcceptAllOption: true
+            };
+            try {
+                // Для других браузеров
+                const fileHandle = await window.showSaveFilePicker(options);
+                const writable = await fileHandle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (err){
+                if (err.name === 'AbortError')
+                    return
+                console.error(err);
+                // Для других браузеров
+                const downloadUrl =  window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = fileName + '.svg';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(downloadUrl);
+                    document.body.removeChild(a);
+                }, 0);
+            }
+        }
+    }
+
+    async getQRCode() {
+        const dataURI = await DataSet.getQRCode(location.origin+`?trainer=${this.currentItem._id.split(':')[1]}#my-trainer`)
+        const blob = await (await fetch(dataURI)).blob();
+        await this.saveToFile(blob, this.fio(this.currentItem).slice(0,-1))
+        window.open(URL.createObjectURL(blob))
+    }
+
+    gotoPersonalPage() {
+        location.hash = "#my-trainer";
+        location.search = `?trainer=${this.currentItem._id.split(':')[1]}`
     }
 
     async showDialog(message, type='message') {
@@ -538,7 +866,7 @@ class MyTrainersSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этот регион?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого тренера?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)
@@ -549,4 +877,5 @@ class MyTrainersSection1 extends BaseElement {
         this.dataSource = new DataSource(this, await DataSet.getDataSet())
     }
 }
+
 customElements.define("my-trainers-section-1", MyTrainersSection1)

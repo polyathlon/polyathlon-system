@@ -3,19 +3,42 @@ import refreshToken, {getToken} from "../../../refresh-token.mjs";
 export default class DataSet {
     static #dataSet;
 
-    // static async getDataSet() {
-    //     if (DataSet.#dataSet) {
-    //         return DataSet.#dataSet
-    //     }
-    //     DataSet.#dataSet = await DataSet.#getItems()
-    //     return DataSet.#dataSet
-    // }
+    static async getDataSet() {
+        if (DataSet.#dataSet) {
+            return DataSet.#dataSet
+        }
+        DataSet.#dataSet = await DataSet.#getItems()
+        return DataSet.#dataSet
+    }
 
     static find(name, value) {
         const index = DataSet.#dataSet.findIndex(element =>
             element[name] === value || element[name].toLowerCase() === value
         )
         return index === -1 ? null : DataSet.#dataSet[index]
+    }
+
+    static #fetchGetItems(token) {
+        return fetch('https://localhost:4500/api/referee', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async #getItems() {
+        const token = getToken()
+        let response = await DataSet.#fetchGetItems(token)
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetItems(token)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        const items = [result]
+        return items
     }
 
     static fetchAddItem(token, item) {
@@ -198,8 +221,8 @@ export default class DataSet {
         return blob ? window.URL.createObjectURL(blob) : blob;
     }
 
-    static fetchGetQRCode(token, item) {
-        return fetch(`https://localhost:4500/api/qr-code?data=123`, {
+    static fetchGetQRCode(token, data) {
+        return fetch(`https://localhost:4500/api/qr-code?data=${data}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -208,13 +231,13 @@ export default class DataSet {
         })
     }
 
-    static async getQRCode(item) {
+    static async getQRCode(data) {
         const token = getToken();
-        let response = await DataSet.fetchGetQRCode(token, item)
+        let response = await DataSet.fetchGetQRCode(token, btoa(data))
 
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchGetQRCode(token, item)
+            response = await DataSet.fetchGetQRCode(token, btoa(data))
         }
         const result = await response.json()
         if (!response.ok) {

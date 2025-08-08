@@ -231,22 +231,17 @@ class MyProfileSection2 extends BaseElement {
         this.oldValues = new Map();
         this.pages = [
             {name: 'page1', iconName: 'user', page: 0, title: lang`User`, click: () => this.gotoPage(0), visible: true},
-            {name: 'page2', iconName: 'sportsman-man-solid', page: 1, title: lang`Become a sportsman`, click: () => this.gotoPage(1)},
-            {name: 'page3', iconName: 'judge1-solid', page: 2, title: lang`Become a referee`, click: () => this.gotoPage(2)},
-            {name: 'page4', iconName: 'trainer-solid', page: 3, title: lang`Become a trainer`, click: () => this.gotoPage(3)},
-            {name: 'page5',iconName: 'federation-member-solid', page: 4, title: lang`Become a federation member`, click: () => this.gotoPage(4)},
+            {name: 'page2', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'sportsman-woman-solid' : 'sportsman-man-solid', page: 1, title: lang`Become a sportsman`, click: () => this.gotoPage(1)},
+            {name: 'page3', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'referee-woman-solid' : 'referee-man-solid', page: 2, title: lang`Become a referee`, click: () => this.gotoPage(2)},
+            {name: 'page4', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'trainer-woman-solid' : 'trainer-man-solid', page: 3, title: lang`Become a trainer`, click: () => this.gotoPage(3)},
+            {name: 'page5',iconName: () => this.currentItem?.personalInfo?.gender  == true ? 'federation-member-woman-solid' : 'federation-member-man-solid', page: 4, title: lang`Become a federation member`, click: () => this.gotoPage(4)},
         ]
+
         this.buttons = [
             {iconName: 'telegram-bot-solid', page: 'my-referee-categories', title: lang`Telegram bot`, click: () => this.telegramBot()},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
-        // this.pageNames = [
-        //     {label: lang`User`, iconName: 'user'},
-        //     {label: lang`Passport`, iconName: 'judge1-solid'},
-        //     {label: lang`Sportsman`, iconName: 'user'},
-        //     {label: lang`Competition`, iconName: 'competition-solid'},
-        // ]
     }
 
     showPage(page) {
@@ -391,18 +386,19 @@ class MyProfileSection2 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
+
     requestIcon(item) {
         switch (item.type) {
             case 1:
-                return "sportsman-solid"
+                return item.payload?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"
             case 2:
-                return "judge1-solid"
+                return item.payload?.gender ? "referee-woman-solid" : "referee-man-solid"
             case 3:
-                return "trainer-solid"
+                return item.payload?.gender ? "trainer-woman-solid" : "trainer-man-solid"
             case 4:
-                return "federation-member-solid"
+                return item.payload?.gender ? "federation-member-woman-solid" : "federation-member-man-solid"
             default:
-                return "sportsman-solid"
+                return "sportsman-man-solid"
         }
     }
 
@@ -541,7 +537,7 @@ class MyProfileSection2 extends BaseElement {
             return html`
                 <nav class="buttons">
                     ${this.pages.map( (button, index) =>
-                        button.visible ? '' : html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
+                        button.visible ? '' : html`<aside-button icon-name=${button.iconName instanceof Function ? button.iconName() : button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
                     }
                 </nav>
             `

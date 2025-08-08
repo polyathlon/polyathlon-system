@@ -50,15 +50,15 @@ class MyFederationMemberSection2List1 extends BaseElement {
     requestIcon(item) {
         switch (item.type) {
             case 1:
-                return "sportsman-solid"
+                return item.payload?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"
             case 2:
-                return "judge1-solid"
+                return item.payload?.gender ? "referee-woman-solid" : "referee-man-solid"
             case 3:
-                return "trainer-solid"
+                return item.payload?.gender ? "trainer-woman-solid" : "trainer-man-solid"
             case 4:
-                return "federation-member-solid"
+                return item.payload?.gender ? "federation-member-woman-solid" : "federation-member-man-solid"
             default:
-                return "sportsman-solid"
+                return "sportsman-man-solid"
         }
     }
 

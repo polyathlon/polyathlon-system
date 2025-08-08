@@ -220,8 +220,8 @@ class MySportsmenSection1 extends BaseElement {
             {iconName: 'filter-regular', page: () => this.#page3(), title: lang`Filter`, click: () => this.gotoPage(2)},
         ]
         this.buttons = [
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
-            // {iconName: 'qrcode-solid', page: 'my-sportsmen', title: 'qrcode', click: () => this.changeStart()},
+            {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
+            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Personal page`, click: () => this.gotoPersonalPage()},
             {iconName: 'excel-import-solid', page: 'my-sportsmen', title: lang`Export to Excel`, click: () => this.exportToExcel()},
             {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-sportsmen', title: lang`Import from Excel`, click: this.ExcelFile},
             {iconName: 'arrow-rotate-right-solid', page: 'my-sportsmen', title: lang`Refresh`, click: () => this.refresh()},
@@ -242,15 +242,71 @@ class MySportsmenSection1 extends BaseElement {
         this.listEnd--;
     }
 
+    fio(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName[0]}.`
+        }
+        if (item.middleName) {
+            result += `${item.middleName[0]}.`
+        }
+        return result
+    }
+
+    async saveToFile(blob, fileName) {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'sportsman-qr.svg');
+        } else {
+            const options = {
+                suggestedName: fileName,
+                types: [
+                    {
+                        description: 'SVG Files',
+                        accept: {
+                            'image/svg+xml': ['.svg']
+                        }
+                    },
+                ],
+                excludeAcceptAllOption: true
+            };
+            try {
+                // Для других браузеров
+                const fileHandle = await window.showSaveFilePicker(options);
+                const writable = await fileHandle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (err){
+                if (err.name === 'AbortError')
+                    return
+                console.error(err);
+                // Для других браузеров
+                const downloadUrl =  window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = fileName + '.svg';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(downloadUrl);
+                    document.body.removeChild(a);
+                }, 0);
+            }
+        }
+    }
+
     async getQRCode() {
-        const dataURI = await DataSet.getQRCode(this.currentItem._id)
+        const dataURI = await DataSet.getQRCode(location.origin+`?sportsman=${this.currentItem._id.split(':')[1]}#my-sportsman`)
         const blob = await (await fetch(dataURI)).blob();
+        await this.saveToFile(blob, this.fio(this.currentItem).slice(0,-1))
         window.open(URL.createObjectURL(blob))
-        // window.open(dataURI)
-        // const image = new Image();
-        // image.src = dataURI;
-        // const w = window.open("");
-        // w.document.write(image.outerHTML);
+    }
+
+    gotoPersonalPage() {
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.currentItem._id.split(':')[1]}`
     }
 
     async getNewFileHandle() {

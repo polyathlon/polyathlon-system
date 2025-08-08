@@ -246,4 +246,109 @@ export default class DataSet {
         }
         return result.token
     }
+
+    static #fetchGetSportsmanProfile(token) {
+        return fetch(`https://localhost:4500/api/sportsman-profile`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getSportsmanProfile() {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetSportsmanProfile(token)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetSportsmanProfile(token)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
+    static #fetchGetRefereeProfile(token) {
+        return fetch(`https://localhost:4500/api/referee-profile`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getRefereeProfile() {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetRefereeProfile(token)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetRefereeProfile(token)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
+    static #fetchGetTrainerProfile(token) {
+        return fetch(`https://localhost:4500/api/trainer-profile`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getTrainerProfile() {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetTrainerProfile(token)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetTrainerProfile(token)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
+    static #fetchGetFederationMemberProfile(token) {
+        return fetch(`https://localhost:4500/api/federation-member-profile`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getFederationMemberProfile() {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetFederationMemberProfile(token)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetFederationMemberProfile(token)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
 }

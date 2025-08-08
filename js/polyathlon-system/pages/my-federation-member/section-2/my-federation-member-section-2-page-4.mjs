@@ -6,8 +6,6 @@ import '../../../../../components/inputs/gender-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
-// import DataSet from './my-sportsmen-dataset.mjs'
-
 import FederationMemberCategoryDataSource from '../../my-federation-member-categories/my-federation-member-categories-datasource.mjs'
 import FederationMemberCategoryDataset from '../../my-federation-member-categories/my-federation-member-categories-dataset.mjs'
 
@@ -17,14 +15,17 @@ import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 
+import FederationMembersDataset from '../../my-federation-members/my-federation-members-dataset.mjs'
+
 class MyFederationMemberSection2Page4 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
-            item: {type: Object, default: null},
             federationMemberCategorySource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: { type: Object, default: null },
+            findDataSource: { type: Object, default: null },
+            item: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
             oldValues: { type: Map, default: null },
         }
@@ -57,6 +58,12 @@ class MyFederationMemberSection2Page4 extends BaseElement {
         ]
     }
 
+    federationMemberShowValue(item) {
+         if (item?.lastName) {
+            return item.lastName
+         }
+    }
+
     cityShowValue(item) {
         return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
     }
@@ -82,9 +89,10 @@ class MyFederationMemberSection2Page4 extends BaseElement {
                 </div>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="category" label="${lang`Category`}:" icon-name="federation-member-category-solid" @icon-click=${() => this.showPage('my-federation-member-categories')} .dataSource=${this.federationMemberCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="federationMemberPC" label="${lang`Federation member PC`}:" icon-name="federation-member-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createFederationMemberPC} .value=${this.item?.payload?.federationMemberPC} @input=${this.validateInput}></simple-input>
+                <simple-input id="federationMember" label="${lang`Federation member`}:" .dataSource=${this.findDataSource} icon-name="federation-member-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.federationMemberShowValue} .value=${this.item?.federationMember} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
-                <simple-input id="federationMemberPC" label="${lang`Federation member PC`}:" icon-name="federation-member-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createFederationMemberPC} .value=${this.item?.payload?.federationMemberPC} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.link} @input=${this.validateInput}></simple-input>
@@ -102,6 +110,81 @@ class MyFederationMemberSection2Page4 extends BaseElement {
             ulid: this.item?.profileUlid,
         })
         target.setValue(id)
+    }
+
+    async findSportsman(e) {
+        const target = e.target
+        let sportsman
+        const value = target.value
+        if (target.isShowList)
+            target.isShowList = false
+        if (!value) {
+            const lastName = this.$id('lastName').value
+            if (!lastName) {
+                await this.errorDialog('Вы не задали фамилию для поиска')
+                return
+            }
+            sportsman = await FederationMembersDataset.getItemByLastName(lastName)
+            if (sportsman.rows.length === 0) {
+                this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
+                return
+            }
+            if (sportsman.rows.length >= 1) {
+                this.findDataSource = {}
+                this.findDataSource.items = sportsman.rows.map(item => item.doc)
+                target.isShowList = true
+                return
+            }
+            sportsman = sportsman.rows[0].doc
+        } else if (value.includes(":")) {
+            sportsman = await FederationMembersDataset.getItem(value)
+        } else if (target.value.includes("-")) {
+            sportsman = await FederationMembersDataset.getItemBySportsmanPC(value)
+            if (sportsman.rows.length === 0) {
+                this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
+                return
+            }
+            if (sportsman.rows.length > 1) {
+                this.parentNode.parentNode.host.showDialog('Найдено несколько спортсменов с таким ID')
+                return
+            }
+            sportsman = sportsman.rows[0].doc
+        } else {
+            sportsman = await FederationMembersDataset.getItemByLastName(value)
+            if (sportsman.rows.length >= 0) {
+                this.findDataSource = sportsman.rows
+            }
+        }
+        if (sportsman) {
+            const inputs = this.$id()
+            sportsman.sportsmanUlid = sportsman._id
+            inputs.forEach(input => {
+                if (input.id in sportsman) {
+                    input.setValue(sportsman[input.id])
+                }
+            })
+            // Object.assign(this.item, sportsman)
+            this.requestUpdate()
+        } else {
+            this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
+        }
+    }
+
+    sportsmanChoose(e) {
+        let sportsman = e.detail
+        if (sportsman) {
+            this.item.federationMember = sportsman
+            // this.$id('sportsman').setValue(sportsman)
+            // sportsman.sportsmanUlid = sportsman._id
+            // const inputs = this.$id()
+            // inputs.forEach(input => {
+            //     if (input.id in sportsman) {
+            //         input.setValue(sportsman[input.id])
+            //     }
+            // })
+            // //Object.assign(this.item, sportsman)
+            this.requestUpdate()
+        }
     }
 
     copyToClipboard(e) {

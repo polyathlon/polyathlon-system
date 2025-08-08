@@ -7,7 +7,7 @@ export default class DataSource {
         this.dataSet = dataSet;
         this.items = this.dataSet.map(item => {
             return item;
-        }).sort( (a, b) => a.name.localeCompare(b.name) )
+        }).sort( (a, b) => (a.lastName || a.name)?.localeCompare(b.lastName) )
         this.component.currentItem = this.getCurrentItem();
     }
 
@@ -15,6 +15,24 @@ export default class DataSource {
         this.items = this.dataSet.filter(item => {
             return item?.country?.name === value?.name;
         }).sort( (a, b) => a.name.localeCompare(b.name) )
+    }
+
+    find(value) {
+        return this.items.find(item =>
+            item.lastName?.includes(value?.lastName)
+        )
+    }
+
+    findIndex(value) {
+        return this.items.findIndex(item =>
+            item.lastName?.includes(value?.lastName)
+        )
+    }
+
+    sort(sortDirection) {
+        this.items.sort( (a, b) =>
+            sortDirection ? a.lastName.localeCompare(b.lastName) : b.lastName.localeCompare(a.lastName)
+        )
     }
 
     getCurrentItem(){
@@ -30,11 +48,12 @@ export default class DataSource {
 
     setCurrentItem(item) {
         sessionStorage.setItem('currentTrainer', item._id)
-        this.component.currentItem = item;
+        this.component.currentItem = item
     }
 
     async addItem(item) {
         const newItem = await DataSet.addItem(item)
+        DataSet.addToDataset(newItem)
         this.addTo(newItem)
     }
 

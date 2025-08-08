@@ -34,7 +34,7 @@ class MyCompetition extends BaseElement {
             {name: "section2", label: lang`Sportsmen`, iconName: 'sportsmen-solid'},
             // {name: "section6", label: lang`Results`, iconName: 'hundred-points-solid'},
             {name: "section6", label: lang`Results`, iconName: 'timer-solid'},
-            {name: "section3", label: lang`Referees`, iconName: 'judge1-solid'},
+            {name: "section3", label: lang`Referees`, iconName: 'referee-man-solid'},
             {name: "section4", label: lang`Statistic`, iconName: 'chart-pie-solid'},
             {name: "section5", label: lang`Requests`, iconName: 'registration-solid'},
         ]
@@ -56,28 +56,28 @@ class MyCompetition extends BaseElement {
     get section3() {
         import('./section-3/my-competition-section-3.mjs');
         return html`
-            <my-competition-section-3 .sections=${this.sections} .currentSection=${2}></my-competition-section-3>
+            <my-competition-section-3 .sections=${this.sections} .currentSection=${3}></my-competition-section-3>
         `;
     }
 
     get section4() {
         import('./section-4/my-competition-section-4.mjs');
         return html`
-            <my-competition-section-4 .sections=${this.sections} .currentSection=${3}></my-competition-section-4>
+            <my-competition-section-4 .sections=${this.sections} .currentSection=${4}></my-competition-section-4>
         `;
     }
 
     get section5() {
         import('./section-5/my-competition-section-5.mjs');
         return html`
-            <my-competition-section-5 .sections=${this.sections} .currentSection=${4}></my-competition-section-5>
+            <my-competition-section-5 .sections=${this.sections} .currentSection=${5}></my-competition-section-5>
         `;
     }
 
     get section6() {
         import('./section-6/my-competition-section-6.mjs');
         return html`
-            <my-competition-section-6 .sections=${this.sections} .currentSection=${5}></my-competition-section-6>
+            <my-competition-section-6 .sections=${this.sections} .currentSection=${2}></my-competition-section-6>
         `;
     }
 
@@ -87,7 +87,7 @@ class MyCompetition extends BaseElement {
 
     render() {
         return html`
-            ${this.section}
+            ${this.#section}
         `;
     }
 

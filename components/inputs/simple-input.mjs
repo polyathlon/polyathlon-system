@@ -20,6 +20,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             currentObject: { type: Object, default: undefined},
             lang: { type: String, default: ''},
             listLabel: { type: Function, default: null, attribute: 'list-name'},
+            showValue: { type: Function, default: null, attribute: 'show-value'},
             isShowList: {type: Boolean, default: false},
             mask: {type: Function, default: undefined},
             textAlign: { type: Boolean, default: false, attribute: 'text-align'},
@@ -162,7 +163,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                 <input type=${this.type}
                     placeholder=${this.placeholder || nothing}
                     ${this.required ? 'required' : ''}
-                    .value=${this.value || ''}
+                    .value=${this.showValue?.(this.value) || this.value || ''}
                     lang=${this.lang || nothing}
                     @input=${this.changeValue}
                     @focus=${this.changeFocus}

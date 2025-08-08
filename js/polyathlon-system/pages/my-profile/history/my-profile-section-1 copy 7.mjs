@@ -232,7 +232,7 @@ class MyProfileSection1 extends BaseElement {
         this.statusDataSet = new Map()
         this.pageNames = [
             {label: 'User', iconName: 'user'},
-            {label: 'Passport', iconName: 'judge1-solid'},
+            {label: 'Passport', iconName: 'referee-man-solid'},
             {label: 'Sportsman', iconName: 'user'},
             {label: 'Competition', iconName: 'competition-solid'},
         ]

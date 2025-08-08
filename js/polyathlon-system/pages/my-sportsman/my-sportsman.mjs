@@ -29,8 +29,7 @@ class MySportsman extends BaseElement {
         super();
         this.version = "1.0.0";
         this.sections = [
-            {name: "section1", label: lang`Information`, iconName: 'user'},
-            {name: "section2", label: lang`Requests`, iconName: 'registration-solid'},
+            {name: "section1", label: lang`Sportsman`, iconName: 'sportsman-solid'},
         ]
     }
 

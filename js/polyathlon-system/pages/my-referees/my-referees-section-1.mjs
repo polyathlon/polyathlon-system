@@ -22,7 +22,7 @@ class MyRefereesSection1 extends BaseElement {
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null },
             isModified: { type: Boolean, default:  "", local: true },
-            sortDirection: { type: Boolean, default: true},
+            sortDirection: { type: Boolean, default: true },
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
@@ -208,8 +208,8 @@ class MyRefereesSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: lang`Referee positions`, click: () => this.showPage('my-referee-positions')},
-            {iconName: 'qrcode-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
-
+            {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
+            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Personal page`, click: () => this.gotoPersonalPage()},
             {iconName: 'excel-import-solid', page: 'my-referee', title: lang`Export to Excel`, click: () => this.exportToExcel()},
             {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-referee', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-rotate-right-solid', page: 'my-referee', title: lang`Refresh`, click: () => this.refresh()},
@@ -390,7 +390,8 @@ class MyRefereesSection1 extends BaseElement {
         };
 
         pdfMake.createPdf(docInfo).open();
-        }
+
+    }
 
     showPage(page) {
         location.hash = page;
@@ -425,6 +426,7 @@ class MyRefereesSection1 extends BaseElement {
     ExcelFile() {
         this.renderRoot.getElementById("fileInput").click();
     }
+
     async exportToExcel(e) {
         const modalResult = await this.showDialog('Вы действительно хотите экспортировать всех судей в Excel?', 'confirm')
         if (modalResult === 'Ok') {
@@ -647,7 +649,6 @@ class MyRefereesSection1 extends BaseElement {
         return result
     }
 
-    //                        icon-name="judge1-solid"
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
@@ -772,10 +773,57 @@ class MyRefereesSection1 extends BaseElement {
 
     }
 
+    async saveToFile(blob, fileName) {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'sportsman-qr.svg');
+        } else {
+            const options = {
+                suggestedName: fileName,
+                types: [
+                    {
+                        description: 'SVG Files',
+                        accept: {
+                            'image/svg+xml': ['.svg']
+                        }
+                    },
+                ],
+                excludeAcceptAllOption: true
+            };
+            try {
+                // Для других браузеров
+                const fileHandle = await window.showSaveFilePicker(options);
+                const writable = await fileHandle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (err){
+                if (err.name === 'AbortError')
+                    return
+                console.error(err);
+                // Для других браузеров
+                const downloadUrl =  window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = fileName + '.svg';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(downloadUrl);
+                    document.body.removeChild(a);
+                }, 0);
+            }
+        }
+    }
+
     async getQRCode() {
-        const dataURI = await DataSet.getQRCode(this.currentItem._id)
+        const dataURI = await DataSet.getQRCode(location.origin+`?referee=${this.currentItem._id.split(':')[1]}#my-referee`)
         const blob = await (await fetch(dataURI)).blob();
+        await this.saveToFile(blob, this.fio(this.currentItem).slice(0,-1))
         window.open(URL.createObjectURL(blob))
+    }
+
+    gotoPersonalPage() {
+        location.hash = "#my-referee";
+        location.search = `?referee=${this.currentItem._id.split(':')[1]}`
     }
 
     async showDialog(message, type='message') {

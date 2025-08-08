@@ -503,6 +503,10 @@ const dictionary = {
         "ru-RU": 'Представитель федерации',
         "en-EN": 'Federation member'
     },
+    'Member': {
+        "ru-RU": 'Представитель',
+        "en-EN": 'Member'
+    },
     'Federation member PC': {
         "ru-RU": 'Персональный код представителя федерации',
         "en-EN": 'Federation member personal code'
@@ -906,6 +910,10 @@ const dictionary = {
     'Become a federation member': {
         "ru-RU": 'Стать представителем федерации',
         "en-EN": 'Become a federation member'
+    },
+    'Personal page': {
+        "ru-RU": 'Персональная страница',
+        "en-EN": 'Personal page'
     },
 }
 

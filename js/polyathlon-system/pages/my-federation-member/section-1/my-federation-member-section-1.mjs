@@ -13,12 +13,9 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import './my-federation-member-section-1-page-1.mjs'
 import './my-federation-member-section-1-list-1.mjs'
-//import './my-competition-section-1-page-2.mjs'
-// import './my-competition-section-2-page-1.mjs'
-// import './my-competition-section-2-list-1.mjs'
 
 import DataSet from './my-federation-member-dataset.mjs'
-//import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
+
 import DataSource from './my-federation-member-datasource.mjs'
 
 class MyFederationMemberSection1 extends BaseElement {
@@ -231,19 +228,19 @@ class MyFederationMemberSection1 extends BaseElement {
         this.statusDataSet = new Map()
         this.currentPage = 0;
         this.listNames = [
-            {label: lang`Federation member`, iconName: ''},
+            {label: lang`Personal page`, iconName: ''},
         ]
         this.oldValues = new Map();
         this.buttons = [
+            {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
         this.pages = [
-            {iconName: 'competition-solid', page: () => this.#page1(), title: lang`Competition`, click: () => this.gotoPage(0)},
-            {iconName: 'age-group-solid', page: () => this.#page2(), title: lang`Age groups`, click: () => this.gotoPage(1)},
-            {iconName: 'location-circle-solid', page: () => this.#page3(), title: lang`Location`, click: () => this.gotoPage(2)},
-            // {iconName: 'map-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
-            {iconName: 'registration-solid', page: () => this.#page1, title: lang`Registration`, click: () => this.gotoPage(5)},
+            {name: 'page1', iconName: 'competition-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
+            {name: 'page2', iconName: 'age-group-solid', page: 1, title: lang`Age groups`, click: () => this.gotoPage(1)},
+            {name: 'page1', iconName: 'location-circle-solid', page: 2, title: lang`Location`, click: () => this.gotoPage(2)},
+            {name: 'page1', iconName: 'registration-solid', page: 5, title: lang`Registration`, click: () => this.gotoPage(5)},
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
         ]
     }
@@ -340,28 +337,20 @@ class MyFederationMemberSection1 extends BaseElement {
     // }
 
     get #page() {
-        return this.pages[this.currentPage].page()
+        return this[this.pages[this.currentPage].name]
     }
 
-    #page1() {
+    get page1() {
         return html`
             <my-federation-member-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-1-page-1>
         `;
     }
 
-    #page2() {
+    get page2() {
         return html`
             <my-federation-member-section-1-page-2 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-1-page-2>
         `;
     }
-
-    #page3() {
-        return html`
-            <my-federation-member-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-1-page-1>
-        `;
-    }
-
-
 
     #list1() {
         return html`
@@ -454,6 +443,68 @@ class MyFederationMemberSection1 extends BaseElement {
 
     prevPage() {
         this.currentPage--;
+    }
+
+    async saveToFile(blob, fileName) {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'sportsman-qr.svg');
+        } else {
+            const options = {
+                suggestedName: fileName,
+                types: [
+                    {
+                        description: 'SVG Files',
+                        accept: {
+                            'image/svg+xml': ['.svg']
+                        }
+                    },
+                ],
+                excludeAcceptAllOption: true
+            };
+            try {
+                // Для других браузеров
+                const fileHandle = await window.showSaveFilePicker(options);
+                const writable = await fileHandle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (err){
+                if (err.name === 'AbortError')
+                    return
+                console.error(err);
+                // Для других браузеров
+                const downloadUrl =  window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = fileName + '.svg';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(downloadUrl);
+                    document.body.removeChild(a);
+                }, 0);
+            }
+        }
+    }
+
+    fio(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName[0]}.`
+        }
+        if (item.middleName) {
+            result += `${item.middleName[0]}.`
+        }
+        return result
+    }
+
+    async getQRCode() {
+        const dataURI = await DataSet.getQRCode(location.origin+`?federation-member=${this.currentItem._id.split(':')[1]}#my-federation-member`)
+        const blob = await (await fetch(dataURI)).blob();
+        await this.saveToFile(blob, this.fio(this.currentItem).slice(0,-1))
+        window.open(URL.createObjectURL(blob))
     }
 
     async showDialog(message, type='message') {

@@ -3,7 +3,7 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/avatar-input.mjs'
 
-class MyCompetitionSection1List1 extends BaseElement {
+class MyTrainerSection1List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0', save: true },
@@ -105,4 +105,4 @@ class MyCompetitionSection1List1 extends BaseElement {
     }
 }
 
-customElements.define("my-trainer-section-1-list-1", MyCompetitionSection1List1);
+customElements.define("my-trainer-section-1-list-1", MyTrainerSection1List1);
