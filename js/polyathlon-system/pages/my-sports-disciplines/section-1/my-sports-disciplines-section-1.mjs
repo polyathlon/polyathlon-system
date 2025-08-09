@@ -682,9 +682,9 @@ class MySportsDisciplinesSection1 extends BaseElement {
 
     gotoTab(index) {
         if (index === 1) {
-            this.currentSection = 1
-            this.currentTab = 1
+            this.parentNode.host.currentSection = index
         } else {
+            // this.parentNode.host.currentTab = index
             this.currentTab = index
         }
     }

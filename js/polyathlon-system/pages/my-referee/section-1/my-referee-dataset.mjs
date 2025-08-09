@@ -168,9 +168,9 @@ export default class DataSet {
         }
         DataSet.#dataSet.splice(itemIndex, 1)
     }
-
-    static fetchUploadAvatar(token, formData, refereeId) {
-        return fetch(`https://localhost:4500/api/upload/referee/avatar/${refereeId}`, {
+    
+    static fetchUploadAvatar(token, formData, id) {
+        return fetch(`https://localhost:4500/api/upload/avatar/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -179,14 +179,14 @@ export default class DataSet {
         })
     }
 
-    static async uploadAvatar(avatar, refereeId) {
+    static async uploadAvatar(avatar, id) {
         const token = getToken();
         const formData = new FormData();
         formData.append("file", avatar);
-        let response = await DataSet.fetchUploadAvatar(token, formData, refereeId)
+        let response = await DataSet.fetchUploadAvatar(token, formData, id)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchUploadAvatar(token, formData, refereeId)
+            response = await DataSet.fetchUploadAvatar(token, formData, id)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -195,8 +195,8 @@ export default class DataSet {
         return result
     }
 
-    static fetchDownloadAvatar(token, refereeId) {
-        return fetch(`https://localhost:4500/api/upload/referee/avatar/${refereeId}`, {
+    static fetchDownloadAvatar(token, id) {
+        return fetch(`https://localhost:4500/api/upload/avatar/${id}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -204,12 +204,12 @@ export default class DataSet {
         })
     }
 
-    static async downloadAvatar(refereeId) {
+    static async downloadAvatar(id) {
         const token = getToken();
-        let response = await DataSet.fetchDownloadAvatar(token, refereeId)
+        let response = await DataSet.fetchDownloadAvatar(token, id)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchDownloadAvatar(token, refereeId)
+            response = await DataSet.fetchDownloadAvatar(token, id)
         }
 
         if (!response.ok) {

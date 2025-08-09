@@ -10,7 +10,8 @@ class MySportsDisciplines extends BaseElement {
     static get properties() {
         return {
             currentSection: { type: BigInt, default: 0 },
-            sectionNames: { type: Array, default: 0 },
+            currentTab: { type: BigInt, default: 0 },
+            sections: { type: Array, default: 0 },
             version: { type: String, default: '1.0.0', save: true },
         }
     }
@@ -39,14 +40,14 @@ class MySportsDisciplines extends BaseElement {
 
     get section1() {
         return html`
-            <my-sports-disciplines-section-1 .sections=${this.sections}></my-sports-disciplines-section-1>
+            <my-sports-disciplines-section-1 .sections=${this.sections} .currentSection=${0} .currentTab=${this.currentTab}></my-sports-disciplines-section-1>
         `;
     }
 
     get section2() {
         import('./section-2/my-sports-disciplines-section-2.mjs');
         return html`
-            <my-sports-disciplines-section-2 .sections=${this.sections}></my-sports-disciplines-section-2>
+            <my-sports-disciplines-section-2 .sections=${this.sections} .currentSection=${1}></my-sports-disciplines-section-2>
         `;
     }
 

@@ -354,7 +354,18 @@ class MyFederationMemberSection1 extends BaseElement {
 
     #list1() {
         return html`
-            <my-federation-member-section-1-list-1 .avatar=${this.avatar} .item=${this.currentItem}></my-federation-member-section-1-list-1>
+            <div class="avatar">
+                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
+            </div>
+            <div class="label">
+                ${this.currentItem?.firstName + ' ' + this.currentItem?.lastName}
+            </div>
+            <fashion-button @click=${this.startTelegramBot}>Telegram Bot</fashion-button>
+            <div class="statistic">
+                <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+                <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
+            </div>
         `;
     }
 
@@ -519,11 +530,11 @@ class MyFederationMemberSection1 extends BaseElement {
 
 
     async saveItem() {
-        if ('_id' in this.currentItem) {
-            await this.dataSource.saveItem(this.currentItem);
-        } else {
-            await this.dataSource.addItem(this.currentItem);
-        }
+        // if ('_id' in this.currentItem) {
+        //     await this.dataSource.saveItem(this.currentItem);
+        // } else {
+        //     await this.dataSource.addItem(this.currentItem);
+        // }
         if (this.avatarFile) {
             let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
             if (!result) return;
@@ -581,9 +592,9 @@ class MyFederationMemberSection1 extends BaseElement {
         this.isFirst  = false;
         this.dataSource = new DataSource(this)
         await this.dataSource.getItem()
-        // if (this.currentItem._id) {
-        //     this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
-        // }
+        if (this.currentItem._id) {
+            this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
+        }
         this.isFirst = true;
     }
 }

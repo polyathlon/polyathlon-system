@@ -96,8 +96,8 @@ class MyFederationMemberSection1List1 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.isFirst  = false;
-        this.avatar = null; // await this.downloadAvatar();
+        // this.isFirst  = false;
+        // this.avatar = null; // await this.downloadAvatar();
         this.isFirst = true;
     }
 }
