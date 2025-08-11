@@ -273,6 +273,7 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'lot9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
             {name: 'lot10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
         ]
+        this.resultNames = ['shooting', 'swimming', 'sprinting', 'throwing', 'running', 'pullUps', 'pushUps', 'skiing', 'rollerSkiing', 'jumping'];
     }
 
     pdfMethod() {
@@ -287,17 +288,22 @@ class MyCompetitionSection6 extends BaseElement {
 
     }
 
+    getPoints(a) {
+        return a[this.resultNames[this.currentPage]]?.points ?? 0;
+    }
+
     sportsPlace() {
-        const item = this.dataSource.items.map(item => item).sort( (a, b) =>
-            a.points - b.points
-        )
-        item.reduce((a, b) => {
+        const item = this.dataSource.items.map(item => item).sort((a, b) => a.gender - b.gender || this.getPoints(b) - this.getPoints(a))
+        item.reduce((a, b, index) => {
+            if (index != 0 && item[index - 1].gender != b.gender)
+                a = 0
             if (b.place != a + 1) {
                 b.place = a + 1
                 this.dataSource.saveItem(b);
             }
             return a + 1
         }, 0)
+        this.requestUpdate();
     }
 
     showPage(page) {

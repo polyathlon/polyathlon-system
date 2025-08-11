@@ -249,7 +249,7 @@ class MyFederationMemberSection2 extends BaseElement {
         this.pages = [
             {name: 'page1', iconName: 'sportsman-man-solid', page: 0, title: lang`Sportsman`, click: () => this.gotoPage(0)},
             {name: 'page2', iconName: 'referee-man-solid', page: 1, title: lang`Referee`, click: () => this.gotoPage(1)},
-            {name: 'page3', iconName: 'trainer-solid', page: 2, title: lang`Trainer`, click: () => this.gotoPage(2)},
+            {name: 'page3', iconName: 'trainer-man-solid', page: 2, title: lang`Trainer`, click: () => this.gotoPage(2)},
             {name: 'page4',iconName: 'federation-member-solid', page: 4, title: lang`Federation member`, click: () => this.gotoPage(3)},
         ]
     }

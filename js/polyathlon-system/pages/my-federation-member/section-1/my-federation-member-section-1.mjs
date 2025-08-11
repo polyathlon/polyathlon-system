@@ -355,7 +355,7 @@ class MyFederationMemberSection1 extends BaseElement {
     #list1() {
         return html`
             <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
+                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || (this.currentItem.gender == true ? 'images/federation-member-woman-solid.svg' : 'images/federation-member-man-solid.svg')} @input=${this.validateAvatar}></avatar-input>` : ''}
             </div>
             <div class="label">
                 ${this.currentItem?.firstName + ' ' + this.currentItem?.lastName}

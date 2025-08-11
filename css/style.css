@@ -32,4 +32,5 @@ body {
     --form-color: gray;
     --form-input-color: red;
     --layout-background-color: rgba(255, 0, 255, 0.1);
+    --table-group-background-color: red;
 }

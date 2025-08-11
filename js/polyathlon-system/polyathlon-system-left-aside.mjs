@@ -49,7 +49,7 @@ class PolyathlonSystemLeftAside extends BaseElement {
             {iconName: 'house-sharp-solid', title: 'Home', page: 'home-page', click: () => this.showPage('')},
             {iconName: 'user', title: 'Profile', page: 'my-profile', click: () => this.showPage('my-profile')},
             {iconName: 'referee-man-solid', page: 'my-referees', title: lang`Referees`, click: () => this.showPage('my-referees')},
-            {iconName: 'trainer-solid', page: 'my-trainers', title: lang`Trainers`, click: () => this.showPage('my-trainers')},
+            {iconName: 'trainer-man-solid', page: 'my-trainers', title: lang`Trainers`, click: () => this.showPage('my-trainers')},
             {iconName: 'sportsman-man-solid', page: 'my-sportsmen', title: lang`Sportsmen`, click: () => this.showPage('my-sportsmen')},
             {iconName: 'competition-solid', page: 'my-competitions', title: lang`Competitions`, click: () => this.showPage('my-competitions')},
             // {iconName: 'registration-solid', page: 'my-sportsman-registrations', title: 'Registration', click: () => this.showPage('my-sportsman-registrations')},
@@ -65,8 +65,8 @@ class PolyathlonSystemLeftAside extends BaseElement {
             {iconName: 'table-list-solid', page: 'my-sports-discipline-components', title: lang`Sports components`, click: () => this.showPage('my-sports-discipline-components')},
             {iconName: 'bell-sharp-solid', page: 'my-notifications', title: lang`Notifications`, blink: 1, click: () => this.showPage('my-notifications')},
             {iconName: 'settings-solid', page: 'my-settings', title: lang`Settings`, click: () => this.showPage('my-settings')},
-            // {iconName: 'user', page: 'my-referee', title: 'Settings', click: () => this.showPage('my-referee')},
-            // {iconName: 'trainer-solid', page: 'my-trainer', title: 'My Trainer', click: () => this.showPage('my-trainer')},
+
+
         ]
     }
 

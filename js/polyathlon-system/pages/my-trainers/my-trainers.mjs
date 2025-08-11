@@ -28,7 +28,7 @@ class MyTrainers extends BaseElement {
     constructor() {
         super();
         this.sections = [
-            {name: "section1", label: lang`Trainer`, iconName: 'trainer-solid'},
+            {name: "section1", label: lang`Trainer`, iconName: 'trainer-man-solid'},
         ]
         this.version = "1.0.0";
     }

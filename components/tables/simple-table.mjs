@@ -107,7 +107,7 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
 
                 .group {
                     height: 2em;
-                    background-color: var(--layout-background-color);
+                    background-color: var(--table-group-background-color);
                 }
 
                 thead[hidden] {
@@ -178,6 +178,14 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
         this.fire('input')
     }
 
+    maxColumns() {
+        return Math.max(this.columns.map(column => column.length))
+    }
+
+    showGroup(row, index) {
+        return html`<tr class="group"><td colspan="${this.maxColumns()}">${this.groups[0].label instanceof Function ? this.groups[0].label(row) : this.groups[0].label ? row[this.groups[0].name] + ' ' + this.groups[0].label : this.groups[0].name}</td></tr>`
+    }
+
     render() {
         return html`
             <table id="example" class="display nowrap dataTable dtr-inline collapsed" style="width: 100%;" aria-describedby="example_info">
@@ -204,10 +212,10 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                     )}
                 </thead>
                 <tbody>
-                    ${this.rows?.map((row, index) =>
-                        index === 0 ?
+                    ${this.rows?.map((row, index, rows) =>
+                        index === 0 || (this.groups && row[this.groups[0].name] != rows[index-1][this.groups[0].name]) ?
                         html`
-                            <tr class="group"><td colspan="${this.columns[0].length}">${index + ' смена'}</td></tr>
+                            ${this.groups?.length ? this.showGroup(row, index) : ''}
                             <tr @click=${(e) => e.details = index}>
                                 ${this.columns[0]?.map((column, index) => (column?.colspan ?? 1) > 1 ? this.columns?.[1].filter(item => item.parent === column.name).map(item =>
                                 html`

@@ -351,7 +351,7 @@ class MyRefereeSection1 extends BaseElement {
     #list1() {
         return html`
             <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
+                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || (this.currentItem.gender == true ? 'images/referee-woman-solid.svg' : 'images/referee-man-solid.svg')} @input=${this.validateAvatar}></avatar-input>` : ''}
             </div>
             <div class="label">
                 ${this.currentItem?.firstName + ' ' + this.currentItem?.lastName}
