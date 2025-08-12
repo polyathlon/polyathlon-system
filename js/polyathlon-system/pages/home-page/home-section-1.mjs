@@ -88,7 +88,7 @@ class HomeSection1 extends BaseElement {
     render() {
         return html`
             <div class="left-layout">
-                <img src="images/home/robot.png" alt="robot">
+                <img src="images/robot.png" alt="robot">
             </div>
             <div class="right-layout">
                 <div>
