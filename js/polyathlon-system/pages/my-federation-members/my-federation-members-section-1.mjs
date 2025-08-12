@@ -881,7 +881,7 @@ class MyFederationMembersSection1 extends BaseElement {
     }
 
     async getQRCode() {
-        const dataURI = await DataSet.getQRCode(location.origin+`?federation-member=${this.currentItem._id.split(':')[1]}#my-federation-member`)
+        const dataURI = await DataSet.getQRCode(location.origin+`/system?federation-member=${this.currentItem._id.split(':')[1]}#my-federation-member`)
         const blob = await (await fetch(dataURI)).blob();
         await this.saveToFile(blob, this.fio(this.currentItem).slice(0,-1))
         window.open(URL.createObjectURL(blob))

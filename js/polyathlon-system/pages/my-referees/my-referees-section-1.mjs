@@ -815,7 +815,7 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     async getQRCode() {
-        const dataURI = await DataSet.getQRCode(location.origin+`?referee=${this.currentItem._id.split(':')[1]}#my-referee`)
+        const dataURI = await DataSet.getQRCode(location.origin+`/system?referee=${this.currentItem._id.split(':')[1]}#my-referee`)
         const blob = await (await fetch(dataURI)).blob();
         await this.saveToFile(blob, this.fio(this.currentItem).slice(0,-1))
         window.open(URL.createObjectURL(blob))
