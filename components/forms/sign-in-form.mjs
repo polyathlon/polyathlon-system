@@ -231,7 +231,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
 
     static fetchSendGoogleToken(token) {
-        return fetch('https://${HOST}:4500/api/sign-in-google', {
+        return fetch(`https://${HOST}:4500/api/sign-in-google`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'

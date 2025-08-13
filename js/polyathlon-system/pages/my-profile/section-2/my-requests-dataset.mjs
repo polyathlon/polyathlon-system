@@ -1,6 +1,6 @@
 import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
-import {HOST} from "../../polyathlon-system-config.mjs";
+import {HOST} from "../../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
