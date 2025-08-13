@@ -1,5 +1,7 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
+import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+
 import { formStyles } from './form-css.mjs'
 
 import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refresh-token.mjs";
@@ -13,6 +15,7 @@ import '../inputs/simple-informer.mjs';
 import '../buttons/close-button.mjs';
 
 import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
+
 
 class SignUpForm extends BaseElement {
     static get properties() {
@@ -603,7 +606,7 @@ class SignUpForm extends BaseElement {
     }
 
     static fetchCheckUsername(user) {
-        return fetch(`https://localhost:4500/api/sign-up/check-username`, {
+        return fetch(`https://${HOST}:4500/api/sign-up/check-username`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -623,7 +626,7 @@ class SignUpForm extends BaseElement {
     }
 
     static fetchCheckEmail(user) {
-        return fetch(`https://localhost:4500/api/sign-up/check-email`, {
+        return fetch(`https://${HOST}:4500/api/sign-up/check-email`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -643,7 +646,7 @@ class SignUpForm extends BaseElement {
     }
 
     static fetchSendSimpleUser(user) {
-        return fetch(`https://localhost:4500/api/sign-up`, {
+        return fetch(`https://${HOST}:4500/api/sign-up`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -671,7 +674,7 @@ class SignUpForm extends BaseElement {
 
 
     static fetchSimpleUserInfo(token) {
-        return fetch(`https://localhost:4500/api/user`, {
+        return fetch(`https://${HOST}:4500/api/user`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             },

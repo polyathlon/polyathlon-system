@@ -1,5 +1,7 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
+import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+
 import { formStyles } from './form-css.mjs'
 
 import refreshToken, { getToken } from "../../js/polyathlon-system/refresh-token.mjs";
@@ -108,7 +110,7 @@ class VerifyEmailForm extends BaseElement {
     }
 
     static #fetchVerifyEmailRequest(token) {
-        return fetch(`https://localhost:4500/api/verify-email`, {
+        return fetch(`https://${HOST}:4500/api/verify-email`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json;charset=utf-8'
@@ -141,7 +143,7 @@ class VerifyEmailForm extends BaseElement {
     }
 
     static #fetchVerifyEmail(code, token) {
-        return fetch(`https://localhost:4500/api/verify-email`, {
+        return fetch(`https://${HOST}:4500/api/verify-email`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,

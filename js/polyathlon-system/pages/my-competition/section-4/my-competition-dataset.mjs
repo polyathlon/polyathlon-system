@@ -1,5 +1,7 @@
 import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
+import {HOST} from "../../../polyathlon-system-config.mjs";
+
 export default class DataSet {
     static #dataSet;
 
@@ -19,7 +21,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition`, {
+        return fetch(`https://${HOST}:4500/api/competition`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -52,7 +54,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/competition/${itemId}`, {
+        return fetch(`https://${HOST}:4500/api/competition/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -78,7 +80,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition`, {
+        return fetch(`https://${HOST}:4500/api/competition`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -111,7 +113,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/my-competition//${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:4500/api/my-competition//${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -147,7 +149,7 @@ export default class DataSet {
     }
 
     static fetchUploadAvatar(token, formData, competitionId) {
-        return fetch(`https://localhost:4500/api/upload/competition/avatar/${competitionId}`, {
+        return fetch(`https://${HOST}:4500/api/upload/competition/avatar/${competitionId}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -173,7 +175,7 @@ export default class DataSet {
     }
 
     static fetchDownloadAvatar(token, competitionId) {
-        return fetch(`https://localhost:4500/api/upload/competition/avatar/${competitionId}`, {
+        return fetch(`https://${HOST}:4500/api/upload/competition/avatar/${competitionId}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -199,7 +201,7 @@ export default class DataSet {
     }
 
     static fetchCreateCompetitionId(token, item) {
-        return fetch(`https://localhost:4500/api/competition-id`, {
+        return fetch(`https://${HOST}:4500/api/competition-id`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,

@@ -19,6 +19,8 @@ import '../auth/vk-auth.mjs';
 
 import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
 
+import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+
 import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refresh-token.mjs";
 
 customElements.define("sign-in-form", class SignInForm extends BaseElement {
@@ -172,7 +174,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     //     //     state: params.get("state"),
     //     // }
 
-    //     const response = await fetch("https://localhost:4500/api/sign-in-vk", {
+    //     const response = await fetch(`https://${HOST}:4500/api/sign-in-vk`, {
     //         method: 'POST',
     //         mode: 'cors',
     //         headers: {
@@ -193,7 +195,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
 
     static fetchGetVKToken() {
-        return fetch("https://localhost:4500/api/sign-in-vk", {
+        return fetch(`https://${HOST}:4500/api/sign-in-vk`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -229,7 +231,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
 
     static fetchSendGoogleToken(token) {
-        return fetch('https://localhost:4500/api/sign-in-google', {
+        return fetch('https://${HOST}:4500/api/sign-in-google', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -290,7 +292,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     getCodeChallenge(obj) {
-        fetch('https://localhost:4500/api/sign-in-vk', {
+        fetch(`https://${HOST}:4500/api/sign-in-vk`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -392,7 +394,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     static fetchSendSimpleUser(user) {
-        return fetch('https://localhost:4500/api/sign-in', {
+        return fetch(`https://${HOST}:4500/api/sign-in`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -434,7 +436,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     static fetchSimpleUserInfo(token) {
-        return fetch(`https://localhost:4500/api/user`, {
+        return fetch(`https://${HOST}:4500/api/user`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             },

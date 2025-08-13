@@ -1,5 +1,7 @@
+import {HOST} from "./polyathlon-system-config.mjs";
+
 export default async function refreshToken() {
-    const response = await fetch('https://localhost:4500/api/refresh-token', {
+    const response = await fetch(`https://${HOST}:4500/api/refresh-token`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'

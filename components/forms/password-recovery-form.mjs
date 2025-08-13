@@ -6,6 +6,8 @@ import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refr
 
 import '../dialogs/modal-dialog.mjs';
 
+import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+
 import '../inputs/simple-input.mjs';
 import '../inputs/email-input.mjs';
 import '../inputs/password-input.mjs';
@@ -634,7 +636,7 @@ class PasswordRecoveryForm extends BaseElement {
     }
 
     static fetchCheckUsername(user) {
-        return fetch(`https://localhost:4500/api/verify-email/email/${user}`, {
+        return fetch(`https://${HOST}:4500/api/verify-email/email/${user}`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             }
@@ -653,7 +655,7 @@ class PasswordRecoveryForm extends BaseElement {
     }
 
     static fetchCheckEmail(user) {
-        return fetch(`https://localhost:4500/api/verify-email/check-email`, {
+        return fetch(`https://${HOST}:4500/api/verify-email/check-email`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -673,7 +675,7 @@ class PasswordRecoveryForm extends BaseElement {
     }
 
     static fetchPasswordRecoveryRequest(user) {
-        return fetch(`https://localhost:4500/api/password-recovery/request`, {
+        return fetch(`https://${HOST}:4500/api/password-recovery/request`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -724,7 +726,7 @@ class PasswordRecoveryForm extends BaseElement {
 
 
     static fetchPasswordRecovery(code, token) {
-        return fetch(`https://localhost:4500/api/password-recovery`, {
+        return fetch(`https://${HOST}:4500/api/password-recovery`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
