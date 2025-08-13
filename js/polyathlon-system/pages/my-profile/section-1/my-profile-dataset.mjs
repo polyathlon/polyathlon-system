@@ -1,5 +1,7 @@
 import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
+import {HOST} from "../../../polyathlon-system-config.mjs";
+
 export default class DataSet {
     static #dataSet;
 
@@ -19,7 +21,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/profile', {
+        return fetch(`https://${HOST}:4500/api/profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -42,7 +44,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/country`, {
+        return fetch(`https://${HOST}:4500/api/country`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -75,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/profile`, {
+        return fetch(`https://${HOST}:4500/api/profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -101,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/profile`, {
+        return fetch(`https://${HOST}:4500/api/profile`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -134,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/profile/?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:4500/api/profile/?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -170,7 +172,7 @@ export default class DataSet {
     }
 
     static fetchUploadAvatar(token, formData) {
-        return fetch(`https://localhost:4500/api/upload/avatar`, {
+        return fetch(`https://${HOST}:4500/api/upload/avatar`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -196,7 +198,7 @@ export default class DataSet {
     }
 
     static fetchDownloadAvatar(token) {
-        return fetch(`https://localhost:4500/api/upload/avatar`, {
+        return fetch(`https://${HOST}:4500/api/upload/avatar`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -224,7 +226,7 @@ export default class DataSet {
     }
 
     static fetchTelegramToken(token) {
-        return fetch(`https://localhost:4500/api/telegram-token`, {
+        return fetch(`https://${HOST}:4500/api/telegram-token`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -248,7 +250,7 @@ export default class DataSet {
     }
 
     static #fetchGetSportsmanProfile(token) {
-        return fetch(`https://localhost:4500/api/sportsman-profile`, {
+        return fetch(`https://${HOST}:4500/api/sportsman-profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -274,7 +276,7 @@ export default class DataSet {
     }
 
     static #fetchGetRefereeProfile(token) {
-        return fetch(`https://localhost:4500/api/referee-profile`, {
+        return fetch(`https://${HOST}:4500/api/referee-profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -300,7 +302,7 @@ export default class DataSet {
     }
 
     static #fetchGetTrainerProfile(token) {
-        return fetch(`https://localhost:4500/api/trainer-profile`, {
+        return fetch(`https://${HOST}:4500/api/trainer-profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -326,7 +328,7 @@ export default class DataSet {
     }
 
     static #fetchGetFederationMemberProfile(token) {
-        return fetch(`https://localhost:4500/api/federation-member-profile`, {
+        return fetch(`https://${HOST}:4500/api/federation-member-profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

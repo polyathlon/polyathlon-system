@@ -1,5 +1,7 @@
 import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
+import {HOST} from "../../../polyathlon-system-config.mjs";
+
 export default class DataSet {
     static #dataSet;
 
@@ -19,7 +21,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/sportsman', {
+        return fetch(`https://${HOST}:4500/api/sportsman`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -42,7 +44,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman`, {
+        return fetch(`https://${HOST}:4500/api/sportsman`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -75,7 +77,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/sportsman/${itemId}`, {
+        return fetch(`https://${HOST}:4500/api/sportsman/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -101,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman`, {
+        return fetch(`https://${HOST}:4500/api/sportsman`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -134,7 +136,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:4500/api/sportsman/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -170,7 +172,7 @@ export default class DataSet {
     }
 
     static fetchUploadAvatar(token, formData, id) {
-        return fetch(`https://localhost:4500/api/upload/avatar/${id}`, {
+        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -196,7 +198,7 @@ export default class DataSet {
     }
 
     static fetchDownloadAvatar(token, id) {
-        return fetch(`https://localhost:4500/api/upload/avatar/${id}`, {
+        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -222,7 +224,7 @@ export default class DataSet {
     }
 
     static fetchGetQRCode(token, data) {
-        return fetch(`https://localhost:4500/api/qr-code?data=${data}`, {
+        return fetch(`https://${HOST}:4500/api/qr-code?data=${data}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,

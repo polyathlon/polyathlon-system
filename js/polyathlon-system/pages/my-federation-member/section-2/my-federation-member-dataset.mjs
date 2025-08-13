@@ -1,5 +1,7 @@
 import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
+import {HOST} from "../../../polyathlon-system-config.mjs";
+
 export default class DataSet {
     static #dataSet;
     static #parentId;
@@ -20,7 +22,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token, id) {
-        return fetch(`https://localhost:4500/api/requests/${id}`, {
+        return fetch(`https://${HOST}:4500/api/requests/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -45,7 +47,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item, id) {
-        return fetch(`https://localhost:4500/api/requests/${id}`, {
+        return fetch(`https://${HOST}:4500/api/requests/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -77,7 +79,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/request/${itemId}`, {
+        return fetch(`https://${HOST}:4500/api/request/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -103,7 +105,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/request/${item._id}`, {
+        return fetch(`https://${HOST}:4500/api/request/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -141,7 +143,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/request/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:4500/api/request/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -177,7 +179,7 @@ export default class DataSet {
     }
 
     static fetchGetQRCode(token, data) {
-        return fetch(`https://localhost:4500/api/qr-code?${data}`, {
+        return fetch(`https://${HOST}:4500/api/qr-code?${data}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -202,7 +204,7 @@ export default class DataSet {
     }
 
     static fetchAddSportsmanProfile(token, item) {
-        return fetch(`https://localhost:4500/api/sportsman-profile`, {
+        return fetch(`https://${HOST}:4500/api/sportsman-profile`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -228,7 +230,7 @@ export default class DataSet {
     }
 
     static fetchAddFederationMemberProfile(token, item) {
-        return fetch(`https://localhost:4500/api/federation-member-profile`, {
+        return fetch(`https://${HOST}:4500/api/federation-member-profile`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -254,7 +256,7 @@ export default class DataSet {
     }
 
     static fetchAddTrainerProfile(token, item) {
-        return fetch(`https://localhost:4500/api/trainer-profile`, {
+        return fetch(`https://${HOST}:4500/api/trainer-profile`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -280,7 +282,7 @@ export default class DataSet {
     }
 
     static fetchAddRefereeProfile(token, item) {
-        return fetch(`https://localhost:4500/api/referee-profile`, {
+        return fetch(`https://${HOST}:4500/api/referee-profile`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,

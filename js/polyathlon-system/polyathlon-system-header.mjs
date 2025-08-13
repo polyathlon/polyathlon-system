@@ -1,5 +1,7 @@
 import { BaseElement, html, css } from '../base-element.mjs'
 
+import {HOST} from "./polyathlon-system-config.mjs";
+
 import '../../components/buttons/toggle-button.mjs';
 
 import lang from './polyathlon-dictionary.mjs';
@@ -252,7 +254,7 @@ class PolyathlonSystemHeader extends BaseElement {
     }
 
     createEventSource() {
-        this.eventSource = new EventSource(`https://localhost:4500/api/sse?token=${this.getToken()}`)
+        this.eventSource = new EventSource(`https://${HOST}:4500/api/sse?token=${this.getToken()}`)
         this.eventSource.onmessage = (event) => {
             console.log(event);
         };
@@ -271,7 +273,7 @@ class PolyathlonSystemHeader extends BaseElement {
 
     async getNotificationOffset(projectId) {
         const token = await this.getToken();
-        return fetch(`https://localhost:4500/api/notification-offset`, {
+        return fetch(`https://${HOST}:4500/api/notification-offset`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }

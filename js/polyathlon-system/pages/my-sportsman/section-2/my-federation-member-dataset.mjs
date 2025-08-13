@@ -1,5 +1,7 @@
 import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
+import {HOST} from "../../../polyathlon-system-config.mjs";
+
 export default class DataSet {
     static #dataSet;
     static #parentId;
@@ -20,7 +22,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token, id) {
-        return fetch(`https://localhost:4500/api/federation-members/${id}`, {
+        return fetch(`https://${HOST}:4500/api/federation-members/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -45,7 +47,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item, id) {
-        return fetch(`https://localhost:4500/api/competition-sportsman/${id}`, {
+        return fetch(`https://${HOST}:4500/api/competition-sportsman/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -77,7 +79,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/federation-member/${itemId}`, {
+        return fetch(`https://${HOST}:4500/api/federation-member/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -103,7 +105,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/federation-member`, {
+        return fetch(`https://${HOST}:4500/api/federation-member`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -136,7 +138,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/federation-member/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:4500/api/federation-member/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -172,7 +174,7 @@ export default class DataSet {
     }
 
     static fetchGetQRCode(token, data) {
-        return fetch(`https://localhost:4500/api/qr-code?${data}`, {
+        return fetch(`https://${HOST}:4500/api/qr-code?${data}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,

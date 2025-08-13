@@ -1,5 +1,7 @@
 import refreshToken, {getToken} from "../../refresh-token.mjs";
 
+import {HOST} from "../../polyathlon-system-config.mjs";
+
 export default class DataSet {
     static #dataSet;
 
@@ -12,7 +14,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch('https://localhost:4500/api/competition-stages', {
+        return fetch(`https://${HOST}:4500/api/competition-stages`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -37,7 +39,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition-stage`, {
+        return fetch(`https://${HOST}:4500/api/competition-stage`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -70,7 +72,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://localhost:4500/api/competition-stage/${itemId}`, {
+        return fetch(`https://${HOST}:4500/api/competition-stage/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -96,7 +98,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition-stage/${item._id}`, {
+        return fetch(`https://${HOST}:4500/api/competition-stage/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -129,7 +131,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://localhost:4500/api/competition-stage/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:4500/api/competition-stage/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
