@@ -13,21 +13,12 @@ export default class DataSet {
         return DataSet.#dataSet
     }
 
-    static #fetchGetItems(token) {
-        return fetch(`https://${HOST}:4500/api/competition-stages`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
+    static #fetchGetItems() {
+        return fetch(`https://${HOST}:4500/api/competition-stages`)
     }
 
     static async #getItems() {
-        const token = getToken()
-        let response = await DataSet.#fetchGetItems(token)
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.#fetchGetItems(token)
-        }
+        let response = await DataSet.#fetchGetItems()
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)

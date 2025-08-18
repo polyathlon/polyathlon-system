@@ -9,7 +9,7 @@ import './pages/home-page/home-page.mjs'
 class PolyathlonSystem extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true, category: 'settings' },
+            version: { type: String, default: '1.0.0' },
             successUserIn: { type: Boolean, default: false, attribute: 'auth', reflect: true, local: true},
         }
     }

@@ -769,6 +769,12 @@ class MyRefereesSection1 extends BaseElement {
         this.dataSource.sort(this.sortDirection)
     }
 
+    gotoSection(index) {
+        if (index !== this.currentSection) {
+            this.parentNode.host.currentSection = index;
+        }
+    }
+
     filterPage() {
 
     }
