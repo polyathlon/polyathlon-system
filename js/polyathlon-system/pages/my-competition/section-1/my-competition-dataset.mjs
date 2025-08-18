@@ -148,8 +148,8 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchUploadAvatar(token, formData, competitionId) {
-        return fetch(`https://${HOST}:4500/api/upload/competition/avatar/${competitionId}`, {
+    static fetchUploadAvatar(token, formData, id) {
+        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -158,14 +158,14 @@ export default class DataSet {
         })
     }
 
-    static async uploadAvatar(avatar, competitionId) {
+    static async uploadAvatar(avatar, id) {
         const token = getToken();
         const formData = new FormData();
         formData.append("file", avatar);
-        let response = await DataSet.fetchUploadAvatar(token, formData, competitionId)
+        let response = await DataSet.fetchUploadAvatar(token, formData, id)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchUploadAvatar(token, formData, competitionId)
+            response = await DataSet.fetchUploadAvatar(token, formData, id)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -174,8 +174,8 @@ export default class DataSet {
         return result
     }
 
-    static fetchDownloadAvatar(token, competitionId) {
-        return fetch(`https://${HOST}:4500/api/upload/competition/avatar/${competitionId}`, {
+    static fetchDownloadAvatar(token, id) {
+        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -183,12 +183,12 @@ export default class DataSet {
         })
     }
 
-    static async downloadAvatar(competitionId) {
+    static async downloadAvatar(id) {
         const token = getToken();
-        let response = await DataSet.fetchDownloadAvatar(token, competitionId)
+        let response = await DataSet.fetchDownloadAvatar(token, id)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchDownloadAvatar(token, competitionId)
+            response = await DataSet.fetchDownloadAvatar(token, id)
         }
 
         if (!response.ok) {
@@ -209,6 +209,31 @@ export default class DataSet {
             },
             body: JSON.stringify(item)
         })
+    }
+
+    static fetchGetQRCode(token, data) {
+        return fetch(`https://${HOST}:4500/api/qr-code?data=${data}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        })
+    }
+
+    static async getQRCode(data) {
+        const token = getToken();
+        let response = await DataSet.fetchGetQRCode(token, btoa(data))
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchGetQRCode(token, btoa(data))
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result.qr
     }
 
     static async createCompetitionPC(item) {

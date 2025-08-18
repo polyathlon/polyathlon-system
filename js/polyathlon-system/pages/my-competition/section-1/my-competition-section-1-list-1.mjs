@@ -7,7 +7,8 @@ class MyCompetitionSection1List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            avatar: {type: Object, default: null},
+            avatar: {type: Object, default: null, local: true},
+            avatarFile: {type: Object, default: null, local: true},
             name: {type: String, default: null},
             regulationsLink: {type: String, default: null},
             protocolLink: {type: String, default: null},
@@ -136,6 +137,25 @@ class MyCompetitionSection1List1 extends BaseElement {
         this.currentPage = 3
     }
 
+    validateAvatar(e) {
+        this.oldValues ??= new Map();
+        if (!this.oldValues.has(e.target)) {
+            this.oldValues.set(e.target, e.target.avatar)
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        else if (this.oldValues.get(e.target) === e.target.avatar) {
+            this.oldValues.delete(e.target.id)
+            this.avatarFile = null;
+        } else {
+            this.avatar = window.URL.createObjectURL(e.target.value);
+            this.avatarFile = e.target.value;
+            this.requestUpdate();
+        }
+        this.isModified = this.oldValues.size !== 0;
+    }
+
     regulationsLinkClick() {
         window.open(this.regulationsLink);
     }
@@ -147,7 +167,6 @@ class MyCompetitionSection1List1 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;
-        this.avatar = null; // await this.downloadAvatar();
         this.isFirst = true;
     }
 }

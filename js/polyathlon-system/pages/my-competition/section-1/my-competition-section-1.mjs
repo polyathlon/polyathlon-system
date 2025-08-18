@@ -39,6 +39,8 @@ class MyCompetitionSection1 extends BaseElement {
             currentPage: { type: BigInt, default: 0, local: true },
             isFirst: { type: Boolean, default: false },
             currentList: { type: BigInt, default: 0, local: true},
+            avatar: {type: Object, default: null, local: true},
+            avatarFile: {type: Object, default: null, local: true},
         }
     }
 
@@ -238,15 +240,16 @@ class MyCompetitionSection1 extends BaseElement {
         ]
         this.oldValues = new Map();
         this.buttons = [
+            {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
         this.pages = [
-            {iconName: 'competition-solid', page: () => this.#page1(), title: lang`Competition`, click: () => this.gotoPage(0)},
-            {iconName: 'age-group-solid', page: () => this.#page2(), title: lang`Age groups`, click: () => this.gotoPage(1)},
-            {iconName: 'location-circle-solid', page: () => this.#page3(), title: lang`Location`, click: () => this.gotoPage(2)},
+            {name: 'page1', iconName: 'competition-solid', page: 0, title: lang`Competition`, click: () => this.gotoPage(0)},
+            {name: 'page2', iconName: 'age-group-solid', page: 1, title: lang`Age groups`, click: () => this.gotoPage(1)},
+            {name: 'page3', iconName: 'location-circle-solid', page: 2, title: lang`Location`, click: () => this.gotoPage(2)},
             // {iconName: 'map-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
-            {iconName: 'registration-solid', page: () => this.#page4, title: lang`Registration`, click: () => this.gotoPage(5)},
+            {name: 'page4', iconName: 'registration-solid', page: 3, title: lang`Registration`, click: () => this.gotoPage(5)},
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
         ]
     }
@@ -322,9 +325,9 @@ class MyCompetitionSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentCountryItem')) {
-            this.currentPage = 0;
-        }
+        // if (changedProps.has('currentCountryItem')) {
+        //     this.currentPage = 0;
+        // }
     }
 
     // async showItem(index, itemId) {
@@ -343,28 +346,28 @@ class MyCompetitionSection1 extends BaseElement {
     // }
 
     get #page() {
-        return this.pages[this.currentPage].page()
+        return this[this.pages[this.currentPage].name]
     }
 
-    #page1() {
+    get page1() {
         return html`
             <my-competition-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-1-page-1>
         `;
     }
 
-    #page2() {
+    get page2() {
         return html`
             <my-competition-section-1-page-2 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-1-page-2>
         `;
     }
 
-    #page3() {
+    get page3() {
         return html`
             <my-competition-section-1-page-3 .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-1-page-3>
         `;
     }
 
-    #page4() {
+    get page4() {
         return html`
             <my-competition-section-1-page-4 .parent=${this.currentItem}></my-competition-section-1-page-4>
         `;
@@ -376,7 +379,7 @@ class MyCompetitionSection1 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-1-list-1 .startRegistration=${this.currentItem?.startRegistration} .endRegistration=${this.currentItem?.endRegistration} .avatar=${this.avatar} .name=${this.currentItem?.name} .startDate=${this.currentItem?.startDate} .endDate=${this.currentItem?.endDate} .stage=${this.currentItem?.stage} .regulationsLink=${this.currentItem?.regulationsLink} .protocolLink=${this.currentItem?.protocolLink}></my-competition-section-1-list-1>
+            <my-competition-section-1-list-1 .oldValues=${this.oldValues} .startRegistration=${this.currentItem?.startRegistration} .endRegistration=${this.currentItem?.endRegistration} .avatar=${this.avatar} .name=${this.currentItem?.name} .startDate=${this.currentItem?.startDate} .endDate=${this.currentItem?.endDate} .stage=${this.currentItem?.stage} .regulationsLink=${this.currentItem?.regulationsLink} .protocolLink=${this.currentItem?.protocolLink}></my-competition-section-1-list-1>
         `;
     }
 
@@ -483,7 +486,7 @@ class MyCompetitionSection1 extends BaseElement {
     }
 
     gotoSection(index) {
-        this.parentNode.host.currentSection = index;
+        this.parentNode.host.currentSection = index
     }
 
     gotoPage(index) {
@@ -500,6 +503,81 @@ class MyCompetitionSection1 extends BaseElement {
 
     prevPage() {
         this.currentPage--;
+    }
+
+    competitionName(item) {
+        if (!item.name) {
+            return ''
+        }
+        if (item.stage) {
+            return `${item.name.name} ${item.stage?.name}`
+        }
+        return item.name.name
+    }
+
+    static monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+
+    competitionDate(item) {
+        if (item.startDate) {
+            const start = item.startDate.split("-")
+            const end = item.endDate.split("-")
+            if (start[2] === end[2] && start[1] === end[1]) {
+                return `${start[2]} ${MyCompetitionSection1.monthNames[start[1] - 1]}`
+            }
+            if (start[1] === end[1]) {
+                return `${start[2]}-${end[2]} ${MyCompetitionSection1.monthNames[start[1] - 1]}`
+            }
+            return `${start[2]} ${MyCompetitionSection1.monthNames[start[1]-1]} - ${end[2]} ${MyCompetitionSection1List1.monthNames[end[1] - 1]}`
+        }
+        return ''
+    }
+
+    async saveToFile(blob, fileName) {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'competition-qr.svg');
+        } else {
+            const options = {
+                suggestedName: fileName,
+                types: [
+                    {
+                        description: 'SVG Files',
+                        accept: {
+                            'image/svg+xml': ['.svg']
+                        }
+                    },
+                ],
+                excludeAcceptAllOption: true
+            };
+            try {
+                // Для других браузеров
+                const fileHandle = await window.showSaveFilePicker(options);
+                const writable = await fileHandle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (err){
+                if (err.name === 'AbortError')
+                    return
+                console.error(err);
+                // Для других браузеров
+                const downloadUrl =  window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = fileName + '.svg';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(downloadUrl);
+                    document.body.removeChild(a);
+                }, 0);
+            }
+        }
+    }
+
+    async getQRCode() {
+        const dataURI = await DataSet.getQRCode(location.origin+`/system?competition-member=${this.currentItem._id.split(':')[1]}#my-competition`)
+        const blob = await (await fetch(dataURI)).blob();
+        await this.saveToFile(blob, this.competitionName(this.currentItem) + ' ' + this.competitionDate(this.currentItem))
+        window.open(URL.createObjectURL(blob))
     }
 
     async showDialog(message, type='message') {
@@ -576,8 +654,12 @@ class MyCompetitionSection1 extends BaseElement {
         this.isFirst  = false;
         this.dataSource = new DataSource(this)
         await this.dataSource.getItem()
-        if (this.currentItem._id) {
-            this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
+        try {
+            if (this.currentItem._id) {
+                this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
+            }
+        } catch {
+
         }
         this.isFirst = true;
     }
