@@ -15,7 +15,7 @@ import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 class MyRefereeSection2Page1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             refereeTypeDataSource: {type: Object, default: null},
             refereeStageDataSource: {type: Object, default: null},
             sportsDisciplineDataSource: {type: Object, default: null},

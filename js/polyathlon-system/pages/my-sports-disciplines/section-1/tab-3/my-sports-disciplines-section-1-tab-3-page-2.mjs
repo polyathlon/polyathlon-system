@@ -11,7 +11,7 @@ import SportsCategoriesDataSource from '../../../my-sports-categories/my-sports-
 class MySportsDisciplinesSection1Tab3Page2 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             item: {type: Object, default: null},
             sportsCategoriesDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},

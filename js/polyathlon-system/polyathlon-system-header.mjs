@@ -11,7 +11,7 @@ class PolyathlonSystemHeader extends BaseElement {
         return {
             isShow: { type: Boolean, default: false },
             isHorizontal: { type: Boolean, default: true },
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             activePage: { type: String, default: '', attribute: 'active-page', local: true },
             successUserIn: { type: Boolean, default: false, local: true},
             notificationMaxOffset: { type: String, default: '', local: true },

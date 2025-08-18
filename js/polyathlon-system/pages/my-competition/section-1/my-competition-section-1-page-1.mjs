@@ -32,7 +32,7 @@ import sportsDisciplineAgeGroupsDataSet from '../../my-sports-disciplines/sectio
 class MyCompetitionSection1Page1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             competitionTypeDataSource: {type: Object, default: null},
             competitionStageDataSource: {type: Object, default: null},
             sportsDisciplineDataSource: {type: Object, default: null},

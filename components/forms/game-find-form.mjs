@@ -10,7 +10,7 @@ import '../dialogs/modal-dialog.mjs';
 class GameFindForm extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true, category: 'settings' },
+            version: { type: String, default: '1.0.0' },
             opened: { type: Boolean, default: false, category: 'settings' },
             defaultPiecesColor: { type: Boolean, default: true},
             defaultFlashKing: { type: Number, default: -1},

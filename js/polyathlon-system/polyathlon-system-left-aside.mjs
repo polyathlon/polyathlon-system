@@ -7,7 +7,7 @@ import lang from './polyathlon-dictionary.mjs';
 class PolyathlonSystemLeftAside extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             successUserIn: { type: Boolean, default: false, local: true},
             activePage: { type: String, default: '', local: true },
             notificationMaxOffset: { type: String, default: '', local: true },

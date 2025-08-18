@@ -6,7 +6,7 @@ import '../../../../../components/inputs/avatar-input.mjs'
 class MyCompetitionSection4List1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             avatar: {type: Object, default: null},
             name: {type: String, default: null},
             startDate: {type: String, default: null},

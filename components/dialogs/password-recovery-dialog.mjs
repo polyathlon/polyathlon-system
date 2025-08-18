@@ -11,7 +11,7 @@ import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 customElements.define('password-recovery-dialog', class PasswordRecoveryDialog extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true, category: 'settings' },
+            version: { type: String, default: '1.0.0' },
             title: { type: String, default: 'Сообщение'},
             message: { type: String, default: 'Модальное окно'},
             opened: { type: Boolean, default: false},

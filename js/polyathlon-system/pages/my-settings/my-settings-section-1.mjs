@@ -7,7 +7,7 @@ import '../../../../components/dialogs/confirm-dialog.mjs'
 class MySettingsSection1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
         }
     }
 

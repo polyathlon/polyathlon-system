@@ -12,7 +12,7 @@ class MySportsDisciplines extends BaseElement {
             currentSection: { type: BigInt, default: 0 },
             currentTab: { type: BigInt, default: 0 },
             sections: { type: Array, default: 0 },
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
         }
     }
 

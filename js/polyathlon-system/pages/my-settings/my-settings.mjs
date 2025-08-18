@@ -23,7 +23,7 @@ class MySettings extends BaseElement {
 
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
         }
     }
 

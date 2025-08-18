@@ -28,7 +28,7 @@ import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 class MyCompetitionSection2Page1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             sportsCategorySource: {type: Object, default: null},
             regionDataSource: {type: Object, default: null},
             clubDataSource: {type: Object, default: null},

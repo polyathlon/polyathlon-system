@@ -11,7 +11,7 @@ import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 class MyCityTypesSection1Page1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             item: {type: Object, default: null},
             regionDataSource: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},

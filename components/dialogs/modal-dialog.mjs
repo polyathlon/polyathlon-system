@@ -6,7 +6,7 @@ import '../buttons/close-button.mjs';
 customElements.define('modal-dialog', class ModalDialog extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true, category: 'settings' },
+            version: { type: String, default: '1.0.0' },
             title: { type: String, default: 'Сообщение'},
             message: { type: String, default: 'Модальное окно'},
             opened: { type: Boolean, default: false},

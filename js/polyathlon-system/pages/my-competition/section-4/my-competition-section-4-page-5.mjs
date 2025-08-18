@@ -28,7 +28,7 @@ import DataSet from './my-competition-dataset.mjs'
 class MyCompetitionSection4Page5 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             competitionTypeDataSource: {type: Object, default: null},
             competitionStageDataSource: {type: Object, default: null},
             sportsDisciplineDataSource: {type: Object, default: null},

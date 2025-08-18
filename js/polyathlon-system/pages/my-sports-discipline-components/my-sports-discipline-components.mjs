@@ -11,7 +11,7 @@ class MySportsDisciplineComponents extends BaseElement {
         return {
             currentSection: { type: BigInt, default: 0 },
             sectionNames: { type: Array, default: 0 },
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
         }
     }
 

@@ -7,7 +7,7 @@ customElements.define('message-dialog', class MessageDialog extends BaseElement 
 
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true, category: 'settings' },
+            version: { type: String, default: '1.0.0' },
             message: { type: String, default: 'Модальное окно'},
             opened: { type: Boolean, default: false},
             animateClose: { type: Boolean, default: false}

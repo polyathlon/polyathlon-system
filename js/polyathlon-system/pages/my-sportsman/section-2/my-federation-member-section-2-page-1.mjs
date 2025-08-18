@@ -18,7 +18,7 @@ import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 class MyFederationMemberSection2Page1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             federationMemberCategoryDataSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: {type: Object, default: null},

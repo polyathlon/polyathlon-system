@@ -11,7 +11,7 @@ import '../../../../components/charts/prediction-chart.mjs'
 class MyProjectsSection1Page2 extends BaseElement {
         static get properties() {
             return {
-                version: { type: String, default: '1.0.0', save: true },
+                version: { type: String, default: '1.0.0' },
                 dataSet: {type: Array, default: []},
                 statusDataSet: {type: Map, default: null, attrubute: "status-data-set" },
                 isModified: {type: Boolean, default: false},

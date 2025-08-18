@@ -20,7 +20,7 @@ import FederationMembersDataset from '../../my-federation-members/my-federation-
 class MyFederationMemberSection2Page4 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             federationMemberCategorySource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: { type: Object, default: null },

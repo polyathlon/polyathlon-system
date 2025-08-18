@@ -23,7 +23,7 @@ import DataSource from './my-competitions-datasource.mjs'
 class MyCompetitionsSection1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             dataSource: {type: Object, default: null},
             competitionTypeDataSource: {type: Object, default: null},
             competitionType: {type: Object, default: null},

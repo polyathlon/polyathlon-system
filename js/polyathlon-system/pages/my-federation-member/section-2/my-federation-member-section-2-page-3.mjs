@@ -20,7 +20,7 @@ import TrainersDataset from '../../my-trainers/my-trainers-dataset.mjs'
 class MyFederationMemberSection2Page3 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             trainerCategorySource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: { type: Object, default: null },

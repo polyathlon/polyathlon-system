@@ -11,7 +11,7 @@ import DisciplineGroupDataSource from '../../../my-discipline-groups/my-discipli
 class MySportsDisciplinesSection1Tab1Page1 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             disciplineGroupDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},

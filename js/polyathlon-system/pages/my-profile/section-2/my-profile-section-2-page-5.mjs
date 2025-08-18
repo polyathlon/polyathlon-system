@@ -20,7 +20,7 @@ import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 class MyProfileSection2Page5 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             item: {type: Object, default: null},
             federationMemberCategorySource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },

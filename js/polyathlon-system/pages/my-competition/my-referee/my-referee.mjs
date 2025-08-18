@@ -8,7 +8,7 @@ class MyReferee extends BaseElement {
     static get properties() {
         return {
             currentSection: { type: BigInt, default: 0 },
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
         }
     }
 

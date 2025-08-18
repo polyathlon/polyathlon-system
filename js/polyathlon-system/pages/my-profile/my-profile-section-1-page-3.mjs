@@ -21,7 +21,7 @@ import lang from '../../polyathlon-dictionary.mjs'
 class MyProfileSection1Page3 extends BaseElement {
     static get properties() {
         return {
-            version: { type: String, default: '1.0.0', save: true },
+            version: { type: String, default: '1.0.0' },
             item: {type: Object, default: null},
             sportsCategorySource: {type: Object, default: null},
             regionDataSource: {type: Object, default: null},
