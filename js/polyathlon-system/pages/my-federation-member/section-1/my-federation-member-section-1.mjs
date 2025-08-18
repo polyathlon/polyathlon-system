@@ -592,8 +592,12 @@ class MyFederationMemberSection1 extends BaseElement {
         this.isFirst  = false;
         this.dataSource = new DataSource(this)
         await this.dataSource.getItem()
-        if (this.currentItem._id) {
-            this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
+        try {
+            if (this.currentItem._id) {
+                this.avatar = await DataSet.downloadAvatar(this.currentItem._id);
+            }
+        } catch {
+
         }
         this.isFirst = true;
     }
