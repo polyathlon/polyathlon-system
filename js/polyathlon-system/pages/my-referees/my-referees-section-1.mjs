@@ -7,6 +7,8 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
+import { isAuth, States } from '../../../utils.js'
+
 import './my-referees-section-1-page-1.mjs'
 import './my-referees-section-1-page-2.mjs'
 
@@ -694,6 +696,9 @@ class MyRefereesSection1 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (this.currentPage === 1) {
             return this.#findFooter
         }

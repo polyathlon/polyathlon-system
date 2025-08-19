@@ -6,7 +6,8 @@ import '../../../../../components/buttons/aside-button.mjs'
 import '../../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs';
-import { States } from "../../../../utils.js"
+
+import { isAuth, States } from '../../../../utils.js'
 
 import './my-profile-section-2-page-1.mjs'
 import './page2/my-profile-section-2-page-2.mjs'
@@ -525,6 +526,9 @@ class MyProfileSection2 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (!this.dataSource?.items)
             return ''
         // if (this.dataSource.items.length) {

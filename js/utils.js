@@ -185,3 +185,12 @@ export const States = Enum({ NEW: 'new', BROWSE: 'browse', EDIT: 'edit' });
 // console.log('color === Colors.RED: ',   color === Colors.RED)
 
 export const ulid = factory();
+
+export function isAuth() {
+    if (localStorage.getItem('rememberMe')) {
+        return localStorage.getItem('accessUserToken')
+    }
+    else {
+        return sessionStorage.getItem('accessUserToken')
+    }
+}

@@ -15,6 +15,8 @@ import './my-referee-section-1-list-1.mjs'
 // import './my-competition-section-2-page-1.mjs'
 // import './my-competition-section-2-list-1.mjs'
 
+import { isAuth, States } from '../../../../../utils.js'
+
 import DataSet from './my-referee-dataset.mjs'
 //import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-referee-datasource.mjs'
@@ -368,13 +370,17 @@ class MyRefereeSection1 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
+
         if (this.isModified) {
         return html`
-            <nav class='save'>
-                <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
-                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
-            </nav>
-        `
+                <nav class='save'>
+                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
         }
         else return ''
     }

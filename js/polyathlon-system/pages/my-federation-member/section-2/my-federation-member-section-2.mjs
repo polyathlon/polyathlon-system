@@ -11,6 +11,8 @@ import '../../../../../components/buttons/simple-button.mjs';
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
+import { isAuth, States } from '../../../../utils.js'
+
 import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 import RefereeDataset from '../../my-referees/my-referees-dataset.mjs'
 import TrainerDataset from '../../my-trainers/my-trainers-dataset.mjs'
@@ -402,6 +404,9 @@ class MyFederationMemberSection2 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (this.isModified) {
         return html`
             <nav class='save'>

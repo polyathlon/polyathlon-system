@@ -7,7 +7,7 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import { States } from "../../../utils.js"
+import { isAuth, States } from '../../../utils.js'
 
 import './my-discipline-groups-section-1-page-1.mjs'
 
@@ -363,8 +363,10 @@ class MyDisciplineGroupsSection1 extends BaseElement {
         // page.startEdit()
     }
 
-
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (!this.dataSource?.items)
             return ''
         if (this.dataSource.items.length) {

@@ -12,6 +12,8 @@ import '../../../../../components/buttons/simple-button.mjs';
 import './my-referee-section-2-page-1.mjs'
 import './my-referee-section-2-list-1.mjs'
 
+import { isAuth, States } from '../../../../utils.js'
+
 import DataSet from './my-referee-dataset.mjs'
 //import SportsmenDataSet from './my-sportsmen/my-sportsmen-dataset.mjs'
 import DataSource from './my-referee-datasource.mjs'
@@ -365,6 +367,9 @@ class MyRefereeSection2 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (this.isModified) {
         return html`
             <nav class='save'>

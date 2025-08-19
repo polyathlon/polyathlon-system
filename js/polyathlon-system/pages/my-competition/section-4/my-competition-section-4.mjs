@@ -11,6 +11,8 @@ import '../../../../../components/buttons/simple-button.mjs';
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
+import { isAuth, States } from '../../../../utils.js'
+
 import './my-competition-section-4-page-1.mjs'
 import './my-competition-section-4-list-1.mjs'
 import './my-competition-section-4-page-2.mjs'
@@ -470,9 +472,10 @@ class MyCompetitionSection4 extends BaseElement {
         `
     }
 
-
-
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (this.isModified) {
             return html`
                 <nav>

@@ -8,6 +8,8 @@ import '../../../../../components/buttons/simple-button.mjs';
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
+import { isAuth, States } from '../../../../utils.js'
+
 import { States } from "../../../../utils.js"
 
 import './my-sports-disciplines-section-2-page-1.mjs'
@@ -610,6 +612,9 @@ class MySportsDisciplinesSection2 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (!this.dataSource?.items)
             return ''
         if (this.dataSource.items.length) {

@@ -9,6 +9,8 @@ import '../../../../../components/inputs/avatar-input.mjs'
 import '../../../../../components/buttons/aside-button.mjs';
 import '../../../../../components/buttons/simple-button.mjs';
 
+import { isAuth, States } from '../../../../../utils.js'
+
 import './my-referee-section-2-page-1.mjs'
 import './my-referee-section-2-list-1.mjs'
 
@@ -365,6 +367,9 @@ class MyRefereeSection2 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (this.isModified) {
         return html`
             <nav class='save'>

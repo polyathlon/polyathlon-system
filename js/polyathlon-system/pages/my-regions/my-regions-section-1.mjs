@@ -7,6 +7,8 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
+import { isAuth, States } from '../../../utils.js'
+
 import './my-regions-section-1-page-1.mjs'
 
 import DataSet from './my-regions-dataset.mjs'
@@ -304,6 +306,9 @@ class MyRegionsSection1 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (this.isModified) {
             return html`
                 <nav>

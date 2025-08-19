@@ -11,6 +11,8 @@ import '../../../../../components/buttons/simple-button.mjs';
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
+import { isAuth, States } from '../../../../utils.js'
+
 import './my-competition-section-1-page-1.mjs'
 import './my-competition-section-1-list-1.mjs'
 import './my-competition-section-1-page-2.mjs'
@@ -420,6 +422,9 @@ class MyCompetitionSection1 extends BaseElement {
 
     get #rightFooter() {
         if (this.currentPage === 3) {
+            if (!isAuth()) {
+                return ''
+            }
             return html`
                 <nav>
                     <simple-button @click=${this.saveRegistration}>${lang`Send request`}</simple-button>
@@ -428,6 +433,9 @@ class MyCompetitionSection1 extends BaseElement {
             `
         }
         if (this.isModified) {
+            if (!isAuth()) {
+                return ''
+            }
             return html`
                 <nav>
                     <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>

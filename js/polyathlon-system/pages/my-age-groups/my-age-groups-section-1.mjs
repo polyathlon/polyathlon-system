@@ -7,6 +7,8 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
+import { isAuth, States } from '../../../utils.js'
+
 import './my-age-groups-section-1-page-1.mjs'
 
 import DataSet from './my-age-groups-dataset.mjs'
@@ -307,6 +309,9 @@ class MyAgeGroupsSection1 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+                return ''
+        }
         if (this.isModified) {
             return html`
                 <nav>

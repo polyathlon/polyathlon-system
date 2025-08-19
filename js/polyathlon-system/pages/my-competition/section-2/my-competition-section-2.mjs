@@ -8,7 +8,7 @@ import '../../../../../components/buttons/simple-button.mjs';
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
-import { States } from "../../../../utils.js"
+import { isAuth, States } from '../../../../utils.js'
 
 import './my-competition-section-2-list-1.mjs'
 import './my-competition-section-2-page-1.mjs'
@@ -573,6 +573,9 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (!this.dataSource?.items)
             return ''
         if (this.dataSource.items.length) {
@@ -618,9 +621,11 @@ class MyCompetitionSection2 extends BaseElement {
             <footer class="left-footer">
                 ${this.#task}
             </footer>
-            <footer class="right-footer">
-                ${this.#rightFooter}
-            </footer>
+            ${isAuth() ? html`
+                <footer class="right-footer">
+                    ${this.#rightFooter}
+                </footer>
+            ` : ''}
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }

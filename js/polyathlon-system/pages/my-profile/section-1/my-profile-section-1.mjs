@@ -9,6 +9,8 @@ import '../../../../../components/inputs/avatar-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs';
 
+import { isAuth, States } from '../../../../utils.js'
+
 import './my-profile-section-1-page-1.mjs'
 import '../my-profile-section-1-page-2.mjs'
 import '../my-profile-section-1-page-3.mjs'
@@ -416,6 +418,9 @@ class MyProfileSection1 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (this.isModified) {
             return html`
                 <nav>

@@ -174,22 +174,12 @@ export default class DataSet {
         return result
     }
 
-    static fetchDownloadAvatar(token, id) {
-        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
+    static fetchDownloadAvatar(id) {
+        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`)
     }
 
     static async downloadAvatar(id) {
-        const token = getToken();
-        let response = await DataSet.fetchDownloadAvatar(token, id)
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchDownloadAvatar(token, id)
-        }
+        let response = await DataSet.fetchDownloadAvatar(id)
 
         if (!response.ok) {
             return null

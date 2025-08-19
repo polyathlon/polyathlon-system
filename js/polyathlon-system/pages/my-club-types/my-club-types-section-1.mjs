@@ -9,6 +9,8 @@ import lang from '../../polyathlon-dictionary.mjs'
 
 import './my-club-types-section-1-page-1.mjs'
 
+import { isAuth, States } from '../../../utils.js'
+
 import DataSet from './my-club-types-dataset.mjs'
 import DataSource from './my-club-types-datasource.mjs'
 
@@ -312,6 +314,9 @@ class MyClubTypesSection1 extends BaseElement {
     }
 
     get #rightFooter() {
+        if (!isAuth()) {
+            return ''
+        }
         if (this.isModified) {
             return html`
                 <nav>

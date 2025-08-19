@@ -7,6 +7,8 @@ import '../../../../components/buttons/simple-button.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
+import { isAuth, States } from '../../../utils.js'
+
 import './my-trainers-section-1-page-1.mjs'
 
 import DataSet from './my-trainers-dataset.mjs'
@@ -692,6 +694,9 @@ class MyTrainersSection1 extends BaseElement {
     get #rightFooter() {
         if (this.currentPage === 1) {
             return this.#findFooter
+        }
+        if (!isAuth()) {
+            return ''
         }
         if (this.isModified) {
             return html`
