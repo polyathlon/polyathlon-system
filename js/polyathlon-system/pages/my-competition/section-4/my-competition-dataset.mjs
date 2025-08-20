@@ -148,8 +148,8 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchUploadAvatar(token, formData, competitionId) {
-        return fetch(`https://${HOST}:4500/api/upload/competition/avatar/${competitionId}`, {
+    static fetchUploadAvatar(token, formData, id) {
+        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -158,14 +158,14 @@ export default class DataSet {
         })
     }
 
-    static async uploadAvatar(avatar, competitionId) {
+    static async uploadAvatar(avatar, id) {
         const token = getToken();
         const formData = new FormData();
         formData.append("file", avatar);
-        let response = await DataSet.fetchUploadAvatar(token, formData, competitionId)
+        let response = await DataSet.fetchUploadAvatar(token, formData, id)
         if (response.status === 419) {
             const token = await refreshToken()
-            response = await DataSet.fetchUploadAvatar(token, formData, competitionId)
+            response = await DataSet.fetchUploadAvatar(token, formData, id)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -174,22 +174,12 @@ export default class DataSet {
         return result
     }
 
-    static fetchDownloadAvatar(token, competitionId) {
-        return fetch(`https://${HOST}:4500/api/upload/competition/avatar/${competitionId}`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
+    static fetchDownloadAvatar(id) {
+        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`)
     }
 
-    static async downloadAvatar(competitionId) {
-        const token = getToken();
-        let response = await DataSet.fetchDownloadAvatar(token, competitionId)
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchDownloadAvatar(token, competitionId)
-        }
+    static async downloadAvatar(id) {
+        let response = await DataSet.fetchDownloadAvatar(id)
 
         if (!response.ok) {
             return null
@@ -198,6 +188,29 @@ export default class DataSet {
         const blob = await response.blob()
 
         return blob ? window.URL.createObjectURL(blob) : blob;
+    }
+
+        static fetchDeleteAvatar(token, id) {
+        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+    }
+
+    static async deleteAvatar(id) {
+        const token = getToken();
+        let response = await DataSet.fetchDeleteAvatar(token, id)
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchDeleteAvatar(token, id)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
     }
 
     static fetchCreateCompetitionId(token, item) {

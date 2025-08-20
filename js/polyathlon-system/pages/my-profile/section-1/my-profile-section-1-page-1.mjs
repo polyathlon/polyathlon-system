@@ -32,6 +32,10 @@ class MyProfileSection1Page1 extends BaseElement {
                     min-width: min(600px, 50vw);
                     max-width: 600px;
                 }
+                .name-group {
+                    display: flex;
+                    gap: 10px;
+                }
             `
         ]
     }
@@ -40,9 +44,10 @@ class MyProfileSection1Page1 extends BaseElement {
         return html`
             <verify-email-form></verify-email-form>
             <div class="container">
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input label="${lang`First name`}:" id="firstName" icon-name="user" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
-                    <simple-input label="${lang`Last name`}:" id="lastName" icon-name="user-group-solid" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.personalInfo?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-input label="${lang`Nickname`}:" id="nickName" icon-name="user-alien-solid" .value=${this.item?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
                 <simple-input label="${lang`Email`}:" id="email" icon-name=${this.item?.emailVerified ? "envelope-solid" : "envelope-regular"} .value=${this.item?.email} button-name=${this.item?.emailVerified ? nothing : "envelope-dot-solid"} @button-click=${this.item?.emailVerified ? nothing : this.confirmEmail} @input=${this.validateInput}></simple-input>

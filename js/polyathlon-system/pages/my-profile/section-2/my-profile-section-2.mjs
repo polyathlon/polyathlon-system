@@ -517,6 +517,7 @@ class MyProfileSection2 extends BaseElement {
         this.currentItem.payload = {
             lastName: this.parent.personalInfo.lastName,
             firstName: this.parent.personalInfo.firstName,
+            middleName: this.parent.personalInfo.middleName,
             gender: this.parent.personalInfo.gender,
             birthday: this.parent.personalInfo.birthday,
         }

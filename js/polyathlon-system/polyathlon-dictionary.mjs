@@ -915,6 +915,10 @@ const dictionary = {
         "ru-RU": 'Персональная страница',
         "en-EN": 'Personal page'
     },
+    'Remove avatar': {
+        "ru-RU": 'Удалить аватар',
+        "en-EN": 'Remove avatar'
+    },
 }
 
 //const language = navigator.language

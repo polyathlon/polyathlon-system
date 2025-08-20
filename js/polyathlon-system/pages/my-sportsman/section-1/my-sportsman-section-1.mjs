@@ -38,6 +38,7 @@ class MySportsmanSection1 extends BaseElement {
             currentPage: { type: BigInt, default: 0, local: true },
             isFirst: { type: Boolean, default: false },
             currentList: { type: BigInt, default: 0, local: true},
+            avatar: { type: Object, default: null },
         }
     }
 
@@ -238,6 +239,7 @@ class MySportsmanSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
+            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Remove avatar`, click: () => this.removeAvatar()},
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
@@ -249,6 +251,14 @@ class MySportsmanSection1 extends BaseElement {
             {iconName: 'registration-solid', page: () => this.#page1, title: lang`Registration`, click: () => this.gotoPage(5)},
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
         ]
+    }
+
+    async removeAvatar() {
+        if (this.avatar) {
+            let result = await DataSet.deleteAvatar(this.currentItem._id);
+            if (!result) return;
+            this.avatar = null;
+        }
     }
 
     showPage(page) {
@@ -426,7 +436,18 @@ class MySportsmanSection1 extends BaseElement {
         `;
     }
 
-
+    listFIO(firstName, lastName) {
+        if (firstName && lastName) {
+            return firstName + ' ' + lastName
+        }
+        if (firstName) {
+            return firstName
+        }
+        if (lastName) {
+            return firstName
+        }
+        return ''
+    }
 
     #list1() {
         return html`
@@ -434,7 +455,7 @@ class MySportsmanSection1 extends BaseElement {
                 ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || (this.currentItem.gender == true ? 'images/sportsman-woman-solid.svg' : 'images/sportsman-man-solid.svg')} @input=${this.validateAvatar}></avatar-input>` : ''}
             </div>
             <div class="label">
-                ${this.currentItem?.firstName + ' ' + this.currentItem?.lastName}
+                ${this.listFIO(this.currentItem?.firstName, this.currentItem?.lastName)}
             </div>
             <fashion-button @click=${this.startTelegramBot}>Telegram Bot</fashion-button>
             <div class="statistic">
@@ -461,7 +482,7 @@ class MySportsmanSection1 extends BaseElement {
 
     get #task() {
         return html`
-            <nav>${this.buttons.map((button, index) =>
+            <nav>${this.buttons.filter(button => button.iconName!=='no-avatar' || button.iconName==='no-avatar' && this.avatar).map((button, index) =>
                 html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
             </nav>
         `

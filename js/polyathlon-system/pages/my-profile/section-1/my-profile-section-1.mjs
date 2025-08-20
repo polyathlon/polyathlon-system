@@ -32,6 +32,7 @@ class MyProfileSection1 extends BaseElement {
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             isFirst: { type: Boolean, default: false },
+            avatar: { type: Object, default: null },
         }
     }
 
@@ -233,6 +234,7 @@ class MyProfileSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'telegram-bot-solid', page: 'my-referee-categories', title: lang`Telegram bot`, click: () => this.telegramBot()},
+            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Remove avatar`, click: () => this.removeAvatar()},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
@@ -244,6 +246,14 @@ class MyProfileSection1 extends BaseElement {
             {name: 'page4', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'trainer-woman-solid' : 'trainer-man-solid', page: 3, title: lang`Trainer`, click: () => this.gotoPage(3)},
             {name: 'page5', iconName: () => this.currentItem?.personalInfo?.gender  == true ? 'federation-member-woman-solid' : 'federation-member-man-solid', page: 4, title: lang`Federation member`, click: () => this.gotoPage(4)},
         ]
+    }
+
+    async removeAvatar() {
+        if (this.avatar) {
+            let result = await DataSet.deleteAvatar();
+            if (!result) return;
+            this.avatar = null;
+        }
     }
 
     showPage(page) {
@@ -402,7 +412,7 @@ class MyProfileSection1 extends BaseElement {
 
     get #task() {
         return html`
-            <nav>${this.buttons.map((button, index) =>
+            <nav>${this.buttons.filter(button => button.iconName!=='no-avatar' || button.iconName==='no-avatar' && this.avatar).map((button, index) =>
                 html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName instanceof Function ? button.iconName() : button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
             </nav>
         `

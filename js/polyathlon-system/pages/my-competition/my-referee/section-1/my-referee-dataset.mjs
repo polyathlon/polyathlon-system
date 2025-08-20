@@ -200,6 +200,29 @@ export default class DataSet {
         return blob ? window.URL.createObjectURL(blob) : blob;
     }
 
+    static fetchDeleteAvatar(token, id) {
+        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+    }
+
+    static async deleteAvatar(id) {
+        const token = getToken();
+        let response = await DataSet.fetchDeleteAvatar(token, id)
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchDeleteAvatar(token, id)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+    
     static fetchGetQRCode(token, data) {
         return fetch(`https://${HOST}:4500/api/qr-code?data=${data}`, {
             method: "GET",

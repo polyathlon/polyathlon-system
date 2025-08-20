@@ -631,7 +631,7 @@ class MyFederationMemberSection2 extends BaseElement {
         const parentId = localStorage.getItem('federationMember')
         this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))
         await this.dataSource.init();
-        this.currentPage = this.currentItem.type - 1
+        this.currentPage = (this.currentItem.type ?? 1) - 1
     }
 }
 
