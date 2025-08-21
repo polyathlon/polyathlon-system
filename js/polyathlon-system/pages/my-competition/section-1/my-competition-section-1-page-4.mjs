@@ -19,6 +19,8 @@ import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
 
 import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 
+import Dataset from './my-competition-dataset.mjs'
+
 import lang from '../../../polyathlon-dictionary.mjs';
 
 class MyCompetitionSection1Page4 extends BaseElement {
@@ -233,6 +235,8 @@ class MyCompetitionSection1Page4 extends BaseElement {
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
         this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
+        this.profile = await Dataset.getSportsmanProfile()
+        this.sportsman = await Dataset.getSportsmanProfile()
     }
 
 }

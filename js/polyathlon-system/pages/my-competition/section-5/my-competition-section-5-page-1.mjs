@@ -5,33 +5,39 @@ import '../../../../../components/inputs/gender-input.mjs'
 import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
-import RefereeCategoriesDataset from '../../my-referee-categories/my-referee-categories-dataset.mjs'
-import RefereeCategoriesDataSource from '../../my-referee-categories/my-referee-categories-datasource.mjs'
+import lang from '../../../polyathlon-dictionary.mjs'
 
-import RefereePositionsDataset from '../../my-referee-positions/my-referee-positions-dataset.mjs'
-import RefereePositionsDataSource from '../../my-referee-positions/my-referee-positions-datasource.mjs'
+import SportsCategoryDataSource from '../../my-sports-categories/my-sports-categories-datasource.mjs'
+import SportsCategoryDataset from '../../my-sports-categories/my-sports-categories-dataset.mjs'
 
 import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 
-import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
-import CityDataset from '../../my-cities/my-cities-dataset.mjs'
+import ClubDataSource from '../../my-clubs/my-clubs-datasource.mjs'
+import ClubDataset from '../../my-clubs/my-clubs-dataset.mjs'
 
-import RefereeDataset from '../../my-referees/my-referees-dataset.mjs'
+import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs'
+import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
 
+import Dataset from './my-competition-section-5-dataset.mjs'
+import DataSource from './my-competition-section-5-datasource.mjs'
+
+import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 
 class MyCompetitionSection5Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            refereeCategoriesDataSource: {type: Object, default: null},
-            refereePositionsDataSource: {type: Object, default: null},
-            regionDataSource: {type: Object, default: null},
-            cityDataSource: {type: Object, default: null},
-            findDataSource: {type: Object, default: null},
-            item: {type: Object, default: null},
-            isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null},
+            dataSource: { type: Object, default: null },
+            sportsCategorySource: {type: Object, default: null },
+            regionDataSource: {type: Object, default: null },
+            clubDataSource: {type: Object, default: null },
+            ageGroupDataSource: {type: Object, default: null },
+            findDataSource: {type: Object, default: null },
+            item: {type: Object, default: {} },
+            isModified: {type: Boolean, default: false, local: true },
+            oldValues: {type: Map, default: null },
+            parent: { type: Object, default: {} },
         }
     }
 
@@ -58,22 +64,64 @@ class MyCompetitionSection5Page1 extends BaseElement {
         ]
     }
 
+    // render() {
+    //     return html`
+    //         <modal-dialog></modal-dialog>
+    //         <div class="container">
+    //             <div class="name-group">
+    //                 <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+    //                 <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+    //             </div>
+    //             <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
+    //             <birthday-input id="birthday" label="${lang`Data of birth`}:" .value="${this.item?.birthday}" @input=${this.validateInput}></birthday-input>
+    //             <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
+    //             <simple-select id="ageGroup" label="${lang`Age group`}:" icon-name="age-group-solid" @icon-click=${() => this.showPage('my-age-groups')} .dataSource=${this.ageGroupDataSource} .value=${this.item?.ageGroup} @input=${this.validateInput}></simple-select>
+    //             <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+    //             <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+    //             <simple-select id="category" label="${lang`Sports category`}:" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+
+    //         </div>
+
+    //     `;
+    // }
+
+    sportsmanShowValue(item) {
+         if (item?.lastName) {
+            return item.lastName
+         }
+    }
+
+    clubShowValue(item) {
+        if (item?.name)
+            return `${item?.name}, ${item?.city?.type?.shortName || ''} ${item?.city?.name}`
+        return ''
+    }
+
+    clubListLabel(item) {
+        // return item?.type?.shortName + ' ' + item?.name
+        return item?.city?.name ? `${item?.name}, ${item?.city?.type?.shortName || ''} ${item?.city?.name}` : item?.name
+    }
+
+    clubListStatus(item) {
+        return { name: item?.city?.region?.name }
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .dataSource=${this.findDataSource} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsmanByName} .value=${this.item?.payload?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <div class="name-group">
-                    <simple-input id="lastName" icon-name="user" label="Last name:" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="firstName" icon-name="user-group-solid" label="First name:" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.payload?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="middleName" icon-name="users-solid" label="Middle name:" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
-                <simple-input id="refereeId" .dataSource=${this.findDataSource} icon-name="id-number-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} label="Referee ID:" .value=${this.item?.refereeId} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
-                <simple-select id="position" icon-name="referee-position-solid" @icon-click=${() => this.showPage('my-referee-positions')} label="Position:" .dataSource=${this.refereePositionsDataSource} .value=${this.item?.position} @input=${this.validateInput}></simple-select>
-                <gender-input id="gender" icon-name="gender" label="Gender:" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="Region name:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
-                <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-referee-categories')} label="Category:" .dataSource=${this.refereeCategoriesDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-input id="refereeUlid" icon-name=${+this.item?.gender ? "referee-woman-solid" : "referee-man-solid"} @icon-click=${() => this.showPage('my-referee')} label="Referee Ulid:" .value=${this.item?.refereeUlid} @input=${this.validateInput}></simple-input>
+                <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
+                <simple-input id="birthday" label="${lang`Data of birth`}:" icon-name="cake-candles-solid" .value=${this.item?.payload?.birthday} @input=${this.validateInput} lang="ru-Ru" type="date" ></simple-input>
+                <simple-select id="category" label="${lang`Sports category`}:" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" icon-name="sportsman-pc-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.payload?.sportsmanPC} @input=${this.validateInput}></simple-input>
+                <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.item?.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"} .dataSource=${this.findDataSource}  @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.sportsmanShowValue} .value=${this.item?.sportsman} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.payload?.club} @input=${this.validateInput}></simple-select>
             </div>
         `;
     }
@@ -98,8 +146,40 @@ class MyCompetitionSection5Page1 extends BaseElement {
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
+            if (e.target.id === 'birthday' || e.target.id === 'gender') {
+                try {
+                    this.changeAgeGroup()
+                    this.requestUpdate()
+                }
+                catch {
 
+                }
+            }
             this.isModified = this.oldValues.size !== 0;
+        }
+    }
+
+    async findSportsmanByName(e) {
+        const target = e.target
+        let sportsman
+        const lastName = target.value
+        if (target.isShowList)
+            target.isShowList = false
+        if (!lastName) {
+            await this.errorDialog('Вы не задали фамилию для поиска')
+            return
+        }
+        sportsman = await SportsmanDataset.getItemByLastName(lastName)
+        if (sportsman.rows.length === 0) {
+            this.showDialog('Такой спортсмен не найден')
+            return
+        }
+
+        if (sportsman.rows.length >= 1) {
+            this.findDataSource = {}
+            this.findDataSource.items = sportsman.rows.map(item => item.doc)
+            target.isShowList = true
+            return
         }
     }
 
@@ -115,7 +195,7 @@ class MyCompetitionSection5Page1 extends BaseElement {
                 await this.errorDialog('Вы не задали фамилию для поиска')
                 return
             }
-            sportsman = await RefereeDataset.getItemByLastName(lastName)
+            sportsman = await SportsmanDataset.getItemByLastName(lastName)
             if (sportsman.rows.length === 0) {
                 this.showDialog('Такой спортсмен не найден')
                 return
@@ -128,9 +208,9 @@ class MyCompetitionSection5Page1 extends BaseElement {
             }
             sportsman = sportsman.rows[0].doc
         } else if (value.includes(":")) {
-            sportsman = await RefereeDataset.getItem(value)
+            sportsman = await SportsmanDataset.getItem(value)
         } else if (target.value.includes("-")) {
-            sportsman = await RefereeDataset.getItemBySportsmanPC(value)
+            sportsman = await SportsmanDataset.getItemBySportsmanPC(value)
             if (sportsman.rows.length === 0) {
                 this.showDialog('Такой спортсмен не найден')
                 return
@@ -141,14 +221,14 @@ class MyCompetitionSection5Page1 extends BaseElement {
             }
             sportsman = sportsman.rows[0].doc
         } else {
-            sportsman = await RefereeDataset.getItemByLastName(value)
+            sportsman = await SportsmanDataset.getItemByLastName(value)
             if (sportsman.rows.length >= 0) {
                 this.findDataSource = sportsman.rows
             }
         }
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.refereeUlid = sportsman._id
+            sportsman.sportsmanUlid = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
@@ -164,14 +244,11 @@ class MyCompetitionSection5Page1 extends BaseElement {
     sportsmanChoose(e) {
         let sportsman = e.detail
         if (sportsman) {
-            sportsman.refereeUlid = sportsman._id
-            const inputs = this.$id()
-            inputs.forEach(input => {
-                if (input.id in sportsman) {
-                    input.setValue(sportsman[input.id])
-                }
-            })
-            //Object.assign(this.item, sportsman)
+            this.item.sportsman = sportsman
+            this.item.payload = {}
+            Object.assign(this.item.payload, this.item.sportsman)
+            delete this.item.payload._id
+            delete this.item.payload._rev
             this.requestUpdate()
         }
     }
@@ -193,6 +270,28 @@ class MyCompetitionSection5Page1 extends BaseElement {
         return this.showDialog(message, 'error', 'Ошибка')
     }
 
+    changeAgeGroup() {
+        const gender = this.$id('gender').value
+        const year = this.$id('birthday').value.split('.')[2]
+        if ((gender || gender === 0) && year) {
+            const ageGroupComponent = this.$id('ageGroup')
+            const nowYear = this.parent.startDate.split("-")[0]
+            const age = nowYear - year
+            const item = this.parent.ageGroups.find( item => item.gender == gender && age >= item.minAge && age <= item.maxAge)
+            if (item) {
+                ageGroupComponent.setValue(item)
+            } else {
+                this.errorDialog("Такая возрастная группа в соревновании не найдена")
+                delete this.item.ageGroup
+                ageGroupComponent.setValue('')
+            }
+        }
+    }
+
+    async saveItem() {
+        await Dataset.addItem(this.item);
+    }
+
     startEdit() {
         let input = this.$id("lastName")
         input.focus()
@@ -201,11 +300,12 @@ class MyCompetitionSection5Page1 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.refereeCategoriesDataSource = new RefereeCategoriesDataSource(this, await RefereeCategoriesDataset.getDataSet())
-        this.refereePositionsDataSource = new RefereePositionsDataSource(this, await RefereePositionsDataset.getDataSet())
+        this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
-        this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
+        this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
+        this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
     }
+
 }
 
 customElements.define("my-competition-section-5-page-1", MyCompetitionSection5Page1);

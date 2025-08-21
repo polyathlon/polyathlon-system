@@ -222,4 +222,28 @@ export default class DataSet {
 
         return result
     }
+
+    static fetchTrainerGetItem(token) {
+        return fetch(`https://${HOST}:4500/api/profile/trainer`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        })
+    }
+
+    static async getTrainer() {
+        const token = getToken()
+        let response = await DataSet.fetchTrainerGetItem(token)
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.fetchTrainerGetItem(token)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+
+        return result
+    }
 }

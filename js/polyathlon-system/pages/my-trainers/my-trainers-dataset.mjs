@@ -121,7 +121,7 @@ export default class DataSet {
     }
 
     static #fetchGetItemByLastName(token, itemId) {
-        return fetch(`https://${HOST}:4500/api/referee/last-name/${itemId}`, {
+        return fetch(`https://${HOST}:4500/api/trainer/last-name/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

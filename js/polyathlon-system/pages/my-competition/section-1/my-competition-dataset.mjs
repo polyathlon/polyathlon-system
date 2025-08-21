@@ -263,4 +263,30 @@ export default class DataSet {
         }
         return result.number
     }
+    
+    static #fetchGetSportsmanProfile(token) {
+        return fetch(`https://${HOST}:4500/api/sportsman-profile`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getSportsmanProfile() {
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetSportsmanProfile(token)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetSportsmanProfile(token)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
 }

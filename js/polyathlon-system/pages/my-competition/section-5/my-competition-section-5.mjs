@@ -159,11 +159,14 @@ class MyCompetitionSection5 extends BaseElement {
                     }
                 }
                 icon-button[selected] {
-                    background: rgba(255, 255, 255, 0.1)
+                    background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
                 }
 
                 icon-button:hover {
-                    background: rgba(255, 255, 255, 0.1)
+                    background: var(--list-icon-button-hover, rgba(255, 255, 255, 0.1));
+                    &[selected] {
+                        background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
+                    }
                 }
 
                 /* width */
@@ -654,7 +657,7 @@ class MyCompetitionSection5 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>Referees</p>
+                <p>${lang`Requests`}</p>
             </header>
             <header class="right-header">
                 ${this.sections.map( (page, index) =>

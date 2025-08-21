@@ -55,11 +55,11 @@ class MyCompetitionSection5List1 extends BaseElement {
         return html`
             ${this.item.dataSource?.items?.map((item, index) =>
                 html `<icon-button
-                        label=${this.fio(item)}
+                        label=${this.fio(item.payload)}
                         title=${item._id}
-                        image-name=${item.gender == 0 ? "images/referee-man-solid.svg" : "images/referee-man-solid.svg"}
+                        image-name=${item.payload.gender == true ? "images/sportsman-woman-solid.svg" : "images/sportsman-man-solid.svg"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
+                        .status=${ { name: item.payload?.category?.name || item?._id, icon: 'sports-category-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>                `
 

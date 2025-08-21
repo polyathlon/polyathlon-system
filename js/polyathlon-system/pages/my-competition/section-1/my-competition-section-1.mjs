@@ -202,11 +202,14 @@ class MyCompetitionSection1 extends BaseElement {
                 }
 
                 icon-button[selected] {
-                    background: rgba(255, 255, 255, 0.1)
+                    background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
                 }
 
                 icon-button:hover {
-                    background: rgba(255, 255, 255, 0.1)
+                    background: var(--list-icon-button-hover, rgba(255, 255, 255, 0.1));
+                    &[selected] {
+                        background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
+                    }
                 }
 
                 /* width */
@@ -252,7 +255,7 @@ class MyCompetitionSection1 extends BaseElement {
             {name: 'page2', iconName: 'age-group-solid', page: 1, title: lang`Age groups`, click: () => this.gotoPage(1)},
             {name: 'page3', iconName: 'location-circle-solid', page: 2, title: lang`Location`, click: () => this.gotoPage(2)},
             // {iconName: 'map-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
-            {name: 'page4', iconName: 'registration-solid', page: 3, title: lang`Registration`, click: () => this.gotoPage(5)},
+            {name: 'page4', iconName: 'registration-solid', page: 3, title: lang`Registration`, click: () => this.gotoPage(3)},
             {iconName: 'circle-trash-sharp-solid', page: -2, title: lang`Delete`, click: this.deleteItem},
         ]
     }
