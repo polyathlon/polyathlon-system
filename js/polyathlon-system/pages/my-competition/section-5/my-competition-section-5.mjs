@@ -150,7 +150,7 @@ class MyCompetitionSection5 extends BaseElement {
                         height: 70%;
                         display: flex;
                         align-items: center;
-                        justify-content: flex-end;
+                        justify-content: center;
                         padding: 0 10px;
                         gap: 1vw;
                         simple-button {
@@ -635,22 +635,102 @@ class MyCompetitionSection5 extends BaseElement {
         }
         if (!this.dataSource?.items)
             return ''
-        if (this.dataSource.items.length) {
-            if (this.dataSource.state === States.NEW) {
-                return this.#newItemFooter
-            }
-            if (this.isModified) {
-                return this.#itemFooter
-            }
-            return this.#addItemFooter
-        }
-        if (this.dataSource.state === States.NEW) {
-            return this.#newItemFooter
-        }
-        if (this.isModified) {
-            return this.#firstItemFooter
-        }
+        return html`
+            <nav class="buttons">
+                <aside-button icon-name=${"verified-status-solid"} title=${'Принять'} @click=${this.verified}></aside-button>
+                <aside-button icon-name=${"clock-status-solid"} title=${'Отложить'} @click=${this.clock}></aside-button>
+                <aside-button icon-name=${"add-status-solid"} title=${'Создать'} @click=${this.add}></aside-button>
+                <aside-button icon-name=${"reject-status-solid"} title=${'Отклонить'} @click=${this.reject}></aside-button>
+                <aside-button icon-name=${"accept-status-solid"} title=${'Завершить'} @click=${this.accept}></aside-button>
+            </nav>
+        `
+        // if (this.dataSource.items.length) {
+        //     if (this.dataSource.state === States.NEW) {
+        //         return this.#newItemFooter
+        //     }
+        //     if (this.isModified) {
+        //         return this.#itemFooter
+        //     }
+        //     return this.#addItemFooter
+        // }
+        // if (this.dataSource.state === States.NEW) {
+        //     return this.#newItemFooter
+        // }
+        // if (this.isModified) {
+        //     return this.#firstItemFooter
+        // }
         return ''
+    }
+
+    verified() {
+        this.currentItem.status = { name: 'Рассматривается' }
+        this.saveItem()
+    }
+
+    clock() {
+        this.currentItem.status = { name: 'Отложено' }
+        this.saveItem()
+    }
+
+    reject() {
+        this.currentItem.status = { name: 'Отклонено' }
+        this.currentItem.active = false
+        this.saveItem()
+    }
+
+    async accept() {
+        this.currentItem.status = { name: 'Выполнено' }
+        this.currentItem.active = false
+        switch (this.currentPage) {
+            case 0:
+                await DataSet.addSportsmanProfile(this.currentItem)
+                break;
+            case 1:
+                await DataSet.addRefereeProfile(this.currentItem)
+                break;
+            case 2:
+                await DataSet.addTrainerProfile(this.currentItem)
+                break;
+            case 3:
+                await DataSet.addFederationMemberProfile(this.currentItem)
+                break;
+        }
+        this.saveItem()
+    }
+
+    async add() {
+        switch (this.currentPage) {
+            case 0:
+                if (this.currentItem?.payload) {
+                    this.currentItem.sportsman = await SportsmanDataset.addItem(this.currentItem?.payload)
+                    this.$id("page1").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            case 1:
+                if (this.currentItem?.payload) {
+                    this.currentItem.referee = await RefereeDataset.addItem(this.currentItem?.payload)
+                    this.$id("page2").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            case 2:
+                if (this.currentItem?.payload) {
+                    this.currentItem.trainer = await TrainerDataset.addItem(this.currentItem?.payload)
+                    this.$id("page3").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            case 3:
+                if (this.currentItem?.payload) {
+                    this.currentItem.federationMember = await FederationMemberDataset.addItem(this.currentItem?.payload)
+                    this.$id("page4").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     render() {
@@ -743,11 +823,11 @@ class MyCompetitionSection5 extends BaseElement {
         } else {
             await this.dataSource.addItem(this.currentItem);
         }
-        if (this.avatarFile) {
-            let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
-            if (!result) return;
-        }
-        this.avatarFile = null;
+        // if (this.avatarFile) {
+        //     let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
+        //     if (!result) return;
+        // }
+        // this.avatarFile = null;
         this.oldValues?.clear();
         this.isModified = false;
     }

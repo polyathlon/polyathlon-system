@@ -45,7 +45,7 @@ class MySportsDisciplinesSection1Tab2Page2 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-select id="category" icon-name="sports-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="${lang`Sports category`}:" .dataSource=${this.sportsCategoriesDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="category" icon-name="sportsman-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} label="${lang`Sports category`}:" .dataSource=${this.sportsCategoriesDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .value=${this.item?.points} @input=${this.validateInput}></simple-input>
             </div>
         `;

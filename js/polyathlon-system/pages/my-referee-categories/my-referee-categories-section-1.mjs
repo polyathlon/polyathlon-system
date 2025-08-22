@@ -299,7 +299,7 @@ class MyRefereeCategoriesSection1 extends BaseElement {
                     <icon-button
                         label=${item.name}
                         title=${item._id}
-                        icon-name="referee-category-solid"
+                        image-name="images/referee-category-solid.svg"
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
                     ></icon-button>

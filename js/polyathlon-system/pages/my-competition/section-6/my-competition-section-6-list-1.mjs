@@ -25,12 +25,16 @@ class MyCompetitionSection6List1 extends BaseElement {
                     icon-button {
                         flex: 0 0 40px;
                     }
+
                     icon-button[selected] {
-                       background: rgba(255, 255, 255, 0.1)
+                        background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
                     }
 
                     icon-button:hover {
-                        background: rgba(255, 255, 255, 0.1)
+                        background: var(--list-icon-button-hover, rgba(255, 255, 255, 0.1));
+                        &[selected] {
+                            background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
+                        }
                     }
                 }
             `
@@ -59,7 +63,7 @@ class MyCompetitionSection6List1 extends BaseElement {
                         title=${item._id}
                         image-name=${item.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'sports-category-solid'} }
+                        .status=${ { name: item.category?.name || item?._id, icon: 'sportsman-category-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>                `
 

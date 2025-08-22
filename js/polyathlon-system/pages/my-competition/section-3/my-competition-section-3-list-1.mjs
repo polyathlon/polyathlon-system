@@ -25,12 +25,16 @@ class MyCompetitionSection3List1 extends BaseElement {
                     icon-button {
                         flex: 0 0 40px;
                     }
+
                     icon-button[selected] {
-                       background: rgba(255, 255, 255, 0.1)
+                        background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
                     }
 
                     icon-button:hover {
-                        background: rgba(255, 255, 255, 0.1)
+                        background: var(--list-icon-button-hover, rgba(255, 255, 255, 0.1));
+                        &[selected] {
+                            background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
+                        }
                     }
                 }
             `

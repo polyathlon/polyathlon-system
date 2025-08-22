@@ -35,8 +35,8 @@ class MySportsCategoriesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="sports-category-solid" label="${lang`Sports category`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="shortName" icon-name="short-sports-category-solid" label="${lang`Short name`}:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="sportsman-category-solid" label="${lang`Sports category`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="shortName" icon-name="sportsman-short-category-solid" label="${lang`Short name`}:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

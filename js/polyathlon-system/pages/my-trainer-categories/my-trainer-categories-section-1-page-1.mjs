@@ -34,8 +34,8 @@ class MyTrainerCategoriesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="referee-category-solid" label="Trainer category:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="shortName" icon-name="short-referee-category-solid" label="Short name:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" icon-name="trainer-category-solid" label="Trainer category:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
+                <simple-input id="shortName" icon-name="trainer-short-category-solid" label="Short name:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

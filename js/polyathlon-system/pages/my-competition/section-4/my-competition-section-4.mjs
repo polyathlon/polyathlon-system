@@ -264,7 +264,7 @@ class MyCompetitionSection4 extends BaseElement {
         ]
         this.pages = [
             {title: lang`Competition statistic`, page: () => this.#page1(), iconName: 'chart-pie-solid', click: () => this.gotoPage(0)},
-            {title: lang`Sport categories statistic`, page: () => this.#page5(), iconName: 'sports-category-solid', click: () => this.gotoPage(1)},
+            {title: lang`Sport categories statistic`, page: () => this.#page5(), iconName: 'sportsman-category-solid', click: () => this.gotoPage(1)},
             {title: lang`Club types statistic`, page: () => this.#page6(), iconName: 'club-type-solid', click: () => this.gotoPage(2)},
             {title: lang`Region statistic`, page: () => this.#page8(), iconName: 'region-solid', click: () => this.gotoPage(3)},
             {title: lang`Medal counts`, page: () => this.#page9(), iconName: 'medal-1-solid', click: () => this.gotoPage(4)},

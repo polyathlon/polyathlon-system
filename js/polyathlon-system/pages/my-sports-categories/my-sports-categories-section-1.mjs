@@ -300,7 +300,7 @@ class MySportsCategoriesSection1 extends BaseElement {
                     <icon-button
                         label=${item.name}
                         title=${item._id}
-                        icon-name="sports-category-solid"
+                        image-name="images/sportsman-category-solid.svg"
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
                     ></icon-button>
