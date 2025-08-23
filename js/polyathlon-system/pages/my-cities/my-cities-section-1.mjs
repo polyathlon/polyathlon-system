@@ -136,12 +136,14 @@ class MyCitiesSection1 extends BaseElement {
                 }
 
                 icon-button[selected] {
+                    border-radius: 5px;
                     background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
                 }
 
                 icon-button:hover {
                     background: var(--list-icon-button-hover, rgba(255, 255, 255, 0.1));
                     &[selected] {
+                        border-radius: 5px;
                         background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
                     }
                 }
