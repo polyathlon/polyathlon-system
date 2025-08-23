@@ -47,11 +47,11 @@ export default class DataSet {
     }
 
     static async addItem(item) {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchAddItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
@@ -69,23 +69,12 @@ export default class DataSet {
         DataSet.#dataSet.unshift(item);
     }
 
-    static #fetchGetItem(token, itemId) {
-        return fetch(`https://${HOST}:4500/api/referee/${itemId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
+    static #fetchGetItem(itemId) {
+        return fetch(`https://${HOST}:4500/api/referee/${itemId}`)
     }
 
     static async getItem(itemId) {
-        const token = getToken();
-
-        let response = await DataSet.#fetchGetItem(token, itemId)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.#fetchGetItem(token, itemId)
-        }
+        let response = await DataSet.#fetchGetItem(itemId)
 
         const result = await response.json()
 
@@ -104,12 +93,12 @@ export default class DataSet {
     }
 
     static async getItemByRefereePC(itemId) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchGetItemByRefereePC(token, itemId)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchGetItemByRefereePC(token, itemId)
         }
 
@@ -130,12 +119,12 @@ export default class DataSet {
     }
 
     static async getItemByLastName(itemId) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchGetItemByLastName(token, itemId)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchGetItemByLastName(token, itemId)
         }
 
@@ -159,12 +148,12 @@ export default class DataSet {
     }
 
     static async saveItem(item) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchSaveItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchSaveItem(token, item)
         }
 
@@ -190,12 +179,12 @@ export default class DataSet {
     }
 
     static async deleteItem(item) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchDeleteItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchDeleteItem(token, item)
         }
 
@@ -228,11 +217,11 @@ export default class DataSet {
     }
 
     static async createRefereePC(item) {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchCreateRefereePC(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchCreateRefereePC(token, item)
         }
         const result = await response.json()
@@ -253,11 +242,11 @@ export default class DataSet {
     }
 
     static async getQRCode(data) {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchGetQRCode(token, btoa(data))
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchGetQRCode(token, btoa(data))
         }
         const result = await response.json()

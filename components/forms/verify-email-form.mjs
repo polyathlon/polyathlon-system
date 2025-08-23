@@ -119,10 +119,10 @@ class VerifyEmailForm extends BaseElement {
     }
 
     async verifyEmailRequest() {
-        const token = getToken()
+        let token = getToken()
         let response = await VerifyEmailForm.#fetchVerifyEmailRequest(token)
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await VerifyEmailForm.#fetchVerifyEmailRequest(token)
         }
 
@@ -155,11 +155,11 @@ class VerifyEmailForm extends BaseElement {
 
     async verifyEmail() {
         const code = this.#code
-        const token = getToken()
+        let token = getToken()
         let response = await VerifyEmailForm.#fetchVerifyEmail({ code,  token: this.token }, token)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await VerifyEmailForm.#fetchVerifyEmail({ code,  token: this.token }, token)
         }
 

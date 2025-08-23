@@ -32,11 +32,11 @@ export default class DataSet {
     }
 
     static async addItem(item) {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchAddItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
@@ -53,23 +53,13 @@ export default class DataSet {
         DataSet.#dataSet.unshift(item);
     }
 
-    static #fetchGetItem(token, itemId) {
-        return fetch(`https://${HOST}:4500/api/referee/${itemId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
+    static #fetchGetItem(itemId) {
+        return fetch(`https://${HOST}:4500/api/referee/${itemId}`)
     }
 
     static async getItem(itemId) {
-        const token = getToken();
 
-        let response = await DataSet.#fetchGetItem(token, itemId)
-
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.#fetchGetItem(token, itemId)
-        }
+        let response = await DataSet.#fetchGetItem(itemId)
 
         const result = await response.json()
 
@@ -91,12 +81,12 @@ export default class DataSet {
     }
 
     static async saveItem(item) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchSaveItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchSaveItem(token, item)
         }
 
@@ -122,12 +112,12 @@ export default class DataSet {
     }
 
     static async deleteItem(item) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchDeleteItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchDeleteItem(token, item)
         }
 
@@ -159,12 +149,12 @@ export default class DataSet {
     }
 
     static async uploadAvatar(avatar, refereeId) {
-        const token = getToken();
+        let token = getToken();
         const formData = new FormData();
         formData.append("file", avatar);
         let response = await DataSet.fetchUploadAvatar(token, formData, refereeId)
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchUploadAvatar(token, formData, refereeId)
         }
         const result = await response.json()
@@ -174,22 +164,13 @@ export default class DataSet {
         return result
     }
 
-    static fetchDownloadAvatar(token, refereeId) {
-        return fetch(`https://${HOST}:4500/api/upload/referee/avatar/${refereeId}`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
+    static fetchDownloadAvatar(refereeId) {
+        return fetch(`https://${HOST}:4500/api/upload/referee/avatar/${refereeId}`)
     }
 
     static async downloadAvatar(refereeId) {
-        const token = getToken();
+
         let response = await DataSet.fetchDownloadAvatar(token, refereeId)
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchDownloadAvatar(token, refereeId)
-        }
 
         if (!response.ok) {
             return null
@@ -210,10 +191,10 @@ export default class DataSet {
     }
 
     static async deleteAvatar(id) {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchDeleteAvatar(token, id)
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchDeleteAvatar(token, id)
         }
         const result = await response.json()
@@ -222,25 +203,14 @@ export default class DataSet {
         }
         return result
     }
-    
+
     static fetchGetQRCode(token, data) {
-        return fetch(`https://${HOST}:4500/api/qr-code?data=${data}`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-        })
+        return fetch(`https://${HOST}:4500/api/qr-code?data=${data}`)
     }
 
     static async getQRCode(data) {
-        const token = getToken();
         let response = await DataSet.fetchGetQRCode(token, btoa(data))
 
-        if (response.status === 419) {
-            const token = await refreshToken()
-            response = await DataSet.fetchGetQRCode(token, btoa(data))
-        }
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)

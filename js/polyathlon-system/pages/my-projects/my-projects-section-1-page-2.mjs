@@ -199,7 +199,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
         async loadChartData() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const input = this.project._id;
             const parts = input.split(":project:");
             const projectId = parts[1];
@@ -247,7 +247,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
         async downloadFile() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const projectId = this.currentProject._id;
             // const fileHandle = await window.getNewFileHandle();
             fetch(`https://localhost:4500/api/download/${projectId}`, {
@@ -373,7 +373,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
         async getProjectList() {
-            const token = await this.getToken();
+            token = await this.getToken();
             return fetch('https://localhost:4500/api/projects', {
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -382,7 +382,7 @@ class MyProjectsSection1Page2 extends BaseElement {
             })
             .then(response => {
                 if (response.status === 419){
-                    return this.refreshToken().then( token =>
+                    return this.refreshToken(token).then( token =>
                         fetch('https://localhost:4500/api/projects', {
                             headers: {
                             'Authorization': `Bearer ${token}`
@@ -419,7 +419,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
         async getProjectStatusList() {
-            const token = await this.getToken();
+            token = await this.getToken();
             return fetch('https://localhost:4500/api/projects-status', {
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -428,7 +428,7 @@ class MyProjectsSection1Page2 extends BaseElement {
             })
             .then(response => {
                 if (response.status === 419){
-                    return this.refreshToken().then( token =>
+                    return this.refreshToken(token).then( token =>
                         fetch('https://localhost:4500/api/projects-status', {
                             headers: {
                             'Authorization': `Bearer ${token}`
@@ -463,7 +463,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
         async downloadAvatar() {
-            const token = await this.getToken();
+            token = await this.getToken();
             return fetch(`https://localhost:4500/api/upload/avatar`, {
                 method: "GET",
                 headers: {
@@ -484,7 +484,7 @@ class MyProjectsSection1Page2 extends BaseElement {
 
 
         async getProjectAvatarList() {
-            const token = await this.getToken();
+            token = await this.getToken();
             return fetch('https://localhost:4500/api/download/project-avatars', {
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -493,7 +493,7 @@ class MyProjectsSection1Page2 extends BaseElement {
             })
             .then(response => {
                 if (response.status === 419){
-                    return this.refreshToken().then( token =>
+                    return this.refreshToken(token).then( token =>
                         fetch('https://localhost:4500/api/download/project-avatars', {
                             headers: {
                             'Authorization': `Bearer ${token}`
@@ -557,7 +557,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
 
-        refreshToken() {
+        refreshToken(token) {
             return fetch('https://localhost:4500/api/refresh-token', {
                 method: 'GET',
                 headers: {
@@ -585,7 +585,7 @@ class MyProjectsSection1Page2 extends BaseElement {
             return token;
         }
         async addProject() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const project = {name: "Новый проект"}
             return fetch(`https://localhost:4500/api/project`, {
                 method: "POST",
@@ -609,7 +609,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
         async LearnModel() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const result = await this.uploadFile();
             if (!result) return;
             return fetch(`https://localhost:4500/api/learn-model/${this.currentProject._id}?epochs=${this.currentProject.epochs}`, {
@@ -635,7 +635,7 @@ class MyProjectsSection1Page2 extends BaseElement {
             this.isLearning = true;
         }
         async saveProject() {
-            const token = await this.getToken();
+            token = await this.getToken();
             let result = await this.uploadFile();
             if (!result) return;
             result = await this.uploadAvatarFile();
@@ -661,7 +661,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
         async uploadFile() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const formData = new FormData();
             const uploadInput = this.renderRoot?.querySelector('upload-input')
             formData.append("file", uploadInput.file);
@@ -685,7 +685,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
         async uploadAvatarFile() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const formData = new FormData();
             const uploadInput = this.renderRoot?.querySelector('avatar-input')
             formData.append("file", uploadInput.value);
@@ -713,7 +713,7 @@ class MyProjectsSection1Page2 extends BaseElement {
             const modalResult = await this.confirmDialogShow('Вы действительно хотите lang`Delete` этот проект?')
             if (modalResult !== 'Ok')
                 return;
-            const token = await this.getToken();
+            token = await this.getToken();
             try {
                 await this.deleteProjectFiles(token)
             } catch(err) {
@@ -791,7 +791,7 @@ class MyProjectsSection1Page2 extends BaseElement {
         }
 
         async getProject(projectId) {
-            const token = await this.getToken();
+            token = await this.getToken();
             return fetch(`https://localhost:4500/api/project/${projectId}`, {
                 headers: {
                   'Authorization': `Bearer ${token}`

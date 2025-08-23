@@ -98,27 +98,9 @@ class PolyathlonSystemLeftAside extends BaseElement {
         }
     }
 
-    onRemovedCookie(cookie) {
-        console.log(`Removed: ${cookie}`);
-    }
-
-    onErrorCookie(error) {
-        console.log(`Error removing cookie: ${error}`);
-    }
-
-    removeCookie(tabs) {
-        let removing = browser.cookies.remove({
-            url: tabs[0].url,
-            name: "refresh-token",
-        });
-        removing.then(this.onRemoved, this.onError);
-    }
-
     signOut() {
         this.successUserIn = false;
         this.clearStorage();
-        document.cookie = "refresh-token=; max-age=-1";
-        document.cookie = "refresh-token=;expires=Thu, 01 Jan 1970 00:00:00 GMT"
         window.location.hash = '';
     }
 

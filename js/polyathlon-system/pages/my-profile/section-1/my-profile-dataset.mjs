@@ -29,10 +29,10 @@ export default class DataSet {
     }
 
     static async #getItems() {
-        const token = getToken()
+        let token = getToken()
         let response = await DataSet.#fetchGetItems(token)
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchGetItems(token)
         }
         const result = await response.json()
@@ -55,11 +55,11 @@ export default class DataSet {
     }
 
     static async addItem(item) {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchAddItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
@@ -85,12 +85,12 @@ export default class DataSet {
     }
 
     static async getItem(itemId) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchGetItem(token, itemId)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchGetItem(token, itemId)
         }
 
@@ -114,12 +114,12 @@ export default class DataSet {
     }
 
     static async saveItem(item) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchSaveItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchSaveItem(token, item)
         }
 
@@ -145,12 +145,12 @@ export default class DataSet {
     }
 
     static async deleteItem(item) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchDeleteItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchDeleteItem(token, item)
         }
 
@@ -182,12 +182,12 @@ export default class DataSet {
     }
 
     static async uploadAvatar(avatar) {
-        const token = getToken();
+        let token = getToken();
         const formData = new FormData();
         formData.append("file", avatar);
         let response = await DataSet.fetchUploadAvatar(token, formData)
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchUploadAvatar(token, formData)
         }
         const result = await response.json()
@@ -208,12 +208,12 @@ export default class DataSet {
     // }
 
     // static async uploadAvatar(avatar) {
-    //     const token = getToken();
+    //     let token = getToken();
     //     const formData = new FormData();
     //     formData.append("file", avatar);
     //     let response = await DataSet.fetchUploadAvatar(token, formData)
     //     if (response.status === 419) {
-    //         const token = await refreshToken()
+    //         token = await refreshToken(token)
     //         response = await DataSet.fetchUploadAvatar(token, formData)
     //     }
     //     const result = await response.json()
@@ -233,10 +233,10 @@ export default class DataSet {
     // }
 
     // static async downloadAvatar() {
-    //     const token = getToken();
+    //     let token = getToken();
     //     let response = await DataSet.fetchDownloadAvatar(token)
     //     if (response.status === 419) {
-    //         const token = await refreshToken()
+    //         token = await refreshToken(token)
     //         response = await DataSet.fetchDownloadAvatar(token)
     //     }
 
@@ -261,10 +261,10 @@ export default class DataSet {
     }
 
     static async downloadAvatar() {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchDownloadAvatar(token)
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchDownloadAvatar(token)
         }
 
@@ -288,10 +288,10 @@ export default class DataSet {
     }
 
     static async deleteAvatar() {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchDeleteAvatar(token)
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchDeleteAvatar(token)
         }
         const result = await response.json()
@@ -311,10 +311,10 @@ export default class DataSet {
     }
 
     static async telegramToken() {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchTelegramToken(token)
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchTelegramToken(token)
         }
 
@@ -334,12 +334,12 @@ export default class DataSet {
     }
 
     static async getSportsmanProfile() {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchGetSportsmanProfile(token)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchGetSportsmanProfile(token)
         }
 
@@ -360,12 +360,12 @@ export default class DataSet {
     }
 
     static async getRefereeProfile() {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchGetRefereeProfile(token)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchGetRefereeProfile(token)
         }
 
@@ -386,12 +386,12 @@ export default class DataSet {
     }
 
     static async getTrainerProfile() {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchGetTrainerProfile(token)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchGetTrainerProfile(token)
         }
 
@@ -412,12 +412,12 @@ export default class DataSet {
     }
 
     static async getFederationMemberProfile() {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchGetFederationMemberProfile(token)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchGetFederationMemberProfile(token)
         }
 

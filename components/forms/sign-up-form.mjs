@@ -683,11 +683,11 @@ class SignUpForm extends BaseElement {
 
     async getSimpleUserInfo() {
 
-        const token = getToken();
+        let token = getToken();
         let response = await SignUpForm.fetchSimpleUserInfo(token)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await SignUpForm.fetchSimpleUserInfo(token)
         }
 

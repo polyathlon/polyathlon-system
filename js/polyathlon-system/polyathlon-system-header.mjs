@@ -272,7 +272,7 @@ class PolyathlonSystemHeader extends BaseElement {
     }
 
     async getNotificationOffset(projectId) {
-        const token = await this.getToken();
+        let token = await this.getToken();
         return fetch(`https://${HOST}:4500/api/notification-offset`, {
             headers: {
               'Authorization': `Bearer ${token}`

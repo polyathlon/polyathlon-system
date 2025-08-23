@@ -183,7 +183,7 @@ class MyNotificationsSection1 extends BaseElement {
         }
 
         async sendOffset() {
-                const token = await this.getToken();
+                token = await this.getToken();
                 const obj = {
                     offset: this.notificationCurrentOffset
                 }
@@ -320,7 +320,7 @@ pdfMake.createPdf(docInfo).open();
         }
 
         async downloadFile() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const projectId = this.currentProject._id;
             // const fileHandle = await window.getNewFileHandle();
             fetch(`https://${HOST}:4500/api/download/${projectId}`, {
@@ -433,7 +433,7 @@ pdfMake.createPdf(docInfo).open();
         }
 
         async getNotificationList() {
-            const token = await this.getToken();
+            token = await this.getToken();
             return fetch(`https://${HOST}:4500/api/notifications`, {
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -442,7 +442,7 @@ pdfMake.createPdf(docInfo).open();
             })
             .then(response => {
                 if (response.status === 419){
-                    return this.refreshToken().then( token =>
+                    return this.refreshToken(token).then( token =>
                         fetch(`https://${HOST}:4500/api/notifications`, {
                             headers: {
                             'Authorization': `Bearer ${token}`
@@ -474,7 +474,7 @@ pdfMake.createPdf(docInfo).open();
             this.currentProject = this.dataSet[0];
         }
 
-        refreshToken() {
+        refreshToken(token) {
             return fetch(`https://${HOST}:4500/api/refresh-token`, {
                 method: 'GET',
                 headers: {
@@ -503,7 +503,7 @@ pdfMake.createPdf(docInfo).open();
         }
 
         async addProject() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const project = {name: "Новый проект"}
             return fetch(`https://${HOST}:4500/api/project`, {
                 method: "POST",
@@ -527,7 +527,7 @@ pdfMake.createPdf(docInfo).open();
         }
 
         async saveProject() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const result = await this.uploadFile();
             if (!result) return;
             return fetch(`https://${HOST}:4500/api/project/${this.currentProject._id}`, {
@@ -551,7 +551,7 @@ pdfMake.createPdf(docInfo).open();
         }
 
         async uploadFile() {
-            const token = await this.getToken();
+            token = await this.getToken();
             const formData = new FormData();
             const uploadInput = this.renderRoot?.querySelector('upload-input')
             formData.append("file", uploadInput.file);
@@ -578,7 +578,7 @@ pdfMake.createPdf(docInfo).open();
             const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
             if (modalResult !== 'Ok')
                 return;
-            const token = await this.getToken();
+            token = await this.getToken();
             try {
                 await this.deleteProjectFiles(token)
             } catch(err) {
@@ -656,7 +656,7 @@ pdfMake.createPdf(docInfo).open();
         }
 
         async getProject(projectId) {
-            const token = await this.getToken();
+            token = await this.getToken();
             return fetch(`https://${HOST}:4500/api/project/${projectId}`, {
                 headers: {
                   'Authorization': `Bearer ${token}`

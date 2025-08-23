@@ -48,11 +48,11 @@ export default class DataSet {
     }
 
     static async addItem(item) {
-        const token = getToken();
+        let token = getToken();
         let response = await DataSet.fetchAddItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
@@ -107,12 +107,12 @@ export default class DataSet {
     }
 
     static async saveItem(item) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchSaveItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchSaveItem(token, item)
         }
 
@@ -138,12 +138,12 @@ export default class DataSet {
     }
 
     static async deleteItem(item) {
-        const token = getToken();
+        let token = getToken();
 
         let response = await DataSet.#fetchDeleteItem(token, item)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await DataSet.#fetchDeleteItem(token, item)
         }
 

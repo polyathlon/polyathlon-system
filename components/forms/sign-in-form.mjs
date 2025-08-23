@@ -275,7 +275,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     async sendVKToken() {
-        const token = await this.getVKToken()
+        token = await this.getVKToken()
         // window.history.replaceState(null, '', window.location.pathname);
         // this.saveToken(token)
         // this.getSimpleUserInfo(token)
@@ -445,11 +445,11 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     async getSimpleUserInfo() {
 
-        const token = getToken();
+        let token = getToken();
         let response = await SignInForm.fetchSimpleUserInfo(token)
 
         if (response.status === 419) {
-            const token = await refreshToken()
+            token = await refreshToken(token)
             response = await SignInForm.fetchSimpleUserInfo(token)
         }
 
