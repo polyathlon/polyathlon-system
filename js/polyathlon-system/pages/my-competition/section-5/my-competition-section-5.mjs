@@ -18,6 +18,12 @@ import DataSource from './my-competition-section-5-datasource.mjs'
 
 import CompetitionDataSource from '../section-1/my-competition-datasource.mjs'
 
+import CompetitionSportsmenDataSet from '../section-2/my-competition-section-2-dataset.mjs'
+import CompetitionSportsmenDataSource from '../section-2/my-competition-section-2-dataset.mjs'
+
+import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs'
+import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
+
 class MyCompetitionSection5 extends BaseElement {
     static get properties() {
         return {
@@ -26,7 +32,7 @@ class MyCompetitionSection5 extends BaseElement {
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null, local: true },
-            isModified: { type: Boolean, default: "", local: true },
+            isModified: { type: Boolean, default: false, local: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
@@ -635,8 +641,17 @@ class MyCompetitionSection5 extends BaseElement {
         if (!isAuth()) {
             return ''
         }
-        if (!this.dataSource?.items)
+        if (!this.dataSource?.items) {
             return ''
+        }
+        if (this.isModified) {
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
+        }
         return html`
             <nav class="buttons">
                 <aside-button icon-name=${"verified-status-solid"} title=${'Принять'} @click=${this.verified}></aside-button>
@@ -701,38 +716,8 @@ class MyCompetitionSection5 extends BaseElement {
     }
 
     async add() {
-        switch (this.currentPage) {
-            case 0:
-                if (this.currentItem?.payload) {
-                    this.currentItem.sportsman = await SportsmanDataset.addItem(this.currentItem?.payload)
-                    this.$id("page1").requestUpdate()
-                    this.isModified = true
-                }
-                break;
-            case 1:
-                if (this.currentItem?.payload) {
-                    this.currentItem.referee = await RefereeDataset.addItem(this.currentItem?.payload)
-                    this.$id("page2").requestUpdate()
-                    this.isModified = true
-                }
-                break;
-            case 2:
-                if (this.currentItem?.payload) {
-                    this.currentItem.trainer = await TrainerDataset.addItem(this.currentItem?.payload)
-                    this.$id("page3").requestUpdate()
-                    this.isModified = true
-                }
-                break;
-            case 3:
-                if (this.currentItem?.payload) {
-                    this.currentItem.federationMember = await FederationMemberDataset.addItem(this.currentItem?.payload)
-                    this.$id("page4").requestUpdate()
-                    this.isModified = true
-                }
-                break;
-            default:
-                break;
-        }
+        const newSportsman = {}
+        this.competitionSportsmenDataSource.addNewItem(this.newSportsman)
     }
 
     render() {
@@ -894,6 +879,7 @@ class MyCompetitionSection5 extends BaseElement {
         this.competitionDataSource = new CompetitionDataSource(this)
         this.parent = await this.competitionDataSource.getItem()
         this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))
+        this.competitionSportsmenDataSource = new CompetitionSportsmenDataSource(this, await CompetitionSportsmenDataSet.getDataSet(parentId))
     }
 }
 

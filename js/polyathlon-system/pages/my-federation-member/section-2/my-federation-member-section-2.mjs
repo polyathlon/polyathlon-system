@@ -39,7 +39,7 @@ class MyFederationMemberSection2 extends BaseElement {
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null },
-            isModified: { type: Boolean, default: "", local: true },
+            isModified: { type: Boolean, default: false, local: true },
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
@@ -412,13 +412,15 @@ class MyFederationMemberSection2 extends BaseElement {
         if (!isAuth()) {
             return ''
         }
+        if (!this.dataSource?.items)
+            return ''
         if (this.isModified) {
-        return html`
-            <nav class='save'>
-                <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
-                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
-            </nav>
-        `
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
         }
         else {
         //     ${this.pages.map( (button, index) =>

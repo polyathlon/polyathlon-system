@@ -28,7 +28,7 @@ class MyFederationMemberSection1 extends BaseElement {
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null },
-            isModified: { type: Boolean, default: "", local: true },
+            isModified: { type: Boolean, default: false, local: true },
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },

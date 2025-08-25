@@ -28,7 +28,7 @@ class MySportsDisciplinesSection2 extends BaseElement {
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null, local: true },
-            isModified: { type: Boolean, default: "", local: true },
+            isModified: { type: Boolean, default: false, local: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },

@@ -4,6 +4,8 @@ import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/inputs/gender-input.mjs'
 import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
+import '../../../../../components/inputs/groupbox-input.mjs'
+import '../../../../../components/inputs/checkbox-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
@@ -117,11 +119,17 @@ class MyCompetitionSection5Page1 extends BaseElement {
                 </div>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-input id="birthday" label="${lang`Data of birth`}:" icon-name="cake-candles-solid" .value=${this.item?.payload?.birthday} @input=${this.validateInput} lang="ru-Ru" type="date" ></simple-input>
+                <simple-select id="ageGroup" label="${lang`Age group`}:" icon-name=${this.item?.payload?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} .listIconName = ${(item) => item?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} @icon-click=${() => this.showPage('my-age-groups')} .dataSource=${this.ageGroupDataSource} .value=${this.item?.payload?.ageGroup} @input=${this.validateInput}></simple-select>
                 <simple-select id="category" label="${lang`Sports category`}:" icon-name="sportsman-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
                 <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" icon-name="sportsman-pc-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.payload?.sportsmanPC} @input=${this.validateInput}></simple-input>
-                <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.item?.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"} .dataSource=${this.findDataSource}  @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.sportsmanShowValue} .value=${this.item?.sportsman} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.item?.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"} .dataSource=${this.findDataSource}  @icon-click=${this.gotoSportsmanPage} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.sportsmanShowValue} .value=${this.item?.sportsman} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.payload?.club} @input=${this.validateInput}></simple-select>
+                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.payload?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                <groupbox-input label="${lang`National team member`}:">
+                    <checkbox-input id="clubMember" label="${lang`Club member`}" .value=${this.item?.clubMember} .checked=${this.item?.payload?.clubMember} @input=${this.validateInput}></checkbox-input>
+                    <checkbox-input id="teamMember" label="${lang`Team member`}" .value=${this.item?.teamMember} .checked=${this.item?.payload?.teamMember} @input=${this.validateInput}></checkbox-input>
+                </groupbox-input>
             </div>
         `;
     }
@@ -130,9 +138,14 @@ class MyCompetitionSection5Page1 extends BaseElement {
         location.hash = page;
     }
 
+    gotoSportsmanPage() {
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.item?.sportsman?._id.split(':')[1]}`
+    }
+
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item
+            const currentItem = e.target.currentObject ?? this.item.payload
             if (!this.oldValues.has(e.target)) {
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
@@ -272,16 +285,16 @@ class MyCompetitionSection5Page1 extends BaseElement {
 
     changeAgeGroup() {
         const gender = this.$id('gender').value
-        const year = this.$id('birthday').value.split('.')[2]
+        const year = new Date(this.$id('birthday').value).getFullYear()
         if ((gender || gender === 0) && year) {
             const ageGroupComponent = this.$id('ageGroup')
-            const nowYear = this.parent.startDate.split("-")[0]
+            const nowYear = new Date(this.parent.startDate).getFullYear()
             const age = nowYear - year
             const item = this.parent.ageGroups.find( item => item.gender == gender && age >= item.minAge && age <= item.maxAge)
             if (item) {
                 ageGroupComponent.setValue(item)
             } else {
-                this.errorDialog("Такая возрастная группа в соревновании не найдена")
+                // this.errorDialog("Такая возрастная группа в соревновании не найдена")
                 delete this.item.ageGroup
                 ageGroupComponent.setValue('')
             }
@@ -304,6 +317,10 @@ class MyCompetitionSection5Page1 extends BaseElement {
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
         this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
+        this.teamMemberDataSource = {items: [
+            {name: 'region'},
+            {name: 'club'},
+        ]}
     }
 
 }
