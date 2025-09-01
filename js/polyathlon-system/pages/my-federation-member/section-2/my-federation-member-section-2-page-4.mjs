@@ -79,6 +79,10 @@ class MyFederationMemberSection2Page4 extends BaseElement {
         return { name: item?.region?.name ?? ''}
     }
 
+    listIconName(item) {
+        return item.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"
+    }
+
     render() {
         return html`
             <div class="container">
@@ -90,7 +94,7 @@ class MyFederationMemberSection2Page4 extends BaseElement {
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="category" label="${lang`Category`}:" icon-name="federation-member-category-solid" @icon-click=${() => this.showPage('my-federation-member-categories')} .dataSource=${this.federationMemberCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
                 <simple-input id="federationMemberPC" label="${lang`Federation member PC`}:" icon-name="federation-member-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createFederationMemberPC} .value=${this.item?.payload?.federationMemberPC} @input=${this.validateInput}></simple-input>
-                <simple-input id="federationMember" label="${lang`Federation member`}:" .dataSource=${this.findDataSource} icon-name="federation-member-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.federationMemberShowValue} .value=${this.item?.federationMember} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="federationMember" label="${lang`Federation member`}:" .listIconName=${this.listIconName} .dataSource=${this.findDataSource} icon-name=${this.item?.payload?.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.federationMemberShowValue} .value=${this.item?.federationMember} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
                 <div class="name-group">

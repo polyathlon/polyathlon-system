@@ -46,7 +46,7 @@ customElements.define("choose-input", class ChooseInput extends BaseElement {
 
     get #icon() {
         return html`
-            <simple-icon class="icon" icon-name=${this.iconName}></simple-icon>
+            <simple-icon class="icon" icon-name=${this.iconName} @click=${() => this.fire("icon-click")}></simple-icon>
         `
     }
 
@@ -88,7 +88,8 @@ customElements.define("choose-input", class ChooseInput extends BaseElement {
                 <input type=${this.type}
                     placeholder=${this.placeholder || nothing}
                     ${this.required ? 'required' : ''}
-                    .value=${this.value?.name || nothing} @input=${this.valueChange}
+                    .value=${(this.value?.name ?? this.value) || nothing}
+                    @input=${this.valueChange}
                     readonly
                 >
                 ${this.iconName ? this.#icon : ''}

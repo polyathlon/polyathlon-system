@@ -379,10 +379,6 @@ const dictionary = {
         "ru-RU": 'Пользователь',
         "en-EN": 'User'
     },
-    'Passport': {
-        "ru-RU": 'Паспорт',
-        "en-EN": 'Passport'
-    },
     'The future is already here': {
         "ru-RU": 'Будущее уже здесь',
         "en-EN": 'The future is already here'
@@ -918,6 +914,74 @@ const dictionary = {
     'Remove avatar': {
         "ru-RU": 'Удалить аватар',
         "en-EN": 'Remove avatar'
+    },
+    'Documents': {
+        "ru-RU": 'Документы',
+        "en-EN": 'Documents'
+    },
+    'Passport': {
+        "ru-RU": 'Паспорт',
+        "en-EN": 'Passport'
+    },
+    'Medical insurance': {
+        "ru-RU": 'Полис ОМС',
+        "en-EN": 'Medical insurance'
+    },
+    'SNILS': {
+        "ru-RU": 'СНИЛС',
+        "en-EN": 'SNILS'
+    },
+    'Passport series': {
+        "ru-RU": 'Серия',
+        "en-EN": 'Passport series'
+    },
+    'Passport number': {
+        "ru-RU": 'Номер',
+        "en-EN": 'Passport number'
+    },
+    'Passport date': {
+        "ru-RU": 'Дата выдачи',
+        "en-EN": 'Passport date'
+    },
+    'Passport issued by': {
+        "ru-RU": 'Выдан',
+        "en-EN": 'Passport issued by'
+    },
+    'Passport code': {
+        "ru-RU": 'Код подразделения',
+        "en-EN": 'Passport code'
+    },
+    'Insurance number': {
+        "ru-RU": 'Номер полиса',
+        "en-EN": 'Insurance number'
+    },
+    'Insurance date': {
+        "ru-RU": 'Дата окончания',
+        "en-EN": 'Insurance date'
+    },
+    'SNILS number': {
+        "ru-RU": 'Номер',
+        "en-EN": 'SNILS number'
+    },
+    'File': {
+        "ru-RU": 'Файл',
+        "en-EN": 'File'
+    },
+    'Birth certificate': {
+        "ru-RU": 'Свидетельство о рождении',
+        "en-EN": 'Birth certificate'
+    },
+    'Birth certificate number': {
+        "ru-RU": 'Номер свидетельства',
+        "en-EN": 'Birth certificate number'
+    },
+    'Birth certificate date': {
+        "ru-RU": 'Дата выдачи',
+        "en-EN": 'Birth certificate date'
+    },
+    'Drag and drop file or browse': {
+        "ru-RU": 'Перетащите сюда файлы и щелкните по этой области',
+        "en-EN": 'Drag and drop file or browse'
     },
 }
 

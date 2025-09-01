@@ -716,8 +716,9 @@ class MyCompetitionSection5 extends BaseElement {
     }
 
     async add() {
-        const newSportsman = {}
-        this.competitionSportsmenDataSource.addNewItem(this.newSportsman)
+        const newSportsman = Object.assign({}, this.currentItem.payload)
+        newSportsman.sportsmanUlid = this.currentItem.sportsman._id
+        CompetitionSportsmenDataSet.addItem(newSportsman)
     }
 
     render() {
@@ -874,12 +875,12 @@ class MyCompetitionSection5 extends BaseElement {
     }
 
     async firstUpdated() {
-        super.firstUpdated();
+        super.firstUpdated()
         const parentId = localStorage.getItem('currentCompetition').split(':')[1]
         this.competitionDataSource = new CompetitionDataSource(this)
         this.parent = await this.competitionDataSource.getItem()
         this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))
-        this.competitionSportsmenDataSource = new CompetitionSportsmenDataSource(this, await CompetitionSportsmenDataSet.getDataSet(parentId))
+        this.competitionSportsmenDataSet = await CompetitionSportsmenDataSet.getDataSet(parentId)
     }
 }
 

@@ -71,7 +71,7 @@ class MyCompetitionSection6Page8 extends BaseElement {
                 <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 <div class="name-group">
                     <simple-input id="race" icon-name="ski-solid" label="${lang`Race`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.race} @input=${this.validateInput}></simple-input>
-                    <simple-input id="number" icon-name="circle-number-solid" label="${lang`Skier number`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.number} @input=${this.validateInput}></simple-input>
+                    <simple-input id="number" icon-name="number-circle-solid" label="${lang`Skier number`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.number} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
                     <simple-input id="start" icon-name="start-gun-solid" .mask=${skiingMask} label="${lang`Start`}:" .currentObject=${this.item?.skiing} .value=${this.item?.skiing?.start} @input=${this.validateInput}></simple-input>

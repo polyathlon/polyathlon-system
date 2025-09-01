@@ -1,4 +1,4 @@
-import DataSet from "./my-federation-member-dataset.mjs";
+import DataSet from "./my-documents-dataset.mjs";
 
 export default class DataSource {
 

@@ -127,8 +127,8 @@ class MyCompetitionSection5Page1 extends BaseElement {
                 <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.payload?.club} @input=${this.validateInput}></simple-select>
                 <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.payload?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 <groupbox-input label="${lang`National team member`}:">
-                    <checkbox-input id="clubMember" label="${lang`Club member`}" .value=${this.item?.clubMember} .checked=${this.item?.payload?.clubMember} @input=${this.validateInput}></checkbox-input>
-                    <checkbox-input id="teamMember" label="${lang`Team member`}" .value=${this.item?.teamMember} .checked=${this.item?.payload?.teamMember} @input=${this.validateInput}></checkbox-input>
+                    <checkbox-input id="clubMember" label="${lang`Club member`}" .value=${this.item?.payload?.clubMember} .checked=${this.item?.payload?.clubMember} @input=${this.validateInput}></checkbox-input>
+                    <checkbox-input id="teamMember" label="${lang`Team member`}" .value=${this.item?.payload?.teamMember} .checked=${this.item?.payload?.teamMember} @input=${this.validateInput}></checkbox-input>
                 </groupbox-input>
             </div>
         `;
@@ -317,10 +317,6 @@ class MyCompetitionSection5Page1 extends BaseElement {
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
         this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
-        this.teamMemberDataSource = {items: [
-            {name: 'region'},
-            {name: 'club'},
-        ]}
     }
 
 }

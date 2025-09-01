@@ -7,11 +7,11 @@ class MyFederationMemberSection2List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            item: {type: Object, default: null},
-            isModified: {type: Boolean, default: false, local: true},
+            item: { type: Object, default: null },
+            isModified: { type: Boolean, default: false, local: true },
             oldValues: {type: Map, default: null},
-            currentItem: {type: Object, default: null, local: true },
-            currentPage: {type: Object, default: null, local: true },
+            currentItem: { type: Object, default: null },
+            currentPage: { type: Object, default: null, local: true },
         }
     }
 

@@ -24,6 +24,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             isShowList: {type: Boolean, default: false},
             mask: {type: Function, default: undefined},
             textAlign: { type: Boolean, default: false, attribute: 'text-align'},
+            listIconName: { type: Function, default: null, attribute: 'show-value'},
         }
     }
 
@@ -140,7 +141,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                     <icon-button
                         label=${ this.fio(item) }
                         title=${ item.sportsmanId || item?._id }
-                        icon-name=${ item.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
+                        icon-name=${this.listIconName ? this.listIconName(item) : this.iconName}
                         image-name=${ item.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg" }
                         .status=${{ name: item.sportsmanId || item?._id, icon: 'cake-candles-solid'} }
                         @click=${() => this.selectItem(index, item)}

@@ -4,21 +4,24 @@ import '../../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../../components/buttons/icon-button.mjs'
 import '../../../../../components/buttons/aside-button.mjs'
 import '../../../../../components/buttons/simple-button.mjs'
-import '../../../../../components/buttons/fashion-button.mjs'
-import '../../../../../components/inputs/avatar-input.mjs'
+import '../../../../../components/inputs/upload-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs';
 
 import { isAuth, States } from '../../../../utils.js'
 
-import './my-profile-section-1-page-1.mjs'
-// import '../my-profile-section-1-page-2.mjs'
-// import '../my-profile-section-1-page-3.mjs'
+import './my-profile-section-3-page-1.mjs'
+import './my-profile-section-3-page-2.mjs'
+import './my-profile-section-3-page-3.mjs'
+import './my-profile-section-3-page-4.mjs'
 
-import DataSet from './my-profile-dataset.mjs'
-import DataSource from './my-profile-datasource.mjs'
+import DataSet from './my-profile-section-3-dataset.mjs'
+import DataSource from './my-profile-section-3-datasource.mjs'
 
-class MyProfileSection1 extends BaseElement {
+import ProfileDataSet from '../section-1/my-profile-dataset.mjs'
+// import ProfileDataSource from '../section-1/my-profile-datasource.mjs'
+
+class MyProfileSection3 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -27,12 +30,12 @@ class MyProfileSection1 extends BaseElement {
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
+            sortDirection: { type: Boolean, default: true},
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
-            isFirst: { type: Boolean, default: false },
-            avatar: { type: Object, default: null },
+            currentFilter: { type: Object, default: {} },
         }
     }
 
@@ -42,6 +45,7 @@ class MyProfileSection1 extends BaseElement {
             css`
                 :host {
                     display: grid;
+                    width: 100%;
                     grid-template-columns: 3fr 9fr;
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
@@ -68,6 +72,7 @@ class MyProfileSection1 extends BaseElement {
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         margin: 0;
+                        font-weight: 700;
                     }
                     icon-button {
                         height: 100%;
@@ -84,60 +89,54 @@ class MyProfileSection1 extends BaseElement {
 
                 .right-header {
                     grid-area: header2;
-                    justify-content: flex-start;
-                    icon-button {
+                    display: flex;
+                    justify-content: space-between;
+                    .left-aside {
                         height: 100%;
-                        padding: 0 1vw;
-                        &[active] {
-                            background-color: var(--layout-background-color);
-                            font-weight: bold;
-                        }
-                        &:hover {
-                            background-color: var(--layout-background-color);
+                        icon-button {
+                            height: 100%;
+                            padding: 0 1vw;
+                            /* --icon-height: 100%; */
+                            &[active] {
+                                background-color: var(--layout-background-color);
+                                font-weight: bold;
+                            }
+                            &:hover {
+                                background-color: var(--layout-background-color);
+                                &:only-of-type {
+                                    background-color: inherit;
+                                }
+                            }
+                            &:first-of-type {
+                                padding-left: 0;
+                                font-weight: 700;
+                            }
                         }
                     }
-
+                    .right-aside {
+                        display: flex;
+                        justify-content: right;
+                        align-items: center;
+                        height: 100%;
+                        padding-right: 10px;
+                    }
                 }
 
                 .left-layout {
                     grid-area: aside;
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
                     align-items: center;
                     overflow-y: auto;
                     overflow-x: hidden;
                     background: var(--layout-background-color);
-                    gap: 10px;
                     icon-button {
                         width: 100%;
                         height: 40px;
                         flex: 0 0 40px;
+                        --icon-height: 100%;
+                        /* --simple-icon-height: 100%; */
                     }
-                    .label {
-                        text-align: center;
-                    }
-                    fashion-button {
-                        margin-top: 10px;
-                        border-radius: 8px;
-                        padding: 10px 10px;
-                    }
-                }
-
-                .avatar {
-                    width: 100%;
-                }
-
-                avatar-input {
-                    width: 80%;
-                    margin: auto;
-                    aspect-ratio: 1 / 1;
-                    overflow: hidden;
-                    border-radius: 50%;
-                }
-
-                img {
-                    width: 100%;
                 }
 
                 .right-layout {
@@ -150,7 +149,6 @@ class MyProfileSection1 extends BaseElement {
                     align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    /* overflow: hidden; */
                     gap: 10px;
                 }
 
@@ -235,30 +233,22 @@ class MyProfileSection1 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.currentPage = 0;
+
         this.oldValues = new Map();
+
+        this.pages = [
+            {name: 'page0', id: '', iconName: 'user', page: 0, title: lang`User`, click: () => this.gotoPage(0), visible: true},
+            {name: 'page1', id: "passport", iconName: 'passport-solid', page: 1, title: lang`Passport`, click: () => this.gotoPage(1)},
+            {name: 'page2', id: "insurance", iconName: 'medical-insurance-solid', page: 2, title: lang`Medical insurance`, click: () => this.gotoPage(2)},
+            {name: 'page3', id: "snils", iconName: 'snils-solid', page: 3, title: lang`SNILS`, click: () => this.gotoPage(3)},
+            {name: 'page4', id: "birth", iconName: 'birth-certificate-solid', page: 4, title: lang`Birth certificate`, click: () => this.gotoPage(4)},
+        ]
+
         this.buttons = [
             {iconName: 'telegram-bot-solid', page: 'my-referee-categories', title: lang`Telegram bot`, click: () => this.telegramBot()},
-            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Remove avatar`, click: () => this.removeAvatar()},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
-
-        this.pages = [
-            {name: 'page1', iconName: 'user', page: 0, title: lang`User`, click: () => this.gotoPage(0), visible: true},
-            {name: 'page2', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'sportsman-woman-solid' : 'sportsman-man-solid', page: 1, title: lang`Sportsman`, click: () => this.gotoPage(1)},
-            {name: 'page3', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'referee-woman-solid' : 'referee-man-solid', page: 2, title: lang`Referee`, click: () => this.gotoPage(2)},
-            {name: 'page4', iconName: () => this.currentItem?.personalInfo?.gender == true ? 'trainer-woman-solid' : 'trainer-man-solid', page: 3, title: lang`Trainer`, click: () => this.gotoPage(3)},
-            {name: 'page5', iconName: () => this.currentItem?.personalInfo?.gender  == true ? 'federation-member-woman-solid' : 'federation-member-man-solid', page: 4, title: lang`Federation member`, click: () => this.gotoPage(4)},
-        ]
-    }
-
-    async removeAvatar() {
-        if (this.avatar) {
-            let result = await DataSet.deleteAvatar();
-            if (!result) return;
-            this.avatar = null;
-        }
     }
 
     showPage(page) {
@@ -332,45 +322,76 @@ class MyProfileSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentProfileItem')) {
+        if (changedProps.has('currentProfileDocumentItem')) {
             this.currentPage = 0;
         }
     }
 
-    async showItem(index, itemId) {
+    copyToClipboard(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text)
+        }
+    }
+
+    async showItem(item) {
+        if (this.currentPage != item.type) {
+            this.currentPage = item.type
+        }
+        if (this.currentItem?._id === item._id) {
+            this.copyToClipboard(item.id || item._id)
+            return
+        }
         if (this.isModified) {
             const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
-                await this.dataSource.saveItem(this.currentItem);
+                await this.dataSource.saveItem(item);
             }
             else {
                 await this.cancelItem()
             }
         }
-        else {
-            this.dataSource.setCurrentItem(this.dataSource.items[index])
+        else if (this.currentItem !== item) {
+            this.dataSource.setCurrentItem(item)
         }
     }
 
-    get page() {
-        return cache(this[this.pages[this.currentPage].name])
+    get #page() {
+        return this[this.pages[this.currentPage].name]
+    }
+
+    get page0() {
+        return html`
+            <my-profile-section-3-page-0 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-3-page-0>
+        `;
     }
 
     get page1() {
         return html`
-            <my-profile-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-profile-section-1-page-1>
+            <my-profile-section-3-page-1 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-3-page-1>
         `;
     }
 
     get page2() {
         return html`
-            <my-profile-section-1-page-2 .item=${this.currentItem}></my-profile-section-1-page-2>
+            <my-profile-section-3-page-2 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-3-page-2>
         `;
     }
 
     get page3() {
         return html`
-            <my-profile-section-1-page-3 .item=${this.currentItem}></my-profile-section-1-page-3>
+            <my-profile-section-3-page-3 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-3-page-3>
+        `;
+    }
+
+    get page4() {
+        return html`
+            <my-profile-section-3-page-4 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-3-page-4>
+        `;
+    }
+
+    get page5() {
+        return html`
+            <my-profile-section-2-page-5 .item=${this.currentItem} .oldValues=${this.oldValues}></my-profile-section-2-page-5>
         `;
     }
 
@@ -378,76 +399,148 @@ class MyProfileSection1 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    #list1() {
-         return html`
-            <div class="avatar">
-                ${this.isFirst ? html`<avatar-input id="avatar" .currentObject=${this} .avatar=${this.avatar || 'images/no-avatar.svg'} @input=${this.validateAvatar}></avatar-input>` : ''}
-            </div>
-            <div class="label">
-                ${JSON.parse(this.#loginInfo).login}
-            </div>
-            <fashion-button @click=${this.startTelegramBot}>Telegram Bot</fashion-button>
-            <div class="statistic">
-                <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-                <statistic-button label="Wallet" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
-            </div>
+    documentIcon(type) {
+        switch (type) {
+            case 1:
+                return "passport-solid"
+            case 2:
+                return "medical-insurance-solid"
+            case 3:
+                return "snils-solid"
+            case 4:
+                return "birth-certificate-solid"
+            default:
+                return "documents-solid"
+        }
+    }
+
+    documentName(type) {
+        switch (type) {
+            case 1:
+                return lang`Passport`
+            case 2:
+                return lang`Medical insurance`
+            case 3:
+                return lang`SNILS`
+            case 4:
+                return lang`Birth certificate`
+            default:
+                return '';
+        }
+    }
+
+    get #list1() {
+        return html`
+            ${this.dataSource?.items?.map((item, index) =>
+                html `
+                    <icon-button
+                        label=${ this.documentName(item?.type) }
+                        title=${ new Date(item?.date).toLocaleString() }
+                        icon-name=${ item?.icon || this.documentIcon(item?.type)}
+                        ?selected=${this.currentItem === item}
+                        @click=${() => this.showItem(item)}
+                    ></icon-button>
+                `
+            )}
         `
     }
 
     get #list() {
         switch(this.currentList) {
-            case 0: return cache(this.#list1())
-            default: return cache(this.#list1())
+            case 0: return cache(this.#list1)
+            default: return cache(this.#list1)
         }
     }
 
-    async startTelegramBot() {
-        const ulid = await DataSet.telegramToken()
-        // window.open(`https://t.me/PolyathlonSystemBot?start=${token}`)
-        // window.open(`https://t.me/system_polyathlon_bot?start=${token}`)
-        window.open(`https://t.me/PolyathlonCompetitionBot?start=${ulid}`)
+    newRecord() {
+        return html `<icon-button
+                label=${ this.documentName(this.currentItem?.type) }
+                title=${ this.documentName(this.currentItem?.type) }
+                icon-name=${ this.documentIcon(this.currentItem?.type) }
+                ?selected=${ true }
+            >
+            </icon-button>
+        `
     }
-
-    async telegramBot() {
-        window.open(`https://t.me/PolyathlonCompetitionBot`)
-    }
-
-    // href="https://t.me/HTMLAcademyKeksobot?start=eyJib251c0lkIjoiYm9udXMxZGF5In0="
 
     get #task() {
         return html`
-            <nav>${this.buttons.filter(button => button.iconName!=='no-avatar' || button.iconName==='no-avatar' && this.avatar).map((button, index) =>
-                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName instanceof Function ? button.iconName() : button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
+            <nav>${this.buttons.map((button, index) =>
+                html`<aside-button blink=${button.blink && this.notificationMaxOffset && +this.notificationMaxOffset > +this.notificationCurrentOffset || nothing} icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.activePage === button.page}></aside-button>`)}
             </nav>
         `
     }
 
-    get #loginInfo() {
-        if (localStorage.getItem('rememberMe')) {
-            return localStorage.getItem('userInfo')
+    cancelFind() {
+        this.currentPage = 0
+    }
+
+    find() {
+        // alert(JSON.stringify(this.dataSource.findIndex(this.currentFilter)))
+        const result = this.dataSource.find(this.currentFilter)
+        this.currentPage = 0
+        this.dataSource.setCurrentItem(result)
+    }
+
+    async saveNewItem() {
+        this.dataSource.saveNewItem(this.currentItem);
+        this.oldValues?.clear();
+        this.isModified = false;
+    }
+
+    get #newItemFooter() {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.saveNewItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelNewItem}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
+    async cancelNewItem() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить добавление?')
+        if (modalResult !== 'Ok')
+            return
+        this.dataSource.cancelNewItem()
+        this.oldValues.clear();
+        this.isModified = false;
+    }
+
+    get #itemFooter() {
+        return html`
+            <nav class='save'>
+                <simple-button @click=${this.isModified ? this.saveItem: this.addNewItem}>${this.isModified ? lang`Save`: lang`Add`}</simple-button>
+                <simple-button @click=${this.isModified ? this.cancelItem: this.deleteItem}>${this.isModified ? lang`Cancel`: lang`Delete`}</simple-button>
+            </nav>
+        `
+    }
+
+    async addNewItem() {
+        if (this.currentPage === 0) {
+            return
         }
-        else {
-            return sessionStorage.getItem('userInfo')
-        }
+        await this.dataSource.addNewItem(this.currentItem)
+        this.currentItem.type = this.currentPage
+        this.currentItem._id = this.pages[this.currentPage].id
+        this.currentItem.payload = {}
+        this.isModified = true
     }
 
     get #rightFooter() {
         if (!isAuth()) {
             return ''
         }
+        // if (this.dataSource.items.length) {
+        //     return (this.dataSource.state === States.NEW) ? this.#newItemFooter : this.#itemFooter
+        // }
+
         if (this.isModified) {
-            return html`
-                <nav>
-                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
-                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
-                </nav>
-            `
+            return (this.dataSource.state === States.NEW) ? this.#newItemFooter : this.#itemFooter
         } else {
             return html`
                 <nav class="buttons">
                     ${this.pages.map( (button, index) =>
-                        button.visible ? html`<aside-button icon-name=${button.iconName instanceof Function ? button.iconName() : button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>` : '' )
+                        button.visible ? '' : html`<aside-button icon-name=${button.iconName instanceof Function ? button.iconName() : button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
                     }
                 </nav>
             `
@@ -463,20 +556,28 @@ class MyProfileSection1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>${lang`Profile`} ${this.currentItem?.name}</p>
+                <p>${lang`Documents` + (this.dataSource?.items?.length ? ' ('+ this.dataSource?.items?.length +')': '')}<p>
+                <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
+                <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
             </header>
             <header class="right-header">
-                ${this.sections.map( (section, index) =>
-                    html `
-                        <icon-button ?active=${index === 0} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
-                    `
-                )}
+                <div class="left-aside">
+                    ${this.sections.map( (section, index) =>
+                        html `
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName || nothing} label=${section.name === 'section2'? lang`Request`: section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        `
+                    )}
+                </div>
+                <div class="right-aside">
+                    <aside-button icon-name="search-regular" @click=${this.searchPage}></aside-button>
+                </div>
             </header>
             <div class="left-layout">
+                ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.page}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
@@ -488,33 +589,19 @@ class MyProfileSection1 extends BaseElement {
         `;
     }
 
+
     gotoSection(index) {
-        this.parentNode.host.currentSection = index
+        this.parentNode.host.currentSection = index;
     }
 
     gotoPage(index) {
-        switch (index) {
-            case 1:
-                location.hash = "#my-sportsman";
-                location.search = `?sportsman=${this.sportsman.sportsman}`
-                break;
-            case 2:
-                location.hash = "#my-referee";
-                location.search = `?referee=${this.referee.referee}`
-                break;
-            case 3:
-                location.hash = "#my-trainer";
-                location.search = `?trainer=${this.trainer.trainer}`
-                break;
-            case 4:
-                location.hash = "#my-federation-member";
-                location.search = `?federation-member=${this.federationMember.federationMember}`
-                break;
-
-            default:
-                break;
+        const item = DataSet.find('type', index)
+        if (item) {
+            this.showItem(item)
+            return
         }
-
+        this.currentPage = index
+        this.addNewItem()
     }
 
     gotoList(index) {
@@ -529,6 +616,26 @@ class MyProfileSection1 extends BaseElement {
         this.currentPage--;
     }
 
+    searchPage() {
+        this.currentFilter = {}
+        this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
+
+    sortPage() {
+        this.sortDirection = !this.sortDirection
+        this.dataSource.sort(this.sortDirection)
+    }
+
+    filterPage() {
+
+    }
+
+    async getQRCode() {
+        const dataURI = await DataSet.getQRCode(this.currentItem._id)
+        const blob = await (await fetch(dataURI)).blob();
+        window.open(URL.createObjectURL(blob))
+    }
+
     async showDialog(message, type='message') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')
         modalDialog.type = type
@@ -539,13 +646,19 @@ class MyProfileSection1 extends BaseElement {
         return this.showDialog(message, 'confirm')
     }
 
+    async addItem() {
+        const newItem = { name: "Новый член федерации" }
+        this.dataSource.addItem(newItem);
+    }
+
     async saveItem() {
-        if (this.avatarFile) {
-            let result = await DataSet.uploadAvatar(this.avatarFile);
+        if (this.currentItem.filename instanceof File) {
+            let result = await DataSet.uploadDocument(this.currentItem.filename, this.pages[this.currentPage].id);
             if (!result) return;
+            this.currentItem.filename = this.currentItem.filename.name
         }
+
         await this.dataSource.saveItem(this.currentItem);
-        this.avatarFile = null;
         this.oldValues.forEach( (value, key) => {
             if (key.oldValue)
                 key.oldValue = null;
@@ -559,71 +672,39 @@ class MyProfileSection1 extends BaseElement {
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
-            if (key.id === 'avatar') {
-                window.URL.revokeObjectURL(value);
-                this.avatar = value;
-                this.avatarFile = null;
-            } else {
-                const currentItem = key.currentObject ?? this.currentItem
-                currentItem[key.id] = value;
-                key.oldValue = null;
-                key.value = value;
+            let id = key.id
+            let currentItem = this.currentItem
+            if (id == "order.number") {
+                id = "number"
+                currentItem = this.currentItem.order
             }
+            if (id == "order.link") {
+                id = "link"
+                currentItem = this.currentItem.order
+            }
+            currentItem[id] = value;
+            key.oldValue = null;
+            key.value = value;
         });
         this.oldValues.clear();
         this.isModified = false;
     }
 
-    validateAvatar(e) {
-        this.oldValues ??= new Map();
-        if (!this.oldValues.has(e.target)) {
-            this.oldValues.set(e.target, e.target.avatar)
-            this.avatar = window.URL.createObjectURL(e.target.value);
-            this.avatarFile = e.target.value;
-            this.requestUpdate();
-        }
-        else if (this.oldValues.get(e.target) === e.target.avatar) {
-            this.oldValues.delete(e.target.id)
-            this.avatarFile = null;
-        } else {
-            this.avatar = window.URL.createObjectURL(e.target.value);
-            this.avatarFile = e.target.value;
-            this.requestUpdate();
-        }
-        this.isModified = this.oldValues.size !== 0;
+    async deleteItem() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить эту заявку?')
+        if (modalResult !== 'Ok')
+            return;
+        this.dataSource.deleteItem(this.currentItem)
     }
 
     async firstUpdated() {
         super.firstUpdated();
-        this.isFirst  = false;
         this.dataSource = new DataSource(this, await DataSet.getDataSet())
-        try {
-            this.sportsman = await DataSet.getSportsmanProfile()
-            this.pages[1].visible = '_id' in this.sportsman
-        } catch(e) {
-
-        }
-        try {
-            this.referee = await DataSet.getRefereeProfile()
-            this.pages[2].visible = '_id' in this.referee
-        } catch(e) {
-
-        }
-        try {
-            this.trainer = await DataSet.getTrainerProfile()
-            this.pages[3].visible = '_id' in this.trainer
-        } catch(e) {
-
-        }
-        try {
-            this.federationMember = await DataSet.getFederationMemberProfile()
-            this.pages[4].visible = '_id' in this.federationMember
-        } catch(e) {
-
-        }
-        this.avatar = await DataSet.downloadAvatar();
-        this.isFirst = true;
+        this.profileDataSet = await ProfileDataSet.getDataSet()
+        this.parent = this.profileDataSet[0]
+        await this.dataSource.init();
+        this.currentPage = this.currentItem?.type || 0
     }
 }
 
-customElements.define("my-profile-section-1", MyProfileSection1);
+customElements.define("my-profile-section-3", MyProfileSection3);

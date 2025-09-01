@@ -9,6 +9,7 @@ export default class DataSource {
     constructor(component, dataSet) {
         this.component = component
         this.items = [...dataSet].sort( (a, b) => {
+            console.log(a)
             let r = a.lastName.localeCompare(b.lastName)
             if (r) {
                 return r

@@ -29,6 +29,7 @@ class MyProfile extends BaseElement {
         this.version = "1.0.0";
         this.sections = [
             {name: "section1", label: lang`User`, iconName: 'user'},
+            {name: "section3", label: lang`Documents`, iconName: 'documents-solid'},
             {name: "section2", label: lang`Requests`, iconName: 'registration-solid'},
         ]
     }
@@ -42,7 +43,14 @@ class MyProfile extends BaseElement {
     get section2() {
         import('./section-2/my-profile-section-2.mjs')
         return html`
-            <my-profile-section-2 .sections=${this.sections} .currentSection=${1}></my-profile-section-2>
+            <my-profile-section-2 .sections=${this.sections} .currentSection=${2}></my-profile-section-2>
+        `;
+    }
+
+    get section3() {
+        import('./section-3/my-profile-section-3.mjs')
+        return html`
+            <my-profile-section-3 .sections=${this.sections} .currentSection=${1}></my-profile-section-3>
         `;
     }
 

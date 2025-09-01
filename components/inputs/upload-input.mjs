@@ -6,8 +6,10 @@ import './choose-input.mjs'
 customElements.define("upload-input", class UploadInput extends BaseElement {
     static get properties() {
         return {
-            value: { type: Object, default: {}},
-            file: { type: Object, default: {}},
+            value: { type: Object, default: {} },
+            label: { type: String, default: '' },
+            file: { type: Object, default: {} },
+            uploadLabel: { type: String, default: 'Drag and drop file or browse' },
         }
     }
 
@@ -27,8 +29,15 @@ customElements.define("upload-input", class UploadInput extends BaseElement {
                     padding-top: 10px;
                     width: 100%;
                     height: 100%;
-                    outline: auto;
+                    margin-top: 10px;
+                    /* outline: auto; */
+                    border: solid white 2px;
+                    border-radius: 10px;
                     overflow: hidden;
+                    p {
+                        text-align: center;
+                        margin-top: 0;
+                    }
                 }
                 #fileInput {
                     display: none;
@@ -99,17 +108,17 @@ customElements.define("upload-input", class UploadInput extends BaseElement {
 
     #dragAndDrop() {
         return html`
-            <div @drop=${this.dropHandler} @dragover=${this.dragOverHandler}>
+            <div @drop=${this.dropHandler} @dragover=${this.dragOverHandler} @click=${this.clickButton}>
                 <input type="file" id="fileInput" multiple @input=${this.changeFileInput}/>
                 <simple-icon icon-name="cloud-arrow-up-solid"></simple-icon>
-                <p>Drag and drop file or <span @click=${this.clickButton}>Browse</span>.</p>
+                <p>${this.uploadLabel}</p>
             </div>
         `
     }
 
     #chosenFile() {
         return html`
-            <choose-input .value=${this.value} icon-name="file-regular" button-name="trash-xmark-regular" @file-changed=${this.fileChanged} @input=${this.valueChanged}></choose-input>
+            <choose-input .label=${this.label} .value=${this.value} icon-name="file-regular" button-name="trash-xmark-regular" @file-changed=${this.fileChanged} @input=${this.valueChanged}></choose-input>
         `
     }
 
