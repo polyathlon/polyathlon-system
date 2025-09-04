@@ -12,8 +12,6 @@ import lang from '../../../polyathlon-dictionary.mjs';
 import { isAuth, States } from '../../../../utils.js'
 
 import './my-profile-section-1-page-1.mjs'
-// import '../my-profile-section-1-page-2.mjs'
-// import '../my-profile-section-1-page-3.mjs'
 
 import DataSet from './my-profile-dataset.mjs'
 import DataSource from './my-profile-datasource.mjs'
