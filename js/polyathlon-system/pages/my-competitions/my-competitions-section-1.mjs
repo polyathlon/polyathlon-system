@@ -351,7 +351,7 @@ class MyCompetitionsSection1 extends BaseElement {
     }
 
     showPage(hash, param) {
-        localStorage.setItem('currentCompetition', param)
+        sessionStorage.setItem('competition', param)
         location.hash = hash;
         // location.search = `?competition=${param}`;
     }

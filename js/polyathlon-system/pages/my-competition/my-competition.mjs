@@ -95,7 +95,7 @@ class MyCompetition extends BaseElement {
         super.firstUpdated();
         let params = new URLSearchParams(window.location.search)
         if (params.has('competition')) {
-            localStorage.setItem('currentCompetition', params.get('competition'))
+            sessionStorage.setItem('competition', 'competition:' + params.get('competition'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
     }

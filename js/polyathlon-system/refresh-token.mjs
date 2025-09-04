@@ -1,13 +1,14 @@
 import {HOST} from "./polyathlon-system-config.mjs";
 
 export default async function refreshToken(token) {
+    const exitToken = getExitToken()
     const response = await fetch(`https://${HOST}:4500/api/refresh-token`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         },
         headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${exitToken}`,
                 'Content-Type': 'application/json;charset=utf-8'
         },
         credentials: "include",
@@ -19,8 +20,8 @@ export default async function refreshToken(token) {
         throw new Error(result.error)
     }
 
-    const newToken = result.token
-    saveToken(newToken)
+    const newToken = result.accessToken
+    saveAccessToken(newToken)
     return newToken
 }
 
@@ -28,12 +29,26 @@ export function  getToken() {
     return localStorage.getItem('rememberMe') ? localStorage.getItem('accessUserToken') : sessionStorage.getItem('accessUserToken')
 }
 
-export function saveToken(token) {
+function  getExitToken() {
+    return localStorage.getItem('rememberMe') ? localStorage.getItem('exitUserToken') : sessionStorage.getItem('exitUserToken')
+}
+
+export function saveAccessToken(token) {
     if (localStorage.getItem('rememberMe')) {
         localStorage.setItem('accessUserToken', token)
     }
     else {
         sessionStorage.setItem('accessUserToken', token)
+    }
+    return token;
+}
+
+export function saveExitToken(token) {
+    if (localStorage.getItem('rememberMe')) {
+        localStorage.setItem('exitUserToken', token)
+    }
+    else {
+        sessionStorage.setItem('exitUserToken', token)
     }
     return token;
 }

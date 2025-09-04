@@ -61,7 +61,7 @@ class MySportsman extends BaseElement {
         super.firstUpdated();
         let params = new URLSearchParams(window.location.search)
         if (params.has('sportsman')) {
-            localStorage.setItem('sportsman', 'sportsman:' + params.get('sportsman'))
+            sessionStorage.setItem('sportsman', 'sportsman:' + params.get('sportsman'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
     }

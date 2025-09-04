@@ -4,7 +4,7 @@ import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 
 import { formStyles } from './form-css.mjs'
 
-import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refresh-token.mjs";
+import refreshToken, {getToken, saveAccessToken, saveExitToken} from "../../js/polyathlon-system/refresh-token.mjs";
 
 import '../dialogs/modal-dialog.mjs';
 
@@ -667,7 +667,8 @@ class SignUpForm extends BaseElement {
             throw new Error(result.error)
         }
 
-        saveToken(result.token)
+        saveAccessToken(result.accessToken)
+        saveExitToken(result.exitToken)
 
         await this.getSimpleUserInfo()
     }

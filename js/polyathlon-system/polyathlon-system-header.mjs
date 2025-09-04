@@ -226,14 +226,14 @@ class PolyathlonSystemHeader extends BaseElement {
             localStorage.removeItem('profile');
             localStorage.removeItem('rememberMe');
             localStorage.removeItem('accessUserToken');
-            localStorage.removeItem('refreshUserToken');
+            localStorage.removeItem('exitUserToken');
         }
         else {
             sessionStorage.removeItem('userInfo');
             sessionStorage.removeItem('profile');
             sessionStorage.removeItem('rememberMe');
             sessionStorage.removeItem('accessUserToken');
-            sessionStorage.removeItem('refreshUserToken');
+            sessionStorage.removeItem('exitUserToken');
         }
     }
 

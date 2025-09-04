@@ -596,7 +596,7 @@ class MyCompetitionSection1 extends BaseElement {
     }
 
     async getQRCode() {
-        const dataURI = await DataSet.getQRCode(location.origin+`/system?competition-member=${this.currentItem._id.split(':')[1]}#my-competition`)
+        const dataURI = await DataSet.getQRCode(location.origin+`/system?competition=${this.currentItem._id.split(':')[1]}#my-competition`)
         const blob = await (await fetch(dataURI)).blob();
         await this.saveToFile(blob, this.competitionName(this.currentItem) + ' ' + this.competitionDate(this.currentItem))
         window.open(URL.createObjectURL(blob))

@@ -89,12 +89,15 @@ class PolyathlonSystemLeftAside extends BaseElement {
             localStorage.removeItem('profile');
             localStorage.removeItem('rememberMe');
             localStorage.removeItem('accessUserToken');
+            localStorage.removeItem('exitUserToken');
+
         }
         else {
             sessionStorage.removeItem('userInfo');
             sessionStorage.removeItem('profile');
             sessionStorage.removeItem('rememberMe');
             sessionStorage.removeItem('accessUserToken');
+            sessionStorage.removeItem('exitUserToken');
         }
     }
 

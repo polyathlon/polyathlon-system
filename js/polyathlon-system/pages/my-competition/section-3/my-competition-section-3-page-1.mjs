@@ -79,11 +79,11 @@ class MyCompetitionSection3Page1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .dataSource=${this.findDataSource} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsmanByName} .value=${this.item?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <div class="name-group">
-                    <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 <simple-select id="position" label="${lang`Referee position`}:" icon-name="referee-position-solid" @icon-click=${() => this.showPage('my-referee-positions')} .dataSource=${this.refereePositionsDataSource} .value=${this.item?.position} @input=${this.validateInput}></simple-select>
                 <simple-input id="refereePC" label="${lang`Referee PC`}:" .dataSource=${this.findDataSource} icon-name="referee-pc-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.refereePC} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
@@ -97,6 +97,11 @@ class MyCompetitionSection3Page1 extends BaseElement {
 
     showPage(page) {
         location.hash = page;
+    }
+
+    gotoSportsmanPage() {
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.item?.sportsman?._id.split(':')[1]}`
     }
 
     validateInput(e) {
@@ -125,6 +130,30 @@ class MyCompetitionSection3Page1 extends BaseElement {
                 }
             }
             this.isModified = this.oldValues.size !== 0;
+        }
+    }
+
+    async findSportsmanByName(e) {
+        const target = e.target
+        let sportsman
+        const lastName = target.value
+        if (target.isShowList)
+            target.isShowList = false
+        if (!lastName) {
+            await this.errorDialog('Вы не задали фамилию для поиска')
+            return
+        }
+        sportsman = await RefereeDataset.getItemByLastName(lastName)
+        if (sportsman.rows.length === 0) {
+            this.showDialog('Такой спортсмен не найден')
+            return
+        }
+
+        if (sportsman.rows.length >= 1) {
+            this.findDataSource = {}
+            this.findDataSource.items = sportsman.rows.map(item => item.doc)
+            target.isShowList = true
+            return
         }
     }
 
@@ -196,6 +225,7 @@ class MyCompetitionSection3Page1 extends BaseElement {
                     input.setValue(sportsman[input.id])
                 }
             })
+            this.item.refereeUlid = sportsman._id
             //Object.assign(this.item, sportsman)
             this.requestUpdate()
         }
@@ -234,6 +264,10 @@ class MyCompetitionSection3Page1 extends BaseElement {
                 ageGroupComponent.setValue('')
             }
         }
+    }
+
+    async saveItem() {
+        await Dataset.addItem(this.item);
     }
 
     startEdit() {

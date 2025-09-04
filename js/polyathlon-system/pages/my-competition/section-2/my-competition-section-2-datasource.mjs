@@ -5,11 +5,10 @@ import { States } from "../../../../utils.js";
 export default class DataSource {
     #lock = false
     #oldItem
-
+    sortDirection = true
     constructor(component, dataSet) {
         this.component = component
         this.items = [...dataSet].sort( (a, b) => {
-            console.log(a)
             let r = a.lastName.localeCompare(b.lastName)
             if (r) {
                 return r
@@ -43,6 +42,25 @@ export default class DataSource {
         }
     }
 
+    sort(sortDirection) {
+        this.sortDirection = sortDirection
+        this.items.sort( (a, b) => {
+            [a, b] = sortDirection ? [a, b] : [b, a]
+            let r = a.lastName?.localeCompare(b.lastName)
+            if (r) {
+                return r
+            }
+            r = a.firstName?.localeCompare(b.firstName)
+            if (r) {
+                return r
+            }
+            r = a.middleName?.localeCompare(b.firstName)
+            if (r) {
+                return r
+            }
+            return 0
+        })
+    }
 
     getTeamCategories(team) {
         let sum = 0

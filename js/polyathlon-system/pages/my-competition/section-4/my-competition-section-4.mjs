@@ -631,7 +631,7 @@ class MyCompetitionSection4 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        const parentId = localStorage.getItem('currentCompetition').split(':')[1]
+        const parentId = sessionStorage.getItem('competition').split(':')[1]
         this.competitionDataSource = new CompetitionDataSource(this)
         this.parent = await this.competitionDataSource.getItem()
         this.sportsmenDataSource = new SportsmenDataSource(this, await SportsmenDataSet.getDataSet(parentId))

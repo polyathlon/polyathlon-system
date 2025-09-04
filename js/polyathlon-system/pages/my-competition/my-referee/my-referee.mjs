@@ -59,7 +59,7 @@ class MyReferee extends BaseElement {
         super.firstUpdated();
         let params = new URLSearchParams(window.location.search)
         if (params.has('referee')) {
-            localStorage.setItem('currentReferee', params.get('referee'))
+            sessionStorage.setItem('currentReferee', params.get('referee'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
     }

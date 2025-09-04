@@ -553,10 +553,10 @@ class MyCompetitionSection5 extends BaseElement {
         }
         let result = item.lastName
         if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
+            result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += `${item.middleName[0]}.`
+            result += ` ${item.middleName[0]}.`
         }
         return result
     }
@@ -876,7 +876,7 @@ class MyCompetitionSection5 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated()
-        const parentId = localStorage.getItem('currentCompetition').split(':')[1]
+        const parentId = sessionStorage.getItem('competition').split(':')[1]
         this.competitionDataSource = new CompetitionDataSource(this)
         this.parent = await this.competitionDataSource.getItem()
         this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))

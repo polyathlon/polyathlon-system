@@ -240,7 +240,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
         super.firstUpdated();
         // this.dataSource = new DataSource(this)
         // await this.dataSource.getItem()
-        const parentId = localStorage.getItem('currentCompetition').split(':')[1]
+        const parentId = sessionStorage.getItem('competition').split(':')[1]
         Dataset.getDataSet(parentId)
         this.sportsman = await Dataset.getSportsman()
         Object.assign(this.item, this.sportsman)

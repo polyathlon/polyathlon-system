@@ -61,7 +61,7 @@ class MyFederationMember extends BaseElement {
         super.firstUpdated();
         let params = new URLSearchParams(window.location.search)
         if (params.has('federation-member')) {
-            localStorage.setItem('federationMember', 'federation-member:' + params.get('federation-member'))
+            sessionStorage.setItem('federationMember', 'federation-member:' + params.get('federation-member'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
     }

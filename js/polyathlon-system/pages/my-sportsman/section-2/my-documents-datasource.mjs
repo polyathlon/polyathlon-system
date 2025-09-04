@@ -21,7 +21,7 @@ export default class DataSource {
     }
 
     setCurrentItem(item) {
-        localStorage.setItem('federationMember', item._id)
+        sessionStorage.setItem('federationMember', item._id)
         this.component.currentItem = item;
     }
 

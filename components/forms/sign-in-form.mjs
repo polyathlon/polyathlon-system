@@ -21,7 +21,7 @@ import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
 
 import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 
-import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refresh-token.mjs";
+import refreshToken, {getToken, saveAccessToken, saveExitToken} from "../../js/polyathlon-system/refresh-token.mjs";
 
 customElements.define("sign-in-form", class SignInForm extends BaseElement {
     static get properties() {
@@ -224,7 +224,8 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
         window.history.replaceState(null, '', window.location.pathname);
 
-        saveToken(result.token)
+        saveAccessToken(result.accessToken)
+        saveExitToken(result.exitToken)
 
         await this.getSimpleUserInfo()
       }
@@ -258,7 +259,8 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             return
         }
 
-        saveToken(result.token)
+        saveAccessToken(result.accessToken)
+        saveExitToken(result.exitToken)
 
         await this.getSimpleUserInfo()
     }
@@ -275,7 +277,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     async sendVKToken() {
-        token = await this.getVKToken()
+        await this.getVKToken()
         // window.history.replaceState(null, '', window.location.pathname);
         // this.saveToken(token)
         // this.getSimpleUserInfo(token)
@@ -421,18 +423,10 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
             return
         }
 
-        saveToken(result.token)
+        saveAccessToken(result.accessToken)
+        saveExitToken(result.exitToken)
 
         await this.getSimpleUserInfo()
-    }
-
-    async saveToken(token) {
-        if (localStorage.getItem('rememberMe')) {
-            localStorage.setItem('accessUserToken', token)
-        }
-        else {
-            sessionStorage.setItem('accessUserToken', token)
-        }
     }
 
     static fetchSimpleUserInfo(token) {

@@ -532,10 +532,10 @@ class MyTrainerSection1 extends BaseElement {
         }
         let result = item.lastName
         if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
+            result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += `${item.middleName[0]}.`
+            result += ` ${item.middleName[0]}.`
         }
         return result
     }

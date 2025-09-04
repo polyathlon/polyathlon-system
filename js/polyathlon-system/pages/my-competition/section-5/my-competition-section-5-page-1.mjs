@@ -301,10 +301,6 @@ class MyCompetitionSection5Page1 extends BaseElement {
         }
     }
 
-    async saveItem() {
-        await Dataset.addItem(this.item);
-    }
-
     startEdit() {
         let input = this.$id("lastName")
         input.focus()

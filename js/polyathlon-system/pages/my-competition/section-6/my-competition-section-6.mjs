@@ -297,13 +297,33 @@ class MyCompetitionSection6 extends BaseElement {
         return a[this.resultNames[this.currentPage]]?.points ?? 0;
     }
 
+    getPoints(a) {
+        return a[this.resultNames[this.currentPage]]?.points ?? 0;
+    }
+
+    getPlace(a) {
+        return a[this.resultNames[this.currentPage]]?.place ?? 0;
+    }
+
+    setPlace(a, value) {
+        a[this.resultNames[this.currentPage]].place = value;
+    }
+
     sportsPlace() {
-        const item = this.dataSource.items.map(item => item).sort((a, b) => a.gender - b.gender || this.getPoints(b) - this.getPoints(a))
+        const item = this.dataSource.items.map(item => item).sort((a, b) =>
+        (!this.parent?.championship ? a.ageGroup?.sortOrder - b.ageGroup?.sortOrder : a.gender - b.gender) || this.getPoints(b) - this.getPoints(a))
         item.reduce((a, b, index) => {
-            if (index != 0 && item[index - 1].gender != b.gender)
+            let place
+            if (index === 0 || (!this.parent?.championship ? item[index - 1].ageGroup?.sortOrder != b.ageGroup?.sortOrder : item[index - 1].gender != b.gender)) {
                 a = 0
-            if (b.place != a + 1) {
-                b.place = a + 1
+                place = 1
+            }
+            else {
+                place = this.getPoints(b) === this.getPoints(item[index - 1]) ? this.getPlace(item[index - 1]) : a + 1
+            }
+
+            if (this.getPlace(b) != place) {
+                this.setPlace(b, place)
                 this.dataSource.saveItem(b);
             }
             return a + 1
@@ -538,10 +558,10 @@ class MyCompetitionSection6 extends BaseElement {
         }
         let result = item.lastName
         if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
+            result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += `${item.middleName[0]}.`
+            result += ` ${item.middleName[0]}.`
         }
         return result
     }
@@ -813,7 +833,7 @@ class MyCompetitionSection6 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        const parentId = localStorage.getItem('currentCompetition').split(':')[1]
+        const parentId = sessionStorage.getItem('competition').split(':')[1]
         this.competitionDataSource = new CompetitionDataSource(this)
         this.parent = await this.competitionDataSource.getItem()
         this.refereeDataSource = new RefereeDataSource(this, await RefereeDataSet.getDataSet(parentId))

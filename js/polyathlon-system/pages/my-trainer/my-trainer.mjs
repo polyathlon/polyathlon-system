@@ -60,7 +60,7 @@ class MyTrainer extends BaseElement {
         super.firstUpdated();
         let params = new URLSearchParams(window.location.search)
         if (params.has('trainer')) {
-            localStorage.setItem('trainer', 'trainer:' + params.get('trainer'))
+            sessionStorage.setItem('trainer', 'trainer:' + params.get('trainer'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
     }

@@ -85,7 +85,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .dataSource=${this.findDataSource} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsmanByName} .value=${this.item?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
@@ -109,6 +109,11 @@ class MyCompetitionSection2Page1 extends BaseElement {
 
     showPage(page) {
         location.hash = page;
+    }
+
+    gotoSportsmanPage() {
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.item?.sportsman?._id.split(':')[1]}`
     }
 
     validateInput(e) {
@@ -137,6 +142,30 @@ class MyCompetitionSection2Page1 extends BaseElement {
                 }
             }
             this.isModified = this.oldValues.size !== 0;
+        }
+    }
+
+    async findSportsmanByName(e) {
+        const target = e.target
+        let sportsman
+        const lastName = target.value
+        if (target.isShowList)
+            target.isShowList = false
+        if (!lastName) {
+            await this.errorDialog('Вы не задали фамилию для поиска')
+            return
+        }
+        sportsman = await SportsmanDataset.getItemByLastName(lastName)
+        if (sportsman.rows.length === 0) {
+            this.showDialog('Такой спортсмен не найден')
+            return
+        }
+
+        if (sportsman.rows.length >= 1) {
+            this.findDataSource = {}
+            this.findDataSource.items = sportsman.rows.map(item => item.doc)
+            target.isShowList = true
+            return
         }
     }
 
@@ -208,6 +237,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
                     input.setValue(sportsman[input.id])
                 }
             })
+            this.item.sportsmanUlid = sportsman._id
             //Object.assign(this.item, sportsman)
             this.requestUpdate()
         }

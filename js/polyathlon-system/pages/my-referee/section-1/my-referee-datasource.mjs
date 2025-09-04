@@ -9,7 +9,7 @@ export default class DataSource {
     }
 
     async getItem() {
-        const id = localStorage.getItem('referee')
+        const id = sessionStorage.getItem('referee')
         if (id === 'new') {
             this.item = {};
             this.component.currentItem = this.item;
@@ -21,7 +21,7 @@ export default class DataSource {
     }
 
     setCurrentItem(item) {
-        localStorage.setItem('referee', item._id)
+        sessionStorage.setItem('referee', item._id)
         this.component.currentItem = item;
     }
 

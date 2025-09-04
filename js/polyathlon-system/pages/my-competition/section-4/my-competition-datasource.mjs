@@ -9,7 +9,7 @@ export default class DataSource {
     }
 
     async getItem() {
-        const id = localStorage.getItem('currentCompetition')
+        const id = sessionStorage.getItem('competition')
         if (id === 'new') {
             this.item = {};
             this.component.currentItem = this.item;
@@ -21,7 +21,7 @@ export default class DataSource {
     }
 
     async getTeams() {
-        const id = localStorage.getItem('currentCompetition')
+        const id = sessionStorage.getItem('competition')
         if (id === 'new') {
             this.item = {};
             this.component.currentItem = this.item;
@@ -33,7 +33,7 @@ export default class DataSource {
     }
 
     setCurrentItem(item) {
-        localStorage.setItem('currentCompetition', item._id)
+        sessionStorage.setItem('competition', item._id)
         this.component.currentItem = item;
     }
 

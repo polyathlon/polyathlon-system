@@ -13,6 +13,7 @@ class MyCompetitionSection6Table1 extends BaseElement {
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
             sportsmenDataSource: { type: Object, default: null },
+            isChampionship: {type: Boolean, default: false},
         }
     }
     constructor() {
@@ -28,9 +29,16 @@ class MyCompetitionSection6Table1 extends BaseElement {
             { name: "result", label: lang`Result`, },
             { name: "points", label: lang`Points`, },
         ]]
-        this.groups = [
-            { name: "gender", label: item => item.gender == true ? lang`Women` : lang`Men`, title: lang`Gender`},
-        ]
+        if (!this.parent?.championship) {
+            this.groups = [
+                { name: "ageGroup", label: item => item.ageGroup, title: lang`Age group` },
+            ]
+        }
+        else {
+            this.groups = [
+                { name: "gender", label: item => item.gender == true ? lang`Women` : lang`Men`, title: lang`Gender` },
+            ]
+        }
     }
 
     static get styles() {
@@ -236,14 +244,17 @@ class MyCompetitionSection6Table1 extends BaseElement {
         if (changedProps.has('sportsmenDataSource')) {
             this.items = this.sportsmenDataSource.items.map(item => {
                 return {
-                    place: item.place ?? 0,
+                    place: item?.shooting?.place ?? 0,
                     sportsman: this.sportsmanName(item),
                     gender: item.gender,
+                    ageGroup: item.ageGroup?.name,
+                    ageGroupOrder: item.ageGroup?.sortOrder,
                     birthday: new Date(item.birthday).toLocaleDateString(),
                     category: item.category.shortName,
                     // year: new Date(item.birthday).getFullYear(),
                     region: item.region.shortName ?? item.region.name,
                     club: this.clubShowValue(item.club),
+
                     sportsNumber: item.sportsNumber,
                     result: item.shooting?.result ?? 0,
                     points: +(item.shooting?.points ?? 0)
@@ -252,7 +263,7 @@ class MyCompetitionSection6Table1 extends BaseElement {
                       + +(item.skiing?.points ?? 0) + +(item.rollerSkiing?.points ?? 0)  + +(item.jumping?.points ?? 0),
                     */
                 }
-            }).sort((a, b) => a.gender - b.gender || b.points - a.points);
+            }).sort((a, b) => a.gender - b.gender || (!this.parent?.championship ? a.ageGroupOrder - b.ageGroupOrder : false) || b.points - a.points);
         }
     }
 

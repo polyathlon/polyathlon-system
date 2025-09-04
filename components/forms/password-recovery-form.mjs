@@ -2,7 +2,7 @@ import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import { formStyles } from './form-css.mjs'
 
-import refreshToken, {getToken, saveToken} from "../../js/polyathlon-system/refresh-token.mjs";
+import refreshToken, {getToken} from "../../js/polyathlon-system/refresh-token.mjs";
 
 import '../dialogs/modal-dialog.mjs';
 

@@ -27,6 +27,7 @@ class MyCompetitionSection2 extends BaseElement {
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null, local: true },
             isModified: { type: Boolean, default: false, local: true },
+            sortDirection: { type: Boolean, default: true},
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
@@ -494,10 +495,10 @@ class MyCompetitionSection2 extends BaseElement {
         }
         let result = item.lastName
         if (item.firstName) {
-            result += ` ${item.firstName[0]}.`
+            result += ` ${item.firstName[0]}`
         }
         if (item.middleName) {
-            result += `${item.middleName[0]}.`
+            result += ` ${item.middleName[0]}.`
         }
         return result
     }
@@ -516,7 +517,7 @@ class MyCompetitionSection2 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-2-list-1 .item=${this}></my-competition-section-2-list-1>
+            <my-competition-section-2-list-1 .item=${this} .sortDirection=${this.sortDirection}></my-competition-section-2-list-1>
         `;
     }
 
@@ -605,6 +606,13 @@ class MyCompetitionSection2 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
+                <p>${lang`Sportsmen` + (this.dataSource?.items?.length ? ' ('+ this.dataSource?.items?.length +')' : '')}</p>
+                <p>
+                    <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
+                    <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
+                </p>
+            </header>
+            <header class="left-header">
                 <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
                 <!-- <aside-button icon-name="search-regular" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button> -->
                 <aside-button icon-name="filter-regular" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
@@ -654,6 +662,16 @@ class MyCompetitionSection2 extends BaseElement {
 
     prevPage() {
         this.currentPage--;
+    }
+
+    filterPage() {
+        this.currentFilter = {}
+        this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
+
+    sortPage() {
+        this.sortDirection = !this.sortDirection
+        this.dataSource.sort(this.sortDirection)
     }
 
     async showDialog(message, type='message') {
@@ -760,7 +778,7 @@ class MyCompetitionSection2 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        const parentId = localStorage.getItem('currentCompetition').split(':')[1]
+        const parentId = sessionStorage.getItem('competition').split(':')[1]
         this.competitionDataSource = new CompetitionDataSource(this)
         this.parent = await this.competitionDataSource.getItem()
         this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))
