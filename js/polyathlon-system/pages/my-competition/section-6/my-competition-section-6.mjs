@@ -309,9 +309,49 @@ class MyCompetitionSection6 extends BaseElement {
         a[this.resultNames[this.currentPage]].place = value;
     }
 
+    resultToValue(result) {
+        const parts = result.split(':')
+        const minutes = parts[1].split(',')
+        return (+parts[0] * 60 + +minutes[0]) * 10 + +minutes[1];
+    }
+
+    throwingResultToValue(result) {
+        let parts = result.split(',')
+        return +parts[0] * 100 + +parts[1];
+    }
+
+    sprintingResultToValue(result) {
+        let parts = result.split(',')
+        return +parts[0] * 10 + +parts[1];
+    }
+
+    getResult(a) {
+        this.resultNames = ['shooting', 'swimming', 'sprinting', 'throwing', 'running', 'pullUps', 'pushUps', 'skiing', 'rollerSkiing', 'jumping'];
+        switch ( this.resultNames[this.currentPage]) {
+            case 'shooting':
+            case 'pullUps':
+            case 'pushUps':
+            case 'jumping':
+                return +a[this.resultNames[this.currentPage]].result
+            case 'swimming':
+            case 'running':
+            case 'skiing':
+            case 'rollerSkiing':
+                return this.resultToValue(a[this.resultNames[this.currentPage]].result)
+            case 'throwing':
+                return this.throwingResultToValue(a[this.resultNames[this.currentPage]].result)
+            case 'sprinting':
+                return this.sprintingResultToValue(a[this.resultNames[this.currentPage]].result)
+            case 'sprinting':
+                return this.sprintingResultToValue(a[this.resultNames[this.currentPage]].result)
+            default:
+                return 0;
+        }
+    }
+
     sportsPlace() {
         const item = this.dataSource.items.map(item => item).sort((a, b) =>
-        (!this.parent?.championship ? a.ageGroup?.sortOrder - b.ageGroup?.sortOrder : a.gender - b.gender) || this.getPoints(b) - this.getPoints(a))
+        (!this.parent?.championship ? a.gender - b.gender || a.ageGroup?.sortOrder - b.ageGroup?.sortOrder : a.gender - b.gender) || this.getPoints(b) - this.getPoints(a) || this.getResult(b) - this.getResult(a))
         item.reduce((a, b, index) => {
             let place
             if (index === 0 || (!this.parent?.championship ? item[index - 1].ageGroup?.sortOrder != b.ageGroup?.sortOrder : item[index - 1].gender != b.gender)) {
@@ -319,7 +359,7 @@ class MyCompetitionSection6 extends BaseElement {
                 place = 1
             }
             else {
-                place = this.getPoints(b) === this.getPoints(item[index - 1]) ? this.getPlace(item[index - 1]) : a + 1
+                place = this.getPoints(b) === this.getPoints(item[index - 1]) && this.getResult(b) === this.getResult(item[index - 1]) ? this.getPlace(item[index - 1]) : a + 1
             }
 
             if (this.getPlace(b) != place) {

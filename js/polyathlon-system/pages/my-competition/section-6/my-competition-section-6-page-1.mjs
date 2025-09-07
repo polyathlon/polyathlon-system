@@ -81,14 +81,13 @@ class MyCompetitionSection6Page1 extends BaseElement {
         `;
     }
 
-
     showPage(page) {
         location.hash = page;
     }
 
     pointsFind(result, table) {
-        let value  = +result * 10
-        return table.reduce( (last, item) =>
+        let value = +result * 10
+        return table.reduce((last, item) =>
             item.value <= value && item.points > last ? item.points : last
         , 0)
     }

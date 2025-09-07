@@ -183,6 +183,169 @@ class MyCompetitionSection6Page5 extends BaseElement {
         return this.showDialog(message, 'error', 'Ошибка')
     }
 
+    #competitionDate(parent) {
+        const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+
+        if (parent.startDate) {
+            const start = parent.startDate.split("-")
+            const end = parent.endDate.split("-")
+            if (start[2] === end[2] && start[1] === end[1]) {
+                return `${start[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
+            }
+            if (start[1] === end[1]) {
+                return `${start[2]}-${end[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
+            }
+            return `${start[2]} ${monthNames[start[1]-1]} - ${end[2]} ${monthNames[end[1] - 1]} ${start[0]} года`
+        }
+        return ''
+    }
+
+    pdfMethod(refereeDataSource) {
+        const mainReferee = refereeDataSource.items.find( item => item.position.name === "Главный судья");
+        const mainSecretary = refereeDataSource.items.find(item => item.position.name === "Главный секретарь");
+
+        const tableBody = [
+            [
+                { text: 'Место', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+                { text: 'Спортсмен', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+                { text: 'Год рожд', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+                { text: 'Звание, разряд', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+                { text: 'Субъект РФ', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+                { text: 'Спортивный клуб', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+                { text: 'Очки', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+                { text: 'Вып. разряд', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+            ],
+            [
+                '', '', '', '', '', '', '', ''
+            ].map(cell => ({ text: cell, fillColor: '#eeeeee' })),
+        ];
+
+        tableBody.push(...this.items.map((item, index) => ([
+            { text: item.place ?? index + 1, fontSize: 8 },
+            { text: item.sportsman ?? '', fontSize: 8 },
+            { text: item.year ?? '', fontSize: 8 },
+            { text: item.category ?? '', fontSize: 8 },
+            { text: item.region ?? '', fontSize: 8 },
+            { text: item.club ?? '', fontSize: 8 },
+            { text: item.points ?? '', fontSize: 8 },
+            { text: item.completedCategory ?? '', fontSize: 8 }
+        ])));
+
+        const docInfo = {
+            info: {
+                title: "sportsmen",
+                author: "Polyathlon systems",
+            },
+            pageSize: "A4",
+            pageOrientation: 'landscape',
+            pageMargins: [20, 15, 20, 40],
+            content: [
+                { text: "Министерство спорта Российской Федерации", fontSize: 9, alignment: "center", margin: [0, 2, 0, 2] },
+                { text: "Всероссийская Федерация Полиатлона", fontSize: 9, alignment: "center", margin: [0, 2, 0, 2] },
+                {
+                    text: `${this.parent.name.name}${this.parent.stage ? ' ' + this.parent.stage.name : ''} по полиатлону в спортивной дисциплине ${this.parent?.sportsDiscipline1?.name}`,
+                    fontSize: 11, bold: true, alignment: "center", margin: [0, 4, 0, 2]
+                },
+                {
+                    text: `№ СМ ${this.parent?.ekpNumber} в ЕКП`,
+                    fontSize: 11, bold: true, alignment: "center", margin: [0, 0, 0, 4]
+                },
+                {
+                    columns: [
+                        {
+                            text: this.#competitionDate(this.parent),
+                            margin: [20, 0, 0, 0],
+                            fontSize: 9,
+                            alignment: "left",
+                        },
+                        {
+                            text: `г. ${this.parent?.city.name}, ${this.parent?.city?.region?.name}`,
+                            alignment: "right",
+                            margin: [0, 0, 20, 0],
+                            fontSize: 9,
+                        },
+                    ]
+                },
+                {
+                    text: "Протокол командного зачета среди команд спортивных клубов",
+                    fontSize: 11,
+                    bold: true,
+                    alignment: "center",
+                    margin: [0, 6, 0, 6],
+                },
+                {
+                    table: {
+                        widths: [25, 150, 35, 60, 120, 170, 75, 90],
+                        body: tableBody,
+                        headerRows: 2
+                    },
+                },
+                {
+                    columns: [
+                        {
+                            text: mainReferee?.position.name ?? '',
+                            margin: [50, 20, 0, 0],
+                            fontSize: 9,
+                        },
+                        {
+                            text: `${mainReferee?.firstName?.[0] ?? ''}.${mainReferee?.middleName?.[0] ?? ''}. ${mainReferee?.lastName ?? ''}`,
+                            alignment: "left",
+                            margin: [50, 20, 0, 0],
+                            fontSize: 9,
+                        },
+                    ]
+                },
+                {
+                    columns: [
+                        {
+                            text: mainReferee?.category?.name ?? '',
+                            margin: [50, 0, 0, 0],
+                            fontSize: 9,
+                        },
+                        {
+                            text: `(г. ${mainReferee?.city?.name ?? ''}, ${mainReferee?.city?.region?.name ?? ''})`,
+                            alignment: "left",
+                            margin: [50, 0, 0, 0],
+                            fontSize: 9,
+                        },
+                    ]
+                },
+                {
+                    columns: [
+                        {
+                            text: mainSecretary?.position.name ?? '',
+                            margin: [50, 20, 0, 0],
+                            fontSize: 9,
+                        },
+                        {
+                            text: `${mainSecretary?.firstName?.[0] ?? ''}.${mainSecretary?.middleName?.[0] ?? ''}. ${mainSecretary?.lastName ?? ''}`,
+                            alignment: "left",
+                            margin: [50, 20, 0, 0],
+                            fontSize: 9,
+                        },
+                    ]
+                },
+                {
+                    columns: [
+                        {
+                            text: mainSecretary?.category?.name ?? '',
+                            margin: [50, 0, 0, 0],
+                            fontSize: 9,
+                        },
+                        {
+                            text: `(г. ${mainSecretary?.city?.name ?? ''}, ${mainSecretary?.city?.region?.name ?? ''})`,
+                            alignment: "left",
+                            margin: [50, 0, 0, 0],
+                            fontSize: 9,
+                        },
+                    ]
+                },
+            ]
+        };
+
+        pdfMake.createPdf(docInfo).open();
+    }
+
     startEdit() {
         let input = this.$id("result")
         input.focus()
@@ -192,7 +355,6 @@ class MyCompetitionSection6Page5 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
     }
-
 }
 
 customElements.define("my-competition-section-6-page-5", MyCompetitionSection6Page5);

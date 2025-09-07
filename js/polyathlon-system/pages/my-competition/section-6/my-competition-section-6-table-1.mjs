@@ -231,6 +231,7 @@ class MyCompetitionSection6Table1 extends BaseElement {
             return `${club?.name}, ${club?.city?.type?.shortName || ''} ${club?.city?.name}`
         return ''
     }
+
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
@@ -244,6 +245,7 @@ class MyCompetitionSection6Table1 extends BaseElement {
         if (changedProps.has('sportsmenDataSource')) {
             this.items = this.sportsmenDataSource.items.map(item => {
                 return {
+                    _id: item?._id,
                     place: item?.shooting?.place ?? 0,
                     sportsman: this.sportsmanName(item),
                     gender: item.gender,
@@ -254,7 +256,6 @@ class MyCompetitionSection6Table1 extends BaseElement {
                     // year: new Date(item.birthday).getFullYear(),
                     region: item.region.shortName ?? item.region.name,
                     club: this.clubShowValue(item.club),
-
                     sportsNumber: item.sportsNumber,
                     result: item.shooting?.result ?? 0,
                     points: +(item.shooting?.points ?? 0)
@@ -272,9 +273,13 @@ class MyCompetitionSection6Table1 extends BaseElement {
             <!-- <simple-table-header .columns=${this.columns}></simple-table-header> -->
             <div class="table">
                 <!-- <simple-table @click=${this.tableClick} .hideHead=${true} .columns=${this.columns} .rows=${this.items}></simple-table> -->
-                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.items} .groups=${this.groups}></simple-table>
+                <simple-table @click=${this.tableClick} @dblclick=${this.tableClick} .columns=${this.columns} .rows=${this.items} .groups=${this.groups}></simple-table>
             </div>
         `;
+    }
+
+    tableClick(e) {
+        console.log(e)
     }
 
     validateInput(e) {
