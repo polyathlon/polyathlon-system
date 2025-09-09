@@ -244,36 +244,36 @@ class MyCompetitionSection6 extends BaseElement {
         ]
         this.pages = [
             {name: 'page1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
-            {name: 'page2', iconName: 'swimming-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
-            {name: 'page3', iconName: 'sprinting-solid', page: 5, title: lang`Sprinting`, click: () => this.gotoPage(5)},
-            {name: 'page4', iconName: 'throwing-solid', page: 4, title: lang`Throwing`, click: () => this.gotoPage(4)},
-            {name: 'page5', iconName: 'running-solid', page: 6, title: lang`Running`, click: () => this.gotoPage(6)},
-            {name: 'page6', iconName: 'pull-ups-solid', page: 1, title: lang`Pull-ups`, click: () => this.gotoPage(1)},
-            {name: 'page7', iconName: 'push-ups-solid', page: 2, title: lang`Push-ups`, click: () => this.gotoPage(2)},
+            {name: 'page4', iconName: 'swimming-solid', page: 1, title: lang`Swimming`, click: () => this.gotoPage(1)},
+            {name: 'page6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
+            {name: 'page5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
+            {name: 'page7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
+            {name: 'page2', iconName: 'pull-ups-solid', page: 5, title: lang`Pull-ups`, click: () => this.gotoPage(5)},
+            {name: 'page3', iconName: 'push-ups-solid', page: 6, title: lang`Push-ups`, click: () => this.gotoPage(6)},
             {name: 'page8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
             {name: 'page9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
             {name: 'page10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
         ]
         this.tables = [
             {name: 'table1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
-            {name: 'table2', iconName: 'swimming-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
-            {name: 'table3', iconName: 'sprinting-solid', page: 5, title: lang`Sprinting`, click: () => this.gotoPage(5)},
-            {name: 'table4', iconName: 'throwing-solid', page: 4, title: lang`Throwing`, click: () => this.gotoPage(4)},
-            {name: 'table5', iconName: 'running-solid', page: 6, title: lang`Running`, click: () => this.gotoPage(6)},
-            {name: 'table6', iconName: 'pull-ups-solid', page: 1, title: lang`Pull-ups`, click: () => this.gotoPage(1)},
-            {name: 'table7', iconName: 'push-ups-solid', page: 2, title: lang`Push-ups`, click: () => this.gotoPage(2)},
+            {name: 'table4', iconName: 'swimming-solid', page: 1, title: lang`Swimming`, click: () => this.gotoPage(1)},
+            {name: 'table6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
+            {name: 'table5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
+            {name: 'table7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
+            {name: 'table2', iconName: 'pull-ups-solid', page: 5, title: lang`Strength training`, click: () => this.gotoPage(5)},
+            {name: 'table3', iconName: 'push-ups-solid', page: 6, title: lang`Push-ups`, click: () => this.gotoPage(6)},
             {name: 'table8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
             {name: 'table9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
             {name: 'table10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
         ]
         this.lots = [
             {name: 'lot1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
-            {name: 'lot2', iconName: 'swimming-solid', page: 3, title: lang`Swimming`, click: () => this.gotoPage(3)},
-            {name: 'lot3', iconName: 'sprinting-solid', page: 5, title: lang`Sprinting`, click: () => this.gotoPage(5)},
-            {name: 'lot4', iconName: 'throwing-solid', page: 4, title: lang`Throwing`, click: () => this.gotoPage(4)},
-            {name: 'lot5', iconName: 'running-solid', page: 6, title: lang`Running`, click: () => this.gotoPage(6)},
-            {name: 'lot6', iconName: 'pull-ups-solid', page: 1, title: lang`Pull-ups`, click: () => this.gotoPage(1)},
-            {name: 'lot7', iconName: 'push-ups-solid', page: 2, title: lang`Push-ups`, click: () => this.gotoPage(2)},
+            {name: 'lot4', iconName: 'swimming-solid', page: 1, title: lang`Swimming`, click: () => this.gotoPage(1)},
+            {name: 'lot6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
+            {name: 'lot5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
+            {name: 'lot7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
+            {name: 'lot2', iconName: 'pull-ups-solid', page: 5, title: lang`Pull-ups`, click: () => this.gotoPage(5)},
+            {name: 'lot3', iconName: 'push-ups-solid', page: 6, title: lang`Push-ups`, click: () => this.gotoPage(6)},
             {name: 'lot8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
             {name: 'lot9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
             {name: 'lot10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
@@ -291,10 +291,6 @@ class MyCompetitionSection6 extends BaseElement {
 
     allPoints() {
 
-    }
-
-    getPoints(a) {
-        return a[this.resultNames[this.currentPage]]?.points ?? 0;
     }
 
     getPoints(a) {
@@ -337,13 +333,11 @@ class MyCompetitionSection6 extends BaseElement {
             case 'running':
             case 'skiing':
             case 'rollerSkiing':
-                return this.resultToValue(a[this.resultNames[this.currentPage]].result)
+                return -this.resultToValue(a[this.resultNames[this.currentPage]].result)
             case 'throwing':
                 return this.throwingResultToValue(a[this.resultNames[this.currentPage]].result)
             case 'sprinting':
-                return this.sprintingResultToValue(a[this.resultNames[this.currentPage]].result)
-            case 'sprinting':
-                return this.sprintingResultToValue(a[this.resultNames[this.currentPage]].result)
+                return -this.sprintingResultToValue(a[this.resultNames[this.currentPage]].result)
             default:
                 return 0;
         }
@@ -468,121 +462,122 @@ class MyCompetitionSection6 extends BaseElement {
 
     get page1() {
         return html`
-            <my-competition-section-6-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-1>
+            <my-competition-section-6-page-1 .discipline=${"shooting"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-1>
         `;
     }
 
     get page2() {
         return html`
-            <my-competition-section-6-page-2 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-2>
+            <my-competition-section-6-page-2 .discipline=${"pullUps"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-2>
         `;
     }
 
     get page3() {
         return html`
-            <my-competition-section-6-page-3 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-3>
+            <my-competition-section-6-page-3 .discipline=${"pushUps"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-3>
             `;
     }
 
     get page4() {
         return html`
-            <my-competition-section-6-page-4 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-4>
+            <my-competition-section-6-page-4 .discipline=${"swimming"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-4>
             `;
     }
 
     get page5() {
         return html`
-            <my-competition-section-6-page-5 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-5>
+            <my-competition-section-6-page-5 .discipline=${"throwing"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-5>
         `;
     }
 
     get page6() {
         return html`
-            <my-competition-section-6-page-6 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-6>
+            <my-competition-section-6-page-6 .discipline=${"sprinting"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-6>
         `;
     }
 
     get page7() {
         return html`
-            <my-competition-section-6-page-7 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-7>
+            <my-competition-section-6-page-7 .discipline=${"running"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-7>
         `;
     }
 
     get page8() {
         return html`
-            <my-competition-section-6-page-8 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-8>
+            <my-competition-section-6-page-8 .discipline=${"skiing"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-8>
         `;
     }
 
     get page9() {
         return html`
-            <my-competition-section-6-page-9 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-9>
+            <my-competition-section-6-page-9 .discipline=${"rollerSkiing"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-9>
         `;
     }
 
     get page10() {
         return html`
-            <my-competition-section-6-page-10 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-10>
+            <my-competition-section-6-page-10 .discipline=${"jumping"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-10>
         `;
     }
 
     get table1() {
         return html`
-            <my-competition-section-6-table-1 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-1>
+            <my-competition-section-6-table-1 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"shooting"}></my-competition-section-6-table-1>
         `;
     }
 
     get table2() {
         return html`
-            <my-competition-section-6-table-2 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-2>
+
+            <my-competition-section-6-table-2 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"pullUps"}></my-competition-section-6-table-2>
         `;
     }
 
     get table3() {
         return html`
-            <my-competition-section-6-table-3 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-3>
+            <my-competition-section-6-table-3 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"pushUps"}></my-competition-section-6-table-3>
         `;
     }
 
     get table4() {
         return html`
-            <my-competition-section-6-table-4 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-4>
+            <my-competition-section-6-table-4 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"swimming"}></my-competition-section-6-table-4>
         `;
     }
 
     get table5() {
         return html`
-            <my-competition-section-6-table-5 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-5>
+            <my-competition-section-6-table-5 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"throwing"}></my-competition-section-6-table-5>
         `;
     }
 
     get table6() {
         return html`
-            <my-competition-section-6-table-6 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-6>
+            <my-competition-section-6-table-6 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"sprinting"}></my-competition-section-6-table-6>
         `;
     }
 
     get table7() {
         return html`
-            <my-competition-section-6-table-7 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-7>
+            <my-competition-section-6-table-7 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"running"}></my-competition-section-6-table-7>
         `;
     }
 
     get table8() {
         return html`
-            <my-competition-section-6-table-8 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-8>
+            <my-competition-section-6-table-8 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"skiing"}></my-competition-section-6-table-8>
         `;
     }
 
     get table9() {
         return html`
-            <my-competition-section-6-table-9 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-9>
+            <my-competition-section-6-table-9 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"rollerSkiing"}></my-competition-section-6-table-9>
         `;
     }
 
     get table10() {
         return html`
-            <my-competition-section-6-table-10 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-table-10>
+            <my-competition-section-6-table-10 .parent=${this.parent} .sportsmenDataSource=${this.sportsmenDataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"jumping"}></my-competition-section-6-table-10>
         `;
     }
 

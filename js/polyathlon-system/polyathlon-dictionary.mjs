@@ -304,7 +304,7 @@ const dictionary = {
         "en-EN": 'Sector'
     },
     'Throw': {
-        "ru-RU": 'Бросок',
+        "ru-RU": 'Попытка',
         "en-EN": 'Throw'
     },
     'Horizontal bar': {
@@ -982,6 +982,10 @@ const dictionary = {
     'Drag and drop file or browse': {
         "ru-RU": 'Перетащите сюда файлы и щелкните по этой области',
         "en-EN": 'Drag and drop file or browse'
+    },
+    'Strength training': {
+        "ru-RU": 'Силовая гимнастика',
+        "en-EN": 'Strength training'
     },
 }
 

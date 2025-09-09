@@ -232,6 +232,45 @@ class MyCompetitionSection6Table6 extends BaseElement {
         return ''
     }
 
+    resultToValue(result) {
+        const parts = result.split(':')
+        const minutes = parts[1].split(',')
+        return (+parts[0] * 60 + +minutes[0]) * 10 + +minutes[1];
+    }
+
+    throwingResultToValue(result) {
+        let parts = result.split(',')
+        return +parts[0] * 100 + +parts[1];
+    }
+
+    sprintingResultToValue(result) {
+        let parts = result.split(',')
+        return +parts[0] * 10 + +parts[1];
+    }
+
+    getResult(a) {
+        if (a.result === '')
+            return ''
+        switch ( this.discipline) {
+            case 'shooting':
+            case 'pullUps':
+            case 'pushUps':
+            case 'jumping':
+                return +a.result
+            case 'swimming':
+            case 'running':
+            case 'skiing':
+            case 'rollerSkiing':
+                return -this.resultToValue(a.result)
+            case 'throwing':
+                return this.throwingResultToValue(a.result)
+            case 'sprinting':
+                return -this.sprintingResultToValue(a.result)
+            default:
+                return 0;
+        }
+    }
+
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
@@ -246,7 +285,7 @@ class MyCompetitionSection6Table6 extends BaseElement {
             this.items = this.sportsmenDataSource.items.map(item => {
                 return {
                     _id: item?._id,
-                    place: item?.sprinting?.place ?? 0,
+                    place: item?.[this.discipline]?.place ?? '',
                     sportsman: this.sportsmanName(item),
                     gender: item.gender,
                     ageGroup: item.ageGroup?.name,
@@ -257,14 +296,14 @@ class MyCompetitionSection6Table6 extends BaseElement {
                     region: item.region.shortName ?? item.region.name,
                     club: this.clubShowValue(item.club),
                     sportsNumber: item.sportsNumber,
-                    result: item.sprinting?.result ?? 0,
-                    points: +(item.sprinting?.points ?? 0)
+                    result: item?.[this.discipline]?.result ?? '',
+                    points: item?.[this.discipline]?.points ?? ''
                     /* + +(item.pushUps?.points ?? 0) + +(item.pullUps?.points ?? 0)
                       + +(item.swimming?.points ?? 0) + +(item.throwing?.points ?? 0) + +(item.sprinting?.points ?? 0) + +(item.running?.points ?? 0)
                       + +(item.skiing?.points ?? 0) + +(item.rollerSkiing?.points ?? 0)  + +(item.jumping?.points ?? 0),
                     */
                 }
-            }).sort((a, b) => a.gender - b.gender || (!this.parent?.championship ? a.ageGroupOrder - b.ageGroupOrder : false) || b.points - a.points);
+            }).sort((a, b) => (!this.parent?.championship ? a.gender - b.gender || a.ageGroupOrder - b.ageGroupOrder : a.gender - b.gender) || b.points - a.points || this.getResult(b) - this.getResult(a))
         }
     }
 
@@ -524,9 +563,6 @@ class MyCompetitionSection6Table6 extends BaseElement {
             },
         ]
     };
-
-
-
     pdfMake.createPdf(docInfo).open();
 }
 
