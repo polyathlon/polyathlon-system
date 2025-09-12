@@ -1,9 +1,13 @@
-import { BaseElement, html, css } from '../../../base-element.mjs'
+import { BaseElement, html, css, nothing } from '../../../../base-element.mjs'
 
-import lang from '../../polyathlon-dictionary.mjs'
-import '../../../../components/inputs/simple-input.mjs'
+import '../../../../../components/inputs/simple-input.mjs'
+import '../../../../../components/inputs/gender-input.mjs'
+import '../../../../../components/inputs/birthday-input.mjs'
+import '../../../../../components/forms/verify-email-form.mjs'
 
-class MyFederationMemberCategoriesSection1Page1 extends BaseElement {
+import lang from '../../../polyathlon-dictionary.mjs'
+
+class MyTrainerSection3Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -33,17 +37,30 @@ class MyFederationMemberCategoriesSection1Page1 extends BaseElement {
     }
 
     render() {
-        return html`
-            <div class="container">
-                <simple-input id="name" icon-name="federation-member-category-solid" label="${lang`Federation member category`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-input id="shortName" icon-name="short-federation-member-category-solid" label="${lang`Short name`}:" .value=${this.item?.shortName} @input=${this.validateInput}></simple-input>
-            </div>
-        `;
+        return html``;
+    }
+
+    async confirmEmail() {
+
+        // const verifyEmail = this.renderRoot.querySelector('verify-email-form') ?? null;
+        // verifyEmail.open()
+
+        const verifyEmail = document.createElement('verify-email-form');
+        this.renderRoot.append(verifyEmail)
+        const modalResult = await verifyEmail.open()
+        if (modalResult != 'Error') {
+            this.item.emailVerified = true
+            this.item._rev = modalResult.rev
+            this.requestUpdate()
+        }
+
+        // return this.querySelector('verify-email-form') ?? null;
+        // this.parentNode.parentNode.host.requestUpdate()
     }
 
     validateInput(e) {
         if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item
+            const currentItem = e.target.currentObject ?? this.item.personalInfo
             if (!this.oldValues.has(e.target)) {
                 if (currentItem[e.target.id] !== e.target.value) {
                     this.oldValues.set(e.target, currentItem[e.target.id])
@@ -57,11 +74,9 @@ class MyFederationMemberCategoriesSection1Page1 extends BaseElement {
             if (e.target.id === 'name') {
                 this.parentNode.parentNode.host.requestUpdate()
             }
-
             this.isModified = this.oldValues.size !== 0;
         }
     }
-
 }
 
-customElements.define("my-federation-member-categories-section-1-page-1", MyFederationMemberCategoriesSection1Page1);
+customElements.define("my-trainer-section-3-page-1", MyTrainerSection3Page1);

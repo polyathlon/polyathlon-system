@@ -5,8 +5,8 @@ import '../../../../../components/selects/simple-select.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
-import FederationMemberCategoryDataset from '../../my-federation-member-categories/my-federation-member-categories-dataset.mjs'
-import FederationMemberCategoryDataSource from '../../my-federation-member-categories/my-federation-member-categories-datasource.mjs'
+import FederationMemberPositionDataset from '../../my-federation-member-positions/my-federation-member-positions-dataset.mjs'
+import FederationMemberPositionDataSource from '../../my-federation-member-positions/my-federation-member-positions-datasource.mjs'
 
 import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
@@ -19,7 +19,7 @@ class MyFederationMemberSection2Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            federationMemberCategoryDataSource: { type: Object, default: null },
+            federationMemberPositionDataSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
@@ -60,7 +60,7 @@ class MyFederationMemberSection2Page1 extends BaseElement {
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="category" label="${lang`Category`}:" icon-name="federation-member-category-solid" @icon-click=${() => this.showPage('my-federation-member-categories')} .dataSource=${this.federationMemberCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="position" label="${lang`Position`}:" icon-name="federation-member-position-solid" @icon-click=${() => this.showPage('my-federation-member-positions')} .dataSource=${this.federationMemberPositionDataSource} .value=${this.item?.position} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-input id="federationMemberPC" label="${lang`Federation member PC`}:" icon-name="federation-member-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createFederationMemberPC} .value=${this.item?.federationMemberPC} @input=${this.validateInput}></simple-input>
@@ -99,7 +99,7 @@ class MyFederationMemberSection2Page1 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.federationMemberCategoryDataSource = new FederationMemberCategoryDataSource(this, await FederationMemberCategoryDataset.getDataSet())
+        this.federationMemberPositionDataSource = new FederationMemberPositionDataSource(this, await FederationMemberPositionDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }

@@ -1,4 +1,4 @@
-import DataSet from "./my-federation-member-categories-dataset.mjs";
+import DataSet from "./my-federation-member-positions-dataset.mjs";
 
 export default class DataSource {
 
@@ -18,18 +18,18 @@ export default class DataSource {
     }
 
     getCurrentItem(){
-        const item = sessionStorage.getItem('currentFederationMemberCategories')
+        const item = sessionStorage.getItem('currentFederationMemberPosition')
         if (item) {
             return this.items.find(p => p._id === item)
         }
         else {
-            sessionStorage.setItem('currentFederationMemberCategories', this.items[0]?._id)
+            sessionStorage.setItem('currentFederationMemberPosition', this.items[0]?._id)
             return this.items?.[0]
         }
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentFederationMemberCategories', item._id)
+        sessionStorage.setItem('currentFederationMemberPosition', item._id)
         this.component.currentItem = item;
     }
 

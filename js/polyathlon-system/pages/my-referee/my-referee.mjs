@@ -29,7 +29,7 @@ class MyReferee extends BaseElement {
         super()
         this.version = "1.0.0"
         this.sections = [
-            {name: "section1", label: lang`Referee`, iconName: 'referee-man-solid'},
+            {name: "section1", label: lang`Referee`, iconName: item => item?.gender == true ? 'referee-woman-solid': 'referee-man-solid'},
         ]
     }
 

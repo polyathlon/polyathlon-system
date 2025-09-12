@@ -9,7 +9,8 @@ class MyCompetitionSection6List1 extends BaseElement {
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
-            currentItem: {type: Object, default: null, local: true }
+            currentItem: {type: Object, default: null, local: true },
+            sortDirection: { type: Boolean, default: true},
         }
     }
 

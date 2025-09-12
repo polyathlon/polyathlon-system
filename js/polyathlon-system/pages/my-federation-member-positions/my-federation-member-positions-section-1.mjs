@@ -9,12 +9,12 @@ import lang from '../../polyathlon-dictionary.mjs'
 
 import { isAuth, States } from '../../../utils.js'
 
-import './my-federation-member-categories-section-1-page-1.mjs'
+import './my-federation-member-positions-section-1-page-1.mjs'
 
-import DataSet from './my-federation-member-categories-dataset.mjs'
-import DataSource from './my-federation-member-categories-datasource.mjs'
+import DataSet from './my-federation-member-positions-dataset.mjs'
+import DataSource from './my-federation-member-positions-datasource.mjs'
 
-class MyFederationMemberCategoriesSection1 extends BaseElement {
+class MyFederationMemberPositionsSection1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -178,8 +178,8 @@ class MyFederationMemberCategoriesSection1 extends BaseElement {
         this.pageNames = [lang`Information`]
         this.oldValues = new Map();
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-federation-member-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
-            {iconName: 'arrow-left-solid', page: 'my-federation-member-categories', title: lang`Back`, click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-federation-member-positions', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'arrow-left-solid', page: 'my-federation-member-positions', title: lang`Back`, click: () => this.gotoBack()},
         ]
     }
 
@@ -230,8 +230,8 @@ class MyFederationMemberCategoriesSection1 extends BaseElement {
                     lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
                     firstName: r[1].split(' ')[1],
                     middleName: r[1].split(' ')[2],
-                    category: {
-                        "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
+                    position: {
+                        "_id": "referee-position:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
                         "name": "Судья всероссийской категории",
                     },
@@ -254,7 +254,7 @@ class MyFederationMemberCategoriesSection1 extends BaseElement {
             this.statusDataSet.set(this.itemStatus._id, this.itemStatus)
             this.requestUpdate()
         }
-        if (changedProps.has('currentFederationMemberCategoryItem')) {
+        if (changedProps.has('currentFederationMemberPositionItem')) {
             this.currentPage = 0;
         }
     }
@@ -280,13 +280,13 @@ class MyFederationMemberCategoriesSection1 extends BaseElement {
 
     #page1() {
         return html`
-            <my-federation-member-categories-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-categories-section-1-page-1>
+            <my-federation-member-positions-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-positions-section-1-page-1>
         `;
     }
 
     #page2() {
         return html`
-            <my-federation-member-categories-section-1-page-2 .item=${this.currentItem}></my-federation-member-categories-section-1-page-2>
+            <my-federation-member-positions-section-1-page-2 .item=${this.currentItem}></my-federation-member-positions-section-1-page-2>
         `;
     }
 
@@ -301,7 +301,7 @@ class MyFederationMemberCategoriesSection1 extends BaseElement {
                     <icon-button
                         label=${item.name}
                         title=${item._id}
-                        icon-name="federation-member-category-solid"
+                        icon-name="federation-member-position-solid"
                         ?selected=${this.currentItem === item}
                         @click=${() => this.showItem(index, item._id)}
                     ></icon-button>
@@ -343,7 +343,7 @@ class MyFederationMemberCategoriesSection1 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
-            <header class="left-header"><p>${lang`Federation member categories`}</p></header>
+            <header class="left-header"><p>${lang`Federation member positions`}</p></header>
             <header class="right-header">
                 ${this.#pageName}
             </header>
@@ -418,4 +418,4 @@ class MyFederationMemberCategoriesSection1 extends BaseElement {
     }
 }
 
-customElements.define("my-federation-member-categories-section-1", MyFederationMemberCategoriesSection1);
+customElements.define("my-federation-member-positions-section-1", MyFederationMemberPositionsSection1);

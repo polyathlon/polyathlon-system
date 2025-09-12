@@ -22,6 +22,9 @@ import './my-federation-member-section-2-page-1.mjs'
 import './my-federation-member-section-2-page-2.mjs'
 import './my-federation-member-section-2-page-3.mjs'
 import './my-federation-member-section-2-page-4.mjs'
+import './my-federation-member-section-2-page-5.mjs'
+import './my-federation-member-section-2-page-6.mjs'
+
 import './my-federation-member-section-2-list-1.mjs'
 //import './my-competition-section-1-page-2.mjs'
 // import './my-competition-section-2-page-1.mjs'
@@ -258,6 +261,8 @@ class MyFederationMemberSection2 extends BaseElement {
             {name: 'page2', iconName: 'referee-man-solid', page: 1, title: lang`Referee`, click: () => this.gotoPage(1)},
             {name: 'page3', iconName: 'trainer-man-solid', page: 2, title: lang`Trainer`, click: () => this.gotoPage(2)},
             {name: 'page4',iconName: 'federation-member-solid', page: 4, title: lang`Federation member`, click: () => this.gotoPage(3)},
+            {name: 'page5',iconName: 'sportsman-man-solid', page: 4, title: lang`Sportsman`, click: () => this.gotoPage(4)},
+            {name: 'page6',iconName: 'sportsman-man-solid', page: 4, title: lang`Sportsman`, click: () => this.gotoPage(5)},
         ]
     }
 
@@ -377,6 +382,18 @@ class MyFederationMemberSection2 extends BaseElement {
     get page4() {
         return html`
             <my-federation-member-section-2-page-4 id="page4" .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-4>
+        `;
+    }
+
+    get page5() {
+        return html`
+            <my-federation-member-section-2-page-5 id="page5" .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-5>
+        `;
+    }
+
+    get page6() {
+        return html`
+            <my-federation-member-section-2-page-4 id="page6" .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-4>
         `;
     }
 
@@ -523,7 +540,7 @@ class MyFederationMemberSection2 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -635,7 +652,7 @@ class MyFederationMemberSection2 extends BaseElement {
     async firstUpdated() {
         super.firstUpdated();
         this.isFirst  = false;
-        const parentId = localStorage.getItem('federationMember')
+        const parentId = sessionStorage.getItem('federationMember')
         this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))
         await this.dataSource.init();
         this.currentPage = (this.currentItem.type ?? 1) - 1

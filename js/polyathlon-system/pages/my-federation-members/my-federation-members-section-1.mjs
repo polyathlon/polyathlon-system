@@ -678,7 +678,7 @@ class MyFederationMembersSection1 extends BaseElement {
                         title=${item._id}
                         image-name=${item.gender == 0 ? "images/federation-member-man-solid.svg" : "images/federation-member-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'federation-member-category-solid'} }
+                        .status=${ { name: item.position?.name || item?._id, icon: 'federation-member-position-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>
                 `
@@ -696,7 +696,7 @@ class MyFederationMembersSection1 extends BaseElement {
                 label=${ this.currentItem?.name || "Новый представитель"}
                 title=${ this.currentItem?.name || "Новый представитель"}
                 icon-name=${ this.currentItem?.icon || "federation-member-solid" }
-                .status=${ { name: this.currentItem?.category?.name || '', icon: 'federation-category-solid'} }
+                .status=${ { name: this.currentItem?.position?.name || '', icon: 'federation-member-position-solid'} }
                 ?selected=${ true }
             >
             </icon-button>

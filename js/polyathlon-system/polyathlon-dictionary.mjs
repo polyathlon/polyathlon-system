@@ -447,6 +447,14 @@ const dictionary = {
         "ru-RU": 'Судейские должности',
         "en-EN": 'Referee positions'
     },
+    'Position': {
+        "ru-RU": 'Должность',
+        "en-EN": 'Position'
+    },
+    'Positions': {
+        "ru-RU": 'Должности',
+        "en-EN": 'Positions'
+    },
     'Club': {
         "ru-RU": 'Клуб',
         "en-EN": 'Club'
@@ -511,13 +519,13 @@ const dictionary = {
         "ru-RU": 'Персональный код представителя федерации',
         "en-EN": 'Federation member personal code'
     },
-    'Federation member category': {
-        "ru-RU": 'Категория члена федерации',
-        "en-EN": 'Federation Member category'
+    'Federation member position': {
+        "ru-RU": 'Должность представителя федерации',
+        "en-EN": 'Federation member position'
     },
-    'Federation member categories': {
-        "ru-RU": 'Категории членов федерации',
-        "en-EN": 'Federation member categories'
+    'Federation member positions': {
+        "ru-RU": 'Должности представителей федерации',
+        "en-EN": 'Federation member positions'
     },
     'Trainer PC': {
         "ru-RU": 'Персональный код тренера',
@@ -986,6 +994,14 @@ const dictionary = {
     'Strength training': {
         "ru-RU": 'Силовая гимнастика',
         "en-EN": 'Strength training'
+    },
+    'Sportsman registration': {
+        "ru-RU": 'Зарегистрировать спортсмена',
+        "en-EN": 'Sportsman registration'
+    },
+    'Club registration': {
+        "ru-RU": 'Зарегистрировать клуб',
+        "en-EN": 'Club registration'
     },
 }
 

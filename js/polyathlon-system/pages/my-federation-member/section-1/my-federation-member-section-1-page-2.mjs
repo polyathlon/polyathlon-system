@@ -3,8 +3,8 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
-import FederationMemberCategoryDataset from '../my-federation-member-categories/my-federation-member-categories-dataset.mjs'
-import FederationMemberCategoryDataSource from '../my-federation-member-categories/my-federation-member-categories-datasource.mjs'
+import FederationMemberPositionDataset from '../my-federation-member-positions/my-federation-member-positions-dataset.mjs'
+import FederationMemberPositionDataSource from '../my-federation-member-positions/my-federation-member-positions-datasource.mjs'
 
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../my-regions/my-regions-dataset.mjs'
@@ -17,7 +17,7 @@ class MyFederationMemberSection1Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            federationMemberCategoryDataSource: { type: Object, default: null },
+            federationMemberPositionDataSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
@@ -91,7 +91,7 @@ class MyFederationMemberSection1Page2 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.federationMemberCategoryDataSource = new FederationMemberCategoryDataSource(this, await FederationMemberCategoryDataset.getDataSet())
+        this.federationMemberPositionDataSource = new FederationMemberPositionDataSource(this, await FederationMemberPositionDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }

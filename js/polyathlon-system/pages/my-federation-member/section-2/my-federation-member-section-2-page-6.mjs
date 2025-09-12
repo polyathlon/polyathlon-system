@@ -3,27 +3,30 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 import '../../../../../components/inputs/gender-input.mjs'
+import '../../../../../components/inputs/birthday-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
-import FederationMemberPositionDataSource from '../../my-federation-member-positions/my-federation-member-positions-datasource.mjs'
-import FederationMemberPositionDataset from '../../my-federation-member-positions/my-federation-member-positions-dataset.mjs'
+// import DataSet from './my-sportsmen-dataset.mjs'
 
 import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 
-import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
-import CityDataset from '../../my-cities/my-cities-dataset.mjs'
+import ClubDataSource from '../../my-clubs/my-clubs-datasource.mjs'
+import ClubDataset from '../../my-clubs/my-clubs-dataset.mjs'
 
-import FederationMembersDataset from '../../my-federation-members/my-federation-members-dataset.mjs'
+import ClubTypesDataset from '../../my-club-types/my-club-types-dataset.mjs'
+import ClubTypesDataSource from '../../my-club-types/my-club-types-datasource.mjs'
 
-class MyFederationMemberSection2Page4 extends BaseElement {
+import SportsmenDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
+
+class MyFederationMemberSection2Page6 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            federationMemberPositionSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
-            cityDataSource: { type: Object, default: null },
+            clubDataSource: { type: Object, default: null },
+            clubTypesCategorySource: { type: Object, default: null },
             findDataSource: { type: Object, default: null },
             item: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
@@ -58,29 +61,29 @@ class MyFederationMemberSection2Page4 extends BaseElement {
         ]
     }
 
-    federationMemberShowValue(item) {
+    sportsmanShowValue(item) {
          if (item?.lastName) {
             return item.lastName
          }
     }
 
-    cityShowValue(item) {
-        return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
-    }
-
-    cityListLabel(item) {
-        if (item?.name) {
-            return item?.type?.shortName ? `${item?.type?.shortName} ${item?.name}` : item?.name
-        }
+    clubShowValue(item) {
+        if (item?.name)
+            return `${item?.name}, ${item?.city?.type?.shortName || ''} ${item?.city?.name}`
         return ''
     }
 
-    cityListStatus(item) {
-        return { name: item?.region?.name ?? ''}
+    clubListLabel(item) {
+        // return item?.type?.shortName + ' ' + item?.name
+        return item?.city?.name ? `${item?.name}, ${item?.city?.type?.shortName || ''} ${item?.city?.name}` : item?.name
+    }
+
+    clubListStatus(item) {
+        return { name: item?.city?.region?.name }
     }
 
     listIconName(item) {
-        return item.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"
+        return item.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
     }
 
     render() {
@@ -92,11 +95,12 @@ class MyFederationMemberSection2Page4 extends BaseElement {
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="position" label="${lang`Position`}:" icon-name="federation-member-position-solid" @icon-click=${() => this.showPage('my-federation-member-position')} .dataSource=${this.federationMemberPositionDataSource} .value=${this.item?.payload?.position} @input=${this.validateInput}></simple-select>
-                <simple-input id="federationMemberPC" label="${lang`Federation member PC`}:" icon-name="federation-member-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createFederationMemberPC} .value=${this.item?.payload?.federationMemberPC} @input=${this.validateInput}></simple-input>
-                <simple-input id="federationMember" label="${lang`Federation member`}:" .listIconName=${this.listIconName} .dataSource=${this.findDataSource} icon-name=${this.item?.payload?.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.federationMemberShowValue} .value=${this.item?.federationMember} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="birthday" label="${lang`Data of birth`}:" icon-name="cake-candles-solid" .value=${this.item?.payload?.birthday} @input=${this.validateInput} lang="ru-Ru" type="date" ></simple-input>
+                <simple-select id="category" label="${lang`Sports category`}:" icon-name="sportsman-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" icon-name="sportsman-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createSportsmanPC} .value=${this.item?.payload?.sportsmanPC} @input=${this.validateInput}></simple-input>
+                <simple-input id="sportsman" label="${lang`Sportsman`}:" .listIconName=${this.listIconName} .dataSource=${this.findDataSource} icon-name=${this.item?.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.sportsmanShowValue} .value=${this.item?.sportsman} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
+                <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.payload?.club} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.link} @input=${this.validateInput}></simple-input>
@@ -106,14 +110,14 @@ class MyFederationMemberSection2Page4 extends BaseElement {
         `;
     }
 
-    async createFederationMemberPC(e) {
+    async createSportsmanPC(e) {
         const target = e.target
-        const id = await DataSet.createFederationMemberPC({
-            countryCode: this.item?.region?.country?.flag.toUpperCase(),
-            regionCode: this.item?.region?.code,
-            ulid: this.item?.profileUlid,
-        })
-        target.setValue(id)
+        // const spc = await DataSet.createSportsmanPC({
+        //     countryCode: this.item?.region?.country?.flag.toUpperCase(),
+        //     regionCode: this.item?.region?.code,
+        //     ulid: this.item?.profileUlid,
+        // })
+        target.setValue(spc);
     }
 
     async findSportsman(e) {
@@ -128,7 +132,7 @@ class MyFederationMemberSection2Page4 extends BaseElement {
                 await this.errorDialog('Вы не задали фамилию для поиска')
                 return
             }
-            sportsman = await FederationMembersDataset.getItemByLastName(lastName)
+            sportsman = await SportsmenDataset.getItemByLastName(lastName)
             if (sportsman.rows.length === 0) {
                 this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
                 return
@@ -141,9 +145,9 @@ class MyFederationMemberSection2Page4 extends BaseElement {
             }
             sportsman = sportsman.rows[0].doc
         } else if (value.includes(":")) {
-            sportsman = await FederationMembersDataset.getItem(value)
+            sportsman = await SportsmenDataset.getItem(value)
         } else if (target.value.includes("-")) {
-            sportsman = await FederationMembersDataset.getItemBySportsmanPC(value)
+            sportsman = await SportsmenDataset.getItemBySportsmanPC(value)
             if (sportsman.rows.length === 0) {
                 this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
                 return
@@ -154,7 +158,7 @@ class MyFederationMemberSection2Page4 extends BaseElement {
             }
             sportsman = sportsman.rows[0].doc
         } else {
-            sportsman = await FederationMembersDataset.getItemByLastName(value)
+            sportsman = await SportsmenDataset.getItemByLastName(value)
             if (sportsman.rows.length >= 0) {
                 this.findDataSource = sportsman.rows
             }
@@ -177,7 +181,7 @@ class MyFederationMemberSection2Page4 extends BaseElement {
     sportsmanChoose(e) {
         let sportsman = e.detail
         if (sportsman) {
-            this.item.federationMember = sportsman
+            this.item.sportsman = sportsman
             // this.$id('sportsman').setValue(sportsman)
             // sportsman.sportsmanUlid = sportsman._id
             // const inputs = this.$id()
@@ -254,10 +258,11 @@ class MyFederationMemberSection2Page4 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.federationMemberPositionDataSource = new FederationMemberPositionDataSource(this, await FederationMemberPositionDataset.getDataSet())
+        this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
-        this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
+        this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
+        this.clubTypesDataSource = new ClubTypesDataSource(this, await ClubTypesDataset.getDataSet())
     }
 }
 
-customElements.define("my-federation-member-section-2-page-4", MyFederationMemberSection2Page4);
+customElements.define("my-federation-member-section-2-page-6", MyFederationMemberSection2Page6);

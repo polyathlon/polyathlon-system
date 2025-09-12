@@ -1,6 +1,6 @@
-import refreshToken, {getToken} from "../../refresh-token.mjs";
+import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
-import {HOST} from "../../polyathlon-system-config.mjs";
+import {HOST} from "../../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -14,17 +14,27 @@ export default class DataSet {
     }
 
     static find(name, value) {
-        return DataSet.#dataSet.find(element =>
+        const index = DataSet.#dataSet.findIndex(element =>
             element[name] === value || element[name].toLowerCase() === value
         )
+        return index === -1 ? null : DataSet.#dataSet[index]
     }
 
-    static #fetchGetItems() {
-        return fetch(`https://${HOST}:4500/api/federation-member-categories`)
+    static #fetchGetItems(token) {
+        return fetch(`https://${HOST}:4500/api/trainer-requests`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
     }
 
     static async #getItems() {
-        let response = await DataSet.#fetchGetItems()
+        let token = getToken()
+        let response = await DataSet.#fetchGetItems(token)
+        if (response.status === 419) {
+            token = await refreshToken(token)
+            response = await DataSet.#fetchGetItems(token)
+        }
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)
@@ -36,7 +46,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/federation-member-category`, {
+        return fetch(`https://${HOST}:4500/api/trainer-request`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -55,25 +65,38 @@ export default class DataSet {
             response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
+
         if (!response.ok) {
             throw new Error(result.error)
         }
 
         const newItem = await DataSet.getItem(result.id)
-        DataSet.addToDataset(newItem)
+
         return newItem
     }
 
     static addToDataset(item) {
-        DataSet.#dataSet.unshift(item);
+        DataSet.#dataSet.push(item)
+
     }
 
-    static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:4500/api/federation-member-category/${itemId}`)
+    static #fetchGetItem(token, itemId) {
+        return fetch(`https://${HOST}:4500/api/trainer-request/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
     }
 
     static async getItem(itemId) {
-        let response = await DataSet.#fetchGetItem(itemId)
+        const token = getToken();
+
+        let response = await DataSet.#fetchGetItem(token, itemId)
+
+        if (response.status === 419) {
+            const token = await refreshToken()
+            response = await DataSet.#fetchGetItem(token, itemId)
+        }
 
         const result = await response.json()
 
@@ -84,7 +107,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/federation-member-category/${item._id}`, {
+        return fetch(`https://${HOST}:4500/api/trainer-request/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -117,7 +140,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/federation-member-category/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:4500/api/trainer-request/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`

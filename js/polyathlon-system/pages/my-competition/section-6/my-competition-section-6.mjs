@@ -56,6 +56,7 @@ class MyCompetitionSection6 extends BaseElement {
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null, local: true },
             isModified: { type: Boolean, default: false, local: true },
+            sortDirection: { type: Boolean, default: true},
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
@@ -615,7 +616,7 @@ class MyCompetitionSection6 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-6-list-1 .item=${this}></my-competition-section-6-list-1>
+            <my-competition-section-6-list-1 .item=${this} .sortDirection=${this.sortDirection}></my-competition-section-6-list-1>
         `;
     }
 
@@ -706,8 +707,10 @@ class MyCompetitionSection6 extends BaseElement {
             <modal-dialog></modal-dialog>
             <header class="left-header">
                 <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
-                <!-- <aside-button icon-name="search-regular" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button> -->
-                <aside-button icon-name="filter-regular" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
+                <p>
+                    <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
+                    <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
+                </p>
             </header>
             <header class="right-header">
                 ${this.sections.map( (page, index) =>
@@ -762,6 +765,16 @@ class MyCompetitionSection6 extends BaseElement {
 
     prevPage() {
         this.currentPage--
+    }
+
+    filterPage() {
+        this.currentFilter = {}
+        this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
+
+    sortPage() {
+        this.sortDirection = !this.sortDirection
+        this.dataSource.sort(this.sortDirection)
     }
 
     async showDialog(message, type='message') {

@@ -3,8 +3,8 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 
-import FederationMemberCategoryDataset from '../my-federation-member-categories/my-federation-member-categories-dataset.mjs'
-import FederationMemberCategoryDataSource from '../my-federation-member-categories/my-federation-member-categories-datasource.mjs'
+import FederationMemberPositionDataset from '../my-federation-member-positions/my-federation-member-positions-dataset.mjs'
+import FederationMemberPositionDataSource from '../my-federation-member-positions/my-federation-member-positions-datasource.mjs'
 
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../my-regions/my-regions-dataset.mjs'
@@ -17,7 +17,7 @@ class MyFederationMemberSection2Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            federationMemberCategoryDataSource: { type: Object, default: null },
+            federationMemberPositionDataSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
@@ -54,8 +54,8 @@ class MyFederationMemberSection2Page2 extends BaseElement {
             <div class="container">
                 <simple-select id="name" icon-name="referee-solid" @icon-click=${() => this.showPage('my-referee-types')} label="Name:" .dataSource=${this.refereeTypeDataSource} .value=${this.item?.name} @input=${this.validateInput}></simple-select>
                 <simple-select id="stage" icon-name="order-number-solid" @icon-click=${() => this.showPage('my-referee-stages')} label="Stage:" .dataSource=${this.refereeStageDataSource} .value=${this.item?.stage} @input=${this.validateInput}></simple-select>
-                <simple-select id="sportsDiscipline1" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 1:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline1} @input=${this.validateInput}></simple-select>
-                <simple-select id="sportsDiscipline2" icon-name="category-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 2:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
+                <simple-select id="sportsDiscipline1" icon-name="position-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 1:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline1} @input=${this.validateInput}></simple-select>
+                <simple-select id="sportsDiscipline2" icon-name="position-solid" @icon-click=${() => this.showPage('my-sports-disciplines')} label="Sports discipline 2:" .dataSource=${this.sportsDisciplineDataSource} .value=${this.item?.sportsDiscipline2} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="City name:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input type="date" label="Дата начала:" id="startDate" icon-name="calendar-days-solid" .value=${this.item?.startDate} @input=${this.validateInput} lang="ru-Ru"></simple-input>
@@ -91,7 +91,7 @@ class MyFederationMemberSection2Page2 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.federationMemberCategoryDataSource = new FederationMemberCategoryDataSource(this, await FederationMemberCategoryDataset.getDataSet())
+        this.federationMemberPositionDataSource = new FederationMemberPositionDataSource(this, await FederationMemberPositionDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }

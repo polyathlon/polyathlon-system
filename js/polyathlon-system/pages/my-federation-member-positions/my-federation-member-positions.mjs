@@ -1,8 +1,8 @@
 import { BaseElement, html, css } from '../../../base-element.mjs'
 
-import './my-federation-member-categories-section-1.mjs';
+import './my-federation-member-positions-section-1.mjs';
 
-class MyFederationMemberCategories extends BaseElement {
+class MyFederationMemberPositions extends BaseElement {
     static get styles() {
         return [
             BaseElement.styles,
@@ -28,9 +28,9 @@ class MyFederationMemberCategories extends BaseElement {
 
     render() {
         return html`
-            <my-federation-member-categories-section-1></my-federation-member-categories-section-1>
+            <my-federation-member-positions-section-1></my-federation-member-positions-section-1>
         `;
     }
 }
 
-customElements.define("my-federation-member-categories", MyFederationMemberCategories);
+customElements.define("my-federation-member-positions", MyFederationMemberPositions);

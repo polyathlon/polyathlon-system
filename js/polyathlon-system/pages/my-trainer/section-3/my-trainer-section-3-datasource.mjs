@@ -1,93 +1,52 @@
-import DataSet from "./my-competition-section-6-dataset.mjs";
+import DataSet from "./my-trainer-section-3-dataset.mjs"
 
-import { States } from "../../../../utils.js";
+import { States } from "../../../../utils.js"
 
 export default class DataSource {
+
     #lock = false
+
     #oldItem
-    sortDirection = true
+
     constructor(component, dataSet) {
         this.component = component
-        this.items = [...dataSet].sort( (a, b) => {
-            let r = a.lastName.localeCompare(b.lastName)
-            if (r) {
-                return r
-            }
-            r = a.firstName.localeCompare(b.firstName)
-            if (r) {
-                return r
-            }
-            r = a.middleName?.localeCompare(b.firstName)
-            if (r) {
-                return r
-            }
-            return 0
-        })
-        this.init()
+        this.items = [...dataSet]
         this.state = States.BROWSE
     }
 
-    init() {
+    async init() {
         if (this.items.length) {
-            let itemId = sessionStorage.getItem('currentCompetitionSportsman')
+            let itemId = sessionStorage.getItem('currentTrainerRequest')
             let item
             if (itemId) {
-                item = this.items.find((item) => item._id == itemId)
+                item = this.items.find((item) => item.id == itemId)
             }
             item ??= this.items[0]
-            sessionStorage.setItem('currentCompetitionSportsman', item._id)
+            sessionStorage.setItem('currentTrainerRequest', item.id)
             this.component.currentItem = item
         } else {
             this.component.currentItem = {}
         }
     }
 
-    sort(sortDirection) {
-        this.sortDirection = sortDirection
-        this.items.sort( (a, b) => {
-            [a, b] = sortDirection ? [a, b] : [b, a]
-            let r = a.lastName?.localeCompare(b.lastName)
-            if (r) {
-                return r
-            }
-            r = a.firstName?.localeCompare(b.firstName)
-            if (r) {
-                return r
-            }
-            r = a.middleName?.localeCompare(b.firstName)
-            if (r) {
-                return r
-            }
-            return 0
-        })
-    }
-
-
     filter(value) {
         this.items = this.dataSet.filter(item => {
-            return item?.country?.name === value?.name
+            return item?.country?.name === value?.name;
         }).sort( (a, b) => a.name.localeCompare(b.name) )
     }
 
-    getCurrentItem(){
-        const item = sessionStorage.getItem('currentCompetitionSportsman')
-        if (item) {
-            return this.items.find(p => p._id === item)
-        } else {
-            sessionStorage.setItem('currentCompetitionSportsman', this.items[0]?._id)
-            return this.items?.[0]
-        }
+    async getCurrentItem(item_id){
+        return await this.setCurrentItem(item_id)
     }
 
-    setCurrentItem(item) {
-        sessionStorage.setItem('currentCompetitionSportsman', item._id)
+    async setCurrentItem(item) {
+        sessionStorage.setItem('currentTrainerRequest', item._id)
         this.component.currentItem = item
     }
 
     async saveFirstItem(item) {
         const newItem = await DataSet.addItem(item)
-        const listItem = DataSet.addToDataset(newItem)
-        this.addTo(newItem, listItem)
+        this.addTo(newItem)
     }
 
     async addNewItem(item) {
@@ -106,18 +65,20 @@ export default class DataSource {
     addToDataSource(item) {
         this.items.push(item)
         this.items.sort( (a, b) => a._id.localeCompare(b._id))
-        this.setCurrentItem(item)
+        sessionStorage.setItem('currentTrainerRequest', item._id)
+        this.component.currentItem = item
     }
 
     async saveNewItem(item) {
         const newItem = await DataSet.addItem(item)
-        const listItem = DataSet.addToDataset(newItem)
-        this.addToDataSource(newItem, listItem)
+        DataSet.addToDataset(newItem)
+        this.addToDataSource(newItem)
         this.state = States.BROWSE
     }
 
     cancelNewItem() {
-        this.component.currentItem = this.#oldItem
+        this.component.currentItem = this.#oldItem || {}
+        this.#oldItem = null
         this.state = States.BROWSE
     }
 
@@ -135,7 +96,7 @@ export default class DataSource {
         }
     }
 
-    async saveItem(item, listItem) {
+    async saveItem(item) {
         await DataSet.saveItem(item)
         this.state = States.BROWSE
     }
@@ -148,7 +109,8 @@ export default class DataSource {
     deleteFrom(item) {
         const currentIndex = this.items.indexOf(item)
         if (this.items.length === 1) {
-            this.setCurrentItem({})
+            sessionStorage.removeItem('currentTrainerRequest')
+            this.component.currentItem = {}
         }
         else if (currentIndex === 0) {
             this.setCurrentItem(this.items[currentIndex + 1])

@@ -29,7 +29,7 @@ class MySportsman extends BaseElement {
         super();
         this.version = "1.0.0";
         this.sections = [
-            {name: "section1", label: lang`Sportsman`, iconName: 'sportsman-solid'},
+            {name: "section1", label: lang`Sportsman`, iconName: item => item?.gender == true ? 'sportsman-woman-solid': 'sportsman-man-solid'},
             {name: "section2", label: lang`Documents`, iconName: 'documents-solid'},
         ]
     }
