@@ -17,6 +17,7 @@ import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 import RefereeDataset from '../../my-referees/my-referees-dataset.mjs'
 import TrainerDataset from '../../my-trainers/my-trainers-dataset.mjs'
 import FederationMemberDataset from '../../my-federation-members/my-federation-members-dataset.mjs'
+import ClubDataset from '../../my-clubs/my-clubs-dataset.mjs'
 
 import './my-federation-member-section-2-page-1.mjs'
 import './my-federation-member-section-2-page-2.mjs'
@@ -393,7 +394,7 @@ class MyFederationMemberSection2 extends BaseElement {
 
     get page6() {
         return html`
-            <my-federation-member-section-2-page-4 id="page6" .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-4>
+            <my-federation-member-section-2-page-6 id="page6" .oldValues=${this.oldValues} .item=${this.currentItem}></my-federation-member-section-2-page-6>
         `;
     }
 
@@ -519,6 +520,20 @@ class MyFederationMemberSection2 extends BaseElement {
                 if (this.currentItem?.payload) {
                     this.currentItem.federationMember = await FederationMemberDataset.addItem(this.currentItem?.payload)
                     this.$id("page4").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            case 4:
+                if (this.currentItem?.payload) {
+                    this.currentItem.sportsman = await SportsmanDataset.addItem(this.currentItem?.payload)
+                    this.$id("page1").requestUpdate()
+                    this.isModified = true
+                }
+                break;
+            case 5:
+                if (this.currentItem?.payload) {
+                    this.currentItem.club = await ClubDataset.addItem(this.currentItem?.payload)
+                    this.$id("page6").requestUpdate()
                     this.isModified = true
                 }
                 break;

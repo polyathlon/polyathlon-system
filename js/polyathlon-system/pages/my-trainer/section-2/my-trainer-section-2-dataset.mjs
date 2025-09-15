@@ -1,17 +1,18 @@
-import refreshToken, {getToken} from "../../../refresh-token.mjs";
+import refreshToken, { getToken } from "../../../refresh-token.mjs";
 
 import {HOST} from "../../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
+    static #parentId;
 
-    // static async getDataSet() {
-    //     if (DataSet.#dataSet) {
-    //         return DataSet.#dataSet
-    //     }
-    //     DataSet.#dataSet = await DataSet.#getItems()
-    //     return DataSet.#dataSet
-    // }
+    static async getDataSet(id) {
+        if (!DataSet.#dataSet || DataSet.#parentId != id) {
+            DataSet.#dataSet = await DataSet.#getItems(id)
+            DataSet.#parentId = id
+        }
+        return DataSet.#dataSet
+    }
 
     static find(name, value) {
         const index = DataSet.#dataSet.findIndex(element =>
@@ -20,8 +21,33 @@ export default class DataSet {
         return index === -1 ? null : DataSet.#dataSet[index]
     }
 
-    static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/referee`, {
+    static #fetchGetItems(token, id) {
+        return fetch(`https://${HOST}:4500/api/trainer-sportsmen/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async #getItems(id) {
+        let token = getToken()
+        let response = await DataSet.#fetchGetItems(token, id)
+        if (response.status === 419) {
+            token = await refreshToken(token)
+            response = await DataSet.#fetchGetItems(token, id)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        const items = result.rows.map(item => {
+            return item.doc;
+        })
+        return items
+    }
+
+    static fetchAddItem(token, item, id) {
+        return fetch(`https://${HOST}:4500/api/trainer-sportsman/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -32,12 +58,11 @@ export default class DataSet {
     }
 
     static async addItem(item) {
-        let token = getToken();
-        let response = await DataSet.fetchAddItem(token, item)
-
+        let token = getToken()
+        let response = await DataSet.fetchAddItem(token, item, DataSet.#parentId)
         if (response.status === 419) {
             token = await refreshToken(token)
-            response = await DataSet.fetchAddItem(token, item)
+            response = await DataSet.fetchAddItem(token, item, DataSet.#parentId)
         }
         const result = await response.json()
         if (!response.ok) {
@@ -45,19 +70,20 @@ export default class DataSet {
         }
 
         const newItem = await DataSet.getItem(result.id)
-        // DataSet.addToDataset(newItem)
+        DataSet.addToDataset(newItem)
         return newItem
     }
 
     static addToDataset(item) {
-        DataSet.#dataSet.unshift(item);
+        DataSet.#dataSet.push(item);
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:4500/api/referee/${itemId}`)
+        return fetch(`https://${HOST}:4500/api/trainer-sportsman/${itemId}`)
     }
 
     static async getItem(itemId) {
+
         let response = await DataSet.#fetchGetItem(itemId)
 
         const result = await response.json()
@@ -69,7 +95,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/referee`, {
+        return fetch(`https://${HOST}:4500/api/trainer-sportsman/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -102,7 +128,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/my-referee//${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:4500/api/trainer-sportsman/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -137,55 +163,28 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchUploadAvatar(token, formData, refereeId) {
-        return fetch(`https://${HOST}:4500/api/upload/referee/avatar/${refereeId}`, {
-            method: "POST",
+    static fetchGetQRCode(token, data) {
+        return fetch(`https://${HOST}:4500/api/qr-code?${data}`, {
+            method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
             },
-            body: formData
         })
     }
 
-    static async uploadAvatar(avatar, refereeId) {
+    static async getQRCode(data) {
         let token = getToken();
-        const formData = new FormData();
-        formData.append("file", avatar);
-        let response = await DataSet.fetchUploadAvatar(token, formData, refereeId)
+        let response = await DataSet.fetchGetQRCode(token, btoa(data))
+
         if (response.status === 419) {
             token = await refreshToken(token)
-            response = await DataSet.fetchUploadAvatar(token, formData, refereeId)
+            response = await DataSet.fetchGetQRCode(token, btoa(data))
         }
         const result = await response.json()
         if (!response.ok) {
             throw new Error(result.error)
         }
-        return result
-    }
-
-    static fetchDownloadAvatar(token, refereeId) {
-        return fetch(`https://${HOST}:4500/api/upload/referee/avatar/${refereeId}`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
-    }
-
-    static async downloadAvatar(refereeId) {
-        let token = getToken();
-        let response = await DataSet.fetchDownloadAvatar(token, refereeId)
-        if (response.status === 419) {
-            token = await refreshToken(token)
-            response = await DataSet.fetchDownloadAvatar(token, refereeId)
-        }
-
-        if (!response.ok) {
-            return null
-        }
-
-        const blob = await response.blob()
-
-        return blob ? window.URL.createObjectURL(blob) : blob;
+        return result.qr
     }
 }

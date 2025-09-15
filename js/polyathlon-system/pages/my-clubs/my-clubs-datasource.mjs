@@ -27,6 +27,23 @@ export default class DataSource {
         this.component.currentItem = item;
     }
 
+    find(name, value) {
+        const index = this.dataSet.findIndex(element =>
+            element[name] === value || element[name].toLowerCase() === value || element[name].toLowerCase().include(value.toLowerCase())
+        )
+        return index === -1 ? null : this.dataSet[index]
+    }
+
+    filter(name, value) {
+        return this.dataSet.filter(element =>
+            element[name] === value || element[name].toLowerCase() === value || element[name].toLowerCase().includes(value.toLowerCase())
+        )
+    }
+
+    regionFilter(value) {
+        this.items = this.dataSet.filter( element => element.city?.region?._id === value )
+    }
+
     async addItem(item) {
         const newItem = await DataSet.addItem(item)
         this.addTo(newItem)

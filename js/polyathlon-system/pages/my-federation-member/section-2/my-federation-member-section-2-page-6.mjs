@@ -3,7 +3,6 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 import '../../../../../components/inputs/simple-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 import '../../../../../components/inputs/gender-input.mjs'
-import '../../../../../components/inputs/birthday-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
@@ -12,13 +11,14 @@ import lang from '../../../polyathlon-dictionary.mjs'
 import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 
+import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
+import CityDataset from '../../my-cities/my-cities-dataset.mjs'
+
 import ClubDataSource from '../../my-clubs/my-clubs-datasource.mjs'
 import ClubDataset from '../../my-clubs/my-clubs-dataset.mjs'
 
 import ClubTypesDataset from '../../my-club-types/my-club-types-dataset.mjs'
 import ClubTypesDataSource from '../../my-club-types/my-club-types-datasource.mjs'
-
-import SportsmenDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 
 class MyFederationMemberSection2Page6 extends BaseElement {
     static get properties() {
@@ -61,10 +61,19 @@ class MyFederationMemberSection2Page6 extends BaseElement {
         ]
     }
 
-    sportsmanShowValue(item) {
-         if (item?.lastName) {
-            return item.lastName
-         }
+    cityShowValue(item) {
+        return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
+    }
+
+    cityListLabel(item) {
+        if (item?.name) {
+            return item?.type?.shortName ? `${item?.type?.shortName} ${item?.name}` : item?.name
+        }
+        return ''
+    }
+
+    cityListStatus(item) {
+        return { name: item?.region?.name ?? ''}
     }
 
     clubShowValue(item) {
@@ -82,42 +91,19 @@ class MyFederationMemberSection2Page6 extends BaseElement {
         return { name: item?.city?.region?.name }
     }
 
-    listIconName(item) {
-        return item.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
-    }
-
+    // <simple-input id="name" label="${lang`Club name`}:" icon-name="club-solid" .value=${this.item?.payload?.name} @input=${this.validateInput}></simple-input>
     render() {
         return html`
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.payload?.lastName} @input=${this.validateInput}></simple-input>
-                <div class="name-group">
-                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.payload?.firstName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
-                </div>
-                <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-input id="birthday" label="${lang`Data of birth`}:" icon-name="cake-candles-solid" .value=${this.item?.payload?.birthday} @input=${this.validateInput} lang="ru-Ru" type="date" ></simple-input>
-                <simple-select id="category" label="${lang`Sports category`}:" icon-name="sportsman-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
-                <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" icon-name="sportsman-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createSportsmanPC} .value=${this.item?.payload?.sportsmanPC} @input=${this.validateInput}></simple-input>
-                <simple-input id="sportsman" label="${lang`Sportsman`}:" .listIconName=${this.listIconName} .dataSource=${this.findDataSource} icon-name=${this.item?.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.sportsmanShowValue} .value=${this.item?.sportsman} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
-                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.payload?.club} @input=${this.validateInput}></simple-select>
-                <div class="name-group">
-                    <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.number} @input=${this.validateInput}></simple-input>
-                    <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.link} @input=${this.validateInput}></simple-input>
-                </div>
-                <simple-input id="personLink" label="${lang`Person link`}:" icon-name="user-link" @icon-click=${this.linkClick} .value=${this.item?.payload?.link} @input=${this.validateInput}></simple-input>
+                <simple-input id="name" label="${lang`Club name`}:" icon-name="club-solid" .currentObject=${this.item?.payload} @icon-click=${() => this.showPage('my-clubs')} .value=${this.item?.payload?.name} @input=${this.validateInput} .listStatus=${this.clubListStatus} .listLabel=${this.clubListLabel} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findSportsman} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="fullName" label="${lang`Full name`}:" icon-name="club-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.fullName} @input=${this.validateInput}></simple-input>
+                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" .currentObject=${this.item?.payload} @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.city?.region} @input=${this.regionChange}></simple-select>
+                <simple-select id="city" .showValue=${this.cityShowValue} .listStatus=${this.cityListStatus} .currentObject=${this.item?.payload} .listLabel=${this.cityListLabel} icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="${lang`City name`}:" .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
+                <simple-select id="type" label="${lang`Club type name`}:" icon-name="club-type-solid" .currentObject=${this.item?.payload} @icon-click=${() => this.showPage('my-club-types')} .dataSource=${this.clubTypesDataSource} .value=${this.item?.payload?.type} @input=${this.validateInput}></simple-select>
+                <simple-input id="club" label="${lang`Club`}:" .listStatus=${this.clubListStatus} .listLabel=${this.clubListLabel} .dataSource=${this.findDataSource} icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.clubShowValue} .value=${this.item?.club}  @select-item=${this.sportsmanChoose} @input=${this.validateInput}></simple-input>
             </div>
-        `;
-    }
-
-    async createSportsmanPC(e) {
-        const target = e.target
-        // const spc = await DataSet.createSportsmanPC({
-        //     countryCode: this.item?.region?.country?.flag.toUpperCase(),
-        //     regionCode: this.item?.region?.code,
-        //     ulid: this.item?.profileUlid,
-        // })
-        target.setValue(spc);
+            `;
+            // <!-- <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.club} @input=${this.validateInput}></simple-select> -->
     }
 
     async findSportsman(e) {
@@ -126,43 +112,25 @@ class MyFederationMemberSection2Page6 extends BaseElement {
         const value = target.value
         if (target.isShowList)
             target.isShowList = false
-        if (!value) {
-            const lastName = this.$id('lastName').value
-            if (!lastName) {
-                await this.errorDialog('Вы не задали фамилию для поиска')
-                return
-            }
-            sportsman = await SportsmenDataset.getItemByLastName(lastName)
-            if (sportsman.rows.length === 0) {
-                this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
-                return
-            }
-            if (sportsman.rows.length >= 1) {
-                this.findDataSource = {}
-                this.findDataSource.items = sportsman.rows.map(item => item.doc)
-                target.isShowList = true
-                return
-            }
-            sportsman = sportsman.rows[0].doc
-        } else if (value.includes(":")) {
-            sportsman = await SportsmenDataset.getItem(value)
-        } else if (target.value.includes("-")) {
-            sportsman = await SportsmenDataset.getItemBySportsmanPC(value)
-            if (sportsman.rows.length === 0) {
-                this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
-                return
-            }
-            if (sportsman.rows.length > 1) {
-                this.parentNode.parentNode.host.showDialog('Найдено несколько спортсменов с таким ID')
-                return
-            }
-            sportsman = sportsman.rows[0].doc
-        } else {
-            sportsman = await SportsmenDataset.getItemByLastName(value)
-            if (sportsman.rows.length >= 0) {
-                this.findDataSource = sportsman.rows
-            }
+
+        const lastName = this.$id('name').value
+        if (!lastName) {
+            await this.errorDialog('Вы не задали наименование клуба для поиска')
+            return
         }
+        sportsman = this.clubDataSource.filter('name', lastName)
+        if (sportsman.length === 0) {
+            this.parentNode.parentNode.host.showDialog('Такой клуб не найден')
+            return
+        }
+        if (sportsman.length >= 1) {
+            this.findDataSource = {}
+            this.findDataSource.items = sportsman.map(item => item)
+            target.isShowList = true
+            return
+        }
+        sportsman = sportsman.rows[0].doc
+
         if (sportsman) {
             const inputs = this.$id()
             sportsman.sportsmanUlid = sportsman._id
@@ -174,23 +142,21 @@ class MyFederationMemberSection2Page6 extends BaseElement {
             // Object.assign(this.item, sportsman)
             this.requestUpdate()
         } else {
-            this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
+            this.parentNode.parentNode.host.showDialog('Такой клуб не найден')
         }
     }
 
     sportsmanChoose(e) {
-        let sportsman = e.detail
-        if (sportsman) {
-            this.item.sportsman = sportsman
-            // this.$id('sportsman').setValue(sportsman)
-            // sportsman.sportsmanUlid = sportsman._id
-            // const inputs = this.$id()
-            // inputs.forEach(input => {
-            //     if (input.id in sportsman) {
-            //         input.setValue(sportsman[input.id])
-            //     }
-            // })
-            // //Object.assign(this.item, sportsman)
+        let club = e.detail
+        if (club) {
+            this.$id('club').setValue(club)
+            const inputs = this.$id()
+            inputs.forEach(input => {
+                if (input.id in club) {
+                    input.setValue(club[input.id])
+                }
+            })
+            //Object.assign(this.item, sportsman)
             this.requestUpdate()
         }
     }
@@ -216,7 +182,7 @@ class MyFederationMemberSection2Page6 extends BaseElement {
     validateInput(e) {
         if (e.target.value !== "") {
             let id = e.target.id
-            let currentItem = this.item.payload
+            const currentItem = e.target.currentObject ?? this.item
             if (id == "order.number") {
                 id = "number"
                 if (!currentItem.order) {
@@ -258,8 +224,8 @@ class MyFederationMemberSection2Page6 extends BaseElement {
 
     async firstUpdated() {
         super.firstUpdated();
-        this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
+        this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
         this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
         this.clubTypesDataSource = new ClubTypesDataSource(this, await ClubTypesDataset.getDataSet())
     }

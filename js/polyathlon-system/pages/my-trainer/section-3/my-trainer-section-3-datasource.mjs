@@ -78,6 +78,7 @@ export default class DataSource {
 
     cancelNewItem() {
         this.component.currentItem = this.#oldItem || {}
+        this.component.currentPage = this.#oldItem?.type - 4 || 0
         this.#oldItem = null
         this.state = States.BROWSE
     }

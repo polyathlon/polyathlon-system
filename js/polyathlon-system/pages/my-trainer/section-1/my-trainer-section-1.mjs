@@ -589,7 +589,6 @@ class MyTrainerSection1 extends BaseElement {
             } else {
                 const currentItem = key.currentObject ?? this.currentItem
                 currentItem[key.id] = value;
-                key.oldValue = null;
                 key.value = value;
             }
         });

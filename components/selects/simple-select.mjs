@@ -1,7 +1,7 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
-import '../buttons/country-button.mjs'
+import '../buttons/icon-button.mjs'
 
 import styles from '../inputs/input-css.mjs'
 
@@ -24,7 +24,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             listLabel: { type: Function, default: null, attribute: 'list-name'},
             listStatus: { type: Function, default: null, attribute: 'list-status'},
             showValue: { type: Function, default: null, attribute: 'show-value'},
-            listIconName: { type: Function, default: null, attribute: 'show-value'},
+            listIcon: { type: Function, default: null, attribute: 'show-value'},
         }
     }
 
@@ -82,13 +82,6 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                 `
         ]
     }
-    // /* country-button {
-    //     height: 40px;
-    //     border-radius: 10px;
-    // }
-    // country-button:hover {
-    //     background-color: red;
-    // } */
 
     firstUpdated(setPath = false) {
         super.firstUpdated();
@@ -172,7 +165,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                     <icon-button
                         label=${this.listLabel ? this.listLabel(item) : item.name}
                         title=${item._id}
-                        icon-name=${this.listIconName ? this.listIconName(item) : this.iconName}
+                        icon-name=${this.listIcon?.(item) ?? this.iconName}
                         image-name=${item.flag ? 'https://hatscripts.github.io/circle-flags/flags/' + item.flag + '.svg' : ''}
                         .status=${this.listStatus?.(item) || this.statusDataSet?.get(item._id)}
                         ?selected=${this.currentItem === item}

@@ -1,6 +1,7 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
+import '../buttons/icon-button.mjs'
 
 import styles from './input-css.mjs'
 
@@ -24,7 +25,9 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             isShowList: {type: Boolean, default: false},
             mask: {type: Function, default: undefined},
             textAlign: { type: Boolean, default: false, attribute: 'text-align'},
-            listIconName: { type: Function, default: null, attribute: 'show-value'},
+            listLabel: { type: Function, default: null, attribute: 'list-name'},
+            listStatus: { type: Function, default: null, attribute: 'list-status'},
+            listIcon: { type: Function, default: null, attribute: 'show-value'},
         }
     }
 
@@ -113,9 +116,14 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
         e.onerror = null
     }
 
+    buttonClick() {
+        this.fire("button-click")
+        this.$qs('input').focus()
+    }
+
     get #button() {
         return html`
-            <simple-icon class="button" icon-name=${this.buttonName} @click=${() => this.fire("button-click")}></simple-icon>
+            <simple-icon class="button" icon-name=${this.buttonName} @click=${this.buttonClick}></simple-icon>
         `
     }
 
@@ -139,11 +147,11 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
               ${this.dataSource?.items?.map((item, index) =>
                   html `
                     <icon-button
-                        label=${ this.fio(item) }
+                        label=${this.listLabel?.(item) ??  this.fio(item) ?? item.name}
                         title=${ item.sportsmanId || item?._id }
-                        icon-name=${this.listIconName ? this.listIconName(item) : this.iconName}
+                        icon-name=${this.listIcon?.(item) ?? this.iconName}
                         image-name=${ item.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg" }
-                        .status=${{ name: item.sportsmanId || item?._id, icon: 'cake-candles-solid'} }
+                        .status=${ this.listStatus?.(item) }
                         @click=${() => this.selectItem(index, item)}
                     >
                     </icon-button>
@@ -171,6 +179,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                     @blur=${this.changeBlur}
                     @beforeinput=${this.mask ? this.beforeinput : nothing}
                     class=${this.textAlign ? 'text-align' : nothing}
+                    @keydown=${this.keyDown}
                 >
                 ${this.#image}
                 ${this.buttonName ? this.#button : ''}
@@ -180,6 +189,18 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
         `;
     }
 
+    keyDown(e) {
+        switch (e.key) {
+            case "Enter":
+                // this.isFocus = true;
+                break;
+            case "Escape":
+                this.isShowList = false;
+                break;
+            default:
+                return;
+        }
+    }
     beforeinput(e) {
         this.mask(e)
     }

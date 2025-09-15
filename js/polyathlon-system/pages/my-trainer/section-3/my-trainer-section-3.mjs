@@ -481,6 +481,12 @@ class MyTrainerSection3 extends BaseElement {
     }
 
     get #itemFooter() {
+        // return html`
+        //     <nav class='save'>
+        //         <simple-button @click=${this.isModified ? this.saveItem: this.addNewItem}>${this.isModified ? lang`Save`: lang`Add`}</simple-button>
+        //         <simple-button @click=${this.isModified ? this.cancelItem: this.deleteItem}>${this.isModified ? lang`Cancel`: lang`Delete`}</simple-button>
+        //     </nav>
+        // `
         return html`
             <nav class='save'>
                 <simple-button @click=${this.isModified ? this.saveItem: this.addNewItem}>${this.isModified ? lang`Save`: lang`Add`}</simple-button>
@@ -518,8 +524,8 @@ class MyTrainerSection3 extends BaseElement {
         await this.dataSource.addNewItem(this.currentItem)
         this.currentItem.type = this.requestType()
         this.currentItem.name = this.requestName(this.currentItem)
+        this.currentItem.payload = this.currentItem.type === 5 ? { trainer: this.parent } : {}
         this.currentItem.status = { name: 'Оформляется' }
-        this.currentItem.payload = {}
         this.isModified = true
         // const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
         // page.startEdit()
@@ -529,14 +535,16 @@ class MyTrainerSection3 extends BaseElement {
         if (!isAuth()) {
             return ''
         }
+
         if (!this.dataSource?.items)
             return ''
+
         // if (this.dataSource.items.length) {
         //     return (this.dataSource.state === States.NEW) ? this.#newItemFooter : this.#itemFooter
         // }
 
         if (this.isModified) {
-            return this.#newItemFooter
+            return (this.dataSource.state === States.NEW) ? this.#newItemFooter : this.#itemFooter
         } else {
             return html`
                 <nav class="buttons">

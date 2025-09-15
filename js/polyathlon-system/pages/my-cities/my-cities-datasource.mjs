@@ -17,6 +17,10 @@ export default class DataSource {
         }).sort( (a, b) => a.name.localeCompare(b.name) )
     }
 
+    regionFilter(value) {
+        this.items = this.dataSet.filter( element => element.region?._id === value )
+    }
+
     getCurrentItem(){
         const item = sessionStorage.getItem('currentCity')
         if (item) {
