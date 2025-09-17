@@ -29,8 +29,8 @@ class MyProfile extends BaseElement {
         this.version = "1.0.0";
         this.sections = [
             {name: "section1", label: lang`User`, iconName: 'user'},
-            {name: "section3", label: lang`Documents`, iconName: 'documents-solid'},
-            {name: "section2", label: lang`Requests`, iconName: 'registration-solid'},
+            {name: "section3", label: lang`Documents`, activeLabel: lang`Document`, iconName: 'documents-solid'},
+            {name: "section2", label: lang`Requests`, activeLabel: lang`Request`, iconName: 'registration-solid'},
         ]
     }
 

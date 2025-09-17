@@ -16,9 +16,9 @@ import { isAuth, States } from '../../../../utils.js'
 import './my-trainer-section-1-page-1.mjs'
 import './my-trainer-section-1-list-1.mjs'
 
-import DataSet from './my-trainer-dataset.mjs'
+import DataSet from './my-trainer-section-1-dataset.mjs'
 
-import DataSource from './my-trainer-datasource.mjs'
+import DataSource from './my-trainer-section-1-datasource.mjs'
 
 class MyTrainerSection1 extends BaseElement {
     static get properties() {
@@ -445,7 +445,7 @@ class MyTrainerSection1 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${index === this.currentSection ? section.activeLabel ?? section.label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>

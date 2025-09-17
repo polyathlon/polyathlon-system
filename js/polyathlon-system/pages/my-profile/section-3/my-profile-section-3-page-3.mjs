@@ -39,7 +39,7 @@ class MyProfileSection3Page3 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input label="${lang`SNILS number`}:" id="number" icon-name="number-circle-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.number} @input=${this.validateInput}></simple-input>
+                <simple-input label="${lang`SNILS number`}:" id="number" icon-name="number-circle-solid" .value=${this.item?.payload?.number} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                 <upload-input label="${lang`File`}:" uploadLabel="${lang`Drag and drop file or browse`}" id="filename" .value=${this.item?.filename} @input=${this.validateInput} @icon-click=${this.downloadFile}></upload-input>
             </div>
         `;

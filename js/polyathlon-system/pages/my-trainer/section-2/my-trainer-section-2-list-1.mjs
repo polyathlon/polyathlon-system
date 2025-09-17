@@ -2,14 +2,14 @@ import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
 
-class MyCompetitionSection2List1 extends BaseElement {
+class MyTrainerSection2List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
             item: {type: Object, default: null},
-            isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null},
-            currentItem: {type: Object, default: null, local: true },
+            isModified: { type: Boolean, default: false, local: true },
+            oldValues: { type: Map, default: null },
+            currentItem: { type: Object, default: null },
             sortDirection: { type: Boolean, default: true},
         }
     }
@@ -95,4 +95,4 @@ class MyCompetitionSection2List1 extends BaseElement {
     // }
 }
 
-customElements.define("my-competition-section-2-list-1", MyCompetitionSection2List1);
+customElements.define("my-trainer-section-2-list-1", MyTrainerSection2List1);

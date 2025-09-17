@@ -1,4 +1,4 @@
-import DataSet from "./my-requests-dataset.mjs"
+import DataSet from "./my-profile-section-2-dataset.mjs"
 
 import { States } from "../../../../utils.js"
 

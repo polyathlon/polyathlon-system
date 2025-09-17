@@ -564,7 +564,7 @@ class MyProfileSection3 extends BaseElement {
                 <div class="left-aside">
                     ${this.sections.map( (section, index) =>
                         html `
-                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName || nothing} label=${section.name === 'section2'? lang`Request`: section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName || nothing} label=${index === this.currentSection ? section.activeLabel ?? section.label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
                         `
                     )}
                 </div>
@@ -673,7 +673,7 @@ class MyProfileSection3 extends BaseElement {
             return
         this.oldValues.forEach( (value, key) => {
             let id = key.id
-            let currentItem = this.currentItem
+            const currentItem = key.currentObject ?? this.currentItem
             if (id == "order.number") {
                 id = "number"
                 currentItem = this.currentItem.order

@@ -232,11 +232,11 @@ const dictionary = {
         "en-EN": 'Send'
     },
     'Requests': {
-        "ru-RU": 'Заявки',
+        "ru-RU": 'Обращения',
         "en-EN": 'Requests'
     },
     'Request': {
-        "ru-RU": 'Заявка',
+        "ru-RU": 'Обращение',
         "en-EN": 'Request'
     },
     'Competition name': {
@@ -926,6 +926,10 @@ const dictionary = {
     'Documents': {
         "ru-RU": 'Документы',
         "en-EN": 'Documents'
+    },
+    'Document': {
+        "ru-RU": 'Документ',
+        "en-EN": 'Document'
     },
     'Passport': {
         "ru-RU": 'Паспорт',

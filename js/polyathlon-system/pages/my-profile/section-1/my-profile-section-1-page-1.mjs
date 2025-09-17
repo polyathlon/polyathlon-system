@@ -44,15 +44,15 @@ class MyProfileSection1Page1 extends BaseElement {
         return html`
             <verify-email-form></verify-email-form>
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.personalInfo?.lastName} @input=${this.validateInput}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.personalInfo?.lastName} .currentObject=${this.item?.personalInfo} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.personalInfo?.firstName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.personalInfo?.middleName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.personalInfo?.firstName} .currentObject=${this.item?.personalInfo} @input=${this.validateInput}></simple-input>
+                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.personalInfo?.middleName} .currentObject=${this.item?.personalInfo} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input label="${lang`Nickname`}:" id="nickName" icon-name="user-alien-solid" .value=${this.item?.personalInfo?.nickName} @input=${this.validateInput}></simple-input>
+                <simple-input label="${lang`Nickname`}:" id="nickName" icon-name="user-alien-solid" .value=${this.item?.personalInfo?.nickName} .currentObject=${this.item?.personalInfo} @input=${this.validateInput}></simple-input>
                 <simple-input label="${lang`Email`}:" id="email" icon-name=${this.item?.emailVerified ? "envelope-solid" : "envelope-regular"} .value=${this.item?.email} button-name=${this.item?.emailVerified ? nothing : "envelope-dot-solid"} @button-click=${this.item?.emailVerified ? nothing : this.confirmEmail} @input=${this.validateInput}></simple-input>
-                <gender-input label="${lang`Gender`}:" id="gender" icon-name="gender" .value="${this.item?.personalInfo?.gender}" @input=${this.validateInput}></gender-input>
-                <birthday-input label="${lang`Data of birth`}:" id="birthday" .value="${this.item?.personalInfo?.birthday}" @input=${this.validateInput}></birthday-input>
+                <gender-input label="${lang`Gender`}:" id="gender" icon-name="gender" .value="${this.item?.personalInfo?.gender}" .currentObject=${this.item?.personalInfo} @input=${this.validateInput}></gender-input>
+                <birthday-input label="${lang`Data of birth`}:" id="birthday" .value="${this.item?.personalInfo?.birthday}" .currentObject=${this.item?.personalInfo} @input=${this.validateInput}></birthday-input>
             </div>
         `;
     }
@@ -76,23 +76,21 @@ class MyProfileSection1Page1 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item.personalInfo
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
-                }
+        const currentItem = e.target.currentObject ?? this.item
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[e.target.id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[e.target.id])
             }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-            this.isModified = this.oldValues.size !== 0;
         }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[e.target.id] = e.target.value
+        if (e.target.id === 'name') {
+            this.parentNode.parentNode.host.requestUpdate()
+        }
+        this.isModified = this.oldValues.size !== 0;
     }
 }
 

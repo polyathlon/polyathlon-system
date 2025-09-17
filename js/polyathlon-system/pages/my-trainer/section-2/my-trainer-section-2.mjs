@@ -16,22 +16,23 @@ import './my-trainer-section-2-page-1.mjs'
 import DataSet from './my-trainer-section-2-dataset.mjs'
 import DataSource from './my-trainer-section-2-datasource.mjs'
 
-import TrainerDataSource from '../section-1/my-trainer-datasource.mjs'
+import TrainerDataSource from '../section-1/my-trainer-section-1-datasource.mjs'
 
-class MyCompetitionSection2 extends BaseElement {
+class MyTrainerSection2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
             dataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
-            currentItem: { type: Object, default: null, local: true },
+            currentItem: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
             sortDirection: { type: Boolean, default: true},
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             parent: { type: Object, default: {} },
+            currentFilter: { type: Object, default: {} },
         }
     }
 
@@ -41,12 +42,13 @@ class MyCompetitionSection2 extends BaseElement {
             css`
                 :host {
                     display: grid;
+                    width: 100%;
                     grid-template-columns: 3fr 9fr;
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
-                    "header1 header2"
-                    "aside main"
-                    "footer1 footer2";
+                        "header1 header2"
+                        "aside main"
+                        "footer1 footer2";
                     gap: 0 20px;
                     width: 100%;
                     height: 100%;
@@ -67,23 +69,53 @@ class MyCompetitionSection2 extends BaseElement {
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         margin: 0;
+                        font-weight: 700;
+                    }
+                    icon-button {
+                        height: 100%;
+                        padding: 0 1vw;
+                        font-weight: 400;
+                        &:not(:only-child):active {
+                            background-color: var(--layout-background-color);
+                        }
+                        &:not(:only-child):hover {
+                            background-color: var(--layout-background-color);
+                        }
                     }
                 }
 
                 .right-header {
                     grid-area: header2;
-                    justify-content: flex-start;
-                    icon-button {
+                    display: flex;
+                    justify-content: space-between;
+                    .left-aside {
                         height: 100%;
-                        padding: 0 1vw;
-
-                        &[active] {
-                            background-color: var(--layout-background-color);
-                            font-weight: bold;
+                        icon-button {
+                            height: 100%;
+                            padding: 0 1vw;
+                            /* --icon-height: 100%; */
+                            &[active] {
+                                background-color: var(--layout-background-color);
+                                font-weight: bold;
+                            }
+                            &:hover {
+                                background-color: var(--layout-background-color);
+                                &:only-of-type {
+                                    background-color: inherit;
+                                }
+                            }
+                            &:first-of-type {
+                                padding-left: 0;
+                                font-weight: 700;
+                            }
                         }
-                        &:hover {
-                            background-color: var(--layout-background-color);
-                        }
+                    }
+                    .right-aside {
+                        display: flex;
+                        justify-content: right;
+                        align-items: center;
+                        height: 100%;
+                        padding-right: 10px;
                     }
                 }
 
@@ -101,9 +133,8 @@ class MyCompetitionSection2 extends BaseElement {
                         width: 100%;
                         height: 40px;
                         flex: 0 0 40px;
-                    }
-                    .label {
-                        text-align: center;
+                        --icon-height: 100%;
+                        /* --simple-icon-height: 100%; */
                     }
                 }
 
@@ -202,15 +233,15 @@ class MyCompetitionSection2 extends BaseElement {
     constructor() {
         super();
         this.statusDataSet = new Map()
-        this.currentPage = 0;
+
         this.oldValues = new Map();
+        this.pages = [
+            {iconName: 'sportsmen-solid', page: 0, title: lang`Sportsmen`, click: () => this.gotoPage(0)},
+        ]
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'pdf-make',  page: 'my-coach-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
-        ]
-        this.pages = [
-            {iconName: 'sportsmen-solid', page: 0, title: lang`Sportsmen`, click: () => this.gotoPage(0)},
         ]
     }
 
@@ -481,7 +512,7 @@ class MyCompetitionSection2 extends BaseElement {
 
     #page1() {
         return html`
-            <my-competition-section-2-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-1>
+            <my-trainer-section-2-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-trainer-section-2-page-1>
         `;
     }
 
@@ -517,13 +548,7 @@ class MyCompetitionSection2 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-2-list-1 .item=${this} .sortDirection=${this.sortDirection}></my-competition-section-2-list-1>
-        `;
-    }
-
-    #list3() {
-        return html`
-            <my-competition-section-2-list-1 .parent=${this.currentItem}></my-competition-section-2-list-3>
+            <my-trainer-section-2-list-1 .item=${this} .currentItem=${this.currentItem} .sortDirection=${this.sortDirection}></my-trainer-section-2-list-1>
         `;
     }
 
@@ -618,11 +643,16 @@ class MyCompetitionSection2 extends BaseElement {
                 <aside-button icon-name="filter-regular" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
             </header>
             <header class="right-header">
-                ${this.sections.map( (page, index) =>
-                    html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSection(index)}></icon-button>
-                    `
-                )}
+                <div class="left-aside">
+                    ${this.sections.map( (section, index) =>
+                        html `
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${index === this.currentSection ? section.activeLabel ?? section.label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        `
+                    )}
+                </div>
+                <div class="right-aside">
+                    <aside-button icon-name="search-regular" @click=${this.searchPage}></aside-button>
+                </div>
             </header>
             <div class="left-layout">
                 ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
@@ -781,8 +811,8 @@ class MyCompetitionSection2 extends BaseElement {
         const parentId = sessionStorage.getItem('trainer').split(':')[1]
         this.trainerDataSource = new TrainerDataSource(this)
         this.parent = await this.trainerDataSource.getItem()
-        this.dataSource = new DataSource(this, await DataSet.getDataSet(parentId))
+        this.dataSource = new DataSource(this, await DataSet.getDataSet(this.parent._id))
     }
 }
 
-customElements.define("my-competition-section-2", MyCompetitionSection2);
+customElements.define("my-trainer-section-2", MyTrainerSection2);

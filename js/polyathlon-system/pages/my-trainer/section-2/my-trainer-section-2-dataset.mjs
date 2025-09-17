@@ -22,7 +22,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token, id) {
-        return fetch(`https://${HOST}:4500/api/trainer-sportsmen/${id}`, {
+        return fetch(`https://${HOST}:4500/api/sportsmen/by-trainer/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

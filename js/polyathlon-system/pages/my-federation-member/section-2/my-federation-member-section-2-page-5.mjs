@@ -169,7 +169,7 @@ class MyFederationMemberSection2Page5 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .currentObject=${this.item?.payload} .value=${this.item?.payload?.lastName} @input=${this.validateInput} .listLabel=${this.sportsmanListLabel} .listIcon=${this.sportsmanListIcon} .listStatus=${this.sportsmanListStatus} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findSportsman} @select-item=${this.sportsmanChoose}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" @icon-click=${this.gotoSportsmanPage} .currentObject=${this.item?.payload} .value=${this.item?.payload?.lastName} @input=${this.validateInput} .listLabel=${this.sportsmanListLabel} .listIcon=${this.sportsmanListIcon} .listStatus=${this.sportsmanListStatus} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findSportsman} @select-item=${this.sportsmanChoose}></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.firstName} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
@@ -189,6 +189,14 @@ class MyFederationMemberSection2Page5 extends BaseElement {
                 <simple-input id="personLink" label="${lang`Person link`}:" icon-name="user-link" .currentObject=${this.item?.payload} @icon-click=${this.linkClick} .value=${this.item?.payload?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
+    }
+
+    gotoSportsmanPage() {
+        if (!this.item?.sportsman) {
+            return
+        }
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.item?.sportsman?._id.split(':')[1]}`
     }
 
     async createSportsmanPC(e) {

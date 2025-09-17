@@ -76,26 +76,26 @@ class MyProfileSection2Page4 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.payload?.lastName} @input=${this.validateInput}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.payload?.lastName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.payload?.firstName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.payload?.firstName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
+                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                 </div>
-                <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="category" label="${lang`Category`}:" icon-name="trainer-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
-                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
+                <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" .currentObject=${this.item?.payload} @input=${this.validateInput}></gender-input>
+                <simple-select id="category" label="${lang`Category`}:" icon-name="trainer-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.payload?.category} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput} .currentObject=${this.item?.payload} ></simple-select>
+                <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput} .currentObject=${this.item?.payload} ></simple-select>
                 ${this.item?.payload?.trainerPC ? html`
-                    <simple-input id="trainerPC" label="${lang`Referee PC`}:" icon-name="trainer-pc-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.payload?.trainerPC} @input=${this.validateInput}></simple-input>
+                    <simple-input id="trainerPC" label="${lang`Referee PC`}:" icon-name="trainer-pc-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.payload?.trainerPC} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                 ` : ''}
                 ${this.item?.payload?.order?.number ? html`
                     <div class="name-group">
-                        <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.number} @input=${this.validateInput}></simple-input>
-                        <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.payload?.order} .value=${this.item?.payload?.order?.link} @input=${this.validateInput}></simple-input>
+                        <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .value=${this.item?.payload?.order?.number} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
+                        <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .value=${this.item?.payload?.order?.link} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                     </div>
                 ` : ''}
                 ${this.item?.payload?.link ? html`
-                    <simple-input id="link" label="${lang`Person link`}:" icon-name="user-link" @icon-click=${this.linkClick} .value=${this.item?.payload?.link}></simple-input>
+                    <simple-input id="link" label="${lang`Person link`}:" icon-name="user-link" @icon-click=${this.linkClick} .value=${this.item?.payload?.link} .currentObject=${this.item?.payload}></simple-input>
                 ` : ''}
             </div>
         `;
@@ -130,40 +130,38 @@ class MyProfileSection2Page4 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
-            let id = e.target.id
-            let currentItem = this.item.payload
-            if (id == "order.number") {
-                id = "number"
-                if (!currentItem.order) {
-                    currentItem.order = {}
-                }
-                currentItem = currentItem.order
+        let id = e.target.id
+        let currentItem = e.target.currentObject ?? this.item
+        if (id == "order.number") {
+            id = "number"
+            if (!currentItem.order) {
+                currentItem.order = {}
             }
-            if (id == "order.link") {
-                id = "link"
-                if (!currentItem.order) {
-                    currentItem.order = {}
-                }
-                currentItem = currentItem.order
-            }
-
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[id])
-                }
-            }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[id] = e.target.value
-
-            if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-            this.isModified = this.oldValues.size !== 0;
+            currentItem = currentItem.order
         }
+        if (id == "order.link") {
+            id = "link"
+            if (!currentItem.order) {
+                currentItem.order = {}
+            }
+            currentItem = currentItem.order
+        }
+
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
+            }
+        }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[id] = e.target.value
+
+        if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
+            this.parentNode.parentNode.host.requestUpdate()
+        }
+        this.isModified = this.oldValues.size !== 0;
     }
 
     startEdit() {

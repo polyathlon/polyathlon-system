@@ -18,6 +18,9 @@ import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 import ClubDataSource from '../my-clubs/my-clubs-datasource.mjs'
 import ClubDataset from '../my-clubs/my-clubs-dataset.mjs'
 
+import TrainerDataset from '../my-trainers/my-trainers-dataset.mjs'
+import TrainerDataSource from '../my-trainers/my-trainers-datasource.mjs'
+
 class MySportsmenSection1Page1 extends BaseElement {
     static get properties() {
         return {
@@ -75,10 +78,55 @@ class MySportsmenSection1Page1 extends BaseElement {
         return { name: item?.city?.region?.name }
     }
 
+trainerShowValue(item) {
+        if (!item) {
+            return item
+        }
+        if (typeof item === 'string') {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        if (item.middleName) {
+            result += ` ${item.middleName[0]}.`
+        }
+        result += (item.category ? ' (' + item.category.shortName + ')' : '')
+        return result
+    }
+
+    trainerListLabel(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        if (item.middleName) {
+            result += ` ${item.middleName[0]}.`
+        }
+        result += (item.category ? ' (' + item.category.shortName + ')' : '')
+        return result
+    }
+
+    trainerListStatus(item) {
+        return { name: item?.region?.name }
+    }
+
+    trainerListIcon(item) {
+        return item?.gender == true ? "trainer-woman-solid" : "trainer-man-solid"
+    }
+
+    trainerIcon(item) {
+        return item?.gender == true ? "trainer-woman-solid" : "trainer-man-solid"
+    }
+
     render() {
         return html`
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" @icon-click=${this.gotoSportsmanPage} .value=${this.item?.lastName} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
@@ -89,6 +137,7 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" icon-name="sportsman-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard} @button-click=${this.createSportsmanPC} .value=${this.item?.sportsmanPC} @input=${this.validateInput}></simple-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+                <simple-select id="trainer" label="${lang`Trainer`}:" icon-name=${this.trainerIcon(this.item?.trainer)} @icon-click=${this.gotoTrainerPage} .listStatus=${this.trainerListStatus} .dataSource=${this.trainerDataSource} .showValue=${this.trainerShowValue} .listLabel=${this.trainerListLabel} .listIcon=${this.trainerListIcon} .value=${this.item?.trainer} @input=${this.validateInput}></simple-select>
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
@@ -96,6 +145,23 @@ class MySportsmenSection1Page1 extends BaseElement {
                 <simple-input id="link" label="${lang`Person link`}:" icon-name="user-link" @icon-click=${this.linkClick} .value=${this.item?.link} @input=${this.validateInput}></simple-input>
             </div>
         `;
+    }
+
+    gotoSportsmanPage() {
+        if (!this.item?._id) {
+            return
+        }
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.item?._id.split(':')[1]}`
+    }
+
+    gotoTrainerPage() {
+        if (!this.item?.trainer) {
+            location.hash = "#my-trainer";
+            return
+        }
+        location.hash = "#my-trainer";
+        location.search = `?trainer=${this.item?.trainer?._id.split(':')[1]}`
     }
 
     async createSportsmanPC(e) {
@@ -183,6 +249,7 @@ class MySportsmenSection1Page1 extends BaseElement {
         this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
+        this.trainerDataSource = new TrainerDataSource(this, await TrainerDataset.getDataSet())
     }
 }
 

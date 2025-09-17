@@ -2,6 +2,7 @@ import { BaseElement, html, css, cache, nothing } from '../../../../base-element
 
 import '../../../../../components/dialogs/modal-dialog.mjs'
 import '../../../../../components/buttons/icon-button.mjs'
+
 import '../../../../../components/buttons/aside-button.mjs'
 import '../../../../../components/buttons/simple-button.mjs'
 
@@ -16,8 +17,8 @@ import './my-trainer-section-3-page-3.mjs'
 import DataSet from './my-trainer-section-3-dataset.mjs'
 import DataSource from './my-trainer-section-3-datasource.mjs'
 
-import TrainerDataSet from '../section-1/my-trainer-dataset.mjs'
-import TrainerDataSource from '../section-1/my-trainer-datasource.mjs'
+import TrainerDataSet from '../section-1/my-trainer-section-1-dataset.mjs'
+import TrainerDataSource from '../section-1/my-trainer-section-1-datasource.mjs'
 
 class MyTrainerSection3 extends BaseElement {
     static get properties() {
@@ -29,7 +30,7 @@ class MyTrainerSection3 extends BaseElement {
             currentItem: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
             sortDirection: { type: Boolean, default: true},
-            isReady: { type: Boolean, default: true },
+
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
@@ -573,7 +574,7 @@ class MyTrainerSection3 extends BaseElement {
                 <div class="left-aside">
                     ${this.sections.map( (section, index) =>
                         html `
-                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${section.name === 'section2'? lang`Request`: section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${index === this.currentSection ? section.activeLabel ?? section.label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
                         `
                     )}
                 </div>

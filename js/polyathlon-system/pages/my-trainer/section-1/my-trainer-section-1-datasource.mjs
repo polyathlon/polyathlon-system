@@ -1,4 +1,4 @@
-import DataSet from "./my-trainer-dataset.mjs";
+import DataSet from "./my-trainer-section-1-dataset.mjs";
 
 export default class DataSource {
 

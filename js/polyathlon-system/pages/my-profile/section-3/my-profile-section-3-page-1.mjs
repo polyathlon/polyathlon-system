@@ -40,12 +40,12 @@ class MyProfileSection3Page1 extends BaseElement {
         return html`
             <div class="container">
                 <div class="name-group">
-                    <simple-input label="${lang`Passport series`}:" id="series" icon-name="order-number-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.series} @input=${this.validateInput}></simple-input>
-                    <simple-input label="${lang`Passport number`}:" id="number" icon-name="number-circle-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.number} @input=${this.validateInput}></simple-input>
+                    <simple-input label="${lang`Passport series`}:" id="series" icon-name="order-number-solid" .value=${this.item?.payload?.series} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
+                    <simple-input label="${lang`Passport number`}:" id="number" icon-name="number-circle-solid" .value=${this.item?.payload?.number} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input type="date" label="${lang`Passport date`}:" id="date" icon-name="calendar-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.date} @input=${this.validateInput} lang="ru-Ru"></simple-input>
-                <simple-input label="${lang`Passport issued by`}:" id="issuedBy" icon-name="start-registration-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.issuedBy} @input=${this.validateInput}></simple-input>
-                <simple-input label="${lang`Passport code`}:" id="code" icon-name="hash-number-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.code} @input=${this.validateInput}></simple-input>
+                <simple-input type="date" label="${lang`Passport date`}:" id="date" icon-name="calendar-solid" .value=${this.item?.payload?.date} .currentObject=${this.item?.payload} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                <simple-input label="${lang`Passport issued by`}:" id="issuedBy" icon-name="start-registration-solid" .value=${this.item?.payload?.issuedBy} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
+                <simple-input label="${lang`Passport code`}:" id="code" icon-name="hash-number-solid" .value=${this.item?.payload?.code} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                 <upload-input label="${lang`File`}:" uploadLabel="${lang`Drag and drop file or browse`}" id="filename" .value=${this.item?.filename} @input=${this.validateInput} @icon-click=${this.downloadFile}></upload-input>
             </div>
         `;
@@ -58,23 +58,21 @@ class MyProfileSection3Page1 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
-                }
+        const currentItem = e.target.currentObject ?? this.item
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[e.target.id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[e.target.id])
             }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-            this.isModified = this.oldValues.size !== 0;
         }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[e.target.id] = e.target.value
+        if (e.target.id === 'name') {
+            this.parentNode.parentNode.host.requestUpdate()
+        }
+        this.isModified = this.oldValues.size !== 0;
     }
 }
 

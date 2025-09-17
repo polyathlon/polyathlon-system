@@ -466,7 +466,7 @@ class MyProfileSection1 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === 0} icon-name=${section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName || nothing} label=${index === this.currentSection ? section.activeLabel ?? section.label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>

@@ -30,8 +30,8 @@ class MyTrainer extends BaseElement {
         this.version = "1.0.0"
         this.sections = [
             {name: "section1", label: lang`Trainer`, iconName: item => item?.gender == true ? 'trainer-woman-solid': 'trainer-man-solid'},
-            {name: "section2", label: lang`Sportsmen`, iconName: 'sportsmen-solid'},
-            {name: "section3", label: lang`Requests`, iconName: 'registration-solid'},
+            {name: "section2", label: lang`Sportsmen`, activeLabel: lang`Sportsman`, iconName: 'sportsmen-solid'},
+            {name: "section3", label: lang`Requests`, activeLabel: lang`Request`, iconName: 'registration-solid'},
         ]
     }
 

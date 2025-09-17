@@ -526,7 +526,7 @@ class MyFederationMemberSection2 extends BaseElement {
             case 4:
                 if (this.currentItem?.payload) {
                     this.currentItem.sportsman = await SportsmanDataset.addItem(this.currentItem?.payload)
-                    this.$id("page1").requestUpdate()
+                    this.$id("page5").requestUpdate()
                     this.isModified = true
                 }
                 break;

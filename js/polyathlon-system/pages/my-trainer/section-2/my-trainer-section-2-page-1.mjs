@@ -25,7 +25,7 @@ import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
 import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 
 
-class MyCompetitionSection2Page1 extends BaseElement {
+class MyTrainerSection2Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -93,16 +93,9 @@ class MyCompetitionSection2Page1 extends BaseElement {
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-input id="birthday" label="${lang`Data of birth`}:" icon-name="cake-candles-solid" .value=${this.item?.birthday} @input=${this.validateInput} lang="ru-Ru" type="date" ></simple-input>
                 <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" .dataSource=${this.findDataSource} icon-name="sportsman-pc-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.sportsmanPC} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
-                <simple-select id="ageGroup" label="${lang`Age group`}:" icon-name=${this.item?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} .listIcon=${(item) => item?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} @icon-click=${() => this.showPage('my-age-groups')} .dataSource=${this.ageGroupDataSource} .value=${this.item?.ageGroup} @input=${this.validateInput}></simple-select>
                 <simple-select id="category" label="${lang`Sports category`}:" icon-name="sportsman-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
-                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
-                <groupbox-input label="${lang`National team member`}:">
-                    <checkbox-input id="clubMember" label="${lang`Club member`}" .value=${this.item?.clubMember} .checked=${this.item?.clubMember} @input=${this.validateInput}></checkbox-input>
-                    <checkbox-input id="teamMember" label="${lang`Team member`}" .value=${this.item?.teamMember} .checked=${this.item?.teamMember} @input=${this.validateInput}></checkbox-input>
-                </groupbox-input>
-                <!-- <simple-input id="sportsmanUlid" label="${lang`Sportsman Ulid`}:" icon-name=${+this.item?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${() => this.showPage('my-sportsman')} .value=${this.item?.sportsmanUlid} @input=${this.validateInput}></simple-input> -->
             </div>
         `;
     }
@@ -298,4 +291,4 @@ class MyCompetitionSection2Page1 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-2-page-1", MyCompetitionSection2Page1);
+customElements.define("my-trainer-section-2-page-1", MyTrainerSection2Page1);
