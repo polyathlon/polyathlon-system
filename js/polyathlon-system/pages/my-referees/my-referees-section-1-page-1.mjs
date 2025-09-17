@@ -127,40 +127,38 @@ class MyRefereesSection1Page1 extends BaseElement {
     }
 
     validateInput(e) {
-        // if (e.target.value !== "") {
-            let id = e.target.id
-            let currentItem = this.item
-            if (id == "order.number") {
-                id = "number"
-                if (!this.item.order) {
-                    this.item.order = {}
-                }
-                currentItem = this.item.order
+        let id = e.target.id
+        let currentItem = e.target.currentObject ?? this.item
+        if (id == "order.number") {
+            id = "number"
+            if (!this.item.order) {
+                this.item.order = {}
             }
-            if (id == "order.link") {
-                id = "link"
-                if (!this.item.order) {
-                    this.item.order = {}
-                }
-                currentItem = this.item.order
+            currentItem = this.item.order
+        }
+        if (id == "order.link") {
+            id = "link"
+            if (!this.item.order) {
+                this.item.order = {}
             }
+            currentItem = this.item.order
+        }
 
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[id])
-                }
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
             }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
+        }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
 
-            currentItem[id] = e.target.value
+        currentItem[id] = e.target.value
 
-            if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-            this.isModified = this.oldValues.size !== 0;
-        // }
+        if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName') {
+            this.parentNode.parentNode.host.requestUpdate()
+        }
+        this.isModified = this.oldValues.size !== 0;
     }
 
     async firstUpdated() {

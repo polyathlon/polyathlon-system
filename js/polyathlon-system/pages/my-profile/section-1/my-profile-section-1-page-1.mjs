@@ -76,7 +76,7 @@ class MyProfileSection1Page1 extends BaseElement {
     }
 
     validateInput(e) {
-        const currentItem = e.target.currentObject ?? this.item
+        let currentItem = e.target.currentObject ?? this.item
         if (!this.oldValues.has(e.target)) {
             if (currentItem[e.target.id] !== e.target.value) {
                 this.oldValues.set(e.target, currentItem[e.target.id])

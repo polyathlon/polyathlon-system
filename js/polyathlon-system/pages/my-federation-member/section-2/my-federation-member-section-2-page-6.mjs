@@ -95,11 +95,11 @@ class MyFederationMemberSection2Page6 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" label="${lang`Club name`}:" icon-name="club-solid" .currentObject=${this.item?.payload} @icon-click=${() => this.showPage('my-clubs')} .value=${this.item?.payload?.name} @input=${this.validateInput} .listStatus=${this.clubListStatus} .listLabel=${this.clubListLabel} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findSportsman} @select-item=${this.sportsmanChoose} ></simple-input>
-                <simple-input id="fullName" label="${lang`Full name`}:" icon-name="club-solid" .currentObject=${this.item?.payload} .value=${this.item?.payload?.fullName} @input=${this.validateInput}></simple-input>
-                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" .currentObject=${this.item?.payload} @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.city?.region} @input=${this.regionChange}></simple-select>
-                <simple-select id="city" .showValue=${this.cityShowValue} .listStatus=${this.cityListStatus} .currentObject=${this.item?.payload} .listLabel=${this.cityListLabel} icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="${lang`City name`}:" .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
-                <simple-select id="type" label="${lang`Club type name`}:" icon-name="club-type-solid" .currentObject=${this.item?.payload} @icon-click=${() => this.showPage('my-club-types')} .dataSource=${this.clubTypesDataSource} .value=${this.item?.payload?.type} @input=${this.validateInput}></simple-select>
+                <simple-input id="name" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .value=${this.item?.payload?.name} .currentObject=${this.item?.payload} @input=${this.validateInput} .listStatus=${this.clubListStatus} .listLabel=${this.clubListLabel} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findSportsman} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="fullName" label="${lang`Full name`}:" icon-name="club-solid" .value=${this.item?.payload?.fullName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
+                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.city?.region} .currentObject=${this.item?.payload} @input=${this.regionChange}></simple-select>
+                <simple-select id="city" .showValue=${this.cityShowValue} .listStatus=${this.cityListStatus} .listLabel=${this.cityListLabel} icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="${lang`City name`}:" .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-select>
+                <simple-select id="type" label="${lang`Club type name`}:" icon-name="club-type-solid" @icon-click=${() => this.showPage('my-club-types')} .dataSource=${this.clubTypesDataSource} .value=${this.item?.payload?.type} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-select>
                 <simple-input id="club" label="${lang`Club`}:" .listStatus=${this.clubListStatus} .listLabel=${this.clubListLabel} .dataSource=${this.findDataSource} icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.clubShowValue} .value=${this.item?.club}  @select-item=${this.sportsmanChoose} @input=${this.validateInput}></simple-input>
             </div>
             `;
@@ -180,40 +180,38 @@ class MyFederationMemberSection2Page6 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
-            let id = e.target.id
-            const currentItem = e.target.currentObject ?? this.item
-            if (id == "order.number") {
-                id = "number"
-                if (!currentItem.order) {
-                    currentItem.order = {}
-                }
-                currentItem = currentItem.order
+        let id = e.target.id
+        let currentItem = e.target.currentObject ?? this.item
+        if (id == "order.number") {
+            id = "number"
+            if (!currentItem.order) {
+                currentItem.order = {}
             }
-            if (id == "order.link") {
-                id = "link"
-                if (!currentItem.order) {
-                    currentItem.order = {}
-                }
-                currentItem = currentItem.order
-            }
-
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[id])
-                }
-            }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[id] = e.target.value
-
-            if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-            this.isModified = this.oldValues.size !== 0;
+            currentItem = currentItem.order
         }
+        if (id == "order.link") {
+            id = "link"
+            if (!currentItem.order) {
+                currentItem.order = {}
+            }
+            currentItem = currentItem.order
+        }
+
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
+            }
+        }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[id] = e.target.value
+
+        if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
+            this.parentNode.parentNode.host.requestUpdate()
+        }
+        this.isModified = this.oldValues.size !== 0;
     }
 
     startEdit() {

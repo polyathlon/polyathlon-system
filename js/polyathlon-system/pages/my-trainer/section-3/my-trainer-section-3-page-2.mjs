@@ -199,7 +199,7 @@ class MyTrainerSection3Page2 extends BaseElement {
 
     validateInput(e) {
         let id = e.target.id
-        const currentItem = e.target.currentObject ?? this.item
+        let currentItem = e.target.currentObject ?? this.item
         if (id == "order.number") {
             id = "number"
             if (!currentItem.order) {

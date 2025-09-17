@@ -128,41 +128,39 @@ class MyTrainerSection3Page3 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
-            let id = e.target.id
-            let currentItem = this.item.payload
-            if (id == "order.number") {
-                id = "number"
-                if (!currentItem.order) {
-                    currentItem.order = {}
-                }
-                currentItem = currentItem.order
+        let id = e.target.id
+        let currentItem = this.item.payload
+        if (id == "order.number") {
+            id = "number"
+            if (!currentItem.order) {
+                currentItem.order = {}
             }
-            if (id == "order.link") {
-                id = "link"
-                if (!currentItem.order) {
-                    currentItem.order = {}
-                }
-                currentItem = currentItem.order
-            }
-
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[id])
-                }
-            }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[id] = e.target.value
-
-            if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-
-            this.isModified = this.oldValues.size !== 0;
+            currentItem = currentItem.order
         }
+        if (id == "order.link") {
+            id = "link"
+            if (!currentItem.order) {
+                currentItem.order = {}
+            }
+            currentItem = currentItem.order
+        }
+
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
+            }
+        }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[id] = e.target.value
+
+        if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
+            this.parentNode.parentNode.host.requestUpdate()
+        }
+
+        this.isModified = this.oldValues.size !== 0;
     }
 
     startEdit() {

@@ -109,7 +109,7 @@ class MyCompetitionSection4Page1 extends BaseElement {
 
     validateInput(e) {
         // if (e.target.value !== "") {
-        //     const currentItem = e.target.currentObject ?? this.item
+        //     let currentItem = e.target.currentObject ?? this.item
         //     if (!this.oldValues.has(e.target)) {
         //         if (Array.isArray(e.target.value)) {
         //             this.oldValues.set(e.target, e.target.oldValue)

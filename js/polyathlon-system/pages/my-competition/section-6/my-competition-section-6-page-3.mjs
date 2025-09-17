@@ -106,27 +106,25 @@ class MyCompetitionSection6Page3 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item.pushUps ?? {}
-            if (!this.oldValues.has(e.target)) {
-                this.item.pushUps ??= currentItem
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
-                }
+        let currentItem = e.target.currentObject ?? this.item.pushUps ?? {}
+        if (!this.oldValues.has(e.target)) {
+            this.item.pushUps ??= currentItem
+            if (currentItem[e.target.id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[e.target.id])
             }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[e.target.id] = e.target.value
-
-            if (e.target.id === "result")
-            {
-                this.setPoints(e.target)
-            }
-
-            this.isModified = this.oldValues.size !== 0;
         }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[e.target.id] = e.target.value
+
+        if (e.target.id === "result")
+        {
+            this.setPoints(e.target)
+        }
+
+        this.isModified = this.oldValues.size !== 0;
     }
 
     async showDialog(message, type='message', title='') {

@@ -79,67 +79,36 @@ class MySportsDisciplinesSection2Page1 extends BaseElement {
         location.hash = page;
     }
 
-    // validateInput(e) {
-    //     if (e.target.value !== "") {
-    //         const currentItem = e.target.currentObject ?? this.item
-    //         if (!this.oldValues.has(e.target)) {
-    //             if (currentItem[e.target.id] !== e.target.value) {
-    //                 this.oldValues.set(e.target, currentItem[e.target.id])
-    //             }
-    //         }
-    //         else if (this.oldValues.get(e.target) === e.target.value) {
-    //                 this.oldValues.delete(e.target)
-    //         }
-
-    //         currentItem[e.target.id] = e.target.value
-    //         if (e.target.id === 'name') {
-    //             this.parentNode.parentNode.host.requestUpdate()
-    //         }
-    //         if (e.target.id === 'birthday' || e.target.id === 'gender') {
-    //             try {
-    //                 this.changeAgeGroup()
-    //                 this.requestUpdate()
-    //             }
-    //             catch {
-
-    //             }
-    //         }
-    //         this.isModified = this.oldValues.size !== 0;
-    //     }
-    // }
-
     validateInput(e) {
-        if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item
-            if (!this.oldValues.has(e.target)) {
-                if (Array.isArray(e.target.value)) {
-                    this.oldValues.set(e.target, e.target.oldValue)
-                } else {
-                    if (currentItem[e.target.id] !== e.target.value) {
-                        this.oldValues.set(e.target, currentItem[e.target.id])
-                    }
+        let currentItem = e.target.currentObject ?? this.item
+        if (!this.oldValues.has(e.target)) {
+            if (Array.isArray(e.target.value)) {
+                this.oldValues.set(e.target, e.target.oldValue)
+            } else {
+                if (currentItem[e.target.id] !== e.target.value) {
+                    this.oldValues.set(e.target, currentItem[e.target.id])
                 }
             }
-            else {
-                const oldValue = this.oldValues.get(e.target)
-                if (Array.isArray(oldValue)) {
-                    if (oldValue.length === e.target.value.length && e.target.value.every(item1 => oldValue.some( item2 =>
-                        item1.name ===  item2.name
-                    ))) {
-                        this.oldValues.delete(e.target)
-                    }
-                } else if (oldValue === e.target.value) {
+        }
+        else {
+            const oldValue = this.oldValues.get(e.target)
+            if (Array.isArray(oldValue)) {
+                if (oldValue.length === e.target.value.length && e.target.value.every(item1 => oldValue.some( item2 =>
+                    item1.name ===  item2.name
+                ))) {
                     this.oldValues.delete(e.target)
                 }
+            } else if (oldValue === e.target.value) {
+                this.oldValues.delete(e.target)
             }
-
-            currentItem[e.target.id] = e.target.value
-
-            // if (e.target.id === 'name' || e.target.id === 'startDate' || e.target.id === 'endDate' || e.target.id === 'stage') {
-            //     this.parentNode.parentNode.host.requestUpdate()
-            // }
-            this.isModified = this.oldValues.size !== 0;
         }
+
+        currentItem[e.target.id] = e.target.value
+
+        // if (e.target.id === 'name' || e.target.id === 'startDate' || e.target.id === 'endDate' || e.target.id === 'stage') {
+        //     this.parentNode.parentNode.host.requestUpdate()
+        // }
+        this.isModified = this.oldValues.size !== 0;
     }
 
     // async findSportsman(e) {

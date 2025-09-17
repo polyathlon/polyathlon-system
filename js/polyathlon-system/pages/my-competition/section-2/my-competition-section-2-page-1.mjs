@@ -117,32 +117,30 @@ class MyCompetitionSection2Page1 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? this.item
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
-                }
+        let currentItem = e.target.currentObject ?? this.item
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[e.target.id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[e.target.id])
             }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[e.target.id] = e.target.value
-            if (e.target.id === 'name') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-            if (e.target.id === 'birthday' || e.target.id === 'gender') {
-                try {
-                    this.changeAgeGroup()
-                    this.requestUpdate()
-                }
-                catch {
-
-                }
-            }
-            this.isModified = this.oldValues.size !== 0;
         }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[e.target.id] = e.target.value
+        if (e.target.id === 'name') {
+            this.parentNode.parentNode.host.requestUpdate()
+        }
+        if (e.target.id === 'birthday' || e.target.id === 'gender') {
+            try {
+                this.changeAgeGroup()
+                this.requestUpdate()
+            }
+            catch {
+
+            }
+        }
+        this.isModified = this.oldValues.size !== 0;
     }
 
     async findSportsmanByName(e) {

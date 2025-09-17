@@ -407,7 +407,7 @@ pdfMake.createPdf(docInfo).open();
 
 
         validateInput(e) {
-            if (e.target.value !== "") {
+
                 this.oldValues ??= new Map();
                 const currentProject = e.target.currentObject ?? this.currentProject
                 if (!this.oldValues.has(e.target))
@@ -419,7 +419,6 @@ pdfMake.createPdf(docInfo).open();
                 }
                 currentProject[e.target.id] = e.target.value
                 this.isModified = this.oldValues.size !== 0;
-            }
         }
 
         async getToken() {

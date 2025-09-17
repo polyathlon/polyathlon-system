@@ -71,22 +71,20 @@ class MyCompetitionSection2Page9 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
-            const currentItem = e.target.currentObject ?? {}
-            if (!this.oldValues.has(e.target)) {
-                this.item.skiing ??= currentItem
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
-                }
+        const currentItem = e.target.currentObject ?? {}
+        if (!this.oldValues.has(e.target)) {
+            this.item.skiing ??= currentItem
+            if (currentItem[e.target.id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[e.target.id])
             }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[e.target.id] = e.target.value
-
-            this.isModified = this.oldValues.size !== 0;
         }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[e.target.id] = e.target.value
+
+        this.isModified = this.oldValues.size !== 0;
     }
 
     async showDialog(message, type='message', title='') {

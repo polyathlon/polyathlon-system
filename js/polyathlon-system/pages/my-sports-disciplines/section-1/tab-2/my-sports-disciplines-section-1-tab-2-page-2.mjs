@@ -56,31 +56,28 @@ class MySportsDisciplinesSection1Tab2Page2 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
+        let currentItem = e.target.currentObject ?? this.item
 
-            const currentItem = e.target.currentObject ?? this.item
-
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
-                }
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[e.target.id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[e.target.id])
             }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[e.target.id] = e.target.value
-
-            if (e.target.id === 'name' || e.target.id === 'icon') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-
-            if (e.target.id === 'icon') {
-                 this.requestUpdate()
-            }
-
-            this.isModified = this.oldValues.size !== 0;
         }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[e.target.id] = e.target.value
+
+        if (e.target.id === 'name' || e.target.id === 'icon') {
+            this.parentNode.parentNode.host.requestUpdate()
+        }
+
+        if (e.target.id === 'icon') {
+                this.requestUpdate()
+        }
+
+        this.isModified = this.oldValues.size !== 0;
     }
 
     async firstUpdated() {

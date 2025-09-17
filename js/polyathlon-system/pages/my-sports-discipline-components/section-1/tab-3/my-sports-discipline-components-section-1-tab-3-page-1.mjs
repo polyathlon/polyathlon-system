@@ -61,37 +61,35 @@ class MySportsDisciplineComponentsSection1Tab3Page1 extends BaseElement {
     }
 
     validateInput(e) {
-        if (e.target.value !== "") {
-            if (!this.item.men) {
-                this.item.men = []
-            }
-            let currentItem
-            if (this.currentRow === -1 && this.isNew) {
-                this.item.men.push({})
-                this.isNew = false
-            }
-
-            currentItem = e.target.currentObject ?? this.item?.men.at(this.currentRow)
-
-            if (!this.oldValues.has(e.target)) {
-                if (currentItem[e.target.id] !== e.target.value) {
-                    this.oldValues.set(e.target, currentItem[e.target.id])
-                }
-            }
-            else if (this.oldValues.get(e.target) === e.target.value) {
-                    this.oldValues.delete(e.target)
-            }
-
-            currentItem[e.target.id] = e.target.value
-
-            if (e.target.id === 'name' || e.target.id === 'icon') {
-                this.parentNode.parentNode.host.requestUpdate()
-            }
-            if (e.target.id === 'icon') {
-                 this.requestUpdate()
-            }
-            this.isModified = this.oldValues.size !== 0;
+        if (!this.item.men) {
+            this.item.men = []
         }
+        let currentItem
+        if (this.currentRow === -1 && this.isNew) {
+            this.item.men.push({})
+            this.isNew = false
+        }
+
+        currentItem = e.target.currentObject ?? this.item?.men.at(this.currentRow)
+
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[e.target.id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[e.target.id])
+            }
+        }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[e.target.id] = e.target.value
+
+        if (e.target.id === 'name' || e.target.id === 'icon') {
+            this.parentNode.parentNode.host.requestUpdate()
+        }
+        if (e.target.id === 'icon') {
+                this.requestUpdate()
+        }
+        this.isModified = this.oldValues.size !== 0;
     }
 
     tableClick(e) {
