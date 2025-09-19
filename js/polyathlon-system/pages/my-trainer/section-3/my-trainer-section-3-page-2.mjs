@@ -231,8 +231,10 @@ class MyTrainerSection3Page2 extends BaseElement {
         }
 
         if (e.target.id === 'region') {
-            this.clubDataSource.regionFilter(currentItem.region._id)
+            this.$id('club').setValue('')
+            this.clubDataSource.regionFilter(currentItem.region?._id)
         }
+
         this.isModified = this.oldValues.size !== 0;
 
     }

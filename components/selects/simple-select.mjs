@@ -79,7 +79,10 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                     margin: 8px;
                     aspect-ratio: 1 / 1;
                 }
-                `
+                .hidden {
+                    display: none;
+                }
+            `
         ]
     }
 
@@ -163,6 +166,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
             ${this.dataSource?.items?.map((item, index) =>
                 html `
                     <icon-button
+                        id=${'o'+index}
                         label=${this.listLabel ? this.listLabel(item) : item.name}
                         title=${item._id}
                         icon-name=${this.listIcon?.(item) ?? this.iconName}
@@ -182,9 +186,11 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
     }
 
     changeValue(e) {
-        this.dataSource?.items?.map((item, index) =>{}
-    )
-        // this.value = e.target.value;
+        if (!this.isFocus) {
+            this.isFocus = true
+        }
+        const value = e.target.value.toLowerCase()
+        this.filterList(value)
     }
 
     changeFocus(e) {
@@ -200,8 +206,24 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
     selectItem(index, item) {
         this.isFocus = false;
         this.isListFocus = false;
-        this.value = item;
-        this.fire('input')
+        if (!(typeof this.value === 'object')){
+            this.value = item;
+            this.fire('input')
+            return
+        }
+        if (this.value._id === item._id) {
+            if (this.#input.value != this.showValue?.(item) ?? item.name) {
+                this.#input.value = this.showValue?.(item) ?? item.name
+            }
+            if (this.value._rev !== item._rev) {
+                this.value = item;
+                this.fire('input')
+            }
+        }
+        else {
+            this.value = item;
+            this.fire('input')
+        }
     }
 
     keyDown(e) {
@@ -210,12 +232,31 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                 this.isFocus = true;
                 break;
             case "Escape":
+                if (typeof this.value === 'object')  {
+                    if (this.#input.value != this.showValue?.(this.value) ?? this.value.name)
+                        this.#input.value = this.showValue?.(this.value) ?? this.value.name
+                }
                 this.isFocus = false
                 this.isListFocus = false;
                 break;
             default:
                 return;
         }
+    }
+
+    filterList(value) {
+        this.dataSource?.items?.forEach((item, index) => {
+            const option = this.$id('o'+index)
+            if (value&&!item.name.toLowerCase().includes(value)) {
+                option?.classList.add('hidden');
+            }
+            else {
+                option?.classList.remove('hidden');
+            }
+
+        });
+        this.isFocus = true
+        this.isListFocus = true;
     }
 
     listInFocus() {

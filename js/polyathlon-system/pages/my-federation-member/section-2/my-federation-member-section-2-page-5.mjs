@@ -364,6 +364,12 @@ class MyFederationMemberSection2Page5 extends BaseElement {
         if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
             this.parentNode.parentNode.host.requestUpdate()
         }
+        
+        if (e.target.id === 'region') {
+            this.$id('club').setValue('')
+            this.clubDataSource.regionFilter(currentItem.region?._id)
+        }
+
         this.isModified = this.oldValues.size !== 0;
     }
 

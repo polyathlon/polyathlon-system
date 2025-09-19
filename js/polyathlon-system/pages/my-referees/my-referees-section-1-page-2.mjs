@@ -157,6 +157,13 @@ class MyRefereesSection1Page2 extends BaseElement {
 
         currentItem[id] = e.target.value
 
+
+        if (e.target.id === 'region') {
+            this.$id('city').setValue('')
+            this.cityDataSource.regionFilter(currentItem.region?._id)
+        }
+
+
         // if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName') {
         //     this.parentNode.parentNode.host.requestUpdate()
         // }

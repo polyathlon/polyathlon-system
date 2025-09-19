@@ -158,6 +158,12 @@ class MyTrainersSection1Page1 extends BaseElement {
         if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName') {
             this.parentNode.parentNode.host.requestUpdate()
         }
+
+        if (e.target.id === 'region') {
+            this.$id('city').setValue('')
+            this.cityDataSource.regionFilter(currentItem.region?._id)
+        }
+
         this.isModified = this.oldValues.size !== 0;
     }
 

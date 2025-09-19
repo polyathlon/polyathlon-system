@@ -448,6 +448,7 @@ class MyFederationMemberSection2 extends BaseElement {
             return html`
                 <nav class="buttons">
                     <aside-button icon-name=${"verified-status-solid"} title=${'Принять'} @click=${this.verified}></aside-button>
+                    <aside-button icon-name=${"cancel-status-solid"} title=${'Отказаться'} @click=${this.cancel}></aside-button>
                     <aside-button icon-name=${"clock-status-solid"} title=${'Отложить'} @click=${this.clock}></aside-button>
                     <aside-button icon-name=${"add-status-solid"} title=${'Создать'} @click=${this.add}></aside-button>
                     <aside-button icon-name=${"reject-status-solid"} title=${'Отклонить'} @click=${this.reject}></aside-button>
@@ -459,6 +460,11 @@ class MyFederationMemberSection2 extends BaseElement {
 
     verified() {
       this.currentItem.status = { name: 'Рассматривается' }
+      this.saveItem()
+    }
+
+    cancel() {
+      this.currentItem.status = { name: 'Отказались' }
       this.saveItem()
     }
 

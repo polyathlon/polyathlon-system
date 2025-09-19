@@ -18,7 +18,7 @@ export default class DataSource {
     }
 
     regionFilter(value) {
-        this.items = this.dataSet.filter( element => element.region?._id === value )
+        this.items = this.dataSet.filter( item => item.region?._id === value )
     }
 
     getCurrentItem(){

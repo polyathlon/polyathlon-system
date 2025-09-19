@@ -153,6 +153,11 @@ class MySportsmenSection1Page2 extends BaseElement {
 
         currentItem[id] = e.target.value
 
+        if (e.target.id === 'region') {
+            this.$id('club').setValue('')
+            this.clubDataSource.regionFilter(currentItem.region?._id)
+        }
+
         // if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
         //     this.parentNode.parentNode.host.requestUpdate()
         // }

@@ -160,6 +160,11 @@ class MyTrainerSection3Page3 extends BaseElement {
             this.parentNode.parentNode.host.requestUpdate()
         }
 
+        if (e.target.id === 'region') {
+            this.$id('city').setValue('')
+            this.cityDataSource.regionFilter(currentItem.region?._id)
+        }
+
         this.isModified = this.oldValues.size !== 0;
     }
 
