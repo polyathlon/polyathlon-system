@@ -1007,6 +1007,14 @@ const dictionary = {
         "ru-RU": 'Зарегистрировать клуб',
         "en-EN": 'Club registration'
     },
+    'Expected results': {
+        "ru-RU": 'Ожидаемые результаты',
+        "en-EN": 'Expected results'
+    },
+    'Registration requests': {
+        "ru-RU": 'Заявки',
+        "en-EN": 'Registration requests'
+    },
 }
 
 //const language = navigator.language

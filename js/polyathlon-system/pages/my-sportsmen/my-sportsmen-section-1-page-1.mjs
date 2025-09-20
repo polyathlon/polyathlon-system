@@ -78,7 +78,7 @@ class MySportsmenSection1Page1 extends BaseElement {
         return { name: item?.city?.region?.name }
     }
 
-trainerShowValue(item) {
+    trainerShowValue(item) {
         if (!item) {
             return item
         }

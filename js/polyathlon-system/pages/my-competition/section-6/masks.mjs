@@ -135,7 +135,7 @@ export function throwingMask(e) {
             e.preventDefault()
         }
     }
-}
+    }
 
 // 00:00,0
 export function runningMask(e) {

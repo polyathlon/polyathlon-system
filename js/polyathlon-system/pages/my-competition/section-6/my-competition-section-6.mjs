@@ -249,11 +249,12 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'page6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
             {name: 'page5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
             {name: 'page7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
-            {name: 'page2', iconName: 'pull-ups-solid', page: 5, title: lang`Pull-ups`, click: () => this.gotoPage(5)},
-            {name: 'page3', iconName: 'push-ups-solid', page: 6, title: lang`Push-ups`, click: () => this.gotoPage(6)},
-            {name: 'page8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
-            {name: 'page9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
-            {name: 'page10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
+            // {name: 'page2', iconName: 'pull-ups-solid', page: 5, title: lang`Pull-ups`, click: () => this.gotoPage(5)},
+            {name: 'page3', iconName: 'pull-ups-solid', page: 6, title: lang`Strength training`, click: () => this.gotoPage(5)},
+            // {name: 'page3', iconName: 'push-ups-solid', page: 6, title: lang`Push-ups`, click: () => this.gotoPage(6)},
+            {name: 'page8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(6)},
+            {name: 'page9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(7)},
+            {name: 'page10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(8)},
         ]
         this.tables = [
             {name: 'table1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
@@ -261,11 +262,11 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'table6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
             {name: 'table5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
             {name: 'table7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
-            {name: 'table2', iconName: 'pull-ups-solid', page: 5, title: lang`Strength training`, click: () => this.gotoPage(5)},
-            {name: 'table3', iconName: 'push-ups-solid', page: 6, title: lang`Push-ups`, click: () => this.gotoPage(6)},
-            {name: 'table8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
-            {name: 'table9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
-            {name: 'table10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
+            // {name: 'table2', iconName: 'pull-ups-solid', page: 5, title: lang`Strength training`, click: () => this.gotoPage(5)},
+            {name: 'table3', iconName: 'pull-ups-solid', page: 6, title: lang`Strength training`, click: () => this.gotoPage(5)},
+            {name: 'table8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(6)},
+            {name: 'table9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(7)},
+            {name: 'table10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(8)},
         ]
         this.lots = [
             {name: 'lot1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
@@ -273,11 +274,11 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'lot6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
             {name: 'lot5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
             {name: 'lot7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
-            {name: 'lot2', iconName: 'pull-ups-solid', page: 5, title: lang`Pull-ups`, click: () => this.gotoPage(5)},
-            {name: 'lot3', iconName: 'push-ups-solid', page: 6, title: lang`Push-ups`, click: () => this.gotoPage(6)},
-            {name: 'lot8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
-            {name: 'lot9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
-            {name: 'lot10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
+            // {name: 'lot2', iconName: 'pull-ups-solid', page: 5, title: lang`Pull-ups`, click: () => this.gotoPage(5)},
+            {name: 'lot3', iconName: 'push-ups-solid', page: 6, title: lang`Strength training`, click: () => this.gotoPage(5)},
+            {name: 'lot8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(6)},
+            {name: 'lot9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(7)},
+            {name: 'lot10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(8)},
         ]
         this.resultNames = ['shooting', 'swimming', 'sprinting', 'throwing', 'running', 'pullUps', 'pushUps', 'skiing', 'rollerSkiing', 'jumping'];
     }

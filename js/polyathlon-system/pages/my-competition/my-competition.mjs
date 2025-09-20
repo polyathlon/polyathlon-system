@@ -36,7 +36,7 @@ class MyCompetition extends BaseElement {
             {name: "section6", label: lang`Results`, iconName: 'timer-solid'},
             {name: "section3", label: lang`Referees`, iconName: 'referee-man-solid'},
             {name: "section4", label: lang`Statistic`, iconName: 'chart-pie-solid'},
-            {name: "section5", label: lang`Requests`, iconName: 'registration-solid'},
+            {name: "section5", label: lang`Registration requests`, iconName: 'registration-solid'},
         ]
     }
 
