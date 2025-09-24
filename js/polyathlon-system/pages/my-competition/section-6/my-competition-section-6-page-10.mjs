@@ -61,28 +61,40 @@ class MyCompetitionSection6Page10 extends BaseElement {
         return result
     }
 
+    sportsmanIconName() {
+        return this.item?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
-                <simple-input id="ageGroup" icon-name=${this.item?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} label="${lang`Age group`}:" .value=${this.item?.ageGroup?.name}></simple-input>
-                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.sportsmanIconName()} @icon-click=${this.gotoSportsmanPage} .value=${this.sportsmanName(this.item)}></simple-input>
+                <simple-input id="ageGroup" label="${lang`Age group`}:" icon-name=${this.item?.gender == true ? "age-group-women-solid" : "age-group-solid"} .value=${this.item?.ageGroup?.name}></simple-input>
+                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="flow" icon-name="jumping-solid2" label=${lang`Flow` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.flow} @input=${this.validateInput}></simple-input>
-                    <simple-input id="sector" icon-name="chart-pie-simple-solid" label=${lang`Sector` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.sector} @input=${this.validateInput}></simple-input>
+                    <simple-input id="jumping.flow" label="${lang`Flow`}:" icon-name="jumping-solid2" value=${this.item?.jumping?.flow} @input=${this.validateInput}></simple-input>
+                    <simple-input id="jumping.sector" label="${lang`Sector`}" icon-name="chart-pie-simple-solid" value=${this.item?.jumping?.sector} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="map-location-dot-solid" .mask=${jumpingMask} label=${lang`Result` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.result} @input=${this.validateInput}></simple-input>
-                    <simple-input id="points" icon-name="hundred-points-solid" label=${lang`Points` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.points} @input=${this.validateInput}></simple-input>
+                    <simple-input id="jumping.result" label="${lang`Result`}:" icon-name="map-location-dot-solid" .mask=${jumpingMask} value=${this.item?.jumping?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="jumping.points" label="${lang`Points`}:" icon-name="hundred-points-solid" value=${this.item?.jumping?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="places-solid" label=${lang`Place` + ':'} .currentObject=${this.item?.jumping} .value=${this.item?.jumping?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="jumping.place" label="${lang`Place`}:" icon-name="places-solid" value=${this.item?.jumping?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
     showPage(page) {
         location.hash = page;
+    }
+
+    gotoSportsmanPage() {
+        if (!this.item?.sportsmanUlid) {
+            return
+        }
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.item?.sportsmanUlid.split(':')[1]}`
     }
 
     pointsFind(result, table) {
@@ -96,31 +108,39 @@ class MyCompetitionSection6Page10 extends BaseElement {
         if (isJumpingValid(target.value)) {
             let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
             let b = a.sportsDisciplineComponents.find( item => item.group.name === "Прыжки с места")
-            this.$id("points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
-            this.$id("points").fire('input')
+            this.$id("jumping.points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
+            this.$id("jumping.points").fire('input')
         }
         else {
-            this.$id("points").value = ''
-            this.$id("points").fire('input')
+            this.$id("jumping.points").value = ''
+            this.$id("jumping.points").fire('input')
         }
     }
 
     validateInput(e) {
+        let id = e.target.id.split('.')
 
-        let currentItem = e.target.currentObject ?? this.item.jumping ?? {}
+        let currentItem = this.item
+
+        if (id.length === 1) {
+            id = id[0]
+        }
+        else {
+            currentItem = this.item[id[0]] ??= {}
+            id = id.at(-1)
+        }
         if (!this.oldValues.has(e.target)) {
-            this.item.jumping ??= currentItem
-            if (currentItem[e.target.id] !== e.target.value) {
-                this.oldValues.set(e.target, currentItem[e.target.id])
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
             }
         }
         else if (this.oldValues.get(e.target) === e.target.value) {
                 this.oldValues.delete(e.target)
         }
 
-        currentItem[e.target.id] = e.target.value
+        currentItem[id] = e.target.value
 
-        if (e.target.id === "result")
+        if (id === "result")
         {
             this.setPoints(e.target)
         }
@@ -309,7 +329,7 @@ class MyCompetitionSection6Page10 extends BaseElement {
     }
 
     startEdit() {
-        let input = this.$id("result")
+        let input = this.$id("jumping.result")
         input.focus()
         this.isModified = true
     }

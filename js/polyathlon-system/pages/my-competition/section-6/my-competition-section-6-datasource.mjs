@@ -29,13 +29,13 @@ export default class DataSource {
 
     init() {
         if (this.items.length) {
-            let itemId = sessionStorage.getItem('currentCompetitionSportsman')
+            let itemId = sessionStorage.getItem('currentCompetitionResultSportsman')
             let item
             if (itemId) {
                 item = this.items.find((item) => item._id == itemId)
             }
             item ??= this.items[0]
-            sessionStorage.setItem('currentCompetitionSportsman', item._id)
+            sessionStorage.setItem('currentCompetitionResultSportsman', item._id)
             this.component.currentItem = item
         } else {
             this.component.currentItem = {}
@@ -70,17 +70,17 @@ export default class DataSource {
     }
 
     getCurrentItem(){
-        const item = sessionStorage.getItem('currentCompetitionSportsman')
+        const item = sessionStorage.getItem('currentCompetitionResultSportsman')
         if (item) {
             return this.items.find(p => p._id === item)
         } else {
-            sessionStorage.setItem('currentCompetitionSportsman', this.items[0]?._id)
+            sessionStorage.setItem('currentCompetitionResultSportsman', this.items[0]?._id)
             return this.items?.[0]
         }
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentCompetitionSportsman', item._id)
+        sessionStorage.setItem('currentCompetitionResultSportsman', item._id)
         this.component.currentItem = item
     }
 

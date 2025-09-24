@@ -61,33 +61,45 @@ class MyCompetitionSection6Page5 extends BaseElement {
         return result
     }
 
+    sportsmanIconName() {
+        return this.item?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
-                <simple-input id="ageGroup" icon-name=${this.item?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} label="${lang`Age group`}:" .value=${this.item?.ageGroup?.name}></simple-input>
-                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.sportsmanIconName()} @icon-click=${this.gotoSportsmanPage} .value=${this.sportsmanName(this.item)}></simple-input>
+                <simple-input id="ageGroup" label="${lang`Age group`}:" icon-name=${this.item?.gender == true ? "age-group-women-solid" : "age-group-solid"} .value=${this.item?.ageGroup?.name}></simple-input>
+                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="flow" icon-name="throw-solid" label="${lang`Flow`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.flow} @input=${this.validateInput}></simple-input>
-                    <simple-input id="sector" icon-name="chart-pie-simple-solid" label="${lang`Sector`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.sector} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throwing.flow" label="${lang`Flow`}:" icon-name="throw-solid" .value=${this.item?.throwing?.flow} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throwing.sector" label="${lang`Sector`}:" icon-name="chart-pie-simple-solid" .value=${this.item?.throwing?.sector} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="throw1" icon-name="throwing-ruler-solid" .mask=${throwingMask} label="${lang`Throw` + ' 1'}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.throw1} @input=${this.validateInput}></simple-input>
-                    <simple-input id="throw2" icon-name="throwing-ruler-solid" .mask=${throwingMask} label="${lang`Throw` + ' 2'}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.throw2} @input=${this.validateInput}></simple-input>
-                    <simple-input id="throw3" icon-name="throwing-ruler-solid" .mask=${throwingMask} label="${lang`Throw` + ' 3'}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.throw3} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throwing.throw1" label="${lang`Throw` + ' 1'}:" icon-name="throwing-ruler-solid" .mask=${throwingMask} .value=${this.item?.throwing?.throw1} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throwing.throw2" label="${lang`Throw` + ' 2'}:" icon-name="throwing-ruler-solid" .mask=${throwingMask} .value=${this.item?.throwing?.throw2} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throwing.throw3" label="${lang`Throw` + ' 3'}:" icon-name="throwing-ruler-solid" .mask=${throwingMask} .value=${this.item?.throwing?.throw3} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="map-location-dot-solid" .mask=${throwingMask} label="${lang`Result`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.result} @input=${this.validateInput}></simple-input>
-                    <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.points} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throwing.result" label="${lang`Result`}:" icon-name="map-location-dot-solid" .mask=${throwingMask} .value=${this.item?.throwing?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throwing.points" label="${lang`Points`}:" icon-name="hundred-points-solid" .value=${this.item?.throwing?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.throwing} .value=${this.item?.throwing?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="throwing.place" label="${lang`Place`}:" icon-name="places-solid" .value=${this.item?.throwing?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
     showPage(page) {
         location.hash = page;
+    }
+
+    gotoSportsmanPage() {
+        if (!this.item?.sportsmanUlid) {
+            return
+        }
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.item?.sportsmanUlid.split(':')[1]}`
     }
 
     resultToValue(result) {
@@ -106,12 +118,12 @@ class MyCompetitionSection6Page5 extends BaseElement {
         if (isThrowingValid(target.value)) {
             let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
             let b = a.sportsDisciplineComponents.find( item => item.group.name === "Метание")
-            this.$id("points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
-            this.$id("points").fire('input')
+            this.$id("throwing.points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
+            this.$id("throwing.points").fire('input')
         }
         else {
-            this.$id("points").value = ''
-            this.$id("points").fire('input')
+            this.$id("throwing.points").value = ''
+            this.$id("throwing.points").fire('input')
         }
     }
 
@@ -119,7 +131,7 @@ class MyCompetitionSection6Page5 extends BaseElement {
         if (isThrowingValid(target1.value)) {
             const value1 = this.resultToValue(target1.value)
             let result = target1.value
-            const throws = ['throw1', 'throw2', 'throw3']
+            const throws = ['throwing.throw1', 'throwing.throw2', 'throwing.throw3']
             throws.forEach( (item) => {
                 if (item !== target1.id) {
                     const target2 = this.$id(item)
@@ -131,27 +143,36 @@ class MyCompetitionSection6Page5 extends BaseElement {
                     }
                 }
             })
-            const resultTarget = this.$id('result')
+            const resultTarget = this.$id('throwing.result')
             resultTarget.value = result
             resultTarget.fire('input')
         }
     }
 
     validateInput(e) {
-        let currentItem = e.target.currentObject ?? this.item.throwing ?? {}
+        let id = e.target.id.split('.')
+
+        let currentItem = this.item
+
+        if (id.length === 1) {
+            id = id[0]
+        }
+        else {
+            currentItem = this.item[id[0]] ??= {}
+            id = id.at(-1)
+        }
         if (!this.oldValues.has(e.target)) {
-            this.item.throwing ??= currentItem
-            if (currentItem[e.target.id] !== e.target.value) {
-                this.oldValues.set(e.target, currentItem[e.target.id])
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
             }
         }
         else if (this.oldValues.get(e.target) === e.target.value) {
                 this.oldValues.delete(e.target)
         }
 
-        currentItem[e.target.id] = e.target.value
+        currentItem[id] = e.target.value
 
-        if (e.target.id === "result")
+        if (id === "result")
         {
             this.setPoints(e.target)
         }
@@ -345,7 +366,7 @@ class MyCompetitionSection6Page5 extends BaseElement {
     }
 
     startEdit() {
-        let input = this.$id("result")
+        let input = this.$id("throwing.result")
         input.focus()
         this.isModified = true
     }

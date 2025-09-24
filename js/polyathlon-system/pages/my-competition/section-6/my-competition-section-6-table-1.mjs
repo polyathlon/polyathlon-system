@@ -291,9 +291,9 @@ class MyCompetitionSection6Table1 extends BaseElement {
                     ageGroup: item.ageGroup?.name,
                     ageGroupOrder: item.ageGroup?.sortOrder,
                     birthday: new Date(item.birthday).toLocaleDateString(),
-                    category: item.category.shortName,
+                    category: item.category?.shortName,
                     // year: new Date(item.birthday).getFullYear(),
-                    region: item.region.shortName ?? item.region.name,
+                    region: item.region?.shortName ?? item.region?.name,
                     club: this.clubShowValue(item.club),
                     sportsNumber: item.sportsNumber,
                     result: item?.[this.discipline]?.result ?? '',
@@ -356,7 +356,7 @@ class MyCompetitionSection6Table1 extends BaseElement {
         return ''
     }
 
-    pdfMethod(refereeDataSource) {
+    pdfMethod(refereeDataSet) {
     //     pdfMake.fonts = {
     //     // Courier: {
     //     //     normal: 'Courier',
@@ -384,8 +384,8 @@ class MyCompetitionSection6Table1 extends BaseElement {
     //     // }
     // };
     // pdfMake.addFonts(fonts);
-    const mainReferee = refereeDataSource.items.find( item => item.position.name === "Главный судья");
-    const mainSecretary = refereeDataSource.items.find(item => item.position.name === "Главный секретарь");
+    const mainReferee = refereeDataSet.find( item => item.position.name === "Главный судья");
+    const mainSecretary = refereeDataSet.find(item => item.position.name === "Главный секретарь");
 
     const tableBody = [
         [

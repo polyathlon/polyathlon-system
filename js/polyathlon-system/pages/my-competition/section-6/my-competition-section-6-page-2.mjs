@@ -61,13 +61,17 @@ class MyCompetitionSection6Page2 extends BaseElement {
         return result
     }
 
+    sportsmanIconName() {
+        return this.item?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
-                <simple-input id="ageGroup" icon-name=${this.item?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} label="${lang`Age group`}:" .value=${this.item?.ageGroup?.name}></simple-input>
-                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.sportsmanIconName()} @icon-click=${this.gotoSportsmanPage} .value=${this.sportsmanName(this.item)}></simple-input>
+                <simple-input id="ageGroup" label="${lang`Age group`}:" icon-name=${this.item?.gender == true ? "age-group-women-solid" : "age-group-solid"} .value=${this.item?.ageGroup?.name}></simple-input>
+                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input id="flow" label="${lang`Flow`}:" icon-name="pull-up-flow-solid" .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.flow} @input=${this.validateInput}></simple-input>
                     <simple-input id="crossbar" label="${lang`Horizontal bar`}:" icon-name="horizontal-bar-solid" .currentObject=${this.item?.pullUps} .value=${this.item?.pullUps?.crossbar} @input=${this.validateInput}></simple-input>
@@ -83,6 +87,14 @@ class MyCompetitionSection6Page2 extends BaseElement {
 
     showPage(page) {
         location.hash = page;
+    }
+
+    gotoSportsmanPage() {
+        if (!this.item?.sportsmanUlid) {
+            return
+        }
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.item?.sportsmanUlid.split(':')[1]}`
     }
 
     pointsFind(result, table) {
@@ -106,7 +118,15 @@ class MyCompetitionSection6Page2 extends BaseElement {
     }
 
     validateInput(e) {
-        let currentItem = e.target.currentObject ?? this.item.pullUps ?? {}
+        let id = e.target.id
+        let currentItem = this.item
+
+        if (e.target.currentObject) {
+            currentItem = e.target.currentObject
+            id = id.split('.')
+            this.item[id.at(-1)] ??= currentItem
+            id = id.at(-1)
+        }
         if (!this.oldValues.has(e.target)) {
             this.item.pullUps ??= currentItem
             if (currentItem[e.target.id] !== e.target.value) {

@@ -424,13 +424,17 @@ class MyCompetitionSection1 extends BaseElement {
     async saveRegistration() {
         const page  = this.renderRoot.querySelector('my-competition-section-1-page-4')
         await page.saveItem()
-        const modalResult = await this.showDialog("Ваша заявка успешно отправлена")
+        const modalResult = await this.showDialog("Ваша заявка получена. Скоро она будет рассмотрена")
         if (modalResult === "Ok") {
             this.currentPage = 0;
         }
     }
 
-    cancelRegistration() {
+    async cancelRegistration() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все изменения?')
+        if (modalResult !== "Ok") {
+            return
+        }
         this.currentPage = 0;
     }
 
@@ -642,12 +646,21 @@ class MyCompetitionSection1 extends BaseElement {
                 this.avatar = value;
                 this.avatarFile = null;
             } else {
-                const currentItem = key.currentObject ?? this.currentItem
-                currentItem[key.id] = value;
-                key.oldValue = null;
+                const id = key.id?.split('.')
+                if (id.length === 1) {
+                    this.currentItem[key.id[0]] = value;
+                }
+                else {
+                    let currentItem
+                    for (let index = 0; index < id.length - 1; index++) {
+                        currentItem = this.currentItem[id[index]] ??= {}
+                    }
+                    currentItem[id.at(-1)] = value
+                }
                 key.value = value;
             }
         });
+
         this.oldValues.clear();
         this.isModified = false;
     }

@@ -83,6 +83,29 @@ class MyCompetitionSection2Page1 extends BaseElement {
         return { name: item?.city?.region?.name }
     }
 
+    sportsmanListLabel(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName ?? ''
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        if (item.middleName) {
+            result += ` ${item.middleName[0]}.`
+        }
+        result += (item.category?.shortName ? ' (' + item.category.shortName + ')' : '')
+        return result
+    }
+
+    sportsmanListStatus(item) {
+        return { name: item?.region?.name }
+    }
+
+    sportsmanListIcon(item) {
+        return item?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
+    }
+
     trainerShowValue(item) {
         if (!item) {
             return item
@@ -132,7 +155,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .dataSource=${this.findDataSource} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsmanByName} .value=${this.item?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user"  @icon-click=${this.gotoSportsmanPage} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsmanByName} .listLabel=${this.sportsmanListLabel} .listIcon=${this.sportsmanListIcon} .listStatus=${this.sportsmanListStatus} .value=${this.item?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
@@ -151,58 +174,56 @@ class MyCompetitionSection2Page1 extends BaseElement {
                     <checkbox-input id="teamMember" label="${lang`Team member`}" .value=${this.item?.teamMember} .checked=${this.item?.teamMember} @input=${this.validateInput}></checkbox-input>
                 </groupbox-input>
                 <groupbox-input label="${lang`Expected results`}:">
-                    <simple-input id="shootingPreResult" label="${lang`Shooting`}:" icon-name="shooting-solid" .mask=${shootingMask} .value=${this.item?.shootingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="swimmingPreResult" label="${lang`Swimming`}:" icon-name="swimming-solid" .mask=${swimmingMask} .value=${this.item?.swimmingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="sprintingPreResult" label="${lang`Sprinting`}:" icon-name="sprinting-solid" .mask=${sprintMask} .value=${this.item?.sprintingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="throwingPreResult" label="${lang`Throwing`}:" icon-name="throwing-solid" .mask=${throwingMask} .value=${this.item?.throwingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="runningPreResult" label="${lang`Running`}:" icon-name="running-solid" .mask=${runningMask} .value=${this.item?.runningPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="strengthTrainingPreResult" label="${lang`Strength training`}:" icon-name=${this.item?.gender == true ? "push-ups-solid" : "pull-ups-solid"} .mask=${pushUpMask} .value=${this.item?.strengthTrainingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="skiingPreResult" label="${lang`Skiing`}:" icon-name="skiing-solid" .mask=${skiingMask} .value=${this.item?.strengthTrainingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="rollerSkiingPreResult" label="${lang`Roller skiing`}:" icon-name="roller-skiing-solid" .mask=${rollerSkiingMask} .value=${this.item?.rollerSkiingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="jumpingPreResult" label="${lang`Jumping`}:" icon-name="jumping-solid" .mask=${jumpingMask} .value=${this.item?.jumpingPreResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="shooting.preResult" label="${lang`Shooting`}:" icon-name="shooting-solid" .mask=${shootingMask} .value=${this.item?.shooting?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="swimming.preResult" label="${lang`Swimming`}:" icon-name="swimming-solid" .mask=${swimmingMask} .value=${this.item?.swimming?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="sprinting.preResult" label="${lang`Sprinting`}:" icon-name="sprinting-solid" .mask=${sprintMask} .value=${this.item?.sprinting?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throwing.preResult" label="${lang`Throwing`}:" icon-name="throwing-solid" .mask=${throwingMask} .value=${this.item?.throwing?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="running.preResult" label="${lang`Running`}:" icon-name="running-solid" .mask=${runningMask} .value=${this.item?.running?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="strengthTraining.preResult" label="${lang`Strength training`}:" icon-name=${this.item?.gender == true ? "push-ups-solid" : "pull-ups-solid"} .mask=${pushUpMask} .value=${this.item?.strengthTraining?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="skiing.preResult" label="${lang`Skiing`}:" icon-name="skiing-solid" .mask=${skiingMask} .value=${this.item?.skiing?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="rollerSkiing.preResult" label="${lang`Roller skiing`}:" icon-name="roller-skiing-solid" .mask=${rollerSkiingMask} .value=${this.item?.rollerSkiing?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="jumping.preResult" label="${lang`Jumping`}:" icon-name="jumping-solid" .mask=${jumpingMask} .value=${this.item?.jumping?.preResult} @input=${this.validateInput}></simple-input>
                 </groupbox-input>
-                <!-- <simple-input id="sportsmanUlid" label="${lang`Sportsman Ulid`}:" icon-name=${+this.item?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${() => this.showPage('my-sportsman')} .value=${this.item?.sportsmanUlid} @input=${this.validateInput}></simple-input> -->
             </div>
-            `;
-            // strength gymnastics
+        `;
     }
-
-    // {name: 'page1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
-    //             {name: 'page4', iconName: 'swimming-solid', page: 1, title: lang`Swimming`, click: () => this.gotoPage(1)},
-    //             {name: 'page6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
-    //             {name: 'page5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
-    //             {name: 'page7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
-    //             {name: 'page2', iconName: 'pull-ups-solid', page: 5, title: lang`Pull-ups`, click: () => this.gotoPage(5)},
-    //             {name: 'page3', iconName: 'push-ups-solid', page: 6, title: lang`Push-ups`, click: () => this.gotoPage(6)},
-    //             {name: 'page8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(7)},
-    //             {name: 'page9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(8)},
-    //             {name: 'page10', iconName: 'jumping-solid', page: 9, title: lang`Jumping`, click: () => this.gotoPage(9)},
 
     showPage(page) {
         location.hash = page;
     }
 
     gotoSportsmanPage() {
+        if (!this.item?.sportsmanUlid) {
+            return
+        }
         location.hash = "#my-sportsman";
-        location.search = `?sportsman=${this.item?.sportsman?._id.split(':')[1]}`
+        location.search = `?sportsman=${this.item?.sportsmanId.split(':')[1]}`
     }
 
     validateInput(e) {
-        let currentItem = e.target.currentObject ?? this.item
+        let id = e.target.id.split('.')
+
+        let currentItem = this.item
+
+        if (id.length === 1) {
+            id = id[0]
+        }
+        else {
+            currentItem = this.item[id[0]] ??= {}
+            id = id.at(-1)
+        }
         if (!this.oldValues.has(e.target)) {
-            if (currentItem[e.target.id] !== e.target.value) {
-                this.oldValues.set(e.target, currentItem[e.target.id])
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
             }
         }
         else if (this.oldValues.get(e.target) === e.target.value) {
                 this.oldValues.delete(e.target)
         }
 
-        currentItem[e.target.id] = e.target.value
-        if (e.target.id === 'name') {
-            this.parentNode.parentNode.host.requestUpdate()
-        }
-        if (e.target.id === 'birthday' || e.target.id === 'gender') {
+        currentItem[id] = e.target.value
+
+        if (id === 'birthday' || id === 'gender') {
             try {
                 this.changeAgeGroup()
                 this.requestUpdate()
@@ -212,7 +233,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
             }
         }
 
-        if (e.target.id === 'region') {
+        if (id === 'region') {
             this.$id('club').setValue('')
             this.clubDataSource.regionFilter(currentItem.region?._id)
         }
@@ -289,12 +310,12 @@ class MyCompetitionSection2Page1 extends BaseElement {
         }
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
                 }
             })
+            this.item.sportsmanId = sportsman._id
             // Object.assign(this.item, sportsman)
             this.requestUpdate()
         } else {
@@ -305,14 +326,13 @@ class MyCompetitionSection2Page1 extends BaseElement {
     sportsmanChoose(e) {
         let sportsman = e.detail
         if (sportsman) {
-            sportsman.sportsmanUlid = sportsman._id
             const inputs = this.$id()
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
                 }
             })
-            this.item.sportsmanUlid = sportsman._id
+            this.item.sportsmanId = sportsman._id
             //Object.assign(this.item, sportsman)
             this.requestUpdate()
         }

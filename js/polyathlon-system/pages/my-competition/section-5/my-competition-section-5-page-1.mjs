@@ -5,6 +5,7 @@ import '../../../../../components/inputs/gender-input.mjs'
 import '../../../../../components/inputs/birthday-input.mjs'
 import '../../../../../components/selects/simple-select.mjs'
 import '../../../../../components/inputs/groupbox-input.mjs'
+import '../../../../../components/inputs/groupbox-input.mjs'
 import '../../../../../components/inputs/checkbox-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
@@ -23,25 +24,29 @@ import ClubDataset from '../../my-clubs/my-clubs-dataset.mjs'
 import AgeGroupDataSource from '../../my-age-groups/my-age-groups-datasource.mjs'
 import AgeGroupDataset from '../../my-age-groups/my-age-groups-dataset.mjs'
 
+import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
+
+import TrainerDataset from '../../my-trainers/my-trainers-dataset.mjs'
+import TrainerDataSource from '../../my-trainers/my-trainers-datasource.mjs'
+
 import Dataset from './my-competition-section-5-dataset.mjs'
 import DataSource from './my-competition-section-5-datasource.mjs'
 
-import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 
 class MyCompetitionSection5Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
+            sportsCategorySource: { type: Object, default: null },
+            regionDataSource: { type: Object, default: null },
+            clubDataSource: { type: Object, default: null },
+            trainerDataSource: { type: Object, default: null},
+            ageGroupDataSource: { type: Object, default: null },
+            findDataSource: { type: Object, default: null },
             dataSource: { type: Object, default: null },
-            sportsCategorySource: {type: Object, default: null },
-            regionDataSource: {type: Object, default: null },
-            clubDataSource: {type: Object, default: null },
-            trainerDataSource: {type: Object, default: null },
-            ageGroupDataSource: {type: Object, default: null },
-            findDataSource: {type: Object, default: null },
-            item: {type: Object, default: {} },
-            isModified: {type: Boolean, default: false, local: true },
-            oldValues: {type: Map, default: null },
+            item: { type: Object, default: null },
+            isModified: { type: Boolean, default: false, local: true },
+            oldValues: { type: Map, default: null },
             parent: { type: Object, default: {} },
         }
     }
@@ -70,9 +75,44 @@ class MyCompetitionSection5Page1 extends BaseElement {
     }
 
     sportsmanShowValue(item) {
-         if (item?.lastName) {
-            return item.lastName
-         }
+        if (!item) {
+            return item
+        }
+        if (typeof item === 'string') {
+            return item
+        }
+        let result = item.lastName ?? ''
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        if (item.middleName) {
+            result += ` ${item.middleName[0]}.`
+        }
+        result += (item?.category?.shortName ? ' (' + item.category.shortName + ')' : '')
+        return result
+    }
+
+    sportsmanListLabel(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName ?? ''
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        if (item.middleName) {
+            result += ` ${item.middleName[0]}.`
+        }
+        result += (item.category?.shortName ? ' (' + item.category.shortName + ')' : '')
+        return result
+    }
+
+    sportsmanListStatus(item) {
+        return { name: item?.region?.name }
+    }
+
+    sportsmanListIcon(item) {
+        return item?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
     }
 
     clubShowValue(item) {
@@ -90,7 +130,7 @@ class MyCompetitionSection5Page1 extends BaseElement {
         return { name: item?.city?.region?.name }
     }
 
-   trainerShowValue(item) {
+    trainerShowValue(item) {
         if (!item) {
             return item
         }
@@ -139,35 +179,35 @@ class MyCompetitionSection5Page1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .dataSource=${this.findDataSource} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsmanByName} .value=${this.item?.payload?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="payload.lastName" label="${lang`Last name`}:" icon-name="user" @icon-click=${this.gotoSportsmanPage} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findSportsmanByName} .listLabel=${this.sportsmanListLabel} .listIcon=${this.sportsmanListIcon} .listStatus=${this.sportsmanListStatus} .value=${this.item?.payload?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose}></simple-input>
                 <div class="name-group">
-                    <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.payload?.firstName} @input=${this.validateInput}></simple-input>
-                    <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.payload?.firstName} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
-                <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-input id="birthday" label="${lang`Data of birth`}:" icon-name="cake-candles-solid" .value=${this.item?.payload?.birthday} @input=${this.validateInput} lang="ru-Ru" type="date" ></simple-input>
-                <simple-select id="ageGroup" label="${lang`Age group`}:" icon-name=${this.item?.payload?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} .listIcon=${(item) => item?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} @icon-click=${() => this.showPage('my-age-groups')} .dataSource=${this.ageGroupDataSource} .value=${this.item?.payload?.ageGroup} @input=${this.validateInput}></simple-select>
-                <simple-select id="category" label="${lang`Sports category`}:" icon-name="sportsman-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
-                <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" icon-name="sportsman-pc-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.payload?.sportsmanPC} @input=${this.validateInput}></simple-input>
-                <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.item?.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"} .dataSource=${this.findDataSource}  @icon-click=${this.gotoSportsmanPage} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.sportsmanShowValue} .value=${this.item?.sportsman} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
-                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
-                <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.payload?.club} @input=${this.validateInput}></simple-select>
-                <simple-select id="trainer" label="${lang`Trainer`}:" icon-name=${this.trainerIcon(this.item?.trainer)} @icon-click=${this.gotoTrainerPage} .listStatus=${this.trainerListStatus} .dataSource=${this.trainerDataSource} .showValue=${this.trainerShowValue} .listLabel=${this.trainerListLabel} .listIcon=${this.trainerListIcon} .value=${this.item?.trainer} @input=${this.validateInput}></simple-select>
-                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.payload?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                <gender-input id="payload.gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" @input=${this.validateInput}></gender-input>
+                <simple-input id="payload.birthday" label="${lang`Data of birth`}:" icon-name="cake-candles-solid" .value=${this.item?.payload?.birthday} @input=${this.validateInput} lang="ru-Ru" type="date" ></simple-input>
+                <simple-select id="payload.ageGroup" label="${lang`Age group`}:" icon-name=${this.item?.payload?.gender == true ? "age-group-women-solid" : "age-group-solid"} .listIcon=${(item) => item?.gender == true ? "age-group-women-solid" : "age-group-solid"} @icon-click=${() => this.showPage('my-age-groups')} .dataSource=${this.ageGroupDataSource} .value=${this.item?.payload?.ageGroup} @input=${this.validateInput}></simple-select>
+                <simple-select id="payload.category" label="${lang`Sports category`}:" icon-name="sportsman-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.payload?.category} @input=${this.validateInput}></simple-select>
+                <simple-input id="payload.sportsmanPC" label="${lang`Sportsman PC`}:" icon-name="sportsman-pc-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.payload?.sportsmanPC} @input=${this.validateInput}></simple-input>
+                <simple-select id="payload.region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="payload.club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.payload?.club} @input=${this.validateInput}></simple-select>
+                <simple-select id="payload.trainer" label="${lang`Trainer`}:" icon-name=${this.trainerIcon(this.item?.trainer)} @icon-click=${this.gotoTrainerPage} .listStatus=${this.trainerListStatus} .dataSource=${this.trainerDataSource} .showValue=${this.trainerShowValue} .listLabel=${this.trainerListLabel} .listIcon=${this.trainerListIcon} .value=${this.item?.payload?.trainer} @input=${this.validateInput}></simple-select>
+                <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.item?.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${this.gotoSportsmanPage} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .listLabel=${this.sportsmanListLabel} .listIcon=${this.sportsmanListIcon} .listStatus=${this.sportsmanListStatus} .showValue=${this.sportsmanShowValue} .value=${this.item?.sportsman} @input=${this.validateInput} @select-item=${this.sportsmanChoose}></simple-input>
+                <simple-input id="payload.sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.payload?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 <groupbox-input label="${lang`National team member`}:">
-                    <checkbox-input id="clubMember" label="${lang`Club member`}" .value=${this.item?.payload?.clubMember} .checked=${this.item?.payload?.clubMember} @input=${this.validateInput}></checkbox-input>
-                    <checkbox-input id="teamMember" label="${lang`Team member`}" .value=${this.item?.payload?.teamMember} .checked=${this.item?.payload?.teamMember} @input=${this.validateInput}></checkbox-input>
+                    <checkbox-input id="payload.clubMember" label="${lang`Club member`}" .value=${this.item?.payload?.clubMember} .checked=${this.item?.payload?.clubMember} @input=${this.validateInput}></checkbox-input>
+                    <checkbox-input id="payload.teamMember" label="${lang`Team member`}" .value=${this.item?.payload?.teamMember} .checked=${this.item?.payload?.teamMember} @input=${this.validateInput}></checkbox-input>
                 </groupbox-input>
                 <groupbox-input label="${lang`Expected results`}:">
-                    <simple-input id="shootingPreResult" label="${lang`Shooting`}:" icon-name="shooting-solid" .mask=${shootingMask} .value=${this.item?.payload?.shootingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="swimmingPreResult" label="${lang`Swimming`}:" icon-name="swimming-solid" .mask=${swimmingMask} .value=${this.item?.payload?.swimmingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="sprintingPreResult" label="${lang`Sprinting`}:" icon-name="sprinting-solid" .mask=${sprintMask} .value=${this.item?.payload?.sprintingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="throwingPreResult" label="${lang`Throwing`}:" icon-name="throwing-solid" .mask=${throwingMask} .value=${this.item?.payload?.throwingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="runningPreResult" label="${lang`Running`}:" icon-name="running-solid" .mask=${runningMask} .value=${this.item?.payload?.runningPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="strengthTrainingPreResult" label="${lang`Strength training`}:" icon-name=${this.item?.payload?.gender == true ? "push-ups-solid" : "pull-ups-solid"} .mask=${pushUpMask} .value=${this.item?.payload?.strengthTrainingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="skiingPreResult" label="${lang`Skiing`}:" icon-name="skiing-solid" .mask=${skiingMask} .value=${this.item?.payload?.strengthTrainingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="rollerSkiingPreResult" label="${lang`Roller skiing`}:" icon-name="roller-skiing-solid" .mask=${rollerSkiingMask} .value=${this.item?.payload?.rollerSkiingPreResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="jumpingPreResult" label="${lang`Jumping`}:" icon-name="jumping-solid" .mask=${jumpingMask} .value=${this.item?.payload?.jumpingPreResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.shooting.preResult" label="${lang`Shooting`}:" icon-name="shooting-solid" .mask=${shootingMask} .value=${this.item?.payload?.shooting?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.swimming.preResult" label="${lang`Swimming`}:" icon-name="swimming-solid" .mask=${swimmingMask} .value=${this.item?.payload?.swimming?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.sprinting.preResult" label="${lang`Sprinting`}:" icon-name="sprinting-solid" .mask=${sprintMask} .value=${this.item?.payload?.sprinting?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.throwing.preResult" label="${lang`Throwing`}:" icon-name="throwing-solid" .mask=${throwingMask} .value=${this.item?.payload?.throwing?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.running.preResult" label="${lang`Running`}:" icon-name="running-solid" .mask=${runningMask} .value=${this.item?.payload?.running?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.strengthTraining.preResult" label="${lang`Strength training`}:" icon-name=${this.item?.gender == true ? "push-ups-solid" : "pull-ups-solid"} .mask=${pushUpMask} .value=${this.item?.payload?.strengthTraining?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.skiing.preResult" label="${lang`Skiing`}:" icon-name="skiing-solid" .mask=${skiingMask} .value=${this.item?.payload?.skiing?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.rollerSkiing.preResult" label="${lang`Roller skiing`}:" icon-name="roller-skiing-solid" .mask=${rollerSkiingMask} .value=${this.item?.payload?.rollerSkiing?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="payload.jumping.preResult" label="${lang`Jumping`}:" icon-name="jumping-solid" .mask=${jumpingMask} .value=${this.item?.payload?.jumping?.preResult} @input=${this.validateInput}></simple-input>
                 </groupbox-input>
             </div>
         `;
@@ -178,15 +218,31 @@ class MyCompetitionSection5Page1 extends BaseElement {
     }
 
     gotoSportsmanPage() {
+        if (!this.item?.sportsman) {
+            return
+        }
         location.hash = "#my-sportsman";
         location.search = `?sportsman=${this.item?.sportsman?._id.split(':')[1]}`
     }
 
     validateInput(e) {
-        let currentItem = e.target.currentObject ?? this.item.payload
+        let id = e.target.id.split('.')
+
+        let currentItem = this.item
+
+        if (id.length === 1) {
+            id = id[0]
+        }
+        else {
+            for (let index = 0; index < id.length - 1; index++) {
+                currentItem = currentItem[id[index]] ??= {}
+            }
+            id = id.at(-1)
+        }
+
         if (!this.oldValues.has(e.target)) {
-            if (currentItem[e.target.id] !== e.target.value) {
-                this.oldValues.set(e.target, currentItem[e.target.id])
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
             }
         }
         else if (this.oldValues.get(e.target) === e.target.value) {
@@ -194,10 +250,8 @@ class MyCompetitionSection5Page1 extends BaseElement {
         }
 
         currentItem[e.target.id] = e.target.value
-        if (e.target.id === 'name') {
-            this.parentNode.parentNode.host.requestUpdate()
-        }
-        if (e.target.id === 'birthday' || e.target.id === 'gender') {
+
+        if (id === 'birthday' || id === 'gender') {
             try {
                 this.changeAgeGroup()
                 this.requestUpdate()
@@ -207,7 +261,7 @@ class MyCompetitionSection5Page1 extends BaseElement {
             }
         }
 
-        if (e.target.id === 'region') {
+        if (id === 'region') {
             this.$id('club').setValue('')
             this.clubDataSource.regionFilter(currentItem.region?._id)
         }
@@ -284,7 +338,7 @@ class MyCompetitionSection5Page1 extends BaseElement {
         }
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.sportsmanId = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
@@ -337,7 +391,7 @@ class MyCompetitionSection5Page1 extends BaseElement {
             if (item) {
                 ageGroupComponent.setValue(item)
             } else {
-                // this.errorDialog("Такая возрастная группа в соревновании не найдена")
+                this.errorDialog("Такая возрастная группа в соревновании не найдена")
                 delete this.item.ageGroup
                 ageGroupComponent.setValue('')
             }
@@ -355,8 +409,12 @@ class MyCompetitionSection5Page1 extends BaseElement {
         this.sportsCategoryDataSource = new SportsCategoryDataSource(this, await SportsCategoryDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.clubDataSource = new ClubDataSource(this, await ClubDataset.getDataSet())
-        this.trainerDataSource = new TrainerDataSource(this, await TrainerDataset.getDataSet())
         this.ageGroupDataSource = new AgeGroupDataSource(this, await AgeGroupDataset.getDataSet())
+        this.trainerDataSource = new TrainerDataSource(this, await TrainerDataset.getDataSet())
+        this.teamMemberDataSource = {items: [
+            {name: 'region'},
+            {name: 'club'},
+        ]}
     }
 
 }

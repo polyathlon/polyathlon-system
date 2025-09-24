@@ -10,8 +10,6 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import { isAuth, States } from '../../../../utils.js'
 
-import { States } from "../../../../utils.js"
-
 import './my-sports-disciplines-section-2-page-1.mjs'
 import './my-sports-disciplines-section-2-list-1.mjs'
 

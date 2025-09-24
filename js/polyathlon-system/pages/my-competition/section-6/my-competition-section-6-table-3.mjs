@@ -253,7 +253,7 @@ class MyCompetitionSection6Table3 extends BaseElement {
             return ''
         switch ( this.discipline) {
             case 'shooting':
-            case 'pullUps':
+            case 'strengthTraining':
             case 'pushUps':
             case 'jumping':
                 return +a.result
@@ -291,11 +291,12 @@ class MyCompetitionSection6Table3 extends BaseElement {
                     ageGroup: item.ageGroup?.name,
                     ageGroupOrder: item.ageGroup?.sortOrder,
                     birthday: new Date(item.birthday).toLocaleDateString(),
-                    category: item.category.shortName,
+                    category: item.category?.shortName,
                     // year: new Date(item.birthday).getFullYear(),
-                    region: item.region.shortName ?? item.region.name,
+                    region: item.region?.shortName ?? item.region?.name,
                     club: this.clubShowValue(item.club),
                     sportsNumber: item.sportsNumber,
+                    // result: item.pushUps?.result ?? item.pullUps?.result ?? '',
                     result: item?.[this.discipline]?.result ?? '',
                     points: item?.[this.discipline]?.points ?? ''
                     /* + +(item.pushUps?.points ?? 0) + +(item.pullUps?.points ?? 0)
@@ -356,7 +357,7 @@ class MyCompetitionSection6Table3 extends BaseElement {
         return ''
     }
 
-    pdfMethod(refereeDataSource) {
+    pdfMethod(refereeDataSet) {
     //     pdfMake.fonts = {
     //     // Courier: {
     //     //     normal: 'Courier',
@@ -384,8 +385,8 @@ class MyCompetitionSection6Table3 extends BaseElement {
     //     // }
     // };
     // pdfMake.addFonts(fonts);
-    const mainReferee = refereeDataSource.items.find( item => item.position.name === "Главный судья");
-    const mainSecretary = refereeDataSource.items.find(item => item.position.name === "Главный секретарь");
+    const mainReferee = refereeDataSet.find( item => item.position.name === "Главный судья");
+    const mainSecretary = refereeDataSet.find(item => item.position.name === "Главный секретарь");
 
     const tableBody = [
         [

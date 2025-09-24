@@ -42,13 +42,13 @@ class MySportsDisciplineComponentsSection1Tab3Page1 extends BaseElement {
         super()
         this.columns = [[
             {
+                name: "result",
+                label: lang`Result`,
+            },
+            {
                 name: "points",
                 label: lang`Points`,
             },
-            {
-                name: "result",
-                label: lang`Results`,
-            }
         ]]
     }
 

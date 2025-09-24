@@ -1,16 +1,17 @@
 import { BaseElement, html, css } from '../../../../base-element.mjs'
 
 import '../../../../../components/inputs/simple-input.mjs'
+import '../../../../../components/dialogs/modal-dialog.mjs'
 
 class MyCompetitionSection6List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            item: {type: Object, default: null},
-            isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null},
-            currentItem: {type: Object, default: null, local: true },
-            sortDirection: { type: Boolean, default: true},
+            item: { type: Object, default: null },
+            isModified: { type: Boolean, default: false, local: true },
+            oldValues: { type: Map, default: null },
+            currentItem: { type: Object, default: null },
+            sortDirection: { type: Boolean, default: true },
         }
     }
 
@@ -60,6 +61,7 @@ class MyCompetitionSection6List1 extends BaseElement {
 
     render() {
         return html`
+            <modal-dialog></modal-dialog>
             ${this.item.dataSource?.items?.map((item, index) =>
                 html `<icon-button
                         label=${this.sportsmanName(item)}
@@ -74,15 +76,26 @@ class MyCompetitionSection6List1 extends BaseElement {
         `
     }
 
+    async showDialog(message, type='message') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
+    }
+
     async showItem(item) {
         if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
-            if (modalResult === 'Ok') {
+            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
+            if (modalResult !== 'Ok') {
                 await this.item.dataSource.saveItem(this.currentItem);
+                return
             }
-            else {
-                await this.cancelItem()
-            }
+            // else {
+            //     await this.cancelItem()
+            // }
         }
         else {
             this.item.dataSource.setCurrentItem(item)

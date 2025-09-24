@@ -400,7 +400,7 @@ class MyFederationMemberSection2 extends BaseElement {
 
     #list1() {
         return html`
-            <my-federation-member-section-2-list-1 .item=${this.dataSource} .currentItem=${this.currentItem} ></my-federation-member-section-2-list-1>
+            <my-federation-member-section-2-list-1 .item=${this.dataSource} .currentItem=${this.currentItem}></my-federation-member-section-2-list-1>
         `;
     }
 

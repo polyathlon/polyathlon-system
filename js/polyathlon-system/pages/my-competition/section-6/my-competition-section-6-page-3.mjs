@@ -61,28 +61,52 @@ class MyCompetitionSection6Page3 extends BaseElement {
         return result
     }
 
+    sportsmanIconName() {
+        return this.item?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
+    }
+
+    flowIconName() {
+        return this.item?.gender == true ? "push-ups-flow-solid" : "pull-up-flow-solid"
+    }
+
+    platformIconName() {
+        return this.item?.gender == true ? "push-ups-platform-solid" : "horizontal-bar-solid"
+    }
+
+    platformLabel() {
+        return this.item?.gender == true ? lang`Platform` : lang`Horizontal bar`
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="sportsman" icon-name=${this.item?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid"} label="${lang`Sportsman`}:" .value=${this.sportsmanName(this.item)}></simple-input>
-                <simple-input id="ageGroup" icon-name=${this.item?.gender == 1 ? "age-group-women-solid" : "age-group-solid"} label="${lang`Age group`}:" .value=${this.item?.ageGroup?.name}></simple-input>
-                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
+                <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.sportsmanIconName()} @icon-click=${this.gotoSportsmanPage} .value=${this.sportsmanName(this.item)}></simple-input>
+                <simple-input id="ageGroup" label="${lang`Age group`}:" icon-name=${this.item?.gender == true ? "age-group-women-solid" : "age-group-solid"} .value=${this.item?.ageGroup?.name}></simple-input>
+                <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
-                    <simple-input id="flow" icon-name="push-ups-flow-solid" label="${lang`Flow`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.flow} @input=${this.validateInput}></simple-input>
-                    <simple-input id="platform" icon-name="push-ups-platform-solid" label="${lang`Platform`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.platform} @input=${this.validateInput}></simple-input>
+                    <simple-input id="strengthTraining.flow" label="${lang`Flow`}:" icon-name=${this.flowIconName()} .value=${this.item?.strengthTraining?.flow} @input=${this.validateInput}></simple-input>
+                    <simple-input id="strengthTraining.platform" label=${this.platformLabel()} icon-name=${this.platformIconName()} .value=${this.item?.strengthTraining?.platform} @input=${this.validateInput}></simple-input>
                 </div>
                 <div class="name-group">
-                    <simple-input id="result" icon-name="order-number-solid" .mask=${pushUpMask} label="${lang`Result`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.result} @input=${this.validateInput}></simple-input>
-                    <simple-input id="points" icon-name="hundred-points-solid" label="${lang`Points`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.points} @input=${this.validateInput}></simple-input>
+                    <simple-input id="strengthTraining.result" icon-name="order-number-solid" .mask=${pushUpMask} label="${lang`Result`}:" .value=${this.item?.strengthTraining?.result} @input=${this.validateInput}></simple-input>
+                    <simple-input id="strengthTraining.points" icon-name="hundred-points-solid" label="${lang`Points`}:" .value=${this.item?.strengthTraining?.points} @input=${this.validateInput}></simple-input>
                 </div>
-                <simple-input id="place" icon-name="places-solid" label="${lang`Place`}:" .currentObject=${this.item?.pushUps} .value=${this.item?.pushUps?.place} @input=${this.validateInput}></simple-input>
+                <simple-input id="strengthTraining.place" icon-name="places-solid" label="${lang`Place`}:" .value=${this.item?.strengthTraining?.place} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
 
     showPage(page) {
         location.hash = page;
+    }
+
+    gotoSportsmanPage() {
+        if (!this.item?.sportsmanUlid) {
+            return
+        }
+        location.hash = "#my-sportsman";
+        location.search = `?sportsman=${this.item?.sportsmanUlid.split(':')[1]}`
     }
 
     pointsFind(result, table) {
@@ -96,30 +120,39 @@ class MyCompetitionSection6Page3 extends BaseElement {
         if (isPushUpValid(target.value)) {
             let a = this.parent.sportsDiscipline1.ageGroups.find( item => item.ageGroup._id === this.item.ageGroup._id)
             let b = a.sportsDisciplineComponents.find( item => item.group.name === "Силовая гимнастика")
-            this.$id("points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
-            this.$id("points").fire('input')
+            this.$id("strengthTraining.points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
+            this.$id("strengthTraining.points").fire('input')
         }
         else {
-            this.$id("points").value = ''
-            this.$id("points").fire('input')
+            this.$id("strengthTraining.points").value = ''
+            this.$id("strengthTraining.points").fire('input')
         }
     }
 
     validateInput(e) {
-        let currentItem = e.target.currentObject ?? this.item.pushUps ?? {}
+        let id = e.target.id.split('.')
+
+        let currentItem = this.item
+
+        if (id.length === 1) {
+            id = id[0]
+        }
+        else {
+            currentItem = this.item[id[0]] ??= {}
+            id = id.at(-1)
+        }
         if (!this.oldValues.has(e.target)) {
-            this.item.pushUps ??= currentItem
-            if (currentItem[e.target.id] !== e.target.value) {
-                this.oldValues.set(e.target, currentItem[e.target.id])
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
             }
         }
         else if (this.oldValues.get(e.target) === e.target.value) {
                 this.oldValues.delete(e.target)
         }
 
-        currentItem[e.target.id] = e.target.value
+        currentItem[id] = e.target.value
 
-        if (e.target.id === "result")
+        if (id === "result")
         {
             this.setPoints(e.target)
         }
@@ -308,7 +341,7 @@ class MyCompetitionSection6Page3 extends BaseElement {
     }
 
     startEdit() {
-        let input = this.$id("result")
+        let input = this.$id("strengthTraining.result")
         input.focus()
         this.isModified = true
     }

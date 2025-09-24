@@ -741,8 +741,12 @@ class MyCompetitionSection2 extends BaseElement {
                 this.avatar = value;
                 this.avatarFile = null;
             } else {
-                const currentItem = key.currentObject ?? this.currentItem
-                currentItem[key.id] = value;
+                if (key.currentObject) {
+                    key.currentObject[key.id?.split('.').at(-1)] = value
+                }
+                else {
+                    this.currentItem[key.id] = value;
+                }
                 key.value = value;
             }
         });
