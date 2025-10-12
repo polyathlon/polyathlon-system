@@ -1,23 +1,18 @@
-import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
+import { BaseElement, html, css } from '../../js/base-element.mjs';
 
 import '../icon/icon.mjs'
 
-import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
-
 import styles from './input-css.mjs'
 
-customElements.define("gender-input", class GenderInput extends BaseElement {
+customElements.define("radio-group-input", class RadioGroupInput extends BaseElement {
     static get properties() {
         return {
             type: { type: String, default: 'text'},
             required: { type: Boolean, default: false},
             label: { type: String, default: '' },
-            _useInfo: { type: Boolean, default: false },
-            iconName: { type: String, default: '', attribute: 'icon-name'},
-            buttonName: { type: String, default: '', attribute: 'button-name' },
-            placeholder: { type: String, default: '' },
             value: { type: String, default: ''},
-            oldValue: { type: String, default: ''},
+            items: { type: Array, default: []},
+
         }
     }
 
@@ -52,17 +47,20 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
                 input {
                     appearance: none;
                     width: 1rem;
+                    height: 1rem;
                     aspect-ratio: 1;
-                    border: 2px solid white;
+                    border: 2px solid var(--form-input-color, white);
+                    border: 2px solid var(--form-background-color);
+                    outline: 1px solid var(--form-input-color, white);
                     border-radius: 50%;
                     cursor: pointer;
                     margin: 0;
                     transition: .3s easy-in;
                 }
-                
+
                 input:checked {
                     border-width: 8px;
-                    outline: -webkit-focus-ring-color auto 1px;
+                    background-color: var(--form-input-color, red);
                 }
             `
         ]
@@ -81,23 +79,16 @@ customElements.define("gender-input", class GenderInput extends BaseElement {
         this.fire('input')
     }
 
-    setChecked(gender) {
-        const input = this.renderRoot.getElementById(gender);
-        if (!input) {
-            if (this.value)
-                return this.value == gender
-            return false
-        }
-        input.checked = this.value == gender
-        return input.checked;
-    }
 
     render() {
         return html`
             <fieldset class="fieldset">
-                ${this.label ? this.#legend : ''}
-                <label><input type="radio" name="gender" ?checked=${this.setChecked("0")} id="0" value="0" @input=${this.changeValue}>${lang`Male`}</label>
-                <label><input type="radio" name="gender" ?checked=${this.setChecked("1")} id="1" value="1" @input=${this.changeValue}>${lang`Female`}</label>
+                ${ this.label ? this.#legend : '' }
+                ${ this.items?.map( (item, index) =>
+                    html`
+                        <label><input type="radio" name="group" ?checked=${item.checked} id=${index} value=${index} @input=${this.changeValue}>${item?.name}</label>
+                    `
+                )}
             </fieldset>
         `;
     }

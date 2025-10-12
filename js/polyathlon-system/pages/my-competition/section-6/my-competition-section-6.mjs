@@ -664,7 +664,28 @@ class MyCompetitionSection6 extends BaseElement {
         `
     }
 
+    cancelLot() {
+        this.isLot = false
+    }
+
+    async saveLot() {
+        await import( '../../../../../components/forms/lot-form.mjs')
+        this.renderRoot.querySelector("lot-form").open().then(() => this.lot()).catch(() => '');
+    }
+
+    get #lotItemFooter() {
+        return html`
+            <nav>
+                <simple-button @click=${this.saveLot}>${lang`Lot`}</simple-button>
+                <simple-button @click=${this.cancelLot}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
     get #addItemFooter() {
+        if (this.isLot) {
+            return this.#lotItemFooter
+        }
         return html`
             <nav class="buttons">
                 ${this.pages.map( (button, index) =>
@@ -701,6 +722,7 @@ class MyCompetitionSection6 extends BaseElement {
     render() {
         return html`
             <modal-dialog></modal-dialog>
+            <lot-form></lot-form>
             <header class="left-header">
                 <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
                 <p>

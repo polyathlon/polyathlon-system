@@ -13,14 +13,13 @@ class MyCompetitionSection6Lot1 extends BaseElement {
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
             sportsmenDataSource: { type: Object, default: null },
+            isChampionship: {type: Boolean, default: false},
         }
     }
     constructor() {
         super()
         this.columns = [[
-            { name: "shift", label: lang`Shift`, },
             { name: "shield", label: lang`Shield`, },
-            { name: "place", label: lang`Place`, },
             { name: "sportsman", label: lang`Sportsman`, },
             { name: "category", label: lang`Short sports category`, },
             { name: "birthday", label: lang`Birthday`, },
@@ -30,6 +29,16 @@ class MyCompetitionSection6Lot1 extends BaseElement {
             { name: "result", label: lang`Result`, },
             { name: "points", label: lang`Points`, },
         ]]
+        if (!this.parent?.championship) {
+            this.groups = [
+                { name: "ageGroup", label: item => item.ageGroup, title: lang`Age group` },
+            ]
+        }
+        else {
+            this.groups = [
+                { name: "gender", label: item => item.gender == true ? lang`Women` : lang`Men`, title: lang`Gender` },
+            ]
+        }
     }
 
     static get styles() {
@@ -222,6 +231,46 @@ class MyCompetitionSection6Lot1 extends BaseElement {
             return `${club?.name}, ${club?.city?.type?.shortName || ''} ${club?.city?.name}`
         return ''
     }
+
+    resultToValue(result) {
+        const parts = result.split(':')
+        const minutes = parts[1].split(',')
+        return (+parts[0] * 60 + +minutes[0]) * 10 + +minutes[1];
+    }
+
+    throwingResultToValue(result) {
+        let parts = result.split(',')
+        return +parts[0] * 100 + +parts[1];
+    }
+
+    sprintingResultToValue(result) {
+        let parts = result.split(',')
+        return +parts[0] * 10 + +parts[1];
+    }
+
+    getResult(a) {
+        if (a.result === '')
+            return ''
+        switch ( this.discipline) {
+            case 'shooting':
+            case 'pullUps':
+            case 'pushUps':
+            case 'jumping':
+                return +a.result
+            case 'swimming':
+            case 'running':
+            case 'skiing':
+            case 'rollerSkiing':
+                return -this.resultToValue(a.result)
+            case 'throwing':
+                return this.throwingResultToValue(a.result)
+            case 'sprinting':
+                return -this.sprintingResultToValue(a.result)
+            default:
+                return 0;
+        }
+    }
+
     update(changedProps) {
         super.update(changedProps);
         if (!changedProps) return;
@@ -235,26 +284,27 @@ class MyCompetitionSection6Lot1 extends BaseElement {
         if (changedProps.has('sportsmenDataSource')) {
             this.items = this.sportsmenDataSource.items.map(item => {
                 return {
-                    shift: item?.shooting?.shift ?? '',
-                    shield: item?.shooting?.shield ?? '',
-                    place: item.place ?? 0,
+                    _id: item?._id,
+                    shift: item?.[this.discipline]?.shift ?? '',
+                    shield: item?.[this.discipline]?.shield ?? '',
                     sportsman: this.sportsmanName(item),
                     gender: item.gender,
+                    ageGroup: item.ageGroup?.name,
+                    ageGroupOrder: item.ageGroup?.sortOrder,
                     birthday: new Date(item.birthday).toLocaleDateString(),
-                    category: item.category.shortName,
+                    category: item.category?.shortName,
                     // year: new Date(item.birthday).getFullYear(),
-                    region: item.region.shortName ?? item.region.name,
+                    region: item.region?.shortName ?? item.region?.name,
                     club: this.clubShowValue(item.club),
                     sportsNumber: item.sportsNumber,
-                    result: item.shooting?.result ?? 0,
-                    points: +(item.shooting?.points ?? 0)
+                    result: item?.[this.discipline]?.result ?? '',
+                    points: item?.[this.discipline]?.points ?? ''
                     /* + +(item.pushUps?.points ?? 0) + +(item.pullUps?.points ?? 0)
                       + +(item.swimming?.points ?? 0) + +(item.throwing?.points ?? 0) + +(item.sprinting?.points ?? 0) + +(item.running?.points ?? 0)
                       + +(item.skiing?.points ?? 0) + +(item.rollerSkiing?.points ?? 0)  + +(item.jumping?.points ?? 0),
                     */
                 }
-            }).sort((a, b) => +(a.gender) - b.gender || b.points - a.points).map((item, index) => {item.place = index + 1; return item});
-            this.groups = ['shift']
+            }).sort((a, b) => (!this.parent?.championship ? a.gender - b.gender || a.ageGroupOrder - b.ageGroupOrder : a.gender - b.gender) || b.shift - a.shift)
         }
     }
 
@@ -263,9 +313,13 @@ class MyCompetitionSection6Lot1 extends BaseElement {
             <!-- <simple-table-header .columns=${this.columns}></simple-table-header> -->
             <div class="table">
                 <!-- <simple-table @click=${this.tableClick} .hideHead=${true} .columns=${this.columns} .rows=${this.items}></simple-table> -->
-                <simple-table @click=${this.tableClick} .columns=${this.columns} .rows=${this.items} .groups=${this.groups}></simple-table>
+                <simple-table @click=${this.tableClick} @dblclick=${this.tableClick} .columns=${this.columns} .rows=${this.items} .groups=${this.groups}></simple-table>
             </div>
         `;
+    }
+
+    tableClick(e) {
+        console.log(e)
     }
 
     validateInput(e) {
@@ -302,7 +356,8 @@ class MyCompetitionSection6Lot1 extends BaseElement {
         }
         return ''
     }
-    pdfMethod(refereeDataSource) {
+
+    pdfMethod(refereeDataSet) {
     //     pdfMake.fonts = {
     //     // Courier: {
     //     //     normal: 'Courier',
@@ -330,12 +385,11 @@ class MyCompetitionSection6Lot1 extends BaseElement {
     //     // }
     // };
     // pdfMake.addFonts(fonts);
-    const mainReferee = refereeDataSource.items.find( item => item.position.name === "Главный судья");
-    const mainSecretary = refereeDataSource.items.find(item => item.position.name === "Главный секретарь");
-
+    const mainReferee = refereeDataSet.find( item => item.position.name === "Главный судья");
+    const mainSecretary = refereeDataSet.find(item => item.position.name === "Главный секретарь");
     const tableBody = [
         [
-            { text: 'Место', rowSpan: 2, fontSize: 10, fillColor: '#d7e1b9', alignment: "center", margin: [0, 0, 0, 0] },
+            { text: 'Щит', rowSpan: 2, fontSize: 10, fillColor: '#d7e1b9', alignment: "center", margin: [0, 0, 0, 0] },
             { text: 'Спортсмен', rowSpan: 2, fontSize: 10, fillColor: '#d7e1b9', alignment: "center", margin: [0, 5, 0, 0] },
             { text: 'Разряд', rowSpan: 2, fontSize: 10, fillColor: '#d7e1b9', alignment: "center", margin: [0, 5, 0, 0] },
             { text: 'Дата рожд.', rowSpan: 2, fontSize: 10, fillColor: '#d7e1b9', alignment: "center", margin: [0, 0, 0, 0] },
@@ -350,17 +404,37 @@ class MyCompetitionSection6Lot1 extends BaseElement {
         ].map(cell => ({ text: cell, fillColor: '#d7e1b9' })),
     ];
 
-    tableBody.push(...this.items.map((item, index) => ([
-        { text: item.place ?? index + 1, fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
-        { text: item.sportsman ?? '', fontSize: 10, margin: [0, 0, 0, 0] },
-        { text: item.category ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
-        { text: item.birthday ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
-        { text: item.region ?? '', fontSize: 10, margin: [0, 0, 0, 0] },
-        { text: item.club ?? '', fontSize: 10, margin: [0, 0, 0, 0] },
-        { text: item.sportsNumber ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
-        { text: item.result ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
-        { text: item.points ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
-    ])));
+    tableBody.push(...this.items.flatMap((item, index, rows) =>
+            index === 0 && this.groups?.length || (this.groups && item[this.groups[0].name] != rows[index-1][this.groups[0].name]) ? [
+            [
+                {text: this.groups[0].label instanceof Function ? this.groups[0].label(item) : this.groups[0].label ? item[this.groups[0].name] + ' ' + this.groups[0].label : this.groups[0].label, fontSize: 10, fillColor: '#d7e1b9', alignment: "center", margin: [0, 0, 0, 0], colSpan: 9},
+                {}, {}, {}, {}, {}, {}, {}, {},
+            ],
+            [
+                { text: item.shield ?? index + 1, fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+                { text: item.sportsman ?? '', fontSize: 10, margin: [0, 0, 0, 0] },
+                { text: item.category ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+                { text: item.birthday ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+                { text: item.region ?? '', fontSize: 10, margin: [0, 0, 0, 0] },
+                { text: item.club ?? '', fontSize: 10, margin: [0, 0, 0, 0] },
+                { text: item.sportsNumber ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+                { text: item.result ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+                { text: item.points ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+            ]
+        ]
+    :
+        [[
+            { text: item.place ?? index + 1, fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+            { text: item.sportsman ?? '', fontSize: 10, margin: [0, 0, 0, 0] },
+            { text: item.category ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+            { text: item.birthday ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+            { text: item.region ?? '', fontSize: 10, margin: [0, 0, 0, 0] },
+            { text: item.club ?? '', fontSize: 10, margin: [0, 0, 0, 0] },
+            { text: item.sportsNumber ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+            { text: item.result ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+            { text: item.points ?? '', fontSize: 10, alignment: 'center', margin: [0, 0, 0, 0] },
+        ]]
+        ));
 
     const dot = 2.835;
 
@@ -488,7 +562,6 @@ class MyCompetitionSection6Lot1 extends BaseElement {
             },
         ]
     };
-
     pdfMake.createPdf(docInfo).open();
 }
 

@@ -99,8 +99,8 @@ export default class DataSource {
 
     filter(date, status, type) {
         const currentDate = new Date(date)
-        const competitionTypeFilter = this.competitionTypeFilter(type.name)
-        const competitionStatusFilter = this.competitionStatusFilter(status.name, currentDate)
+        const competitionTypeFilter = this.competitionTypeFilter(type?.name ?? '--Наименование--')
+        const competitionStatusFilter = this.competitionStatusFilter(status?.name ?? '--Статус--', currentDate)
         this.items = this.dataSet.filter ( item =>
             competitionTypeFilter(item) && competitionStatusFilter(item)
         )

@@ -1015,6 +1015,54 @@ const dictionary = {
         "ru-RU": 'Заявки',
         "en-EN": 'Registration requests'
     },
+    'Lot': {
+        "ru-RU": 'Жеребьевка',
+        "en-EN": 'Lot'
+    },
+    'Shooting initial shift': {
+        "ru-RU": 'Начальная смена',
+        "en-EN": 'Initial shift'
+    },
+    'Number of shields': {
+        "ru-RU": 'Количество щитов',
+        "en-EN": 'Number of shields'
+    },
+    'Initial shield': {
+        "ru-RU": 'Начальный щит',
+        "en-EN": 'Initial shield'
+    },
+    'Start lot': {
+        "ru-RU": 'Начать',
+        "en-EN": 'Start lot'
+    },
+    'Parameters of lot': {
+        "ru-RU": 'Параметры жеребьевки',
+        "en-EN": 'Parameters of lot'
+    },
+    'End parameters': {
+        "ru-RU": 'Параметры окончания',
+        "en-EN": 'End parameters'
+    },
+    'Order of the lot': {
+        "ru-RU": 'Порядок жеребьевки',
+        "en-EN": 'Order of the lot'
+    },
+    'Best shield': {
+        "ru-RU": 'Лучший щит',
+        "en-EN": 'Best shield'
+    },
+    'Lot age groups': {
+        "ru-RU": 'Возрастные группы',
+        "en-EN": 'Lot аge groups'
+    },
+    'Shift start time': {
+        "ru-RU": 'Время начала смены',
+        "en-EN": 'Shift start time'
+    },
+    'Shift duration': {
+        "ru-RU": 'Продолжительность смены',
+        "en-EN": 'Shift duration'
+    },
 }
 
 //const language = navigator.language

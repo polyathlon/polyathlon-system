@@ -37,6 +37,7 @@ class MyCompetitionSection5 extends BaseElement {
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             parent: { type: Object, default: {} },
+            status: { type: Object, default: null},
         }
     }
 
@@ -524,11 +525,7 @@ class MyCompetitionSection5 extends BaseElement {
     // }
 
     get #page() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#page1())
-            case 1: return cache(this.#page2())
-            default: return cache(this.#page1())
-        }
+        return this.#page1()
     }
 
     #page1() {
@@ -575,7 +572,7 @@ class MyCompetitionSection5 extends BaseElement {
 
     #list1() {
         return html`
-            <my-competition-section-5-list-1 .item=${this}></my-competition-section-5-list-1>
+            <my-competition-section-5-list-1 .item=${this} .status=${this.status}></my-competition-section-5-list-1>
         `;
     }
 
@@ -679,46 +676,76 @@ class MyCompetitionSection5 extends BaseElement {
         return ''
     }
 
-    verified() {
+    async verified() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите рассмотреть эту заявку?')
+        if (modalResult !== 'Ok')
+            return
         this.currentItem.status = { name: 'Рассматривается' }
-        this.saveItem()
+        try {
+            await this.saveItem()
+        } catch (error) {
+            await this.errorDialog(error)
+            return
+        }
+        await this.showDialog('Заявка успешно принята к рассмотрению')
+        this.status = this.currentItem.status
     }
 
-    clock() {
+    async clock() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отложить эту заявку?')
+        if (modalResult !== 'Ok')
+            return
         this.currentItem.status = { name: 'Отложено' }
-        this.saveItem()
+        try {
+            await this.saveItem()
+        } catch (error) {
+            await this.errorDialog(error)
+            return
+        }
+        await this.showDialog('Заявка успешно отложена')
+        this.status = this.currentItem.status
     }
 
-    reject() {
+    async reject() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отклонить эту заявку?')
+        if (modalResult !== 'Ok')
+            return
         this.currentItem.status = { name: 'Отклонено' }
-        this.currentItem.active = false
-        this.saveItem()
+        try {
+            await this.saveItem()
+        } catch (error) {
+            await this.errorDialog(error)
+            return
+        }
+        await this.showDialog('Заявка успешно отклонена')
+        this.status = this.currentItem.status
     }
 
     async accept() {
-        this.currentItem.status = { name: 'Выполнено' }
-        this.currentItem.active = false
-        switch (this.currentPage) {
-            case 0:
-                await DataSet.addSportsmanProfile(this.currentItem)
-                break;
-            case 1:
-                await DataSet.addRefereeProfile(this.currentItem)
-                break;
-            case 2:
-                await DataSet.addTrainerProfile(this.currentItem)
-                break;
-            case 3:
-                await DataSet.addFederationMemberProfile(this.currentItem)
-                break;
+        const modalResult = await this.confirmDialog('Вы действительно хотите завершить эту заявку?')
+        if (modalResult !== 'Ok')
+            return
+        this.currentItem.status = { name: 'Завершено' }
+        try {
+            await this.saveItem()
+        } catch (error) {
+            await this.errorDialog(error)
+            return
         }
-        this.saveItem()
+        await this.showDialog('Заявка успешно завершена')
+        this.status = this.currentItem.status
     }
 
     async add() {
+        let modalResult = await this.confirmDialog('Вы действительно хотите зарегистрировать этого спортсмена на это соревнование?')
+        if (modalResult !== 'Ok')
+            return
         const newSportsman = Object.assign({}, this.currentItem.payload)
-        newSportsman.sportsmanUlid = this.currentItem.sportsman._id
+        newSportsman.sportsmanId = this.currentItem.sportsman._id
         CompetitionSportsmenDataSet.addItem(newSportsman)
+        modalResult = await this.confirmDialog('Спортсмен успешно зарегистрирован на соревновании. Завершить заявку?')
+        if (modalResult === 'Ok')
+            this.accept()
     }
 
     render() {
@@ -780,6 +807,10 @@ class MyCompetitionSection5 extends BaseElement {
 
     async confirmDialog(message) {
         return this.showDialog(message, 'confirm')
+    }
+
+    async errorDialog(message) {
+        return this.showDialog(message, 'error', 'Ошибка')
     }
 
     async addNewItem() {

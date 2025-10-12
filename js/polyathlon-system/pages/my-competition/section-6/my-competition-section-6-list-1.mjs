@@ -64,11 +64,11 @@ class MyCompetitionSection6List1 extends BaseElement {
             <modal-dialog></modal-dialog>
             ${this.item.dataSource?.items?.map((item, index) =>
                 html `<icon-button
-                        label=${this.sportsmanName(item)}
+                        label=${this.sportsmanName(item) + (item.category ? ' (' + item.category?.shortName + ')' : '')}
                         title=${item._id}
                         image-name=${item.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'sportsman-category-solid'} }
+                        .status=${ { name: item.region?.name || item.category?.name || item?._id, icon: 'region-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>                `
 

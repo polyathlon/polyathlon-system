@@ -9,7 +9,8 @@ class MyCompetitionSection5List1 extends BaseElement {
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
-            currentItem: {type: Object, default: null, local: true }
+            currentItem: {type: Object, default: null, local: true },
+            status: {type: Object, default: null},
         }
     }
 
@@ -43,7 +44,7 @@ class MyCompetitionSection5List1 extends BaseElement {
         ]
     }
 
-    fio(item) {
+    sportsmanName(item) {
         if (!item) {
             return item
         }
@@ -61,11 +62,11 @@ class MyCompetitionSection5List1 extends BaseElement {
         return html`
             ${this.item.dataSource?.items?.map((item, index) =>
                 html `<icon-button
-                        label=${this.fio(item.payload)}
+                        label=${this.sportsmanName(item.payload) + (item.payload?.category ? ' (' + item.payload?.category?.shortName + ')' : '')}
                         title=${item._id}
                         image-name=${item.payload.gender == true ? "images/sportsman-woman-solid.svg" : "images/sportsman-man-solid.svg"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.payload?.category?.name || item?._id, icon: 'sportsman-category-solid'} }
+                        .status=${ { name: item.status?.name || item.payload?.category?.name || item.payload?._id, icon: 'region-solid'} }
                         @click=${() => this.showItem(item)}
                     ></icon-button>                `
 

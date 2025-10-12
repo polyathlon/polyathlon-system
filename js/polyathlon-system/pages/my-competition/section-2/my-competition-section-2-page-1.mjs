@@ -42,6 +42,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
             item: {type: Object, default: null},
             isModified: {type: Boolean, default: false, local: true},
             oldValues: {type: Map, default: null},
+            parent: { type: Object, default: null },
         }
     }
 
@@ -63,6 +64,9 @@ class MyCompetitionSection2Page1 extends BaseElement {
                 .name-group {
                     display: flex;
                     gap: 10px;
+                }
+                simple-input[hidden] {
+                    display: none;
                 }
             `
         ]
@@ -174,15 +178,15 @@ class MyCompetitionSection2Page1 extends BaseElement {
                     <checkbox-input id="teamMember" label="${lang`Team member`}" .value=${this.item?.teamMember} .checked=${this.item?.teamMember} @input=${this.validateInput}></checkbox-input>
                 </groupbox-input>
                 <groupbox-input label="${lang`Expected results`}:">
-                    <simple-input id="shooting.preResult" label="${lang`Shooting`}:" icon-name="shooting-solid" .mask=${shootingMask} .value=${this.item?.shooting?.preResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="swimming.preResult" label="${lang`Swimming`}:" icon-name="swimming-solid" .mask=${swimmingMask} .value=${this.item?.swimming?.preResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="sprinting.preResult" label="${lang`Sprinting`}:" icon-name="sprinting-solid" .mask=${sprintMask} .value=${this.item?.sprinting?.preResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="throwing.preResult" label="${lang`Throwing`}:" icon-name="throwing-solid" .mask=${throwingMask} .value=${this.item?.throwing?.preResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="running.preResult" label="${lang`Running`}:" icon-name="running-solid" .mask=${runningMask} .value=${this.item?.running?.preResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="strengthTraining.preResult" label="${lang`Strength training`}:" icon-name=${this.item?.gender == true ? "push-ups-solid" : "pull-ups-solid"} .mask=${pushUpMask} .value=${this.item?.strengthTraining?.preResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="skiing.preResult" label="${lang`Skiing`}:" icon-name="skiing-solid" .mask=${skiingMask} .value=${this.item?.skiing?.preResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="rollerSkiing.preResult" label="${lang`Roller skiing`}:" icon-name="roller-skiing-solid" .mask=${rollerSkiingMask} .value=${this.item?.rollerSkiing?.preResult} @input=${this.validateInput}></simple-input>
-                    <simple-input id="jumping.preResult" label="${lang`Jumping`}:" icon-name="jumping-solid" .mask=${jumpingMask} .value=${this.item?.jumping?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="shooting.preResult" label="${lang`Shooting`}:" icon-name="shooting-solid" ?hidden=${!this.preResultVisible?.has('shooting-solid')} .mask=${shootingMask} .value=${this.item?.shooting?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="swimming.preResult" label="${lang`Swimming`}:" icon-name="swimming-solid" ?hidden=${!this.preResultVisible?.has('swimming-solid')} .mask=${swimmingMask} .value=${this.item?.swimming?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="sprinting.preResult" label="${lang`Sprinting`}:" icon-name="sprinting-solid" ?hidden=${!this.preResultVisible?.has('sprinting-solid')} .mask=${sprintMask} .value=${this.item?.sprinting?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="throwing.preResult" label="${lang`Throwing`}:" icon-name="throwing-solid" ?hidden=${!this.preResultVisible?.has('throwing-solid')} .mask=${throwingMask} .value=${this.item?.throwing?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="running.preResult" label="${lang`Running`}:" icon-name="running-solid" ?hidden=${!this.preResultVisible?.has('running-solid')} .mask=${runningMask} .value=${this.item?.running?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="strengthTraining.preResult" label="${lang`Strength training`}:" icon-name=${this.item?.gender == true ? "push-ups-solid" : "pull-ups-solid"} ?hidden=${!this.preResultVisible?.has('pull-ups-solid')} .mask=${pushUpMask} .value=${this.item?.strengthTraining?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="skiing.preResult" label="${lang`Skiing`}:" icon-name="skiing-solid" ?hidden=${!this.preResultVisible?.has('skiing-solid')} .mask=${skiingMask} .value=${this.item?.skiing?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="rollerSkiing.preResult" label="${lang`Roller skiing`}:" icon-name="roller-skiing-solid" ?hidden=${!this.preResultVisible?.has('roller-skiing-solid')} .mask=${rollerSkiingMask} .value=${this.item?.rollerSkiing?.preResult} @input=${this.validateInput}></simple-input>
+                    <simple-input id="jumping.preResult" label="${lang`Jumping`}:" icon-name="jumping-solid" ?hidden=${!this.preResultVisible?.has('jumping-solid')} .mask=${jumpingMask} .value=${this.item?.jumping?.preResult} @input=${this.validateInput}></simple-input>
                 </groupbox-input>
             </div>
         `;
@@ -377,6 +381,25 @@ class MyCompetitionSection2Page1 extends BaseElement {
         let input = this.$id("lastName")
         input.focus()
         this.isModified = true
+    }
+
+    setVisibility() {
+        if (!this.parent?.sportsDiscipline1)
+            return
+        this.preResultVisible = new Set()
+        this.parent?.sportsDiscipline1?.ageGroups?.forEach(ageGroup => {
+            ageGroup.sportsDisciplineComponents?.forEach(discipline => {
+                this.preResultVisible.add(discipline.group?.icon)
+            });
+        });
+    }
+
+    update(changedProps) {
+        super.update(changedProps);
+        if (!changedProps) return;
+        if (changedProps.has('parent')) {
+            this.setVisibility()
+        }
     }
 
     async firstUpdated() {

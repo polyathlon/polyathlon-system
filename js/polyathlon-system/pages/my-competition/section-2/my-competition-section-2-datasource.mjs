@@ -70,14 +70,14 @@ export default class DataSource {
         }
         // const categoryNames = ["МСМК", "МС", "КМС", "I", "II", "III", "I юн", "II юн", "II юн", "б/р"]
         team.forEach(athlete => {
-                if (athlete.gender == 0) {
-                    let category = categories.men.get(athlete.category.shortName) ?? 0
+                if (athlete?.gender == 0) {
+                    let category = categories.men.get(athlete.category?.shortName) ?? 0
                     category++
-                    categories.men.set(athlete.category.shortName, category)
+                    categories.men.set(athlete.category?.shortName, category)
                 } else {
-                    let category = categories.women.get(athlete.category.shortName) ?? 0
+                    let category = categories.women.get(athlete.category?.shortName) ?? 0
                     category++
-                    categories.women.set(athlete.category.shortName, category)
+                    categories.women.set(athlete.category?.shortName, category)
                 }
         })
         return categories;
@@ -92,7 +92,7 @@ export default class DataSource {
         }
         this.items.forEach(athlete => {
             const column = categories.columns.indexOf(athlete.gender == 0 ? 'Мужчины' : 'Женщины')
-            const index = categories.indexes.indexOf(athlete.category.shortName)
+            const index = categories.indexes.indexOf(athlete.category?.shortName)
             categories.rows[index][column]++
         })
         categories.rows.forEach(element => {
@@ -195,10 +195,10 @@ export default class DataSource {
     getTeamResults() {
         const teams = new Map()
         this.items.forEach(item => {
-            const team = teams.get(item.region._id) ?? []
+            const team = teams.get(item.region?._id) ?? []
             team.push(item)
             if (team.length === 1) {
-                teams.set(item.region._id, team)
+                teams.set(item.region?._id, team)
             }
         })
         const result = Array.from(teams.values(), team => ({
@@ -215,10 +215,10 @@ export default class DataSource {
     getClubResults() {
         const teams = new Map()
         this.items.forEach(item => {
-            const team = teams.get(item.club._id) ?? []
+            const team = teams.get(item.club?._id) ?? []
             team.push(item)
             if (team.length === 1) {
-                teams.set(item.club._id, team)
+                teams.set(item.club?._id, team)
             }
         })
         const result = Array.from(teams.values(), team => ({
