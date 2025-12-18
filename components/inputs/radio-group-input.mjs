@@ -29,8 +29,8 @@ customElements.define("radio-group-input", class RadioGroupInput extends BaseEle
                 }
                 fieldset {
                     display: flex;
-                    justify-content: space-evenly;
-                    align-items: center;
+                    flex-direction: column;
+                    align-items: flex-start;
                     flex-wrap: wrap;
                 }
 
@@ -49,7 +49,6 @@ customElements.define("radio-group-input", class RadioGroupInput extends BaseEle
                     width: 1rem;
                     height: 1rem;
                     aspect-ratio: 1;
-                    border: 2px solid var(--form-input-color, white);
                     border: 2px solid var(--form-background-color);
                     outline: 1px solid var(--form-input-color, white);
                     border-radius: 50%;
@@ -59,7 +58,6 @@ customElements.define("radio-group-input", class RadioGroupInput extends BaseEle
                 }
 
                 input:checked {
-                    border-width: 8px;
                     background-color: var(--form-input-color, red);
                 }
             `
@@ -86,7 +84,7 @@ customElements.define("radio-group-input", class RadioGroupInput extends BaseEle
                 ${ this.label ? this.#legend : '' }
                 ${ this.items?.map( (item, index) =>
                     html`
-                        <label><input type="radio" name="group" ?checked=${item.checked} id=${index} value=${index} @input=${this.changeValue}>${item?.name}</label>
+                        <label><input type="radio" name="group" ?checked=${item.checked} value=${index} @input=${this.changeValue}>${item?.name}</label>
                     `
                 )}
             </fieldset>

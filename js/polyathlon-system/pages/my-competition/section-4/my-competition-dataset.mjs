@@ -1,6 +1,6 @@
 import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
-import {HOST} from "../../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -21,7 +21,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/competition`, {
+        return fetch(`https://${HOST}:${PORT}/api/competition`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -54,7 +54,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:4500/api/competition/${itemId}`)
+        return fetch(`https://${HOST}:${PORT}/api/competition/${itemId}`)
     }
 
     static async getItem(itemId) {
@@ -70,7 +70,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/competition`, {
+        return fetch(`https://${HOST}:${PORT}/api/competition`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -103,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/my-competition//${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/my-competition//${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -139,7 +139,7 @@ export default class DataSet {
     }
 
     static fetchUploadAvatar(token, formData, id) {
-        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/upload/avatar/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -165,7 +165,7 @@ export default class DataSet {
     }
 
     static fetchDownloadAvatar(id) {
-        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`)
+        return fetch(`https://${HOST}:${PORT}/api/upload/avatar/${id}`)
     }
 
     static async downloadAvatar(id) {
@@ -181,7 +181,7 @@ export default class DataSet {
     }
 
         static fetchDeleteAvatar(token, id) {
-        return fetch(`https://${HOST}:4500/api/upload/avatar/${id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/upload/avatar/${id}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -204,7 +204,7 @@ export default class DataSet {
     }
 
     static fetchCreateCompetitionId(token, item) {
-        return fetch(`https://${HOST}:4500/api/competition-id`, {
+        return fetch(`https://${HOST}:${PORT}/api/competition-id`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,

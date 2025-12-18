@@ -9,6 +9,8 @@ import '../../../../../components/inputs/avatar-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs';
 
+import { TELEGRAM_BOT_NAME } from '../../../polyathlon-system-config.mjs';
+
 import { isAuth, States } from '../../../../utils.js'
 
 import './my-profile-section-1-page-1.mjs'
@@ -404,11 +406,11 @@ class MyProfileSection1 extends BaseElement {
         const ulid = await DataSet.telegramToken()
         // window.open(`https://t.me/PolyathlonSystemBot?start=${token}`)
         // window.open(`https://t.me/system_polyathlon_bot?start=${token}`)
-        window.open(`https://t.me/PolyathlonCompetitionBot?start=${ulid}`)
+        window.open(`https://t.me/${TELEGRAM_BOT_NAME}?start=${ulid}`)
     }
 
     async telegramBot() {
-        window.open(`https://t.me/PolyathlonCompetitionBot`)
+        window.open(`https://t.me/${TELEGRAM_BOT_NAME}`)
     }
 
     // href="https://t.me/HTMLAcademyKeksobot?start=eyJib251c0lkIjoiYm9udXMxZGF5In0="

@@ -8,7 +8,7 @@ import '../../../../components/notifications/my-notification.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import {HOST} from "../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../polyathlon-system-config.mjs";
 
 class MyNotificationsSection1 extends BaseElement {
         static get properties() {
@@ -187,7 +187,7 @@ class MyNotificationsSection1 extends BaseElement {
                 const obj = {
                     offset: this.notificationCurrentOffset
                 }
-                return fetch(`https://${HOST}:4500/api/notification-offset`, {
+                return fetch(`https://${HOST}:${PORT}/api/notification-offset`, {
                     method: "PUT",
                     headers: {
                       'Authorization': `Bearer ${token}`,
@@ -323,7 +323,7 @@ pdfMake.createPdf(docInfo).open();
             token = await this.getToken();
             const projectId = this.currentProject._id;
             // const fileHandle = await window.getNewFileHandle();
-            fetch(`https://${HOST}:4500/api/download/${projectId}`, {
+            fetch(`https://${HOST}:${PORT}/api/download/${projectId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -433,7 +433,7 @@ pdfMake.createPdf(docInfo).open();
 
         async getNotificationList() {
             token = await this.getToken();
-            return fetch(`https://${HOST}:4500/api/notifications`, {
+            return fetch(`https://${HOST}:${PORT}/api/notifications`, {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -442,7 +442,7 @@ pdfMake.createPdf(docInfo).open();
             .then(response => {
                 if (response.status === 419){
                     return this.refreshToken(token).then( token =>
-                        fetch(`https://${HOST}:4500/api/notifications`, {
+                        fetch(`https://${HOST}:${PORT}/api/notifications`, {
                             headers: {
                             'Authorization': `Bearer ${token}`
                             }
@@ -474,7 +474,7 @@ pdfMake.createPdf(docInfo).open();
         }
 
         refreshToken(token) {
-            return fetch(`https://${HOST}:4500/api/refresh-token`, {
+            return fetch(`https://${HOST}:${PORT}/api/refresh-token`, {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json;charset=utf-8'
@@ -504,7 +504,7 @@ pdfMake.createPdf(docInfo).open();
         async addProject() {
             token = await this.getToken();
             const project = {name: "Новый проект"}
-            return fetch(`https://${HOST}:4500/api/project`, {
+            return fetch(`https://${HOST}:${PORT}/api/project`, {
                 method: "POST",
                 headers: {
                   'Authorization': `Bearer ${token}`,
@@ -529,7 +529,7 @@ pdfMake.createPdf(docInfo).open();
             token = await this.getToken();
             const result = await this.uploadFile();
             if (!result) return;
-            return fetch(`https://${HOST}:4500/api/project/${this.currentProject._id}`, {
+            return fetch(`https://${HOST}:${PORT}/api/project/${this.currentProject._id}`, {
                 method: "PUT",
                 headers: {
                   'Authorization': `Bearer ${token}`,
@@ -554,7 +554,7 @@ pdfMake.createPdf(docInfo).open();
             const formData = new FormData();
             const uploadInput = this.renderRoot?.querySelector('upload-input')
             formData.append("file", uploadInput.file);
-            return fetch(`https://${HOST}:4500/api/upload/project/${this.currentProject._id}`, {
+            return fetch(`https://${HOST}:${PORT}/api/upload/project/${this.currentProject._id}`, {
                 method: "POST",
                 headers: {
                   'Authorization': `Bearer ${token}`,
@@ -584,7 +584,7 @@ pdfMake.createPdf(docInfo).open();
                 console.error(err.message)
                 return
             }
-            return fetch(`https://${HOST}:4500/api/project/${this.currentProject._id}?rev=${this.currentProject._rev}`, {
+            return fetch(`https://${HOST}:${PORT}/api/project/${this.currentProject._id}?rev=${this.currentProject._rev}`, {
                 method: "DELETE",
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -603,7 +603,7 @@ pdfMake.createPdf(docInfo).open();
         }
 
         async deleteProjectFiles(token) {
-            return fetch(`https://${HOST}:4500/api/upload/${this.currentProject._id}`, {
+            return fetch(`https://${HOST}:${PORT}/api/upload/${this.currentProject._id}`, {
                 method: "DELETE",
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -656,7 +656,7 @@ pdfMake.createPdf(docInfo).open();
 
         async getProject(projectId) {
             token = await this.getToken();
-            return fetch(`https://${HOST}:4500/api/project/${projectId}`, {
+            return fetch(`https://${HOST}:${PORT}/api/project/${projectId}`, {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }

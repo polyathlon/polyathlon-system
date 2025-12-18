@@ -19,7 +19,7 @@ import '../auth/vk-auth.mjs';
 
 import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
 
-import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+import {HOST, PORT, GOOGLE_CLIENT_ID} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 
 import refreshToken, {getToken, saveAccessToken, saveExitToken} from "../../js/polyathlon-system/refresh-token.mjs";
 
@@ -75,7 +75,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         return html`
             <div id="form-background" class="form-background" style=${this.opened ? 'display: block' : ''}>
                 <modal-dialog></modal-dialog>
-                <form class="form animate" method="post" id="form">
+                <form class="form animate" method="post">
                     <div class="form-header">
                         <div class="form-tabs no-select">
                             <div class="form-tab" selected data-label=${lang`Sign in`}>${lang`Sign in`}</div>
@@ -102,8 +102,10 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
                             <div class="login-options">
                                 <div class="checkbox-remember">
-                                    <label for="remember">${lang`Remember me`}</label>
-                                    <input type="checkbox" id="remember" name="remember" @click=${this.rememberMe}>
+                                    <label>
+                                        ${lang`Remember me`}
+                                        <input type="checkbox" name="remember" @click=${this.rememberMe}>
+                                    </label>
                                 </div>
                                 <link-button @click=${this.forgotClick}>${lang`Forgot password?`}</link-button>
                             </div>
@@ -174,7 +176,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     //     //     state: params.get("state"),
     //     // }
 
-    //     const response = await fetch(`https://${HOST}:4500/api/sign-in-vk`, {
+    //     const response = await fetch(`https://${HOST}:${PORT}/api/sign-in-vk`, {
     //         method: 'POST',
     //         mode: 'cors',
     //         headers: {
@@ -195,7 +197,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
 
     static fetchGetVKToken() {
-        return fetch(`https://${HOST}:4500/api/sign-in-vk`, {
+        return fetch(`https://${HOST}:${PORT}/api/sign-in-vk`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -232,7 +234,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
 
     static fetchSendGoogleToken(token) {
-        return fetch(`https://${HOST}:4500/api/sign-in-google`, {
+        return fetch(`https://${HOST}:${PORT}/api/sign-in-google`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -267,7 +269,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
 
     createGoogleButton() {
         google.accounts.id.initialize({
-            client_id: '152529125992-h422kajfg36g0e9gptsu7auv090okqlv.apps.googleusercontent.com',
+            client_id: GOOGLE_CLIENT_ID,
             callback: res => this.sendGoogleToken(res)
         });
         google.accounts.id.renderButton(
@@ -294,7 +296,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     getCodeChallenge(obj) {
-        fetch(`https://${HOST}:4500/api/sign-in-vk`, {
+        fetch(`https://${HOST}:${PORT}/api/sign-in-vk`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
@@ -386,17 +388,17 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     get #rememberMe() {
-        return this.renderRoot?.querySelector('#remember')?.checked ?? null;
+        return this.renderRoot?.querySelector('.checkbox-remember input')?.checked ?? null;
     }
 
     set #rememberMe(value) {
-        if (this.renderRoot?.querySelector('#remember')) {
-            this.renderRoot.querySelector('#remember').checked = value;
+        if (this.renderRoot?.querySelector('.checkbox-remember input')) {
+            this.renderRoot.querySelector('.checkbox-remember input').checked = value;
         }
     }
 
     static fetchSendSimpleUser(user) {
-        return fetch(`https://${HOST}:4500/api/sign-in`, {
+        return fetch(`https://${HOST}:${PORT}/api/sign-in`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -430,7 +432,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     }
 
     static fetchSimpleUserInfo(token) {
-        return fetch(`https://${HOST}:4500/api/user`, {
+        return fetch(`https://${HOST}:${PORT}/api/user`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             },

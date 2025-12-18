@@ -1,6 +1,6 @@
 import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
-import {HOST} from "../../../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -21,7 +21,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/referee`, {
+        return fetch(`https://${HOST}:${PORT}/api/referee`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -54,7 +54,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:4500/api/referee/${itemId}`)
+        return fetch(`https://${HOST}:${PORT}/api/referee/${itemId}`)
     }
 
     static async getItem(itemId) {
@@ -70,7 +70,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/referee`, {
+        return fetch(`https://${HOST}:${PORT}/api/referee`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -103,7 +103,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/my-referee//${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/my-referee//${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -139,7 +139,7 @@ export default class DataSet {
     }
 
     static fetchUploadAvatar(token, formData, refereeId) {
-        return fetch(`https://${HOST}:4500/api/upload/referee/avatar/${refereeId}`, {
+        return fetch(`https://${HOST}:${PORT}/api/upload/referee/avatar/${refereeId}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -165,7 +165,7 @@ export default class DataSet {
     }
 
     static fetchDownloadAvatar(token, refereeId) {
-        return fetch(`https://${HOST}:4500/api/upload/referee/avatar/${refereeId}`, {
+        return fetch(`https://${HOST}:${PORT}/api/upload/referee/avatar/${refereeId}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,

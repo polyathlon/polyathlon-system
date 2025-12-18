@@ -1,6 +1,6 @@
 import refreshToken, {getToken} from "../../../refresh-token.mjs";
 
-import {HOST} from "../../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -21,7 +21,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch(`https://${HOST}:4500/api/profile-documents`, {
+        return fetch(`https://${HOST}:${PORT}/api/profile-documents`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -46,7 +46,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/profile-document`, {
+        return fetch(`https://${HOST}:${PORT}/api/profile-document`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -81,7 +81,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://${HOST}:4500/api/profile-document`, {
+        return fetch(`https://${HOST}:${PORT}/api/profile-document`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -107,7 +107,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/profile-document`, {
+        return fetch(`https://${HOST}:${PORT}/api/profile-document`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -140,7 +140,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/profile-document/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/profile-document/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -176,7 +176,7 @@ export default class DataSet {
     }
 
     static fetchUploadDocument(token, id, formData) {
-        return fetch(`https://${HOST}:4500/api/upload/document/${id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/upload/document/${id}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -202,7 +202,7 @@ export default class DataSet {
     }
 
     static fetchDownloadDocument(token, id) {
-        return fetch(`https://${HOST}:4500/api/upload/document/${id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/upload/document/${id}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,

@@ -1,6 +1,6 @@
 import refreshToken, {getToken} from "../../js/polyathlon-system/refresh-token.mjs";
 
-import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -21,7 +21,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems() {
-        return fetch(`https://${HOST}:4500/api/sportsmen`)
+        return fetch(`https://${HOST}:${PORT}/api/sportsmen`)
     }
 
     static async #getItems() {
@@ -37,7 +37,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/sportsman`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsman`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -70,7 +70,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:4500/api/sportsman/${itemId}`)
+        return fetch(`https://${HOST}:${PORT}/api/sportsman/${itemId}`)
     }
 
     static async getItem(itemId) {
@@ -85,7 +85,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/sportsman/${item._id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsman/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -118,7 +118,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/sportsman/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsman/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -149,7 +149,7 @@ export default class DataSet {
     }
 
     static fetchGetQRCode(token, data) {
-        return fetch(`https://${HOST}:4500/api/qr-code?${data}`)
+        return fetch(`https://${HOST}:${PORT}/api/qr-code?${data}`)
     }
 
     static async getQRCode(data) {

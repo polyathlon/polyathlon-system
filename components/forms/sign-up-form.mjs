@@ -1,6 +1,6 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
-import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 
 import { formStyles } from './form-css.mjs'
 
@@ -90,7 +90,7 @@ class SignUpForm extends BaseElement {
         return html`
             <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
                 <modal-dialog></modal-dialog>
-                <form class="form animate" method="post" id="form">
+                <form class="form animate" method="post">
                     <div class="form-header">
                         <div class="form-tabs no-select">
                             <div class="form-tab" selected data-label="Sign Up">${lang`Sign Up`}</div>
@@ -131,8 +131,10 @@ class SignUpForm extends BaseElement {
                         </simple-input>
                         <div class="sign-up-options">
                             <div class="checkbox-remember">
-                                <label for="remember"><b>${lang`Remember me`}</b></label>
-                                <input type="checkbox" id="remember" name="remember" @click=${this.RememberMe}>
+                                <label>
+                                    <b>${lang`Remember me`}</b>
+                                    <input type="checkbox" name="remember" @click=${this.RememberMe}>
+                                </label>
                             </div>
                         </div>
                         <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>${lang`Sign Up`}</form-button>
@@ -606,7 +608,7 @@ class SignUpForm extends BaseElement {
     }
 
     static fetchCheckUsername(user) {
-        return fetch(`https://${HOST}:4500/api/sign-up/check-username`, {
+        return fetch(`https://${HOST}:${PORT}/api/sign-up/check-username`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -626,7 +628,7 @@ class SignUpForm extends BaseElement {
     }
 
     static fetchCheckEmail(user) {
-        return fetch(`https://${HOST}:4500/api/sign-up/check-email`, {
+        return fetch(`https://${HOST}:${PORT}/api/sign-up/check-email`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -646,7 +648,7 @@ class SignUpForm extends BaseElement {
     }
 
     static fetchSendSimpleUser(user) {
-        return fetch(`https://${HOST}:4500/api/sign-up`, {
+        return fetch(`https://${HOST}:${PORT}/api/sign-up`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -675,7 +677,7 @@ class SignUpForm extends BaseElement {
 
 
     static fetchSimpleUserInfo(token) {
-        return fetch(`https://${HOST}:4500/api/user`, {
+        return fetch(`https://${HOST}:${PORT}/api/user`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             },
@@ -771,12 +773,12 @@ class SignUpForm extends BaseElement {
     }
 
     get #rememberMe() {
-        return this.renderRoot?.querySelector('#remember')?.checked ?? null;
+        return this.renderRoot?.querySelector('.checkbox-remember input')?.checked ?? null;
     }
 
     set #rememberMe(value) {
-        if (this.renderRoot?.querySelector('#remember')) {
-            this.renderRoot.querySelector('#remember').checked = value;
+        if (this.renderRoot?.querySelector('.checkbox-remember input')) {
+            this.renderRoot.querySelector('.checkbox-remember input').checked = value;
         }
     }
 

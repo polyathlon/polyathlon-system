@@ -1,6 +1,6 @@
 import refreshToken, {getToken} from "../../refresh-token.mjs";
 
-import {HOST} from "../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -20,7 +20,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems() {
-        return fetch(`https://${HOST}:4500/api/referees`)
+        return fetch(`https://${HOST}:${PORT}/api/referees`)
     }
 
     static async #getItems() {
@@ -36,7 +36,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/referee`, {
+        return fetch(`https://${HOST}:${PORT}/api/referee`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -70,7 +70,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:4500/api/referee/${itemId}`)
+        return fetch(`https://${HOST}:${PORT}/api/referee/${itemId}`)
     }
 
     static async getItem(itemId) {
@@ -85,7 +85,7 @@ export default class DataSet {
     }
 
     static #fetchGetItemByRefereePC(token, itemId) {
-        return fetch(`https://${HOST}:4500/api/referee-pc/${itemId}`, {
+        return fetch(`https://${HOST}:${PORT}/api/referee-pc/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -111,7 +111,7 @@ export default class DataSet {
     }
 
     static #fetchGetItemByLastName(token, itemId) {
-        return fetch(`https://${HOST}:4500/api/referee/last-name/${itemId}`, {
+        return fetch(`https://${HOST}:${PORT}/api/referee/last-name/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -137,7 +137,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/referee/${item._id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/referee/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -170,7 +170,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/referee/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/referee/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -206,7 +206,7 @@ export default class DataSet {
     }
 
     static fetchCreateRefereePC(token, item) {
-        return fetch(`https://${HOST}:4500/api/referee-pc`, {
+        return fetch(`https://${HOST}:${PORT}/api/referee-pc`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -232,7 +232,7 @@ export default class DataSet {
     }
 
     static fetchGetQRCode(token, data) {
-        return fetch(`https://${HOST}:4500/api/qr-code?data=${data}`, {
+        return fetch(`https://${HOST}:${PORT}/api/qr-code?data=${data}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,

@@ -668,9 +668,13 @@ class MyCompetitionSection6 extends BaseElement {
         this.isLot = false
     }
 
+    lot(result) {
+        console.log(result)
+    }
+
     async saveLot() {
         await import( '../../../../../components/forms/lot-form.mjs')
-        this.renderRoot.querySelector("lot-form").open().then(() => this.lot()).catch(() => '');
+        this.renderRoot.querySelector("lot-form").open().then( result => this.lot(result)).catch(() => '');
     }
 
     get #lotItemFooter() {

@@ -1,6 +1,6 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
-import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 
 customElements.define('vk-button', class VKButton extends BaseElement {
     static get properties() {
@@ -118,7 +118,7 @@ customElements.define('vk-button', class VKButton extends BaseElement {
     // }
 
     async getCodeChallenge() {
-      const response = await fetch(`https://${HOST}:4500/api/sign-in-vk/init`, {
+      const response = await fetch(`https://${HOST}:${PORT}/api/sign-in-vk/init`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json;charset=utf-8'

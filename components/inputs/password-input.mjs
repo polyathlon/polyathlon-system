@@ -126,7 +126,6 @@ customElements.define("password-input", class PasswordInput extends BaseElement 
             ${this.label ? this.#label : ''}
             <div class="input-group">
                 <input type=${this.type}
-                    id="input"
                     placeholder=${this.placeholder || nothing}
                     ${this.required ? 'required' : ''}
                     .value=${this.value || ''} @input=${this.changeValue} @change=${this.changeValue}>

@@ -1,6 +1,6 @@
 import refreshToken, {getToken} from "../../refresh-token.mjs";
 
-import {HOST} from "../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -20,7 +20,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems() {
-        return fetch(`https://${HOST}:4500/api/clubs`)
+        return fetch(`https://${HOST}:${PORT}/api/clubs`)
     }
 
     static async #getItems() {
@@ -36,7 +36,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/club`, {
+        return fetch(`https://${HOST}:${PORT}/api/club`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -69,7 +69,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:4500/api/club/${itemId}`)
+        return fetch(`https://${HOST}:${PORT}/api/club/${itemId}`)
     }
 
     static async getItem(itemId) {
@@ -85,7 +85,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/club/${item._id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/club/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -118,7 +118,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/club/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/club/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -41,7 +41,7 @@ class GameFindForm extends BaseElement {
             <modal-dialog></modal-dialog>
             <cancel-dialog></cancel-dialog>
             <close-dialog></close-dialog>
-            <form class="form animate" method="post" id="form">
+            <form class="form animate" method="post">
                 <div class="form-header">
                     <div class="form-tabs no-select">
                         <div class="form-tab" selected>

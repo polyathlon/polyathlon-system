@@ -6,7 +6,7 @@ import refreshToken, {getToken} from "../../js/polyathlon-system/refresh-token.m
 
 import '../dialogs/modal-dialog.mjs';
 
-import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 
 import '../inputs/simple-input.mjs';
 import '../inputs/email-input.mjs';
@@ -133,7 +133,7 @@ class PasswordRecoveryForm extends BaseElement {
         return html`
             <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
                 <modal-dialog></modal-dialog>
-                <form class="form animate" method="post" id="form">
+                <form class="form animate" method="post">
                     <div class="form-header">
                         <div class="form-tabs no-select">
                             <div class="form-tab" selected data-label="Password recovery">${lang`Password recovery`}</div>
@@ -636,7 +636,7 @@ class PasswordRecoveryForm extends BaseElement {
     }
 
     static fetchCheckUsername(user) {
-        return fetch(`https://${HOST}:4500/api/verify-email/email/${user}`, {
+        return fetch(`https://${HOST}:${PORT}/api/verify-email/email/${user}`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             }
@@ -655,7 +655,7 @@ class PasswordRecoveryForm extends BaseElement {
     }
 
     static fetchCheckEmail(user) {
-        return fetch(`https://${HOST}:4500/api/verify-email/check-email`, {
+        return fetch(`https://${HOST}:${PORT}/api/verify-email/check-email`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -675,7 +675,7 @@ class PasswordRecoveryForm extends BaseElement {
     }
 
     static fetchPasswordRecoveryRequest(user) {
-        return fetch(`https://${HOST}:4500/api/password-recovery/request`, {
+        return fetch(`https://${HOST}:${PORT}/api/password-recovery/request`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -726,7 +726,7 @@ class PasswordRecoveryForm extends BaseElement {
 
 
     static fetchPasswordRecovery(code, token) {
-        return fetch(`https://${HOST}:4500/api/password-recovery`, {
+        return fetch(`https://${HOST}:${PORT}/api/password-recovery`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,

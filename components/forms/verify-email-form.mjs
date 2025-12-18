@@ -1,6 +1,6 @@
 import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 
-import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 
 import { formStyles } from './form-css.mjs'
 
@@ -68,7 +68,7 @@ class VerifyEmailForm extends BaseElement {
         return html`
             <div id="form-background" class="form-background" style="${this.opened ? 'display: block' : ''}">
                 <modal-dialog></modal-dialog>
-                <form class="form animate" method="post" id="form">
+                <form class="form animate" method="post">
                     <div class="form-header">
                         <div class="form-tabs no-select">
                             <div class="form-tab" selected data-label="Verify Email">${lang`Verify Email`}</div>
@@ -110,7 +110,7 @@ class VerifyEmailForm extends BaseElement {
     }
 
     static #fetchVerifyEmailRequest(token) {
-        return fetch(`https://${HOST}:4500/api/verify-email`, {
+        return fetch(`https://${HOST}:${PORT}/api/verify-email`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json;charset=utf-8'
@@ -143,7 +143,7 @@ class VerifyEmailForm extends BaseElement {
     }
 
     static #fetchVerifyEmail(code, token) {
-        return fetch(`https://${HOST}:4500/api/verify-email`, {
+        return fetch(`https://${HOST}:${PORT}/api/verify-email`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,

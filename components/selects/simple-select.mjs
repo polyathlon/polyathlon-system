@@ -144,7 +144,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
         return html`
             ${this.label ? this.#label : ''}
             <div class="input-group">
-                <input id='input' autocomplete="off"
+                <input autocomplete="off"
                     type=${this.type}
                     placeholder=${this.placeholder || nothing}
                     ${this.required ? 'required' : ''}

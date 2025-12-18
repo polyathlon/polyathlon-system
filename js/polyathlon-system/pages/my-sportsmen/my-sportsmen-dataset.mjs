@@ -1,6 +1,6 @@
 import refreshToken, {getToken} from "../../refresh-token.mjs";
 
-import {HOST} from "../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet;
@@ -27,7 +27,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems() {
-        return fetch(`https://${HOST}:4500/api/sportsmen`)
+        return fetch(`https://${HOST}:${PORT}/api/sportsmen`)
     }
 
     static async #getItems() {
@@ -46,7 +46,7 @@ export default class DataSet {
     }
 
     static #fetchGetAllItems(token) {
-        return fetch(`https://${HOST}:4500/api/sportsmen/all`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsmen/all`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -74,7 +74,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/sportsman`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsman`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -126,7 +126,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:4500/api/sportsman/${itemId}`)
+        return fetch(`https://${HOST}:${PORT}/api/sportsman/${itemId}`)
     }
 
     static async getItem(itemId) {
@@ -141,7 +141,7 @@ export default class DataSet {
     }
 
     static #fetchGetItemBySportsmanPC(token, itemId) {
-        return fetch(`https://${HOST}:4500/api/sportsman-pc/${itemId}`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsman-pc/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -167,7 +167,7 @@ export default class DataSet {
     }
 
     static #fetchGetItemByLastName(token, itemId) {
-        return fetch(`https://${HOST}:4500/api/sportsman/last-name/${itemId}`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsman/last-name/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -193,7 +193,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/sportsman/${item._id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsman/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -226,7 +226,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/sportsman/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsman/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -262,7 +262,7 @@ export default class DataSet {
     }
 
     static fetchCreateSportsmanPC(token, item) {
-        return fetch(`https://${HOST}:4500/api/sportsman-pc`, {
+        return fetch(`https://${HOST}:${PORT}/api/sportsman-pc`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -288,7 +288,7 @@ export default class DataSet {
     }
 
     static fetchGetQRCode(token, data) {
-        return fetch(`https://${HOST}:4500/api/qr-code?data=${data}`, {
+        return fetch(`https://${HOST}:${PORT}/api/qr-code?data=${data}`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,

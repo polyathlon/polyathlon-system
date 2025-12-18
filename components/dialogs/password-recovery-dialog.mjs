@@ -6,7 +6,7 @@ import '../buttons/close-button.mjs';
 
 import lang from '../../js/polyathlon-system/polyathlon-dictionary.mjs'
 
-import {HOST} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../js/polyathlon-system/polyathlon-system-config.mjs";
 
 customElements.define('password-recovery-dialog', class PasswordRecoveryDialog extends BaseElement {
     static get properties() {
@@ -121,7 +121,7 @@ customElements.define('password-recovery-dialog', class PasswordRecoveryDialog e
     }
 
     static fetchRecoverPassword() {
-        return fetch(`https://${HOST}:4500/api/password-recovery/${this.token}`, {
+        return fetch(`https://${HOST}:${PORT}/api/password-recovery/${this.token}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'

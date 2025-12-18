@@ -3,8 +3,6 @@ import { BaseElement, html, css, nothing } from '../../js/base-element.mjs';
 import { formStyles } from './form-css.mjs'
 
 import '../dialogs/modal-dialog.mjs';
-import './sign-up-form.mjs';
-import './password-recovery-form.mjs';
 
 import '../inputs/simple-input.mjs';
 import '../inputs/radio-group-input.mjs';
@@ -22,6 +20,7 @@ customElements.define("lot-form", class LotForm extends BaseElement {
         return {
             version: { type: String, default: '1.0.0'},
             opened: { type: Boolean, default: false},
+            item: { type: Object, default: null},
         }
     }
 
@@ -36,6 +35,7 @@ customElements.define("lot-form", class LotForm extends BaseElement {
                 .form-footer {
                     display: flex;
                     justify-content: right;
+                    gap: 10px;
                 }
                 .name-group {
                     display: flex;
@@ -53,6 +53,7 @@ customElements.define("lot-form", class LotForm extends BaseElement {
     constructor() {
         super();
         this.version = "1.0.0";
+        this.oldValues = new Map();
         this.items1 = [
             { name: 'По разрядам', checked: true },
             { name: 'По текущим местам' },
@@ -78,13 +79,17 @@ customElements.define("lot-form", class LotForm extends BaseElement {
             { name: 'С учетом возрастных групп', checked: true },
             { name: 'Без учета возрастных групп' },
         ]
+
+        this.item = {
+
+        }
     }
 
     render() {
         return html`
             <div id="form-background" class="form-background" style=${this.opened ? 'display: block' : ''}>
                 <modal-dialog></modal-dialog>
-                <form class="form animate" method="post" id="form">
+                <form class="form animate" method="post">
                     <div class="form-header">
                         <div class="form-tabs no-select">
                             <div class="form-tab" selected data-label=${lang`Sign in`}>${lang`Lot`}</div>
@@ -95,35 +100,66 @@ customElements.define("lot-form", class LotForm extends BaseElement {
                     <div class="form-body">
                         <div id="db-tab-section" class="form-tab-section selected">
                             <div class="name-group">
-                                <simple-input id="initial.shift" label="${lang`Shooting initial shift`}:" icon-name="shift-solid" .value=${this.item?.shooting?.shift} @input=${this.validateInput}></simple-input>
-                                <simple-input id="count.shield" label="${lang`Number of shields`}:" icon-name="shield-solid" .value=${this.item?.shooting?.shield} @input=${this.validateInput}></simple-input>
-                                <simple-input id="initial.shield" label="${lang`Initial shield`}:" icon-name="shield-solid" .value=${this.item?.shooting?.shield} @input=${this.validateInput}></simple-input>
+                                <simple-input id="shift.initial" label="${lang`Shooting initial shift`}:" icon-name="shift-solid" .value=${this.item?.shift?.initial} @input=${this.validateInput}></simple-input>
+                                <simple-input id="shield.count" label="${lang`Number of shields`}:" icon-name="shield-solid" .value=${this.item?.shield?.count} @input=${this.validateInput}></simple-input>
+                                <simple-input id="shield.initial" label="${lang`Initial shield`}:" icon-name="shield-solid" .value=${this.item?.shield?.initial} @input=${this.validateInput}></simple-input>
                             </div>
                             <div class="name-group">
-                                <simple-input id="start.shift" label="${lang`Shift start time`}:" icon-name="clock-solid" .value=${this.item?.shooting?.start} @input=${this.validateInput}></simple-input>
-                                <simple-input id="duration.shield" label="${lang`Shift duration`}:" icon-name="hourglass-clock-solid" .value=${this.item?.shooting?.duration} @input=${this.validateInput}></simple-input>
+                                <simple-input id="shift.start" label="${lang`Shift start time`}:" icon-name="clock-solid" .value=${this.item?.shift?.start} @input=${this.validateInput}></simple-input>
+                                <simple-input id="shield.duration" label="${lang`Shift duration`}:" icon-name="hourglass-clock-solid" .value=${this.item?.shield?.duration} @input=${this.validateInput}></simple-input>
                             </div>
                             <div class="name-group">
-                                <radio-group-input label="${lang`Parameters of lot`}:" .items=${this.items1}></radio-group-input>
-                                <radio-group-input label="${lang`End parameters`}:" .items=${this.items2}></radio-group-input>
+                                <radio-group-input id="param1" label="${lang`Parameters of lot`}:" .items=${this.items1} @input=${this.validateInput}></radio-group-input>
+                                <radio-group-input id="param2" label="${lang`End parameters`}:" .items=${this.items2} @input=${this.validateInput}></radio-group-input>
                             </div>
                             <div class="name-group">
-                                <radio-group-input label="${lang`Order of the lot`}:" .items=${this.items3}></radio-group-input>
-                                <radio-group-input label="${lang`Best shield`}:" .items=${this.items4}></radio-group-input>
+                                <radio-group-input id="param3" label="${lang`Order of the lot`}:" .items=${this.items3} @input=${this.validateInput}></radio-group-input>
+                                <radio-group-input id="param4" label="${lang`Best shield`}:" .items=${this.items4} @input=${this.validateInput}></radio-group-input>
                             </div>
                             <div class="name-group">
-                                <radio-group-input label="${lang`Lot age groups`}:" .items=${this.items5}></radio-group-input>
+                                <radio-group-input id="param5" label="${lang`Lot age groups`}:" .items=${this.items5} @input=${this.validateInput}></radio-group-input>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-footer">
-                        <form-button @click=${this.sendSimpleUser}>${lang`Start lot`}</form-button>
+                        <form-button @click=${this.startLot}>${lang`Start lot`}</form-button>
                         <form-button @click=${this.sendSimpleUser}>${lang`Cancel`}</form-button>
                     </div>
                 </form>
             </div>
             `;
+    }
+
+    startLot() {
+        console.log(this.item)
+
+    }
+
+    validateInput(e) {
+        let id = e.target.id.split('.')
+
+        let currentItem = this.item
+
+        if (id.length === 1) {
+            id = id[0]
+        }
+        else {
+            currentItem = this.item[id[0]] ??= {}
+            id = id.at(-1)
+        }
+        if (!this.oldValues.has(e.target)) {
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
+            }
+        }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
+        }
+
+        currentItem[id] = e.target.value
+
+        this.isModified = this.oldValues.size !== 0;
     }
 
     open() {
@@ -138,7 +174,7 @@ customElements.define("lot-form", class LotForm extends BaseElement {
         this.opened = false
 
         if (modalResult == 'Ok')
-            this.resolveForm(modalResult)
+            this.resolveForm(this.item)
         else
             this.rejectFrom(modalResult)
     }

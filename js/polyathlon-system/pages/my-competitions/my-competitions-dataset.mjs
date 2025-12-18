@@ -1,6 +1,6 @@
 import refreshToken, {getToken} from "../../refresh-token.mjs";
 
-import {HOST} from "../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../polyathlon-system-config.mjs";
 
 export default class DataSet {
     static #dataSet
@@ -36,7 +36,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems() {
-        return fetch(`https://${HOST}:4500/api/competitions`)
+        return fetch(`https://${HOST}:${PORT}/api/competitions`)
     }
 
     static async #getItems() {
@@ -52,7 +52,7 @@ export default class DataSet {
     }
 
     static #fetchGetItemsByYear(token, year) {
-        return fetch(`https://${HOST}:4500/api/competitions/by-year/${year}`, {
+        return fetch(`https://${HOST}:${PORT}/api/competitions/by-year/${year}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -77,7 +77,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/competition`, {
+        return fetch(`https://${HOST}:${PORT}/api/competition`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -110,7 +110,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:4500/api/competition/${itemId}`)
+        return fetch(`https://${HOST}:${PORT}/api/competition/${itemId}`)
     }
 
     static async getItem(itemId) {
@@ -125,7 +125,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/competition/${item._id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/competition/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -158,7 +158,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:4500/api/competition/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/competition/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
