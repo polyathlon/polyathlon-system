@@ -203,8 +203,8 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        let regexp=/^.*(?=[А-яЁё])/
-        if (regexp.test(e.data)) {
+        let regex=/^.*(?=[А-яЁё])/
+        if (regex.test(e.data)) {
             this.isPasswordError = true
             this.isPasswordMessage = false
             this.isPasswordValid = false
@@ -213,7 +213,7 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        if (regexp.test(e.target.value)) {
+        if (regex.test(e.target.value)) {
             this.isPasswordError = true
             this.isPasswordMessage = false
             this.isPasswordValid = false
@@ -222,9 +222,9 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        regexp = /[a-zA-Z\d!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-]/
+        regex = /[a-zA-Z\d!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-]/
 
-        if (!regexp.test(e.data)) {
+        if (!regex.test(e.data)) {
             this.isPasswordError = true
             this.isPasswordMessage = false
             this.isPasswordValid = false
@@ -232,7 +232,7 @@ class SignUpForm extends BaseElement {
             this.passwordInfoMessage = `Использовать символ ${e.data} в пароле запрещено`
 		}
 
-        if (!regexp.test(e.target.value)) {
+        if (!regex.test(e.target.value)) {
             this.isPasswordError = true
             this.isPasswordMessage = false
             this.isPasswordValid = false
@@ -250,8 +250,8 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        regexp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&'()*+,^./\\:;<=>?[\]_`"{~}|-])(?=.{8,})/
-        if (!regexp.test(e.target.value)) {
+        regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&'()*+,^./\\:;<=>?[\]_`"{~}|-])(?=.{8,})/
+        if (!regex.test(e.target.value)) {
             this.isPasswordError = true
             this.isPasswordMessage = false
             this.isPasswordValid = false
@@ -279,8 +279,8 @@ class SignUpForm extends BaseElement {
             this.passwordInfoMessage = "Пароль не может быть пустым"
             return
         }
-        const regexp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&'()*+,^./\\:;<=>?[\]_`"{~}|-])(?=.{8,})/
-        if (!regexp.test(e.target.value)) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&'()*+,^./\\:;<=>?[\]_`"{~}|-])(?=.{8,})/
+        if (!regex.test(e.target.value)) {
             this.isPasswordError = true
             this.isPasswordMessage = false
             this.isPasswordValid = false
@@ -342,8 +342,8 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        let regexp=/^.*(?=[А-яЁё])/
-        if (regexp.test(e.data)) {
+        let regex=/^.*(?=[А-яЁё])/
+        if (regex.test(e.data)) {
             this.isLoginError = true
             this.isLoginMessage = false
             this.isLoginValid = false
@@ -352,7 +352,7 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        if (regexp.test(e.target.value)) {
+        if (regex.test(e.target.value)) {
             this.isLoginError = true
             this.isLoginMessage = false
             this.isLoginValid = false
@@ -370,9 +370,9 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        regexp = /(?=^.{6,16}$)^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$|^.+@.+\..+$/;
+        regex = /(?=^.{6,16}$)^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$|^.+@.+\..+$/;
 
-        if (!regexp.test(e.target.value)) {
+        if (!regex.test(e.target.value)) {
             this.loginErrorMessage = "Неправильное имя пользователя"
             this.isLoginMessage = false
             this.isLoginValid = false
@@ -397,8 +397,8 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        const regexp = /(?=^.{6,16}$)^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$|^.+@.+\..+$/;
-        if (!regexp.test(e.target.value)) {
+        const regex = /(?=^.{6,16}$)^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$|^.+@.+\..+$/;
+        if (!regex.test(e.target.value)) {
             this.loginErrorMessage = "Неправильное имя пользователя"
             this.loginInfoMessage = "Должно быть от 6 до 16 символов: a-Z 0-9 . _ - или E-mail"
             this.isLoginError = true
@@ -428,8 +428,8 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        const regexp = /^.+@.+\..+$/
-        if (!regexp.test(e.target.value)) {
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/
+        if (!regex.test(e.target.value)) {
             this.isEmailError = true
             this.isEmailValid = false
             this.emailErrorMessage = "Неправильный формат электронной почты"
@@ -449,9 +449,9 @@ class SignUpForm extends BaseElement {
             return
         }
 
-         const regexp = /^.+@.+\..+$/
+         const regex = /^.+@.+\..+$/
 
-         if (!regexp.test(e.target.value)) {
+         if (!regex.test(e.target.value)) {
             this.emailErrorMessage = "Неправильный формат электронной почты"
             this.emailInfoMessage = "email@example.com"
             this.isEmailError = true
@@ -510,9 +510,9 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        let regexp=/^.*(?=[А-яЁё])/
+        let regex=/^.*(?=[А-яЁё])/
 
-        if (regexp.test(this.#confirm)) {
+        if (regex.test(this.#confirm)) {
             this.isConfirmPasswordError = true
             this.isConfirmPasswordMessage = false
             this.isConfirmPasswordValid = false
@@ -521,9 +521,9 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        regexp = /[a-zA-Z\d!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-]/
+        regex = /[a-zA-Z\d!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-]/
 
-        if (!regexp.test(this.#confirm)) {
+        if (!regex.test(this.#confirm)) {
             this.isConfirmPasswordError = true
             this.isConfirmPasswordMessage = false
             this.isConfirmPasswordValid = false
@@ -557,8 +557,8 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        let regexp=/^.*(?=[А-яЁё])/
-        if (regexp.test(e.data)) {
+        let regex=/^.*(?=[А-яЁё])/
+        if (regex.test(e.data)) {
             this.isConfirmPasswordError = true
             this.isConfirmPasswordMessage = false
             this.isConfirmPasswordValid = false
@@ -567,7 +567,7 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        if (regexp.test(e.target.value)) {
+        if (regex.test(e.target.value)) {
             this.isConfirmPasswordError = true
             this.isConfirmPasswordMessage = false
             this.isConfirmPasswordValid = false
@@ -576,9 +576,9 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        regexp = /[a-zA-Z\d!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-]/
+        regex = /[a-zA-Z\d!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-]/
 
-        if (!regexp.test(e.data)) {
+        if (!regex.test(e.data)) {
             this.isConfirmPasswordError = true
             this.isConfirmPasswordMessage = false
             this.isConfirmPasswordValid = false
@@ -586,7 +586,7 @@ class SignUpForm extends BaseElement {
             this.confirmPasswordInfoMessage = `Использовать символ ${e.data} в пароле запрещено`
 		}
 
-        if (!regexp.test(e.target.value)) {
+        if (!regex.test(e.target.value)) {
             this.isConfirmPasswordError = true
             this.isConfirmPasswordMessage = false
             this.isConfirmPasswordValid = false
