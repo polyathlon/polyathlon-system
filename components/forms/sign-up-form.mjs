@@ -428,7 +428,7 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         if (!regex.test(e.target.value)) {
             this.isEmailError = true
             this.isEmailValid = false
@@ -449,7 +449,7 @@ class SignUpForm extends BaseElement {
             return
         }
 
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
         if (!regex.test(e.target.value)) {
             this.emailErrorMessage = "Неправильный формат электронной почты"
