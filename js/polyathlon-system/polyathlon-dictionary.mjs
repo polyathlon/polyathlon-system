@@ -647,13 +647,17 @@ const dictionary = {
         "ru-RU": 'Порядок сортировки',
         "en-EN": 'Sort order'
     },
-    'Verify Email': {
+    'Email verification': {
         "ru-RU": 'Подтверждение почты',
-        "en-EN": 'Verify Email'
+        "en-EN": 'Email verification'
     },
     'Verification code': {
         "ru-RU": 'Код подтверждения',
         "en-EN": 'Verification code'
+    },
+    'Verify Email': {
+        "ru-RU": 'Подтвердить почту',
+        "en-EN": 'Verify Email'
     },
     'City type name': {
         "ru-RU": 'Вид населенного пункта',
