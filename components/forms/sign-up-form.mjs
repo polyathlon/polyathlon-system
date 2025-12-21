@@ -133,8 +133,8 @@ class SignUpForm extends BaseElement {
                             <div class="checkbox-remember">
                                 <label>
                                     <b>${lang`Remember me`}</b>
-                                    <input type="checkbox" name="remember" @click=${this.RememberMe}>
                                 </label>
+                                <input type="checkbox" name="remember" @click=${this.RememberMe}>
                             </div>
                         </div>
                         <form-button ?disable=${!this.isEnable()} @click=${this.isEnable() ? this.sendSimpleUser : nothing}>${lang`Sign Up`}</form-button>
