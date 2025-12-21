@@ -458,34 +458,35 @@ class SignUpForm extends BaseElement {
             this.isEmailValid = false
             return
         }
-
-        const user = { email: e.target.value}
-        try {
-            await SignUpForm.checkEmail(user)
-            this.isEmailError = false
-            this.isEmailValid = true
-        } catch (e) {
-            if (e instanceof TypeError) {
-                e.message = "Нет доступа к серверу"
-            }
-            this.emailErrorMessage = e.message
-            if (e.message === 'Вы ошиблись в имени сервера электронной почты') {
-                this.emailInfoMessage = "Задайте правильное имя сервера"
-            }
-            else if (e.message === 'Неправильный формат электронной почты') {
-                this.emailInfoMessage = "Формат должен быть email@example.com"
-            } else if (e.message === 'Вы указали одноразовую электронную почту. Ай-я-яй') {
-                this.emailInfoMessage = "Задайте фактическую почту"
-            } else if (e.message === 'Нет mx записи для данной почты в DNS') {
-                this.emailInfoMessage = "Проверьте сервер Вашей электронной почты"
-            } else if (e.message === 'Такой электронной почты не существует') {
-                this.emailInfoMessage = "Вы указали несуществующую электронную почту"
-            } else if (e.message === 'Не могу проверить электронную почту') {
-                this.emailInfoMessage = "Что-то накрылось у разработчика. Пишите: polyathlon.system@gmail.com"
-            }
-            this.isEmailError = true
-            this.isEmailValid = false
-        }
+        this.isEmailError = false
+        this.isEmailValid = true
+        // const user = { email: e.target.value}
+        // try {
+        //     await SignUpForm.checkEmail(user)
+        //     this.isEmailError = false
+        //     this.isEmailValid = true
+        // } catch (e) {
+        //     if (e instanceof TypeError) {
+        //         e.message = "Нет доступа к серверу"
+        //     }
+        //     this.emailErrorMessage = e.message
+        //     if (e.message === 'Вы ошиблись в имени сервера электронной почты') {
+        //         this.emailInfoMessage = "Задайте правильное имя сервера"
+        //     }
+        //     else if (e.message === 'Неправильный формат электронной почты') {
+        //         this.emailInfoMessage = "Формат должен быть email@example.com"
+        //     } else if (e.message === 'Вы указали одноразовую электронную почту. Ай-я-яй') {
+        //         this.emailInfoMessage = "Задайте фактическую почту"
+        //     } else if (e.message === 'Нет mx записи для данной почты в DNS') {
+        //         this.emailInfoMessage = "Проверьте сервер Вашей электронной почты"
+        //     } else if (e.message === 'Такой электронной почты не существует') {
+        //         this.emailInfoMessage = "Вы указали несуществующую электронную почту"
+        //     } else if (e.message === 'Не могу проверить электронную почту') {
+        //         this.emailInfoMessage = "Что-то накрылось у разработчика. Пишите: polyathlon.system@gmail.com"
+        //     }
+        //     this.isEmailError = true
+        //     this.isEmailValid = false
+        // }
     }
 
     confirmPasswordCheck() {
