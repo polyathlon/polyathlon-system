@@ -71,6 +71,10 @@ const dictionary = {
         "ru-RU": 'Пароль',
         "en-EN": 'Password'
     },
+    'New password': {
+        "ru-RU": 'Новый пароль',
+        "en-EN": 'New password'
+    },
     'Remember me': {
         "ru-RU": 'Запомнить меня',
         "en-EN": 'Remember me'
@@ -996,7 +1000,7 @@ const dictionary = {
         "en-EN": 'Birth certificate date'
     },
     'Drag and drop file or browse': {
-        "ru-RU": 'Перетащите сюда файлы и щелкните по этой области',
+        "ru-RU": 'Перетащите сюда файлы или щелкните по этой области',
         "en-EN": 'Drag and drop file or browse'
     },
     'Strength training': {
