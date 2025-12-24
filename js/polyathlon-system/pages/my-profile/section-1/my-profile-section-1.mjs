@@ -386,7 +386,7 @@ class MyProfileSection1 extends BaseElement {
             <div class="label">
                 ${JSON.parse(this.#loginInfo).login}
             </div>
-            <fashion-button @click=${this.startTelegramBot}>Telegram Bot</fashion-button>
+            ${this.currentItem && !this.currentItem.telegramId ? html`<fashion-button @click=${this.startTelegramBot}>Telegram Bot</fashion-button>`: ''}
             <div class="statistic">
                 <statistic-button label="Projects" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
                 <statistic-button label="Sales" @click=${this.certificatesClick} max=${this.projectCount} duration="5000"></statistic-button>
@@ -404,8 +404,6 @@ class MyProfileSection1 extends BaseElement {
 
     async startTelegramBot() {
         const ulid = await DataSet.telegramToken()
-        // window.open(`https://t.me/PolyathlonSystemBot?start=${token}`)
-        // window.open(`https://t.me/system_polyathlon_bot?start=${token}`)
         window.open(`https://t.me/${TELEGRAM_BOT_NAME}?start=${ulid}`)
     }
 
