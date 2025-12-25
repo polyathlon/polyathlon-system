@@ -24,6 +24,7 @@ class MyFederationMemberSection2Page4 extends BaseElement {
             federationMemberPositionSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: { type: Object, default: null },
+            federationMemberDataSource: { type: Object, default: null },
             findDataSource: { type: Object, default: null },
             item: { type: Object, default: null },
             isModified: { type: Boolean, default: false, local: true },
@@ -58,12 +59,6 @@ class MyFederationMemberSection2Page4 extends BaseElement {
         ]
     }
 
-    federationMemberShowValue(item) {
-         if (item?.lastName) {
-            return item.lastName
-         }
-    }
-
     cityShowValue(item) {
         return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
     }
@@ -79,29 +74,89 @@ class MyFederationMemberSection2Page4 extends BaseElement {
         return { name: item?.region?.name ?? ''}
     }
 
+
+    sportsmanListLabel(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName ?? ''
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        if (item.middleName) {
+            result += ` ${item.middleName}`
+        }
+        result += (item.position?.shortName ? ' (' + item.position.shortName + ')' : '')
+        return result
+    }
+
+    sportsmanListStatus(item) {
+        return { name: item?.region?.name }
+    }
+
+    sportsmanListIcon(item) {
+        return item?.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"
+    }
+
+    federationMemberShowValue(item) {
+        if (!item) {
+            return item
+        }
+        if (typeof item === 'string') {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        if (item.middleName) {
+            result += ` ${item.middleName}`
+        }
+        result += (item.position ? ' (' + item.position.shortName + ')' : '')
+        return result
+    }
+
+    federationMemberListLabel(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName
+        if (item.firstName) {
+            result += ` ${item.firstName}`
+        }
+        if (item.middleName) {
+            result += ` ${item.middleName}`
+        }
+        result += (item.position ? ' (' + item.position.shortName + ')' : '')
+        return result
+    }
+
+    federationMemberListStatus(item) {
+        return { name: item?.region?.name }
+    }
+
     federationMemberListIcon(item) {
-        return item.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"
+        return item?.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"
+    }
+
+    federationMemberIcon(item) {
+        return item?.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"
     }
 
     render() {
         return html`
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.payload?.lastName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.payload?.lastName} .currentObject=${this.item?.payload} @input=${this.validateInput} .listLabel=${this.sportsmanListLabel} .listIcon=${this.sportsmanListIcon} .listStatus=${this.sportsmanListStatus} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findSportsman} @select-item=${this.sportsmanChoose}></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.payload?.firstName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                 </div>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.payload?.gender}" .currentObject=${this.item?.payload} @input=${this.validateInput}></gender-input>
-                <simple-select id="position" label="${lang`Position`}:" icon-name="federation-member-position-solid" @icon-click=${() => this.showPage('my-federation-member-position')} .dataSource=${this.federationMemberPositionDataSource} .value=${this.item?.payload?.position} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-select>
+                <simple-select id="position" label="${lang`Position`}:" icon-name="federation-member-position-solid" @icon-click=${() => this.showPage('my-federation-member-positions')} .dataSource=${this.federationMemberPositionDataSource} .value=${this.item?.payload?.position} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-select>
                 <simple-input id="federationMemberPC" label="${lang`Federation member PC`}:" icon-name="federation-member-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createFederationMemberPC} .value=${this.item?.payload?.federationMemberPC} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
-                <simple-input id="federationMember" label="${lang`Federation member`}:" .listIcon=${this.federationMemberListIcon} .dataSource=${this.findDataSource} icon-name=${this.item?.payload?.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .showValue=${this.federationMemberShowValue} .value=${this.item?.federationMember} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="federationMember" label="${lang`Federation member`}:" icon-name=${this.federationMemberIcon(this.item?.payload?.federationMember)} @icon-click=${() => this.showPage('my-federation-member')} .listStatus=${this.federationMemberListStatus} .dataSource=${this.federationMemberDataSource} .showValue=${this.federationMemberShowValue} button-name="user-magnifying-glass-solid" @button-click=${this.findFederationMember} .listLabel=${this.federationMemberListLabel} .listIcon=${this.federationMemberListIcon} .value=${this.item?.payload?.federationMember} .currentObject=${this.item?.payload} @input=${this.validateInput} @select-item=${this.federationMemberChoose}></simple-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-select>
-                <div class="name-group">
-                    <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .value=${this.item?.payload?.order?.number} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
-                    <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .value=${this.item?.payload?.order?.link} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
-                </div>
-                <simple-input id="personLink" label="${lang`Person link`}:" icon-name="user-link" @icon-click=${this.linkClick} .value=${this.item?.payload?.link} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -122,71 +177,70 @@ class MyFederationMemberSection2Page4 extends BaseElement {
         const value = target.value
         if (target.isShowList)
             target.isShowList = false
-        if (!value) {
-            const lastName = this.$id('lastName').value
-            if (!lastName) {
-                await this.errorDialog('Вы не задали фамилию для поиска')
-                return
-            }
-            sportsman = await FederationMembersDataset.getItemByLastName(lastName)
-            if (sportsman.rows.length === 0) {
-                this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
-                return
-            }
-            if (sportsman.rows.length >= 1) {
-                this.findDataSource = {}
-                this.findDataSource.items = sportsman.rows.map(item => item.doc)
-                target.isShowList = true
-                return
-            }
-            sportsman = sportsman.rows[0].doc
-        } else if (value.includes(":")) {
-            sportsman = await FederationMembersDataset.getItem(value)
-        } else if (target.value.includes("-")) {
-            sportsman = await FederationMembersDataset.getItemBySportsmanPC(value)
-            if (sportsman.rows.length === 0) {
-                this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
-                return
-            }
-            if (sportsman.rows.length > 1) {
-                this.parentNode.parentNode.host.showDialog('Найдено несколько спортсменов с таким ID')
-                return
-            }
-            sportsman = sportsman.rows[0].doc
-        } else {
-            sportsman = await FederationMembersDataset.getItemByLastName(value)
-            if (sportsman.rows.length >= 0) {
-                this.findDataSource = sportsman.rows
-            }
+
+        const lastName = this.$id('lastName').value
+        if (!lastName) {
+            await this.errorDialog('Вы не задали фамилию для поиска')
+            return
         }
-        if (sportsman) {
-            const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
-            inputs.forEach(input => {
-                if (input.id in sportsman) {
-                    input.setValue(sportsman[input.id])
-                }
-            })
-            // Object.assign(this.item, sportsman)
-            this.requestUpdate()
-        } else {
-            this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
+        sportsman = await FederationMembersDataset.getItemByLastName(lastName)
+        if (sportsman.rows.length === 0) {
+            this.parentNode.parentNode.host.showDialog('Такой представитель федерации не найден')
+            return
+        }
+        if (sportsman.rows.length >= 1) {
+            this.findDataSource = {}
+            this.findDataSource.items = sportsman.rows.map(item => item.doc)
+            target.isShowList = true
+            return
         }
     }
 
     sportsmanChoose(e) {
         let sportsman = e.detail
         if (sportsman) {
-            this.item.federationMember = sportsman
-            // this.$id('sportsman').setValue(sportsman)
-            // sportsman.sportsmanUlid = sportsman._id
-            // const inputs = this.$id()
-            // inputs.forEach(input => {
-            //     if (input.id in sportsman) {
-            //         input.setValue(sportsman[input.id])
-            //     }
-            // })
-            // //Object.assign(this.item, sportsman)
+            this.$id('federationMember').setValue(sportsman)
+            if (sportsman.federationMemberPC) {
+                this.$id('federationMemberPC').setValue(sportsman.federationMemberPC)
+            }
+            this.requestUpdate()
+        }
+    }
+
+    async findFederationMember(e) {
+        const target = e.target
+        let sportsman
+        const value = target.value
+        if (target.isShowList)
+            target.isShowList = false
+
+        // const lastName = this.$id('lastName').value
+        const lastName = value instanceof Object ? value.lastName : value ? value.split?.(' ')?.[0] : this.$id('lastName').value
+
+        if (!lastName) {
+            await this.errorDialog('Вы не задали фамилию тренера для поиска')
+            return
+        }
+        sportsman = await FederationMembersDataset.getItemByLastName(lastName)
+        if (sportsman.rows.length === 0) {
+            this.parentNode.parentNode.host.showDialog('Такой представитель федерации не найден')
+            return
+        }
+        if (sportsman.rows.length >= 1) {
+            this.federationMemberDataSource = {}
+            this.federationMemberDataSource.items = sportsman.rows.map(item => item.doc)
+            target.isShowList = true
+            return
+        }
+    }
+
+    federationMemberChoose(e) {
+        let sportsman = e.detail
+        if (sportsman) {
+            this.$id('federationMember').setValue(sportsman)
+            if (sportsman.federationMemberPC) {
+                this.$id('federationMemberPC').setValue(sportsman.federationMemberPC)
+            }
             this.requestUpdate()
         }
     }

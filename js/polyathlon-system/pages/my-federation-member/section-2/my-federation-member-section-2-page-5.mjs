@@ -133,7 +133,7 @@ class MyFederationMemberSection2Page5 extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         result += (item.category ? ' (' + item.category.shortName + ')' : '')
         return result
@@ -148,7 +148,7 @@ class MyFederationMemberSection2Page5 extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         result += (item.category ? ' (' + item.category.shortName + ')' : '')
         return result
@@ -253,13 +253,6 @@ class MyFederationMemberSection2Page5 extends BaseElement {
         let sportsman = e.detail
         if (sportsman) {
             this.$id('sportsman').setValue(sportsman)
-            const inputs = this.$id()
-            inputs.forEach(input => {
-                if (input.id in sportsman) {
-                    input.setValue(sportsman[input.id])
-                }
-            })
-            // //Object.assign(this.item, sportsman)
             this.requestUpdate()
         }
     }
@@ -280,7 +273,7 @@ class MyFederationMemberSection2Page5 extends BaseElement {
         }
         sportsman = await TrainerDataset.getItemByLastName(lastName)
         if (sportsman.rows.length === 0) {
-            this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
+            this.parentNode.parentNode.host.showDialog('Такой тренер не найден')
             return
         }
         if (sportsman.rows.length >= 1) {
@@ -288,21 +281,6 @@ class MyFederationMemberSection2Page5 extends BaseElement {
             this.trainerDataSource.items = sportsman.rows.map(item => item.doc)
             target.isShowList = true
             return
-        }
-        sportsman = sportsman.rows[0].doc
-
-        if (sportsman) {
-            const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
-            inputs.forEach(input => {
-                if (input.id in sportsman) {
-                    input.setValue(sportsman[input.id])
-                }
-            })
-            // Object.assign(this.item, sportsman)
-            this.requestUpdate()
-        } else {
-            this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
         }
     }
 

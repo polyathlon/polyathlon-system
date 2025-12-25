@@ -17,7 +17,7 @@ class MySportsmanSection1Page2 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            federationMemberCategoryDataSource: { type: Object, default: null },
+            federationMemberPositionDataSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: {type: Object, default: null},
             item: {type: Object, default: null},
