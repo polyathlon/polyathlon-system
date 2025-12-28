@@ -228,7 +228,6 @@ class MyFederationMembersSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
-            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Personal page`, click: () => this.gotoPersonalPage()},
             {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-referee', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-rotate-right-solid', page: 'my-referee', title: lang`Refresh`, click: () => this.refresh()},
@@ -680,6 +679,7 @@ class MyFederationMembersSection1 extends BaseElement {
                         ?selected=${this.currentItem === item}
                         .status=${ { name: item.position?.name || item?._id, icon: 'federation-member-position-solid'} }
                         @click=${() => this.showItem(item)}
+                        @dblclick=${this.gotoPersonalPage}
                     ></icon-button>
                 `
             )}

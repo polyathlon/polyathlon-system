@@ -214,7 +214,6 @@ class MyTrainersSection1 extends BaseElement {
         this.oldValues = new Map();
         this.buttons = [
             {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
-            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Personal page`, click: () => this.gotoPersonalPage()},
             {iconName: 'excel-import-solid', page: 'my-trainers', title: lang`Export to Excel`, click: () => this.ExportToExcel()},
             {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-trainers', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'pdf-make',  page: 'my-trainer-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
@@ -662,6 +661,7 @@ class MyTrainersSection1 extends BaseElement {
                         ?selected=${this.currentItem === item}
                         .status=${ { name: item.category?.name || item?._id, icon: 'trainer-category-solid'} }
                         @click=${() => this.showItem(item)}
+                        @dblclick=${this.gotoPersonalPage}
                     ></icon-button>
                 `
             )}

@@ -226,7 +226,6 @@ class MySportsmenSection1 extends BaseElement {
         ]
         this.buttons = [
             {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
-            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Personal page`, click: () => this.gotoPersonalPage()},
             {iconName: 'excel-import-solid', page: 'my-sportsmen', title: lang`Export to Excel`, click: () => this.exportToExcel()},
             {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-sportsmen', title: lang`Import from Excel`, click: this.ExcelFile},
             {iconName: 'arrow-rotate-right-solid', page: 'my-sportsmen', title: lang`Refresh`, click: () => this.refresh()},
@@ -655,6 +654,7 @@ class MySportsmenSection1 extends BaseElement {
                         ?selected=${ this.currentItem?._id === item.id }
                         .status=${{ name: item.value?.sportsmanId || item?.id, icon: 'id-number-solid'} }
                         @click=${() => this.showItem(item)}
+                        @dblclick=${this.gotoPersonalPage}
                     >
                     </icon-button>
                 `
@@ -673,6 +673,7 @@ class MySportsmenSection1 extends BaseElement {
                         ?selected=${ this.currentItem?._id === item.id }
                         .status=${ { name: item.value?.sportsmanId || item?.id, icon: 'id-number-solid'} }
                         @click=${() => this.showItem(item)}
+                        @dblclick=${this.gotoPersonalPage}
                     ></icon-button>
                 `
             )}

@@ -216,7 +216,6 @@ class MyRefereesSection1 extends BaseElement {
         this.buttons = [
             {iconName: 'referee-solid', page: 'my-referee-positions', title: lang`Referee positions`, click: () => this.showPage('my-referee-positions')},
             {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
-            {iconName: 'no-avatar', page: 'my-sportsmen', title: lang`Personal page`, click: () => this.gotoPersonalPage()},
             {iconName: 'excel-import-solid', page: 'my-referee', title: lang`Export to Excel`, click: () => this.exportToExcel()},
             {iconName: 'arrow-up-from-bracket-sharp-solid', page: 'my-referee', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'arrow-rotate-right-solid', page: 'my-referee', title: lang`Refresh`, click: () => this.refresh()},
@@ -666,6 +665,7 @@ class MyRefereesSection1 extends BaseElement {
                         ?selected=${this.currentItem === item}
                         .status=${ { name: item.category?.name || item?._id, icon: 'referee-category-solid'} }
                         @click=${() => this.showItem(item)}
+                        @dblclick=${this.gotoPersonalPage}
                     ></icon-button>
                 `
             )}
