@@ -83,7 +83,7 @@ export default class DataSet {
         return result
     }
 
-    static #fetchGetItemByTrainerPC(token, itemId) {
+    static #fetchGetItemByPersonalCode(token, itemId) {
         return fetch(`https://${HOST}:${PORT}/api/trainer-pc/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -91,14 +91,14 @@ export default class DataSet {
         })
     }
 
-    static async getItemByTrainerPC(itemId) {
+    static async getItemByPersonalCode(itemId) {
         let token = getToken();
 
-        let response = await DataSet.#fetchGetItemByTrainerPC(token, itemId)
+        let response = await DataSet.#fetchGetItemByPersonalCode(token, itemId)
 
         if (response.status === 419) {
             token = await refreshToken(token)
-            response = await DataSet.#fetchGetItemByTrainerPC(token, itemId)
+            response = await DataSet.#fetchGetItemByPersonalCode(token, itemId)
         }
 
         const result = await response.json()
@@ -204,7 +204,7 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchCreateTrainerPC(token, item) {
+    static fetchCreatePersonalCode(token, item) {
         return fetch(`https://${HOST}:${PORT}/api/trainer-pc`, {
             method: "POST",
             headers: {
@@ -215,13 +215,13 @@ export default class DataSet {
         })
     }
 
-    static async createTrainerPC(item) {
+    static async createPersonalCode(item) {
         let token = getToken();
-        let response = await DataSet.fetchCreateTrainerPC(token, item)
+        let response = await DataSet.fetchCreatePersonalCode(token, item)
 
         if (response.status === 419) {
             token = await refreshToken(token)
-            response = await DataSet.fetchCreateTrainerPC(token, item)
+            response = await DataSet.fetchCreatePersonalCode(token, item)
         }
         const result = await response.json()
         if (!response.ok) {

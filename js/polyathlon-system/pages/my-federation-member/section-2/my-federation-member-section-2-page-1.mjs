@@ -7,8 +7,6 @@ import '../../../../../components/inputs/birthday-input.mjs'
 
 import lang from '../../../polyathlon-dictionary.mjs'
 
-// import DataSet from './my-sportsmen-dataset.mjs'
-
 import SportsCategoryDataSource from '../../my-sports-categories/my-sports-categories-datasource.mjs'
 import SportsCategoryDataset from '../../my-sports-categories/my-sports-categories-dataset.mjs'
 
@@ -103,7 +101,7 @@ class MyFederationMemberSection2Page1 extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         result += (item.category?.shortName ? ' (' + item.category.shortName + ')' : '')
         return result
@@ -120,7 +118,7 @@ class MyFederationMemberSection2Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" @icon-click=${this.gotoSportsmanPage} .value=${this.item?.payload?.lastName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.payload?.lastName} .currentObject=${this.item?.payload} @input=${this.validateInput} .listLabel=${this.sportsmanListLabel} .listIcon=${this.sportsmanListIcon} .listStatus=${this.sportsmanListStatus} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findSportsman} @select-item=${this.sportsmanChoose}></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.payload?.firstName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.payload?.middleName} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
@@ -132,11 +130,6 @@ class MyFederationMemberSection2Page1 extends BaseElement {
                 <simple-input id="sportsman" label="${lang`Sportsman`}:" icon-name=${this.item?.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${this.gotoSportsmanPage} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .listLabel=${this.sportsmanListLabel} .listIcon=${this.sportsmanListIcon} .listStatus=${this.sportsmanListStatus} .showValue=${this.sportsmanShowValue} .value=${this.item?.sportsman} @input=${this.validateInput} @select-item=${this.sportsmanChoose}></simple-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.payload?.club} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-select>
-                <div class="name-group">
-                    <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .value=${this.item?.payload?.order?.number} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
-                    <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .value=${this.item?.payload?.order?.link} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
-                </div>
-                <simple-input id="personLink" label="${lang`Person link`}:" icon-name="user-link" @icon-click=${this.linkClick} .value=${this.item?.payload?.link} .currentObject=${this.item?.payload} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -151,12 +144,12 @@ class MyFederationMemberSection2Page1 extends BaseElement {
 
     async createSportsmanPC(e) {
         const target = e.target
-        // const spc = await DataSet.createSportsmanPC({
-        //     countryCode: this.item?.region?.country?.flag.toUpperCase(),
-        //     regionCode: this.item?.region?.code,
-        //     ulid: this.item?.profileUlid,
-        // })
-        target.setValue(spc);
+        const pc = await DataSet.createSportsmanPC({
+            countryCode: this.item?.region?.country?.flag.toUpperCase(),
+            regionCode: this.item?.region?.code,
+            ulid: this.item?.profileUlid,
+        })
+        target.setValue(pc);
     }
 
     async findSportsman(e) {
@@ -165,71 +158,33 @@ class MyFederationMemberSection2Page1 extends BaseElement {
         const value = target.value
         if (target.isShowList)
             target.isShowList = false
-        if (!value) {
-            const lastName = this.$id('lastName').value
-            if (!lastName) {
-                await this.errorDialog('Вы не задали фамилию для поиска')
-                return
-            }
-            sportsman = await SportsmenDataset.getItemByLastName(lastName)
-            if (sportsman.rows.length === 0) {
-                this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
-                return
-            }
-            if (sportsman.rows.length >= 1) {
-                this.findDataSource = {}
-                this.findDataSource.items = sportsman.rows.map(item => item.doc)
-                target.isShowList = true
-                return
-            }
-            sportsman = sportsman.rows[0].doc
-        } else if (value.includes(":")) {
-            sportsman = await SportsmenDataset.getItem(value)
-        } else if (target.value.includes("-")) {
-            sportsman = await SportsmenDataset.getItemBySportsmanPC(value)
-            if (sportsman.rows.length === 0) {
-                this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
-                return
-            }
-            if (sportsman.rows.length > 1) {
-                this.parentNode.parentNode.host.showDialog('Найдено несколько спортсменов с таким ID')
-                return
-            }
-            sportsman = sportsman.rows[0].doc
-        } else {
-            sportsman = await SportsmenDataset.getItemByLastName(value)
-            if (sportsman.rows.length >= 0) {
-                this.findDataSource = sportsman.rows
-            }
+        
+        const lastName = this.$id('lastName').value
+        if (!lastName) {
+            await this.errorDialog('Вы не задали фамилию для поиска')
+            return
         }
-        if (sportsman) {
-            const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
-            inputs.forEach(input => {
-                if (input.id in sportsman) {
-                    input.setValue(sportsman[input.id])
-                }
-            })
-            // Object.assign(this.item, sportsman)
-            this.requestUpdate()
-        } else {
+        sportsman = await SportsmenDataset.getItemByLastName(lastName)
+        if (sportsman.rows.length === 0) {
             this.parentNode.parentNode.host.showDialog('Такой спортсмен не найден')
+            return
+        }
+        if (sportsman.rows.length >= 1) {
+            this.findDataSource = {}
+            this.findDataSource.items = sportsman.rows.map(item => item.doc)
+            target.isShowList = true
+            return
         }
     }
 
     sportsmanChoose(e) {
         let sportsman = e.detail
         if (sportsman) {
-            this.item.sportsman = sportsman
-            // this.$id('sportsman').setValue(sportsman)
-            // sportsman.sportsmanUlid = sportsman._id
-            // const inputs = this.$id()
-            // inputs.forEach(input => {
-            //     if (input.id in sportsman) {
-            //         input.setValue(sportsman[input.id])
-            //     }
-            // })
-            // //Object.assign(this.item, sportsman)
+            this.$id('sportsman').setValue(sportsman)
+
+            if (sportsman.sportsmanPC) {
+                this.$id('sportsmanPC').setValue(sportsman.sportsmanPC)
+            }
             this.requestUpdate()
         }
     }

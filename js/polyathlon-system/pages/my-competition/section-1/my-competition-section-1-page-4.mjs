@@ -213,11 +213,11 @@ class MyCompetitionSection1Page4 extends BaseElement {
     }
 
     gotoSportsmanPage() {
-        if (!this.item?.sportsmanUlid) {
+        if (!this.item?.sportsmanId) {
             return
         }
         location.hash = "#my-sportsman";
-        location.search = `?sportsman=${this.item?.sportsmanUlid.split(':')[1]}`
+        location.search = `?sportsman=${this.item?.sportsmanId.split(':')[1]}`
     }
 
     validateInput(e) {
@@ -330,7 +330,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
         }
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.sportsmanId = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
@@ -346,14 +346,14 @@ class MyCompetitionSection1Page4 extends BaseElement {
     sportsmanChoose(e) {
         let sportsman = e.detail
         if (sportsman) {
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.sportsmanId = sportsman._id
             const inputs = this.$id()
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
                 }
             })
-            this.item.sportsmanUlid = sportsman._id
+            this.item.sportsmanId = sportsman._id
             //Object.assign(this.item, sportsman)
             this.requestUpdate()
         }

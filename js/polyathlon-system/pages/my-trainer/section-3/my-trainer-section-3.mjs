@@ -393,7 +393,7 @@ class MyTrainerSection3 extends BaseElement {
     requestIcon(item) {
         switch (item.type) {
             case 5:
-                return item.payload?.gender === true ? "sportsman-woman-solid" : "sportsman-man-solid"
+                return item.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
             case 6:
                 return "club-solid"
             default:

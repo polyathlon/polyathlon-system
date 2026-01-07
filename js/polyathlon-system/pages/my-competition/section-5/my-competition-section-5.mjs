@@ -680,7 +680,7 @@ class MyCompetitionSection5 extends BaseElement {
         const modalResult = await this.confirmDialog('Вы действительно хотите рассмотреть эту заявку?')
         if (modalResult !== 'Ok')
             return
-        this.currentItem.status = { name: 'Рассматривается' }
+        this.currentItem.status = { name: 'В работе' }
         try {
             await this.saveItem()
         } catch (error) {
@@ -725,7 +725,7 @@ class MyCompetitionSection5 extends BaseElement {
         const modalResult = await this.confirmDialog('Вы действительно хотите завершить эту заявку?')
         if (modalResult !== 'Ok')
             return
-        this.currentItem.status = { name: 'Завершено' }
+        this.currentItem.status = { name: 'Выполнено' }
         try {
             await this.saveItem()
         } catch (error) {

@@ -80,7 +80,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .dataSource=${this.clubDataSource} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
                 <simple-select id="category" label="${lang`Sports category`}:" icon-name="sportsman-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <simple-input id="sportsmanUlid" label="${lang`Sportsman Ulid`}:" icon-name=${+this.item?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${() => this.showPage('my-sportsman')} .value=${this.item?.sportsmanUlid} @input=${this.validateInput}></simple-input>
+                <simple-input id="sportsmanId" label="${lang`Sportsman Ulid`}:" icon-name=${+this.item?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"} @icon-click=${() => this.showPage('my-sportsman')} .value=${this.item?.sportsmanId} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -167,7 +167,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
         }
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.sportsmanId = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
@@ -183,7 +183,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
     sportsmanChoose(e) {
         let sportsman = e.detail
         if (sportsman) {
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.sportsmanId = sportsman._id
             const inputs = this.$id()
             inputs.forEach(input => {
                 if (input.id in sportsman) {
@@ -249,7 +249,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
         this.sportsman = await Dataset.getSportsman()
         Object.assign(this.item, this.sportsman)
         if ("_id" in this.sportsman) {
-            this.item.sportsmanUlid = this.sportsman._id
+            this.item.sportsmanId = this.sportsman._id
         }
         delete this.item._id
         delete this.item._rev

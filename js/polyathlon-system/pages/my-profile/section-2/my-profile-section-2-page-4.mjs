@@ -101,9 +101,9 @@ class MyProfileSection2Page4 extends BaseElement {
         `;
     }
 
-    async createTrainerPC(e) {
+    async createPersonalCode(e) {
         const target = e.target
-        const id = await DataSet.createTrainerPC({
+        const id = await DataSet.createPersonalCode({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code,
             ulid: this.item?.profileUlid,

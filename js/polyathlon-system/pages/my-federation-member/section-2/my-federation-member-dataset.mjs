@@ -205,10 +205,10 @@ export default class DataSet {
 
     static async addSportsmanProfile(item) {
         let token = getToken()
-        let response = await DataSet.fetchAddSportsmanProfile(token, { sportsman: item.sportsman._id.split(':')[1], request: item._id })
+        let response = await DataSet.fetchAddSportsmanProfile(token, { sportsmanUlid: item.sportsman._id.split(':')[1], requestId: item._id })
         if (response.status === 419) {
             token = await refreshToken(token)
-            response = await DataSet.fetchAddSportsmanProfile(token, { sportsman: item.sportsman._id.split(':')[1], request: item._id })
+            response = await DataSet.fetchAddSportsmanProfile(token, { sportsmanUlid: item.sportsman._id.split(':')[1], requestId: item._id })
         }
         const result = await response.json()
         if (!response.ok) {
@@ -231,10 +231,10 @@ export default class DataSet {
 
     static async addFederationMemberProfile(item) {
         let token = getToken()
-        let response = await DataSet.fetchAddFederationMemberProfile(token, { federationMember: item.federationMember._id.split(':')[1], request: item._id })
+        let response = await DataSet.fetchAddFederationMemberProfile(token, { federationMemberUlid: item.federationMember._id.split(':')[1], request: item._id })
         if (response.status === 419) {
             token = await refreshToken(token)
-            response = await DataSet.fetchAddFederationMemberProfile(token, { federationMember: item.federationMember._id.split(':')[1], request: item._id })
+            response = await DataSet.fetchAddFederationMemberProfile(token, { federationMemberUlid: item.federationMember._id.split(':')[1], request: item._id })
         }
         const result = await response.json()
         if (!response.ok) {
@@ -257,10 +257,10 @@ export default class DataSet {
 
     static async addTrainerProfile(item) {
         let token = getToken()
-        let response = await DataSet.fetchAddTrainerProfile(token, { trainer: item.trainer._id.split(':')[1], request: item._id })
+        let response = await DataSet.fetchAddTrainerProfile(token, { trainerUlid: item.trainer._id.split(':')[1], requestId: item._id })
         if (response.status === 419) {
             token = await refreshToken(token)
-            response = await DataSet.fetchAddTrainerProfile(token, { trainer: item.trainer._id.split(':')[1], request: item._id })
+            response = await DataSet.fetchAddTrainerProfile(token, { trainerUlid: item.trainer._id.split(':')[1], requestId: item._id })
         }
         const result = await response.json()
         if (!response.ok) {
@@ -283,10 +283,10 @@ export default class DataSet {
 
     static async addRefereeProfile(item) {
         let token = getToken()
-        let response = await DataSet.fetchAddRefereeProfile(token, { referee: item.referee._id.split(':')[1], request: item._id })
+        let response = await DataSet.fetchAddRefereeProfile(token, { refereeUlid: item.referee._id.split(':')[1], requestId: item._id })
         if (response.status === 419) {
             token = await refreshToken(token)
-            response = await DataSet.fetchAddRefereeProfile(token, { referee: item.referee._id.split(':')[1], request: item._id })
+            response = await DataSet.fetchAddRefereeProfile(token, { refereeUlid: item.referee._id.split(':')[1], requestId: item._id })
         }
         const result = await response.json()
         if (!response.ok) {

@@ -197,7 +197,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
     }
 
     gotoSportsmanPage() {
-        if (!this.item?.sportsmanUlid) {
+        if (!this.item?.sportsmanId) {
             return
         }
         location.hash = "#my-sportsman";

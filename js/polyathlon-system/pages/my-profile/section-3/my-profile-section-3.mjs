@@ -483,7 +483,18 @@ class MyProfileSection3 extends BaseElement {
     }
 
     async saveNewItem() {
-        this.dataSource.saveNewItem(this.currentItem);
+        if (this.currentItem.filename instanceof File) {
+            let result = await DataSet.uploadDocument(this.currentItem.filename, this.pages[this.currentPage].id);
+            if (!result) return;
+            this.currentItem.filename = this.currentItem.filename.name
+        }
+
+        // await this.dataSource.saveItem(this.currentItem);
+        await this.dataSource.saveNewItem(this.currentItem);
+        this.oldValues.forEach( (value, key) => {
+            if (key.oldValue)
+                key.oldValue = null;
+        })
         this.oldValues?.clear();
         this.isModified = false;
     }

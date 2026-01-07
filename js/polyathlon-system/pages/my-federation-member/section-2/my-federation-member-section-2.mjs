@@ -250,7 +250,7 @@ class MyFederationMemberSection2 extends BaseElement {
         this.statusDataSet = new Map()
         this.currentPage = 0;
         this.listNames = [
-            {label: lang`Federation member`, iconName: ''},
+            {label: lang`Requests`, iconName: ''},
         ]
         this.oldValues = new Map();
         this.buttons = [
@@ -459,28 +459,28 @@ class MyFederationMemberSection2 extends BaseElement {
     }
 
     verified() {
-      this.currentItem.status = { name: 'Рассматривается' }
+      this.currentItem.status = { name: 'Принято в работу', type: 'verified' }
       this.saveItem()
     }
 
     cancel() {
-      this.currentItem.status = { name: 'Отказались' }
+      this.currentItem.status = { name: 'Передано другому', type: 'cancel' }
       this.saveItem()
     }
 
     clock() {
-      this.currentItem.status = { name: 'Отложено' }
+      this.currentItem.status = { name: 'Отложено', type: 'clock' }
       this.saveItem()
     }
 
     reject() {
-      this.currentItem.status = { name: 'Отклонено' }
+      this.currentItem.status = { name: 'Отклонено', type: 'reject' }
       this.currentItem.active = false
       this.saveItem()
     }
 
     async accept() {
-        this.currentItem.status = { name: 'Выполнено' }
+        this.currentItem.status = { name: 'Выполнено', type: 'accept' }
         this.currentItem.active = false
         switch (this.currentPage) {
             case 0:
@@ -561,7 +561,7 @@ class MyFederationMemberSection2 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${index === this.currentSection ? section.activeLabel || section.label: section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>

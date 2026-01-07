@@ -55,16 +55,42 @@ class MyFederationMemberSection2List1 extends BaseElement {
     requestIcon(item) {
         switch (item.type) {
             case 1:
-                return item.payload?.gender ? "sportsman-woman-solid" : "sportsman-man-solid"
+                return item.payload?.gender == true ? "sportsman-woman-solid" : "sportsman-man-solid"
             case 2:
-                return item.payload?.gender ? "referee-woman-solid" : "referee-man-solid"
+                return item.payload?.gender == true ? "referee-woman-solid" : "referee-man-solid"
             case 3:
-                return item.payload?.gender ? "trainer-woman-solid" : "trainer-man-solid"
+                return item.payload?.gender == true ? "trainer-woman-solid" : "trainer-man-solid"
             case 4:
-                return item.payload?.gender ? "federation-member-woman-solid" : "federation-member-man-solid"
+                return item.payload?.gender == true ? "federation-member-woman-solid" : "federation-member-man-solid"
             default:
                 return "sportsman-man-solid"
         }
+    }
+
+    personListLabel(item) {
+        if (!item) {
+            return item
+        }
+        let result = item.lastName ?? ''
+        if (item.firstName) {
+            result += ` ${item.firstName[0]}.`
+        }
+        if (item.middleName) {
+            result += `${item.middleName[0]}.`
+        }
+        return result
+    }
+
+    statusIcon(item) {
+        return item?.status?.type ? `${item?.status.type}-status-solid` : 'status1-solid'
+    }
+
+    statusName(item) {
+        return item?.name || 'Не определен'
+    }
+
+    clubListLabel(item) {
+        return item.name
     }
 
     render() {
@@ -72,11 +98,11 @@ class MyFederationMemberSection2List1 extends BaseElement {
             ${this.item?.items?.map((item, index) =>
                 html `
                     <icon-button
-                        label=${ item?.name }
-                        title=${ new Date(item?.date).toLocaleString() }
+                        label=${ item.type == 6 ? this.clubListLabel(item.payload) : this.personListLabel(item.payload) }
+                        title=${ item?.trackPC ? `№ ${item?.trackPC} от ${new Date(item?.date).toLocaleString()}` : new Date(item?.date).toLocaleString() }
                         icon-name=${ item?.icon || this.requestIcon(item)}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item?.status?.name || 'Не определен', icon: 'status1-solid'} }
+                        .status=${ {name: this.statusName(item), icon: this.statusIcon(item) }}
                         @click=${() => this.showItem(item)}
                     ></icon-button>
                 `

@@ -81,7 +81,7 @@ export default class DataSet {
     }
 
     static #fetchGetItem(token, itemId) {
-        return fetch(`https://${HOST}:${PORT}/api/profile-document`, {
+        return fetch(`https://${HOST}:${PORT}/api/profile-document?type=${itemId.split(":")[1]}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

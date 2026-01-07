@@ -236,7 +236,7 @@ class MyFederationMemberSection2Page5 extends BaseElement {
 
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.sportsmanId = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])

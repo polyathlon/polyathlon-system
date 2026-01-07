@@ -147,7 +147,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
               ${this.dataSource?.items?.map((item, index) =>
                   html `
                     <icon-button
-                        label=${this.listLabel?.(item) ??  this.fio(item) ?? item.name}
+                        label=${this.listLabel?.(item) ?? this.fio(item) ?? item.name}
                         title=${ item.sportsmanId || item?._id }
                         icon-name=${this.listIcon?.(item) ?? this.iconName}
                         image-name=${ item.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg" }

@@ -80,7 +80,7 @@ class MyTrainersSection1Page1 extends BaseElement {
                 <simple-select id="category" label="${lang`Category`}:" icon-name="trainer-category-solid" @icon-click=${() => this.showPage('my-trainer-categories')} .dataSource=${this.trainerCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
-                <simple-input id="trainerPC" label="${lang`Trainer PC`}:" icon-name="trainer-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createTrainerPC} .value=${this.item?.trainerPC} @input=${this.validateInput}></simple-input>
+                <simple-input id="trainerPC" label="${lang`Trainer PC`}:" icon-name="trainer-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createPersonalCode} .value=${this.item?.trainerPC} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
@@ -98,9 +98,9 @@ class MyTrainersSection1Page1 extends BaseElement {
         location.search = `?trainer=${this.item?._id.split(':')[1]}`
     }
 
-    async createTrainerPC(e) {
+    async createPersonalCode(e) {
         const target = e.target
-        const id = await DataSet.createTrainerPC({
+        const id = await DataSet.createPersonalCode({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code,
             ulid: this.item?.profileUlid,

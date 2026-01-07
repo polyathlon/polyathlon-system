@@ -133,7 +133,7 @@ class MyFederationMemberSection2Page6 extends BaseElement {
 
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.sportsmanId = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
@@ -211,7 +211,7 @@ class MyFederationMemberSection2Page6 extends BaseElement {
         if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'gender') {
             this.parentNode.parentNode.host.requestUpdate()
         }
-        
+
         if (e.target.id === 'region') {
             this.$id('city').setValue('')
             this.cityDataSource.regionFilter(currentItem.region?._id)

@@ -78,9 +78,9 @@ class MyTrainerSection3Page3 extends BaseElement {
             <div class="container">
                 <simple-input id="name" icon-name="club-solid" label="${lang`Club name`}:" .value=${this.item?.payload?.name} @input=${this.validateInput} @icon-click=${this.gotoSportsmanPage}></simple-input>
                 <simple-input id="fullName" icon-name="club-solid" label="${lang`Full name`}:" .value=${this.item?.payload?.fullName} @input=${this.validateInput}></simple-input>
-                <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="${lang`Region name`}:" .dataSource=${this.regionDataSource} .value=${this.item?.payload?.city?.region} @input=${this.regionChange}></simple-select>
-                <simple-select id="city" .showValue=${this.cityShowValue} .listStatus=${this.cityListStatus} .listLabel=${this.cityListLabel} icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="${lang`City name`}:" .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
                 <simple-select id="type" icon-name="club-type-solid" @icon-click=${() => this.showPage('my-club-types')} label="${lang`Club type name`}:" .dataSource=${this.clubTypesDataSource} .value=${this.item?.payload?.type} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.payload?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.payload?.city} @input=${this.validateInput}></simple-select>
             </div>
         `
     }
@@ -91,16 +91,6 @@ class MyTrainerSection3Page3 extends BaseElement {
         }
         location.hash = "#my-club";
         location.search = `?club=${this.item?.club?._id.split(':')[1]}`
-    }
-
-    async createRefereePC(e) {
-        const target = e.target
-        const id = await DataSet.createRefereePC({
-            countryCode: this.item?.region?.country?.flag.toUpperCase(),
-            regionCode: this.item?.region?.code,
-            ulid: this.item?.profileUlid,
-        })
-        target.setValue(id)
     }
 
     copyToClipboard(e) {
@@ -119,12 +109,6 @@ class MyTrainerSection3Page3 extends BaseElement {
 
     numberClick(e) {
         window.open(this.$id('order.link').value);
-    }
-
-    regionChange(e) {
-        let region = e.target.value
-        this.cityDataSource.regionFilter(region._id)
-        this.$id('city').setValue(null)
     }
 
     validateInput(e) {

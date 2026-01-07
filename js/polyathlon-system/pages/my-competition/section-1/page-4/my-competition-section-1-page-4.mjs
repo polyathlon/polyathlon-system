@@ -338,7 +338,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
         }
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.sportsmanUlid = sportsman._id
+            sportsman.sportsmanId = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
@@ -452,7 +452,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
         Object.assign(this.item.payload, this.item.sportsman)
 
         // if ("_id" in this.sportsman) {
-        //     this.item.sportsmanUlid = this.sportsman._id
+        //     this.item.sportsmanId = this.sportsman._id
         // }
         delete this.item.payload._id
         delete this.item.payload._rev

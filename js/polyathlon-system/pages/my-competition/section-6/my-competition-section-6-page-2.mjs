@@ -90,11 +90,11 @@ class MyCompetitionSection6Page2 extends BaseElement {
     }
 
     gotoSportsmanPage() {
-        if (!this.item?.sportsmanUlid) {
+        if (!this.item?.sportsmanId) {
             return
         }
         location.hash = "#my-sportsman";
-        location.search = `?sportsman=${this.item?.sportsmanUlid.split(':')[1]}`
+        location.search = `?sportsman=${this.item?.sportsmanId.split(':')[1]}`
     }
 
     pointsFind(result, table) {

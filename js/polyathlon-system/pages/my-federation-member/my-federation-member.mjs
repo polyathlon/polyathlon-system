@@ -30,7 +30,7 @@ class MyFederationMember extends BaseElement {
         this.version = "1.0.0";
         this.sections = [
             {name: "section1", label: lang`Member`, iconName: item => item?.gender == true ? 'federation-member-woman-solid': 'federation-member-man-solid'},
-            {name: "section2", label: lang`Requests`, iconName: 'registration-solid'},
+            {name: "section2", label: lang`Requests`, activeLabel: lang`Request`, iconName: 'registration-solid'},
         ]
     }
 

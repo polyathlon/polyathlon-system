@@ -494,21 +494,20 @@ class MyProfileSection1 extends BaseElement {
         switch (index) {
             case 1:
                 location.hash = "#my-sportsman";
-                location.search = `?sportsman=${this.sportsman.sportsman}`
+                location.search = `?sportsman=${this.sportsman.sportsmanUlid}`
                 break;
             case 2:
                 location.hash = "#my-referee";
-                location.search = `?referee=${this.referee.referee}`
+                location.search = `?referee=${this.referee.refereeUlid}`
                 break;
             case 3:
                 location.hash = "#my-trainer";
-                location.search = `?trainer=${this.trainer.trainer}`
+                location.search = `?trainer=${this.trainer.trainerUlid}`
                 break;
             case 4:
                 location.hash = "#my-federation-member";
-                location.search = `?federation-member=${this.federationMember.federationMember}`
+                location.search = `?federation-member=${this.federationMember.federationMemberUlid}`
                 break;
-
             default:
                 break;
         }

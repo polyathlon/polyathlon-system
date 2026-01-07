@@ -21,7 +21,8 @@ export default class DataSet {
     }
 
     static #fetchGetItems(token) {
-        return fetch(`https://${HOST}:${PORT}/api/trainer-requests`, {
+        const ulid = sessionStorage.getItem('trainer').split(':')[1]
+        return fetch(`https://${HOST}:${PORT}/api/trainer-requests?trainer=${ulid}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
