@@ -22,7 +22,7 @@ class PolyathlonSystemHeader extends BaseElement {
 
 
     get title() {
-        return 'Polyathlon System';
+        return 'Polyathlon Competition System';
     }
 
     static get styles() {
