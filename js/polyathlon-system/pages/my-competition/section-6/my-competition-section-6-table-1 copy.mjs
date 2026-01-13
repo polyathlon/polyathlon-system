@@ -244,10 +244,6 @@ class MyCompetitionSection6Table1 extends BaseElement {
                     sportsNumber: item.sportsNumber,
                     result: item.shooting?.result ?? 0,
                     points: +(item.shooting?.points ?? 0)
-                    /* + +(item.pushUps?.points ?? 0) + +(item.pullUps?.points ?? 0)
-                      + +(item.swimming?.points ?? 0) + +(item.throwing?.points ?? 0) + +(item.sprinting?.points ?? 0) + +(item.running?.points ?? 0)
-                      + +(item.skiing?.points ?? 0) + +(item.rollerSkiing?.points ?? 0)  + +(item.jumping?.points ?? 0),
-                    */
                 }
             }).sort((a, b) => +(a.gender) - b.gender || b.points - a.points).map((item, index) => {item.place = index + 1; return item});
         }

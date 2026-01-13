@@ -270,7 +270,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
 
     async showItem(index, itemId) {
         if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
                 await this.dataSource.saveItem(this.currentItem);
             }
@@ -312,7 +312,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         return result
     }
@@ -372,7 +372,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
         this.currentPage--;
     }
 
-    async confirmDialogShow(message) {
+    async confirmDialog(message) {
         return await this.renderRoot.querySelector('confirm-dialog').show(message);
     }
 
@@ -388,7 +388,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все сделанные изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
@@ -410,7 +410,7 @@ class MySportsmanRegistrationsSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этот проект?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)

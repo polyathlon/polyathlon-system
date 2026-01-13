@@ -392,7 +392,7 @@ class MyRefereePositionsSection1 extends BaseElement {
     }
 
     async cancelItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все сделанные изменения?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
             return
         this.oldValues.forEach( (value, key) => {
@@ -405,7 +405,7 @@ class MyRefereePositionsSection1 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этот проект?')
         if (modalResult !== 'Ok')
             return;
         this.dataSource.deleteItem(this.currentItem)

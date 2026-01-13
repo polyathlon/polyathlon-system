@@ -86,7 +86,7 @@ class MyFederationMemberSection2Page1 extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         result += (item?.category?.shortName ? ' (' + item.category.shortName + ')' : '')
         return result
@@ -158,7 +158,7 @@ class MyFederationMemberSection2Page1 extends BaseElement {
         const value = target.value
         if (target.isShowList)
             target.isShowList = false
-        
+
         const lastName = this.$id('lastName').value
         if (!lastName) {
             await this.errorDialog('Вы не задали фамилию для поиска')

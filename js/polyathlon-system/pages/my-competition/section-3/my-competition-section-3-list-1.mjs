@@ -67,6 +67,7 @@ class MyCompetitionSection3List1 extends BaseElement {
                         ?selected=${this.currentItem === item}
                         .status=${ { name: item.position?.name || item?._id, icon: 'referee-position-solid'} }
                         @click=${() => this.showItem(item)}
+                        @dblclick=${this.gotoPersonalPage}
                     ></icon-button>                `
 
             )}
@@ -75,7 +76,7 @@ class MyCompetitionSection3List1 extends BaseElement {
 
     async showItem(item) {
         if (this.isModified) {
-            const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
                 await this.item.dataSource.saveItem(this.currentItem);
             }
@@ -86,6 +87,11 @@ class MyCompetitionSection3List1 extends BaseElement {
         else {
             this.item.dataSource.setCurrentItem(item)
         }
+    }
+
+    gotoPersonalPage() {
+        location.hash = "#my-referee";
+        location.search = `?referee=${this.currentItem._id.split(':')[1]}`
     }
 
     // async firstUpdated() {

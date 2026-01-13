@@ -208,7 +208,7 @@ class MyNotificationsSection1 extends BaseElement {
         }
         async showProject(index, projectId) {
             if (this.isModified) {
-                const modalResult = await this.confirmDialogShow('Проект был изменен. Сохранить сделанные изменения?')
+                const modalResult = await this.confirmDialog('Проект был изменен. Сохранить сделанные изменения?')
                 if (modalResult === 'Ok')
                     this.saveProject().then(() => this.currentProject = this.dataSet[index]);
             }
@@ -427,7 +427,7 @@ pdfMake.createPdf(docInfo).open();
                 sessionStorage.getItem('accessUserToken')
         }
 
-        async confirmDialogShow(message) {
+        async confirmDialog(message) {
             return await this.renderRoot.querySelector('confirm-dialog').show(message);
         }
 
@@ -574,7 +574,7 @@ pdfMake.createPdf(docInfo).open();
         }
 
         async deleteProject() {
-            const modalResult = await this.confirmDialogShow('Вы действительно хотите удалить этот проект?')
+            const modalResult = await this.confirmDialog('Вы действительно хотите удалить этот проект?')
             if (modalResult !== 'Ok')
                 return;
             token = await this.getToken();
@@ -620,7 +620,7 @@ pdfMake.createPdf(docInfo).open();
 
 
         async cancelProject() {
-            const modalResult = await this.confirmDialogShow('Вы действительно хотите отменить все сделанные изменения?')
+            const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
             if (modalResult !== 'Ok')
                 return
             this.oldValues.forEach( (value, key) => {

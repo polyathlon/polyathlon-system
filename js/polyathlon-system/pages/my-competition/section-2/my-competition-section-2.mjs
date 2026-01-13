@@ -462,7 +462,7 @@ class MyCompetitionSection2 extends BaseElement {
 
     // async showItem(index, itemId) {
     //     if (this.isModified) {
-    //         const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+    //         const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
     //         if (modalResult === 'Ok') {
     //             await this.dataSource.saveItem(this.currentItem);
     //         }
@@ -498,7 +498,7 @@ class MyCompetitionSection2 extends BaseElement {
             result += ` ${item.firstName[0]}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         return result
     }
@@ -680,6 +680,10 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     async addNewItem() {
+        this.shadowRoot.querySelector('.right-layout').scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
         this.dataSource.addNewItem(this.currentItem);
         // const page = this.renderRoot.querySelector('my-sportsmen-section-2-page-1')
         // page.startEdit()

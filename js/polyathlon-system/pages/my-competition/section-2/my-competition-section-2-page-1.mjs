@@ -96,7 +96,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         result += (item.category?.shortName ? ' (' + item.category.shortName + ')' : '')
         return result
@@ -122,7 +122,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         result += (item.category ? ' (' + item.category.shortName + ')' : '')
         return result
@@ -137,7 +137,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         result += (item.category ? ' (' + item.category.shortName + ')' : '')
         return result
@@ -170,7 +170,9 @@ class MyCompetitionSection2Page1 extends BaseElement {
                 <simple-select id="category" label="${lang`Sports category`}:" icon-name="sportsman-category-solid" @icon-click=${() => this.showPage('my-sports-categories')} .dataSource=${this.sportsCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-input id="sportsmanPC" label="${lang`Sportsman PC`}:" .dataSource=${this.findDataSource} icon-name="sportsman-pc-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.sportsmanPC} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-input id="regionTeamNumber" label="${lang`Region team number`}:" icon-name="region-solid" .value=${this.item?.regionTeamNumber} @input=${this.validateInput}></simple-input>
                 <simple-select id="club" label="${lang`Club name`}:" icon-name="club-solid" @icon-click=${() => this.showPage('my-clubs')} .listStatus=${this.clubListStatus} .dataSource=${this.clubDataSource} .showValue=${this.clubShowValue} .listLabel=${this.clubListLabel} .value=${this.item?.club} @input=${this.validateInput}></simple-select>
+                <simple-input id="clubTeamNumber" label="${lang`Club team number`}:" icon-name="club-solid" .value=${this.item?.clubTeamNumber} @input=${this.validateInput}></simple-input>
                 <simple-select id="trainer" label="${lang`Trainer`}:" icon-name=${this.trainerIcon(this.item?.trainer)} @icon-click=${this.gotoTrainerPage} .listStatus=${this.trainerListStatus} .dataSource=${this.trainerDataSource} .showValue=${this.trainerShowValue} .listLabel=${this.trainerListLabel} .listIcon=${this.trainerListIcon} .value=${this.item?.trainer} @input=${this.validateInput}></simple-select>
                 <simple-input id="sportsNumber" label="${lang`Sports number`}:" icon-name="sports-number-solid" .value=${this.item?.sportsNumber} @input=${this.validateInput} lang="ru-Ru"></simple-input>
                 <groupbox-input label="${lang`National team member`}:">

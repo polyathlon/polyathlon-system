@@ -38,7 +38,7 @@ class MyCompetitionSection1 extends BaseElement {
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
-            currentPage: { type: BigInt, default: 0, local: true },
+            currentPage: { type: BigInt, default: 0 },
             isFirst: { type: Boolean, default: false },
             currentList: { type: BigInt, default: 0, local: true},
             avatar: {type: Object, default: null, local: true},
@@ -348,7 +348,7 @@ class MyCompetitionSection1 extends BaseElement {
 
     // async showItem(index, itemId) {
     //     if (this.isModified) {
-    //         const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+    //         const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
     //         if (modalResult === 'Ok') {
     //             await this.dataSource.saveItem(this.currentItem);
     //         }

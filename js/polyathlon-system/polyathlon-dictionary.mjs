@@ -1071,6 +1071,14 @@ const dictionary = {
         "ru-RU": 'Продолжительность смены',
         "en-EN": 'Shift duration'
     },
+    'Region team number': {
+        "ru-RU": 'Номер команды субъекта РФ',
+        "en-EN": 'Region team number'
+    },
+    'Club team number': {
+        "ru-RU": 'Номер команды клуба',
+        "en-EN": 'Club team number'
+    },
 }
 
 //const language = navigator.language

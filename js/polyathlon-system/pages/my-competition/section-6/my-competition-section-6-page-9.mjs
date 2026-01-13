@@ -100,7 +100,7 @@ class MyCompetitionSection6Page9 extends BaseElement {
         location.hash = "#my-sportsman";
         location.search = `?sportsman=${this.item?.sportsmanId.split(':')[1]}`
     }
-label="${lang`Start`}:"
+
     resultToValue(result) {
         const parts = result.split(':')
         const minutes = parts[1].split(',')
@@ -145,27 +145,36 @@ label="${lang`Start`}:"
     }
 
     validateInput(e) {
-        let currentItem = e.target.currentObject ?? this.item.rollerSkiing ?? {}
+        let id = e.target.id.split('.')
+
+        let currentItem = this.item
+
+        if (id.length === 1) {
+            id = id[0]
+        }
+        else {
+            currentItem = this.item[id[0]] ??= {}
+            id = id.at(-1)
+        }
         if (!this.oldValues.has(e.target)) {
-            this.item.rollerSkiing ??= currentItem
-            if (currentItem[e.target.id] !== e.target.value) {
-                this.oldValues.set(e.target, currentItem[e.target.id])
+            if (currentItem[id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[id])
             }
         }
         else if (this.oldValues.get(e.target) === e.target.value) {
                 this.oldValues.delete(e.target)
         }
 
-        currentItem[e.target.id] = e.target.value
+        currentItem[id] = e.target.value
 
-        if (e.target.id === "result")
+        if (id === "result")
         {
             this.setPoints(e.target)
         }
 
-        if (e.target.id === "start" || e.target.id === "finish")
+        if (id === "start" || id === "finish")
         {
-            this.setResult(e.target)
+            this.setResult()
         }
 
         this.isModified = this.oldValues.size !== 0;

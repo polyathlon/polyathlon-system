@@ -151,8 +151,7 @@ export default class DataSource {
         let gold = 0
         let silver = 0
         let bronze = 0
-        // let categories = new Map()
-        const sportDisciplines = ["shooting", "pullUps", "pushUps", "swimming", "throwing", "sprinting", "running", "skiing", "rollerSkiing", "jumping"]
+        const sportDisciplines = ["shooting", "strengthTraining", "swimming", "throwing", "sprinting", "running", "skiing", "rollerSkiing", "jumping"]
         team.forEach(athlete => {
             sportDisciplines.forEach(discipline => {
                 sum += +(athlete[discipline]?.points ?? 0)
@@ -175,7 +174,7 @@ export default class DataSource {
         let silver = 0
         let bronze = 0
         // let categories = new Map()
-        const sportDisciplines = ["shooting", "pullUps", "pushUps", "swimming", "throwing", "sprinting", "running", "skiing", "rollerSkiing", "jumping"]
+        const sportDisciplines = ["shooting", "strengthTraining", "swimming", "throwing", "sprinting", "running", "skiing", "rollerSkiing", "jumping"]
         team.forEach(athlete => {
             sportDisciplines.forEach(discipline => {
                 sum += +(athlete[discipline]?.points ?? 0)

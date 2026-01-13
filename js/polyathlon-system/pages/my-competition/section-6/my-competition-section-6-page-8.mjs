@@ -172,9 +172,9 @@ class MyCompetitionSection6Page8 extends BaseElement {
             this.setPoints(e.target)
         }
 
-        if (e.target.id === "start" || e.target.id === "finish")
+        if (id === "start" || id === "finish")
         {
-            this.setResult(e.target)
+            this.setResult()
         }
 
         this.isModified = this.oldValues.size !== 0;

@@ -49,9 +49,9 @@ class MyCitiesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="name" icon-name="city-solid" label="${lang`City name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
-                <simple-select id="type" @icon-click=${() => this.showPage('my-city-types')} icon-name="city-type-solid" label="${lang`City type`}:" .dataSource=${this.cityTypesDataSource} .value=${this.item?.type} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" @icon-click=${() => this.showPage('my-regions')} icon-name="region-solid" label="${lang`Region`}:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="type" @icon-click=${() => this.showPage('my-city-types')} icon-name="city-type-solid" label="${lang`City type`}:" .dataSource=${this.cityTypesDataSource} .value=${this.item?.type} @input=${this.validateInput}></simple-select>
+                <simple-input id="name" icon-name="city-solid" label="${lang`City name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }

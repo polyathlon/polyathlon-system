@@ -84,32 +84,6 @@ export default class DataSet {
         return result
     }
 
-    static #fetchGetItemByRefereePC(token, itemId) {
-        return fetch(`https://${HOST}:${PORT}/api/referee-pc/${itemId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    }
-
-    static async getItemByRefereePC(itemId) {
-        let token = getToken();
-
-        let response = await DataSet.#fetchGetItemByRefereePC(token, itemId)
-
-        if (response.status === 419) {
-            token = await refreshToken(token)
-            response = await DataSet.#fetchGetItemByRefereePC(token, itemId)
-        }
-
-        const result = await response.json()
-
-        if (!response.ok) {
-            throw new Error(result.error)
-        }
-        return result
-    }
-
     static #fetchGetItemByLastName(token, itemId) {
         return fetch(`https://${HOST}:${PORT}/api/referee/last-name/${itemId}`, {
             headers: {
@@ -228,7 +202,7 @@ export default class DataSet {
         if (!response.ok) {
             throw new Error(result.error)
         }
-        return result.number
+        return result.pc
     }
 
     static fetchGetQRCode(token, data) {

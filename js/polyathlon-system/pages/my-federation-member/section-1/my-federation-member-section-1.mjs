@@ -339,7 +339,7 @@ class MyFederationMemberSection1 extends BaseElement {
 
     // async showItem(index, itemId) {
     //     if (this.isModified) {
-    //         const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+    //         const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
     //         if (modalResult === 'Ok') {
     //             await this.dataSource.saveItem(this.currentItem);
     //         }
@@ -538,7 +538,7 @@ class MyFederationMemberSection1 extends BaseElement {
             result += ` ${item.firstName}.`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         return result
     }

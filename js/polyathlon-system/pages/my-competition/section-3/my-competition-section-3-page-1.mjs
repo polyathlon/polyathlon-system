@@ -79,18 +79,18 @@ class MyCompetitionSection3Page1 extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .dataSource=${this.findDataSource} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsmanByName} .value=${this.item?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .dataSource=${this.findDataSource} @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsmanByName} .value=${this.item?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose} @icon-click=${this.gotoPersonalPage}></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
                 <simple-select id="position" label="${lang`Referee position`}:" icon-name="referee-position-solid" @icon-click=${() => this.showPage('my-referee-positions')} .dataSource=${this.refereePositionsDataSource} .value=${this.item?.position} @input=${this.validateInput}></simple-select>
+                <simple-input id="sortOrder" label="${lang`Sort order`}:" icon-name="order-number-solid" @icon-click=${this.copyToClipboard} .value=${this.item?.sortOrder} @input=${this.validateInput}></simple-input>
                 <simple-input id="refereePC" label="${lang`Referee PC`}:" .dataSource=${this.findDataSource} icon-name="referee-pc-solid" @icon-click=${this.copyToClipboard} button-name="user-magnifying-glass-solid"  @button-click=${this.findSportsman} .value=${this.item?.refereePC} @input=${this.validateInput} @select-item=${this.sportsmanChoose} ></simple-input>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-select id="category" label="${lang`Category`}:" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-referee-categories')} .dataSource=${this.refereeCategoriesDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
-                <!-- <simple-input id="refereeUlid" label="${lang`Referee Ulid`}:" icon-name=${+this.item?.gender ? "referee-woman-solid" : "referee-man-solid"} @icon-click=${() => this.showPage('my-referee')} .value=${this.item?.refereeUlid} @input=${this.validateInput}></simple-input> -->
             </div>
         `;
     }
@@ -99,9 +99,12 @@ class MyCompetitionSection3Page1 extends BaseElement {
         location.hash = page;
     }
 
-    gotoSportsmanPage() {
-        location.hash = "#my-sportsman";
-        location.search = `?sportsman=${this.item?.sportsman?._id.split(':')[1]}`
+    gotoPersonalPage() {
+        if (!this.item?.refereeId) {
+            return
+        }
+        location.hash = "#my-referee";
+        location.search = `?referee=${this.item?.refereeId.split(':')[1]}`
     }
 
     validateInput(e) {
@@ -206,7 +209,7 @@ class MyCompetitionSection3Page1 extends BaseElement {
         }
         if (sportsman) {
             const inputs = this.$id()
-            sportsman.refereeUlid = sportsman._id
+            sportsman.refereeId = sportsman._id
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
@@ -222,14 +225,14 @@ class MyCompetitionSection3Page1 extends BaseElement {
     sportsmanChoose(e) {
         let sportsman = e.detail
         if (sportsman) {
-            sportsman.refereeUlid = sportsman._id
+            sportsman.refereeId = sportsman._id
             const inputs = this.$id()
             inputs.forEach(input => {
                 if (input.id in sportsman) {
                     input.setValue(sportsman[input.id])
                 }
             })
-            this.item.refereeUlid = sportsman._id
+            this.item.refereeId = sportsman._id
             //Object.assign(this.item, sportsman)
             this.requestUpdate()
         }

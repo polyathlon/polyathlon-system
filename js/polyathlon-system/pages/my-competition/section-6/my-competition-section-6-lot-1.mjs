@@ -29,16 +29,6 @@ class MyCompetitionSection6Lot1 extends BaseElement {
             { name: "result", label: lang`Result`, },
             { name: "points", label: lang`Points`, },
         ]]
-        if (!this.parent?.championship) {
-            this.groups = [
-                { name: "ageGroup", label: item => item.ageGroup, title: lang`Age group` },
-            ]
-        }
-        else {
-            this.groups = [
-                { name: "gender", label: item => item.gender == true ? lang`Women` : lang`Men`, title: lang`Gender` },
-            ]
-        }
     }
 
     static get styles() {
@@ -253,8 +243,7 @@ class MyCompetitionSection6Lot1 extends BaseElement {
             return ''
         switch ( this.discipline) {
             case 'shooting':
-            case 'pullUps':
-            case 'pushUps':
+            case 'strengthTraining':
             case 'jumping':
                 return +a.result
             case 'swimming':
@@ -299,12 +288,8 @@ class MyCompetitionSection6Lot1 extends BaseElement {
                     sportsNumber: item.sportsNumber,
                     result: item?.[this.discipline]?.result ?? '',
                     points: item?.[this.discipline]?.points ?? ''
-                    /* + +(item.pushUps?.points ?? 0) + +(item.pullUps?.points ?? 0)
-                      + +(item.swimming?.points ?? 0) + +(item.throwing?.points ?? 0) + +(item.sprinting?.points ?? 0) + +(item.running?.points ?? 0)
-                      + +(item.skiing?.points ?? 0) + +(item.rollerSkiing?.points ?? 0)  + +(item.jumping?.points ?? 0),
-                    */
                 }
-            }).sort((a, b) => (!this.parent?.championship ? a.gender - b.gender || a.ageGroupOrder - b.ageGroupOrder : a.gender - b.gender) || b.shift - a.shift)
+            }).sort((a, b) => (this.parent?.name?.championship ? a.gender - b.gender : a.gender - b.gender || a.ageGroupOrder - b.ageGroupOrder) || b.shift - a.shift)
         }
     }
 
@@ -564,6 +549,20 @@ class MyCompetitionSection6Lot1 extends BaseElement {
     };
     pdfMake.createPdf(docInfo).open();
 }
+
+async firstUpdated() {
+        super.firstUpdated();
+        if (this.parent?.name?.championship) {
+            this.groups = [
+                { name: "gender", label: item => item.gender == true ? lang`Women` : lang`Men`, title: lang`Gender` },
+            ]
+        }
+        else {
+            this.groups = [
+                { name: "ageGroup", label: item => item.ageGroup, title: lang`Age group` },
+            ]
+        }
+    }
 
 }
 

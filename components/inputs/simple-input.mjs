@@ -136,7 +136,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         return result
     }

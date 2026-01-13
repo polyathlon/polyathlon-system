@@ -345,7 +345,7 @@ class MyFederationMemberSection2 extends BaseElement {
 
     // async showItem(index, itemId) {
     //     if (this.isModified) {
-    //         const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+    //         const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
     //         if (modalResult === 'Ok') {
     //             await this.dataSource.saveItem(this.currentItem);
     //         }

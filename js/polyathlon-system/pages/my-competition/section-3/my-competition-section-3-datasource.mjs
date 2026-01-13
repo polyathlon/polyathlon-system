@@ -8,7 +8,7 @@ export default class DataSource {
 
     constructor(component, dataSet) {
         this.component = component
-        this.items = [...dataSet]
+        this.items = [...dataSet].sort((a, b) => a.sortOrder - b.sortOrder || (a._id < b._id ? -1 : 0))
         this.init()
         this.state = States.BROWSE
     }

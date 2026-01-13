@@ -12,7 +12,6 @@ import { isAuth, States } from '../../../../utils.js'
 
 import './my-competition-section-6-list-1.mjs'
 import './my-competition-section-6-page-1.mjs'
-import './my-competition-section-6-page-2.mjs'
 import './my-competition-section-6-page-3.mjs'
 import './my-competition-section-6-page-4.mjs'
 import './my-competition-section-6-page-5.mjs'
@@ -23,7 +22,6 @@ import './my-competition-section-6-page-9.mjs'
 import './my-competition-section-6-page-10.mjs'
 
 import './my-competition-section-6-table-1.mjs'
-import './my-competition-section-6-table-2.mjs'
 import './my-competition-section-6-table-3.mjs'
 import './my-competition-section-6-table-4.mjs'
 import './my-competition-section-6-table-5.mjs'
@@ -243,9 +241,7 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'page6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
             {name: 'page5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
             {name: 'page7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
-            // {name: 'page2', iconName: 'pull-ups-solid', page: 5, title: lang`Pull-ups`, click: () => this.gotoPage(5)},
             {name: 'page3', iconName: 'pull-ups-solid', page: 5, title: lang`Strength training`, click: () => this.gotoPage(5)},
-            // {name: 'page3', iconName: 'push-ups-solid', page: 6, title: lang`Push-ups`, click: () => this.gotoPage(6)},
             {name: 'page8', iconName: 'skiing-solid', page: 6, title: lang`Skiing`, click: () => this.gotoPage(6)},
             {name: 'page9', iconName: 'roller-skiing-solid', page: 7, title: lang`Roller skiing`, click: () => this.gotoPage(7)},
             {name: 'page10', iconName: 'jumping-solid', page: 8, title: lang`Jumping`, click: () => this.gotoPage(8)},
@@ -256,7 +252,6 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'table6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
             {name: 'table5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
             {name: 'table7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
-            // {name: 'table2', iconName: 'pull-ups-solid', page: 5, title: lang`Strength training`, click: () => this.gotoPage(5)},
             {name: 'table3', iconName: 'pull-ups-solid', page: 6, title: lang`Strength training`, click: () => this.gotoPage(5)},
             {name: 'table8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(6)},
             {name: 'table9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(7)},
@@ -268,7 +263,6 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'lot6', iconName: 'sprinting-solid', page: 2, title: lang`Sprinting`, click: () => this.gotoPage(2)},
             {name: 'lot5', iconName: 'throwing-solid', page: 3, title: lang`Throwing`, click: () => this.gotoPage(3)},
             {name: 'lot7', iconName: 'running-solid', page: 4, title: lang`Running`, click: () => this.gotoPage(4)},
-            // {name: 'lot2', iconName: 'pull-ups-solid', page: 5, title: lang`Pull-ups`, click: () => this.gotoPage(5)},
             {name: 'lot3', iconName: 'push-ups-solid', page: 6, title: lang`Strength training`, click: () => this.gotoPage(5)},
             {name: 'lot8', iconName: 'skiing-solid', page: 7, title: lang`Skiing`, click: () => this.gotoPage(6)},
             {name: 'lot9', iconName: 'roller-skiing-solid', page: 8, title: lang`Roller skiing`, click: () => this.gotoPage(7)},
@@ -322,8 +316,7 @@ class MyCompetitionSection6 extends BaseElement {
     getResult(a) {
         switch ( this.resultNames[this.currentPage]) {
             case 'shooting':
-            case 'pullUps':
-            case 'pushUps':
+            case 'strengthTraining':
             case 'jumping':
                 return +a[this.resultNames[this.currentPage]].result
             case 'swimming':
@@ -342,10 +335,10 @@ class MyCompetitionSection6 extends BaseElement {
 
     sportsPlace() {
         const item = this.dataSource.items.map(item => item).sort((a, b) =>
-        (!this.parent?.championship ? a.gender - b.gender || a.ageGroup?.sortOrder - b.ageGroup?.sortOrder : a.gender - b.gender) || this.getPoints(b) - this.getPoints(a) || this.getResult(b) - this.getResult(a))
+        (this.parent?.name?.championship ? a.gender - b.gender : a.gender - b.gender || a.ageGroup?.sortOrder - b.ageGroup?.sortOrder) || this.getPoints(b) - this.getPoints(a) || this.getResult(b) - this.getResult(a))
         item.reduce((a, b, index) => {
             let place
-            if (index === 0 || (!this.parent?.championship ? item[index - 1].ageGroup?.sortOrder != b.ageGroup?.sortOrder : item[index - 1].gender != b.gender)) {
+            if (index === 0 || (this.parent?.name?.championship ? item[index - 1].gender != b.gender : item[index - 1].ageGroup?.sortOrder != b.ageGroup?.sortOrder)) {
                 a = 0
                 place = 1
             }
@@ -440,7 +433,7 @@ class MyCompetitionSection6 extends BaseElement {
 
     // async showItem(index, itemId) {
     //     if (this.isModified) {
-    //         const modalResult = await this.confirmDialogShow('Запись была изменена. Сохранить изменения?')
+    //         const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
     //         if (modalResult === 'Ok') {
     //             await this.dataSource.saveItem(this.currentItem);
     //         }
@@ -460,12 +453,6 @@ class MyCompetitionSection6 extends BaseElement {
     get page1() {
         return html`
             <my-competition-section-6-page-1 .discipline=${"shooting"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-1>
-        `;
-    }
-
-    get page2() {
-        return html`
-            <my-competition-section-6-page-2 .discipline=${"pullUps"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-2>
         `;
     }
 
@@ -520,13 +507,6 @@ class MyCompetitionSection6 extends BaseElement {
     get table1() {
         return html`
             <my-competition-section-6-table-1 .parent=${this.parent} .sportsmenDataSource=${this.dataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"shooting"}></my-competition-section-6-table-1>
-        `;
-    }
-
-    get table2() {
-        return html`
-
-            <my-competition-section-6-table-2 .parent=${this.parent} .sportsmenDataSource=${this.dataSource} .oldValues=${this.oldValues} .item=${this.currentItem} .discipline=${"pullUps"}></my-competition-section-6-table-2>
         `;
     }
 
@@ -593,7 +573,7 @@ class MyCompetitionSection6 extends BaseElement {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-            result += ` ${item.middleName[0]}.`
+            result += ` ${item.middleName}`
         }
         return result
     }

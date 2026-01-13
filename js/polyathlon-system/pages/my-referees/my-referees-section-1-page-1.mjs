@@ -71,7 +71,7 @@ class MyRefereesSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput} @icon-click=${this.gotoSportsmanPage}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput} @icon-click=${this.gotoPersonalPage}></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
@@ -90,7 +90,7 @@ class MyRefereesSection1Page1 extends BaseElement {
         `;
     }
 
-    gotoSportsmanPage() {
+    gotoPersonalPage() {
         if (!this.item?._id) {
             return
         }
