@@ -85,12 +85,23 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                 tfoot {
                     background-color: var(--layout-background-color);
                 }
-
+                col[left] {
+                    text-align: left;
+                }
+                col[right] {
+                    text-align: right;
+                }
                 th,
                 td {
                     text-align: center;
                     vertical-align: middle;
                     height: 2em;
+                }
+                td[left] {
+                    text-align: left;
+                }
+                td[right] {
+                    text-align: right;
                 }
                 tbody tr {
                     height: 2em;
@@ -191,7 +202,7 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                 <colgroup>
                     ${this.columns?.map((column, index) =>
                         html`
-                            <col data-dt-column=${index}>
+                            <col ?left=${column?.textAlign === 'left'} data-dt-column=${index}>
                         `
                     )}
                 </colgroup>
@@ -221,7 +232,7 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                                     <td>${typeof row[item.name] === 'object' ? row[item.name].name : row[item.name]}</td>
                                 `) :
                                 html`
-                                    <td>${typeof row[column.name] === 'object' ? row[column.name].name : row[column.name]}</td>
+                                    <td ?left=${column?.textAlign === 'left'}>${typeof row[column.name] === 'object' ? row[column.name].name : row[column.name]}</td>
                                 `
                                 )}
                             </tr>
@@ -233,7 +244,7 @@ customElements.define("simple-table", class SimpleTable extends BaseElement {
                                     <td>${typeof row[item.name] === 'object' ? row[item.name].name : row[item.name]}</td>
                                 `) :
                                 html`
-                                    <td>${typeof row[column.name] === 'object' ? row[column.name].name : row[column.name]}</td>
+                                    <td ?left=${column?.textAlign === 'left'}>${typeof row[column.name] === 'object' ? row[column.name].name : row[column.name]}</td>
                                 `
                                 )}
                             </tr>
