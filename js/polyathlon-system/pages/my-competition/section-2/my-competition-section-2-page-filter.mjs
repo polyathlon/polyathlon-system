@@ -29,7 +29,7 @@ import SportsmanDataset from '../../my-sportsmen/my-sportsmen-dataset.mjs'
 import TrainerDataset from '../../my-trainers/my-trainers-dataset.mjs'
 import TrainerDataSource from '../../my-trainers/my-trainers-datasource.mjs'
 
-class MyCompetitionSection2Page1 extends BaseElement {
+class MyCompetitionSection2PageFilter extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -41,7 +41,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
             findDataSource: { type: Object, default: null },
             item: { type: Object, default: null },
             currentItemRefresh: { type: Boolean, default: false, local: true },
-            isModified: { type: Boolean, default: false, local: true },
+            isFilterModified: { type: Boolean, default: false, local: true },
             oldValues: { type: Map, default: null },
         }
     }
@@ -229,10 +229,6 @@ class MyCompetitionSection2Page1 extends BaseElement {
 
         currentItem[id] = e.target.value
 
-        if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id == 'category' || e.target.id == 'region') {
-            this.currentItemRefresh = !this.currentItemRefresh
-        }
-
         if (id === 'birthday' || id === 'gender') {
             try {
                 this.changeAgeGroup()
@@ -250,7 +246,7 @@ class MyCompetitionSection2Page1 extends BaseElement {
             this.clubDataSource.regionFilter(currentItem.region?._id)
         }
 
-        this.isModified = this.oldValues.size !== 0;
+        this.isFilterModified = this.oldValues.size !== 0;
     }
 
     async findSportsmanByName(e) {
@@ -388,7 +384,6 @@ class MyCompetitionSection2Page1 extends BaseElement {
     startEdit() {
         let input = this.$id("lastName")
         input.focus()
-        this.isModified = true
     }
 
     setVisibility() {
@@ -425,4 +420,4 @@ class MyCompetitionSection2Page1 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-2-page-1", MyCompetitionSection2Page1);
+customElements.define("my-competition-section-2-page-filter", MyCompetitionSection2PageFilter);

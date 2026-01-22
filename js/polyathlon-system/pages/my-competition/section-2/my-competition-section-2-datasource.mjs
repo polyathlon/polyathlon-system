@@ -2,40 +2,29 @@ import DataSet from "./my-competition-section-2-dataset.mjs";
 
 import { States } from "../../../../utils.js";
 
+const storageName = 'currentCompetitionSportsman'
+
 export default class DataSource {
     #lock = false
     #oldItem
     sortDirection = true
     constructor(component, dataSet) {
         this.component = component
-        this.items = [...dataSet].sort( (a, b) => {
-            let r = a.lastName.localeCompare(b.lastName)
-            if (r) {
-                return r
-            }
-            r = a.firstName.localeCompare(b.firstName)
-            if (r) {
-                return r
-            }
-            r = a.middleName?.localeCompare(b.firstName)
-            if (r) {
-                return r
-            }
-            return 0
-        })
+        this.items = [...dataSet]
+        this.sort(this.sortDirection)
         this.init()
         this.state = States.BROWSE
     }
 
     init() {
         if (this.items.length) {
-            let itemId = sessionStorage.getItem('currentCompetitionSportsman')
+            let itemId = sessionStorage.getItem(storageName)
             let item
             if (itemId) {
                 item = this.items.find((item) => item.id == itemId)
             }
             item ??= this.items[0]
-            sessionStorage.setItem('currentCompetitionSportsman', item.id)
+            sessionStorage.setItem(storageName, item.id)
             this.component.currentItem = item
         } else {
             this.component.currentItem = {}
@@ -44,6 +33,10 @@ export default class DataSource {
 
     sort(sortDirection) {
         this.sortDirection = sortDirection
+        if (sortDirection === undefined) {
+            this.items.sort((a, b) => a.sortOrder - b.sortOrder || a._id?.localeCompare(b._id))
+            return
+        }
         this.items.sort( (a, b) => {
             [a, b] = sortDirection ? [a, b] : [b, a]
             let r = a.lastName?.localeCompare(b.lastName)
@@ -54,7 +47,7 @@ export default class DataSource {
             if (r) {
                 return r
             }
-            r = a.middleName?.localeCompare(b.firstName)
+            r = a.middleName?.localeCompare(b.middleName)
             if (r) {
                 return r
             }
@@ -146,6 +139,29 @@ export default class DataSource {
         return categories
     }
 
+    async filter(currentFilter) {
+        this.items = (await DataSet.getDataSet()).filter(item =>
+                (!('lastName' in currentFilter) || currentFilter?.lastName == item.lastName)
+                &&(!('firstName' in currentFilter) || currentFilter?.firstName == item.firstName)
+                &&(!('middleName' in currentFilter) || currentFilter?.middleName == item.middleName)
+                &&(!('gender' in currentFilter) || currentFilter?.gender == item.gender)
+                &&(!('category' in currentFilter) || currentFilter?.category?._id == item.category?._id)
+                &&(!('position' in currentFilter) || currentFilter?.position?._id == item.position?._id)
+                &&(!('region' in currentFilter) || currentFilter?.region?._id == item.region?._id)
+                &&(!('city' in currentFilter) || currentFilter.city && (currentFilter?.city?._id == item.city?._id))
+                &&(!('sortOrder' in currentFilter) || currentFilter?.sortOrder == item.sortOrder)
+                &&(!('refereePC' in currentFilter) || currentFilter?.refereePC == item.refereePC)
+        )
+        this.sort(this.sortDirection)
+        return this.items?.[0]
+    }
+
+    async clearFilter() {
+        this.items = await DataSet.getDataSet()
+        this.sort(this.sortDirection)
+        return this.items?.[0]
+    }
+
     getTeamPoints(team) {
         let sum = 0
         let gold = 0
@@ -230,31 +246,26 @@ export default class DataSource {
         return result
     }
 
-    filter(value) {
-        this.items = this.dataSet.filter(item => {
-            return item?.country?.name === value?.name
-        }).sort( (a, b) => a.name.localeCompare(b.name) )
-    }
-
     getCurrentItem(){
-        const item = sessionStorage.getItem('currentCompetitionSportsman')
+        const item = sessionStorage.getItem(storageName)
         if (item) {
             return this.items.find(p => p._id === item)
         } else {
-            sessionStorage.setItem('currentCompetitionSportsman', this.items[0]?._id)
+            sessionStorage.setItem(storageName, this.items[0]?._id)
             return this.items?.[0]
         }
     }
 
     setCurrentItem(item) {
-        sessionStorage.setItem('currentCompetitionSportsman', item._id)
+        sessionStorage.setItem(storageName, item?._id)
         this.component.currentItem = item
     }
 
     async saveFirstItem(item) {
         const newItem = await DataSet.addItem(item)
-        const listItem = DataSet.addToDataset(newItem)
-        this.addTo(newItem, listItem)
+        if (!this.#lock) {
+            this.addToDataSource(newItem)
+        }
     }
 
     async addNewItem(item) {
@@ -272,14 +283,15 @@ export default class DataSource {
 
     addToDataSource(item) {
         this.items.push(item)
-        this.items.sort( (a, b) => a._id.localeCompare(b._id))
+        this.sort(this.sortDirection)
         this.setCurrentItem(item)
     }
 
     async saveNewItem(item) {
         const newItem = await DataSet.addItem(item)
-        const listItem = DataSet.addToDataset(newItem)
-        this.addToDataSource(newItem, listItem)
+        if (!this.#lock) {
+            this.addToDataSource(newItem)
+        }
         this.state = States.BROWSE
     }
 
@@ -294,9 +306,8 @@ export default class DataSource {
 
     async unlock() {
         if (this.#lock) {
-            this.items = this.dataSet.map(item => {
-                return item;
-            }).sort( (a, b) => a.key.localeCompare(b.key) )
+            this.items = [...this.dataSet]
+            this.sort(this.sortDirection)
             await this.init()
             this.#lock = false;
         }

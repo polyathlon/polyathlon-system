@@ -10,8 +10,15 @@ import lang from '../../../polyathlon-dictionary.mjs'
 
 import { isAuth, States } from '../../../../utils.js'
 
-import './my-competition-section-2-list-1.mjs'
 import './my-competition-section-2-page-1.mjs'
+
+import './my-competition-section-2-list-1.mjs'
+
+import './my-competition-section-2-page-search.mjs'
+
+import './my-competition-section-2-page-filter.mjs'
+
+import './my-competition-section-2-table-1.mjs'
 
 import DataSet from './my-competition-section-2-dataset.mjs'
 import DataSource from './my-competition-section-2-datasource.mjs'
@@ -26,12 +33,19 @@ class MyCompetitionSection2 extends BaseElement {
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null, local: true },
+            currentItemRefresh: { type: Boolean, default: false, local: true },
             isModified: { type: Boolean, default: false, local: true },
-            sortDirection: { type: Boolean, default: true},
+            sortDirection: { type: Boolean, default: true, local: true},
+            currentFilter: { type: Object, default: {} },
+            isFiltered: { type: Boolean, default: false },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             parent: { type: Object, default: {} },
+            isTable: { type: Boolean, default: false, local: true },
+            isFilterModified: { type: Boolean, default: false, local: true },
+            oldFilterValues: { type: Map, default: null },
+            gender: { type: Boolean, default: undefined },
         }
     }
 
@@ -44,9 +58,9 @@ class MyCompetitionSection2 extends BaseElement {
                     grid-template-columns: 3fr 9fr;
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
-                    "header1 header2"
-                    "aside main"
-                    "footer1 footer2";
+                        "header1 header2"
+                        "aside main"
+                        "footer1 footer2";
                     gap: 0 20px;
                     width: 100%;
                     height: 100%;
@@ -76,7 +90,6 @@ class MyCompetitionSection2 extends BaseElement {
                     icon-button {
                         height: 100%;
                         padding: 0 1vw;
-
                         &[active] {
                             background-color: var(--layout-background-color);
                             font-weight: bold;
@@ -201,16 +214,26 @@ class MyCompetitionSection2 extends BaseElement {
 
     constructor() {
         super();
+        this.$partid = 'MyCompetitionSection2'
         this.statusDataSet = new Map()
-        this.currentPage = 0;
-        this.oldValues = new Map();
+        this.currentPage = 0
+        this.oldValues = new Map()
+        this.oldFilterValues = new Map()
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
-            {iconName: 'pdf-make',  page: 'my-coach-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'pdf-make',  page: 'my-referee-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: lang`Back`, click: () => this.gotoBack()},
+            {iconName: 'gender', page: 'my-referee-categories', title: lang`Gender`, click: () => this.genderFilter()},
         ]
         this.pages = [
-            {iconName: 'sportsmen-solid', page: 0, title: lang`Sportsmen`, click: () => this.gotoPage(0)},
+            {iconName: 'sportsmen-solid', page: () => this.#page1(), title: lang`Sportsmen`, click: () => this.gotoPage(0)},
+            {iconName: 'search-regular', page: () => this.#pageSearch(), title: lang`Search`, click: () => this.gotoPage(1)},
+            {iconName: 'filter-regular', page: () => this.#pageFilter(), title: lang`Filter`, click: () => this.gotoPage(2)},
+        ]
+        this.tables = [
+            {name: 'table1', iconName: 'shooting-solid', table: () => this.#table1(), title: lang`Shooting`, click: () => this.gotoPage(0)},
+            {name: 'search-regular', iconName: 'search-regular', table: () => this.#pageSearch(), title: lang`Search`, click: () => this.gotoPage(1)},
+            {name: 'filter-regular', iconName: 'filter-regular', table: () => this.#pageFilter(), title: lang`Filter`, click: () => this.gotoPage(2)},
         ]
     }
 
@@ -220,6 +243,23 @@ class MyCompetitionSection2 extends BaseElement {
 
     gotoBack(page) {
         history.back();
+    }
+
+    #competitionDate(parent) {
+        const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+
+        if (parent.startDate) {
+            const start = parent.startDate.split("-")
+            const end = parent.endDate.split("-")
+            if (start[2] === end[2] && start[1] === end[1]) {
+                return `${start[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
+            }
+            if (start[1] === end[1]) {
+                return `${start[2]}-${end[2]} ${monthNames[start[1] - 1]} ${start[0]} года`
+            }
+            return `${start[2]} ${monthNames[start[1]-1]} - ${end[2]} ${monthNames[end[1] - 1]} ${start[0]} года`
+        }
+        return ''
     }
 
     pdfMethod() {
@@ -270,7 +310,7 @@ class MyCompetitionSection2 extends BaseElement {
 
                     {
                         width: 'auto',
-                        text: 1,//this.#competitionDate(this.parent),
+                        text: this.#competitionDate(this.parent),
                         margin: [0, 15, 0, 0],
                         fontSize: 12,
                     },
@@ -392,6 +432,7 @@ class MyCompetitionSection2 extends BaseElement {
 
         pdfMake.createPdf(docInfo).open();
     }
+
     async getNewFileHandle() {
         const options = {
           types: [
@@ -475,13 +516,35 @@ class MyCompetitionSection2 extends BaseElement {
     //     }
     // }
 
+    // {name: 'table1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
     get #page() {
-        return cache(this.#page1())
+        if (this.isTable) {
+            return this.tables[this.currentPage].table();
+        }
+        return this.pages[this.currentPage].page();
     }
 
     #page1() {
         return html`
             <my-competition-section-2-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-page-1>
+        `
+    }
+
+    #pageSearch() {
+        return html`
+            <my-competition-section-2-page-search .item=${this.currentSearch}></my-competition-section-2-page-search>
+        `;
+    }
+
+    #pageFilter() {
+        return html`
+            <my-competition-section-2-page-filter .item=${this.currentFilter} .oldValues=${this.oldFilterValues}></my-competition-section-2-page-filter>
+        `;
+    }
+
+    #table1() {
+        return html`
+            <my-competition-section-2-table-1 .parent=${this.parent} .sportsmenDataSource=${this.dataSource} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-2-table-1>
         `;
     }
 
@@ -489,13 +552,13 @@ class MyCompetitionSection2 extends BaseElement {
         return this.pageNames[this.currentPage];
     }
 
-    fio(item) {
+    sportsmanName(item) {
         if (!item) {
             return item
         }
         let result = item.lastName
         if (item.firstName) {
-            result += ` ${item.firstName[0]}`
+            result += ` ${item.firstName}`
         }
         if (item.middleName) {
             result += ` ${item.middleName}`
@@ -504,12 +567,14 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     newRecord() {
-        return html `<icon-button
-                label=${ this.fio(this.currentItem) || "Новый спортсмен" }
-                title=''
+        return html `
+            ${this.currentItemRefresh ? '' : ''}
+            <icon-button
+                label=${(this.sportsmanName(this.currentItem) || "Новый спортсмен") + (this.currentItem.category ? ' (' + this.currentItem.category?.shortName + ')' : '')}
+                title=${this.currentItem._id}''
                 icon-name=${ this.currentItem?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
                 ?selected=${ true }
-                .status=${{ name: this.currentItem?.sportsmanId || this.currentItem?.sportsmanUlid || "sportsman:new", icon: 'id-number-solid'} }
+                .status=${{ name: this.currentItem.region?.name || 'Не задано', icon: 'region-solid'} }
             >
             </icon-button>
         `
@@ -518,12 +583,6 @@ class MyCompetitionSection2 extends BaseElement {
     #list1() {
         return html`
             <my-competition-section-2-list-1 .item=${this} .sortDirection=${this.sortDirection}></my-competition-section-2-list-1>
-        `;
-    }
-
-    #list3() {
-        return html`
-            <my-competition-section-2-list-1 .parent=${this.currentItem}></my-competition-section-2-list-3>
         `;
     }
 
@@ -560,20 +619,20 @@ class MyCompetitionSection2 extends BaseElement {
         `
     }
 
-    get #itemFooter() {
-        return html`
-            <nav>
-                <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
-                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
-            </nav>
-        `
-    }
-
     get #addItemFooter() {
         return html`
             <nav>
                 <simple-button @click=${this.addNewItem}>${lang`Add`}</simple-button>
                 <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
+            </nav>
+        `
+    }
+
+    get #itemFooter() {
+        return html`
+            <nav>
+                <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
     }
@@ -584,6 +643,9 @@ class MyCompetitionSection2 extends BaseElement {
         }
         if (!this.dataSource?.items)
             return ''
+        if (this.currentPage === 2) {
+            return this.#filterFooter
+        }
         if (this.dataSource.items.length) {
             if (this.dataSource.state === States.NEW) {
                 return this.#newItemFooter
@@ -602,6 +664,16 @@ class MyCompetitionSection2 extends BaseElement {
         return ''
     }
 
+    sectionName(section) {
+        if (this.currentPage == 0 ) {
+            return section
+        } else if (this.currentPage == 1 ) {
+            return { name: "section2", label: lang`Search`, iconName: 'search-regular' }
+        } else {
+            return { name: "section2", label: lang`Filter`, iconName: 'filter-regular' }
+        }
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
@@ -609,13 +681,13 @@ class MyCompetitionSection2 extends BaseElement {
                 <p>${lang`Sportsmen` + (this.dataSource?.items?.length ? ' ('+ this.dataSource?.items?.length +')' : '')}</p>
                 <p>
                     <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
-                    <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
+                    <aside-button icon-name="filter-regular" ?active=${this.isFiltered} @click=${this.filterPage}></aside-button>
                 </p>
             </header>
             <header class="right-header">
-                ${this.sections.map( (page, index) =>
+                ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${index === this.currentSection ? this.sectionName(section).iconName : section.iconName} label=${index === this.currentSection ? this.sectionName(section).label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -639,29 +711,116 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     addFirstItem() {
-        const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
+        const page = this.renderRoot.querySelector('my-sportsmen-section-2-page-1')
         page.startEdit()
     }
 
     gotoSection(index) {
-        this.parentNode.host.currentSection = index;
+        if (this.currentSection == index) {
+            this.isTable = !this.isTable
+        }
+        else {
+            this.$root.currentSection = index;
+        }
     }
 
     gotoPage(index) {
-        this.currentPage = index
+        if (this.currentPage == index) {
+            this.isTable = !this.isTable
+        }
+        else {
+            this.currentPage = index
+        }
     }
 
     nextPage() {
-        this.currentPage++;
+        this.currentPage++
     }
 
     prevPage() {
-        this.currentPage--;
+        this.currentPage--
+    }
+
+    searchPage() {
+        this.currentSearch = {}
+        this.currentPage = this.currentPage === 1 ? 0 : 1
     }
 
     filterPage() {
+        this.currentPage = this.currentPage === 2 ? 0 : 2
+    }
+
+    async applyFilter() {
+        const result = await this.dataSource.filter(this.currentFilter)
+        this.oldFilterValues.clear();
+        this.isFilterModified = false;
+        this.currentItemRefresh = !this.currentItemRefresh
+        this.dataSource.setCurrentItem(result)
+        this.isFiltered = this.currentFilter && Object.keys(this.currentFilter).length
+    }
+
+    async clearFilter() {
+        const result = await this.dataSource.clearFilter()
         this.currentFilter = {}
-        this.currentPage = this.currentPage === 1 ? 0 : 1
+        this.oldFilterValues?.clear();
+        this.isFilterModified = false;
+        this.dataSource.setCurrentItem(result)
+        this.currentItemRefresh = !this.currentItemRefresh
+        this.isFiltered = false
+    }
+
+    async cancelFilter() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить сделанные изменения в фильтре?')
+        if (modalResult !== 'Ok')
+            return modalResult
+        this.oldFilterValues.forEach( (value, key) => {
+            if (key.id === 'avatar') {
+                window.URL.revokeObjectURL(value);
+                this.avatar = value;
+                this.avatarFile = null;
+            } else {
+                if (key.currentObject) {
+                    key.currentObject[key.id?.split('.').at(-1)] = value
+                }
+                else {
+                    this.currentItem[key.id] = value;
+                }
+                key.value = value;
+            }
+        });
+        this.oldFilterValues.clear();
+        this.isFilterModified = false;
+        return 'Ok'
+    }
+
+    async closeFilter() {
+        this.filterPage()
+    }
+
+    get #filterFooter() {
+        if (this.isFilterModified) {
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.applyFilter}>${lang`Apply`}</simple-button>
+                    <simple-button @click=${this.cancelFilter}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
+        } else if (this.isFiltered){
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
+                    <simple-button @click=${this.clearFilter}>${lang`Clear`}</simple-button>
+                </nav>
+            `
+        }
+        else {
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
+                </nav>
+            `
+        }
+
     }
 
     sortPage() {
@@ -672,7 +831,7 @@ class MyCompetitionSection2 extends BaseElement {
     async showDialog(message, type='message') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')
         modalDialog.type = type
-        return modalDialog.show(message);
+        return modalDialog.show(message)
     }
 
     async confirmDialog(message) {
@@ -680,7 +839,7 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     async addNewItem() {
-        this.shadowRoot.querySelector('.right-layout').scrollTo({
+        this.renderRoot.querySelector('.right-layout').scrollTo({
             top: 0,
             behavior: "smooth"
         });
@@ -691,49 +850,41 @@ class MyCompetitionSection2 extends BaseElement {
 
 
     async addItem() {
-        this.dataSource.addItem(this.currentItem);
+        this.dataSource.addItem(this.currentItem)
     }
 
-    saveFirstItem() {
-        this.dataSource.addItem(this.currentItem);
-        this.oldValues?.clear();
-        this.isModified = false;
+    async saveFirstItem() {
+        await this.dataSource.addItem(this.currentItem)
+        this.oldValues?.clear()
+        this.isModified = false
     }
 
     async saveNewItem() {
-        this.dataSource.saveNewItem(this.currentItem);
+        await this.dataSource.saveNewItem(this.currentItem)
         this.oldValues?.clear();
         this.isModified = false;
     }
 
     async saveItem() {
-        if ('_id' in this.currentItem) {
-            await this.dataSource.saveItem(this.currentItem);
-        } else {
-            await this.dataSource.addItem(this.currentItem);
-        }
-        if (this.avatarFile) {
-            let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
-            if (!result) return;
-        }
-        this.avatarFile = null;
-        this.oldValues?.clear();
-        this.isModified = false;
+        await this.dataSource.saveItem(this.currentItem)
+        this.oldValues?.clear()
+        this.isModified = false
     }
 
     async cancelNewItem() {
         const modalResult = await this.confirmDialog('Вы действительно хотите отменить добавление?')
         if (modalResult !== 'Ok')
-            return
+            return modalResult
         this.dataSource.cancelNewItem()
-        this.oldValues.clear();
-        this.isModified = false;
+        this.oldValues.clear()
+        this.isModified = false
+        return 'Ok'
     }
 
     async cancelItem() {
         const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
-            return
+            return modalResult
         this.oldValues.forEach( (value, key) => {
             if (key.id === 'avatar') {
                 window.URL.revokeObjectURL(value);
@@ -751,6 +902,7 @@ class MyCompetitionSection2 extends BaseElement {
         });
         this.oldValues.clear();
         this.isModified = false;
+        return 'Ok'
     }
 
     validateAvatar(e) {
@@ -773,10 +925,28 @@ class MyCompetitionSection2 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить это соревнование?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого спортсмена?')
         if (modalResult !== 'Ok')
-            return;
-        this.dataSource.deleteItem(this.currentItem)
+            return modalResult
+        await this.dataSource.deleteItem(this.currentItem)
+        return 'Ok'
+    }
+
+    genderFilter() {
+        if (this.currentFilter?.gender == undefined) {
+            // this.buttons[3].iconName = 'gender-man'
+            this.buttons[3].iconName = 'sportsman-man-solid'
+            this.currentFilter.gender = 0
+        } else if (this.currentFilter?.gender == 0) {
+            // this.buttons[3].iconName = 'gender-woman'
+            this.buttons[3].iconName = 'sportsman-woman-solid'
+            this.currentFilter.gender = 1
+
+        } else {
+            delete this.currentFilter.gender
+            this.buttons[3].iconName = 'gender'
+        }
+        this.applyFilter()
     }
 
     async firstUpdated() {

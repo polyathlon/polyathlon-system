@@ -1,16 +1,19 @@
 import { BaseElement, html, css } from '../../../../base-element.mjs'
 
+import { States } from '../../../../utils.js'
+
 import '../../../../../components/inputs/simple-input.mjs'
 
 class MyCompetitionSection2List1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            item: {type: Object, default: null},
-            isModified: {type: Boolean, default: false, local: true},
-            oldValues: {type: Map, default: null},
-            currentItem: {type: Object, default: null, local: true },
-            sortDirection: { type: Boolean, default: true},
+            item: { type: Object, default: null },
+            isModified: { type: Boolean, default: false, local: true },
+            oldValues: { type: Map, default: null },
+            currentItemRefresh: { type: Boolean, default: false, local: true },
+            currentItem: { type: Object, default: null, local: true },
+            sortDirection: { type: Boolean, default: undefined, local: true },
         }
     }
 
@@ -35,7 +38,7 @@ class MyCompetitionSection2List1 extends BaseElement {
                     icon-button:hover {
                         background: var(--list-icon-button-hover, rgba(255, 255, 255, 0.1));
                         &[selected] {
-                        border-radius: 5px;
+                            border-radius: 5px;
                             background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
                         }
                     }
@@ -60,6 +63,7 @@ class MyCompetitionSection2List1 extends BaseElement {
 
     render() {
         return html`
+            ${this.currentItemRefresh || this.sortDirection? '' : ''}
             ${this.item.dataSource?.items?.map((item, index) =>
                 html `
                     <icon-button
@@ -67,8 +71,9 @@ class MyCompetitionSection2List1 extends BaseElement {
                         title=${item._id}
                         image-name=${item.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.region?.name || item.category?.name || item?._id, icon: 'region-solid'} }
+                        .status=${{ name: item.region?.name || item.category?.name || item?._id, icon: 'region-solid'} }
                         @click=${() => this.showItem(item)}
+                        @dblclick=${this.gotoPersonalPage}
                     ></icon-button>
                 `
             )}
@@ -76,13 +81,22 @@ class MyCompetitionSection2List1 extends BaseElement {
     }
 
     async showItem(item) {
-        if (this.isModified) {
-            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
+        if (this.item.isModified) {
+            const modalResult = await this.item.confirmDialog('Запись была изменена. Сохранить изменения?')
             if (modalResult === 'Ok') {
-                await this.item.dataSource.saveItem(this.currentItem);
+                if (this.item.dataSource.state === States.NEW) {
+                    await this.item.saveNewItem()
+                } else {
+                    await this.item.saveItem()
+                }
+                this.item.dataSource.setCurrentItem(item)
             }
             else {
-                await this.cancelItem()
+                const result = this.item.dataSource.state === States.NEW ?
+                    await this.item.cancelNewItem() : await this.item.cancelItem()
+                if (result == "Ok") {
+                    this.item.dataSource.setCurrentItem(item)
+                }
             }
         }
         else {
@@ -90,9 +104,13 @@ class MyCompetitionSection2List1 extends BaseElement {
         }
     }
 
-    // async firstUpdated() {
-    //     super.firstUpdated();
-    // }
+    gotoPersonalPage() {
+        if (!this.currentItem?.refereeId) {
+            return
+        }
+        location.hash = "#my-referee";
+        location.search = `?referee=${this.currentItem.refereeId.split(':')[1]}`
+    }
 }
 
 customElements.define("my-competition-section-2-list-1", MyCompetitionSection2List1);

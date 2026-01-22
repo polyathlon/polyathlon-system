@@ -11,7 +11,12 @@ import lang from '../../../polyathlon-dictionary.mjs'
 import { isAuth, States } from '../../../../utils.js'
 
 import './my-competition-section-3-page-1.mjs'
+
 import './my-competition-section-3-list-1.mjs'
+
+import './my-competition-section-3-page-search.mjs'
+
+import './my-competition-section-3-page-filter.mjs'
 
 import DataSet from './my-competition-section-3-dataset.mjs'
 import DataSource from './my-competition-section-3-datasource.mjs'
@@ -26,11 +31,17 @@ class MyCompetitionSection3 extends BaseElement {
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
             currentItem: { type: Object, default: null, local: true },
+            currentItemRefresh: { type: Boolean, default: false, local: true },
             isModified: { type: Boolean, default: false, local: true },
+            sortDirection: { type: Boolean, default: undefined, local: true},
+            currentFilter: { type: Object, default: {} },
+            isFiltered: { type: Boolean, default: false },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             parent: { type: Object, default: {} },
+            isFilterModified: { type: Boolean, default: false, local: true },
+            oldFilterValues: { type: Map, default: null },
         }
     }
 
@@ -43,9 +54,9 @@ class MyCompetitionSection3 extends BaseElement {
                     grid-template-columns: 3fr 9fr;
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
-                    "header1 header2"
-                    "aside main"
-                    "footer1 footer2";
+                        "header1 header2"
+                        "aside main"
+                        "footer1 footer2";
                     gap: 0 20px;
                     width: 100%;
                     height: 100%;
@@ -75,7 +86,6 @@ class MyCompetitionSection3 extends BaseElement {
                     icon-button {
                         height: 100%;
                         padding: 0 1vw;
-
                         &[active] {
                             background-color: var(--layout-background-color);
                             font-weight: bold;
@@ -84,7 +94,6 @@ class MyCompetitionSection3 extends BaseElement {
                             background-color: var(--layout-background-color);
                         }
                     }
-
                 }
 
                 .left-layout {
@@ -156,8 +165,12 @@ class MyCompetitionSection3 extends BaseElement {
                         simple-button {
                             height: 100%;
                         }
+                        &.buttons {
+                            justify-content: center;
+                        }
                     }
                 }
+
                 icon-button[selected] {
                     border-radius: 5px;
                     background: var(--list-icon-button-selected, rgba(255, 255, 255, 0.1));
@@ -197,14 +210,29 @@ class MyCompetitionSection3 extends BaseElement {
 
     constructor() {
         super();
+        this.$partid = 'MyCompetitionSection3'
         this.statusDataSet = new Map()
-        this.currentPage = 0;
-        this.oldValues = new Map();
+        this.currentPage = 0
+        this.oldValues = new Map()
+        this.oldFilterValues = new Map()
         this.buttons = [
-            {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
+            {iconName: 'excel-import-solid', page: 'my-referee-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'pdf-make',  page: 'my-referee-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
-            {iconName: 'arrow-left-solid', page: 'my-coach-categories', title: lang`Back`, click: () => this.gotoBack()},
+            {iconName: 'arrow-left-solid', page: 'my-referee-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
+        this.pages = [
+            {iconName: 'referee-solid', page: () => this.#page1(), title: lang`Referees`, click: () => this.gotoPage(0)},
+            {iconName: 'search-regular', page: () => this.#pageSearch(), title: lang`Search`, click: () => this.gotoPage(1)},
+            {iconName: 'filter-regular', page: () => this.#pageFilter(), title: lang`Filter`, click: () => this.gotoPage(2)},
+        ]
+    }
+
+    showPage(page) {
+        location.hash = page;
+    }
+
+    gotoBack(page) {
+        history.back();
     }
 
     #competitionDate(parent) {
@@ -393,43 +421,6 @@ class MyCompetitionSection3 extends BaseElement {
         };
 
         pdfMake.createPdf(docInfo).open();
-        }
-
-    showPage(page) {
-        location.hash = page;
-    }
-
-    gotoBack(page) {
-        history.back();
-    }
-
-    async getNewFileHandle() {
-        const options = {
-          types: [
-            {
-              description: 'Excel files',
-              accept: {
-                'application/octet-stream': ['.xslx'],
-              },
-            },
-            {
-              description: 'Neural Models',
-              accept: {
-                'application/octet-stream': ['.pkl'],
-              },
-            },
-
-          ],
-        };
-        const handle = await window.showSaveFilePicker(options);
-        return handle;
-    }
-    showPage(page) {
-        location.hash = page;
-    }
-
-    gotoBack(page) {
-        history.back();
     }
 
     async getNewFileHandle() {
@@ -516,22 +507,25 @@ class MyCompetitionSection3 extends BaseElement {
     // }
 
     get #page() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#page1())
-            case 1: return cache(this.#page2())
-            default: return cache(this.#page1())
-        }
+        return this.pages[this.currentPage].page();
     }
 
     #page1() {
         return html`
-            <my-competition-section-3-page-1 .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-3-page-1>
+            <my-competition-section-3-page-1 .parent=${this.parent} .item=${this.currentItem} .oldValues=${this.oldValues}></my-competition-section-3-page-1>
+        `
+    }
+
+    #pageSearch() {
+        return html`
+            <my-competition-section-3-page-search .item=${this.currentSearch}></my-competition-section-3-page-search>
         `;
     }
 
-    #page2() {
+
+    #pageFilter() {
         return html`
-            <my-competition-section-3-page-1 .item=${this.currentItem}></my-competition-section-3-page-1>
+            <my-competition-section-3-page-filter .item=${this.currentFilter} .oldValues=${this.oldFilterValues}></my-competition-section-3-page-filter>
         `;
     }
 
@@ -554,12 +548,14 @@ class MyCompetitionSection3 extends BaseElement {
     }
 
     newRecord() {
-        return html `<icon-button
+        return html `
+            ${this.currentItemRefresh ? '' : ''}
+            <icon-button
                 label=${ this.fio(this.currentItem) || "Новый судья" }
                 title=''
                 icon-name=${ this.currentItem?.gender == 0 ? "referee-man-solid" : "referee-woman-solid" }
                 ?selected=${ true }
-                .status=${{ name: this.currentItem?.refereeId || this.currentItem?.refereeUlid || "referee:new", icon: 'id-number-solid'} }
+                .status=${{ name: this.currentItem.position?.name || 'Не задано', icon: 'referee-position-solid' }}
             >
             </icon-button>
         `
@@ -571,17 +567,10 @@ class MyCompetitionSection3 extends BaseElement {
         `;
     }
 
-    #list3() {
-        return html`
-            <my-competition-section-3-list-1 .parent=${this.currentItem}></my-competition-section-3-list-3>
-        `;
-    }
-
     get #list() {
-        switch(this.currentPage) {
-            case 0: return cache(this.#list1())
-            case 1: return cache(this.#list1())
-            default: return cache(this.#list3())
+        switch (this.currentPage) {
+            // case 6: return cache(this.#list2())
+            default: return cache(this.#list1())
         }
     }
 
@@ -635,6 +624,9 @@ class MyCompetitionSection3 extends BaseElement {
         }
         if (!this.dataSource?.items)
             return ''
+        if (this.currentPage === 2) {
+            return this.#filterFooter
+        }
         if (this.dataSource.items.length) {
             if (this.dataSource.state === States.NEW) {
                 return this.#newItemFooter
@@ -653,16 +645,30 @@ class MyCompetitionSection3 extends BaseElement {
         return ''
     }
 
+    sectionName(section) {
+        if (this.currentPage == 0 ) {
+            return section
+        } else if (this.currentPage == 1 ) {
+            return { name: "section3", label: lang`Search`, iconName: 'search-regular' }
+        } else {
+            return { name: "section3", label: lang`Filter`, iconName: 'filter-regular' }
+        }
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>${lang`Referees`}</p>
+                <p>${lang`Referees`  + (this.dataSource?.items?.length ? ' ('+ this.dataSource?.items?.length +')' : '')}</p>
+                <p>
+                    <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : this.sortDirection === false  ? "arrow-up-z-a-regular" : "arrow-up-down-regular"} @click=${this.sortPage}></aside-button>
+                    <aside-button icon-name="filter-regular" ?active=${this.isFiltered} @click=${this.filterPage}></aside-button>
+                </p>
             </header>
             <header class="right-header">
-                ${this.sections.map( (page, index) =>
+                ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${index === this.currentSection ? this.sectionName(section).iconName : section.iconName} label=${index === this.currentSection ? this.sectionName(section).label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -676,9 +682,11 @@ class MyCompetitionSection3 extends BaseElement {
             <footer class="left-footer">
                 ${this.#task}
             </footer>
-            <footer class="right-footer">
-                ${this.#rightFooter}
-            </footer>
+            ${isAuth() ? html`
+                <footer class="right-footer">
+                    ${this.#rightFooter}
+                </footer>
+            ` : ''}
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
@@ -689,25 +697,119 @@ class MyCompetitionSection3 extends BaseElement {
     }
 
     gotoSection(index) {
-        this.parentNode.host.currentSection = index;
+        this.$root.currentSection = index;
     }
 
     gotoPage(index) {
-        this.currentSection = index
+        this.currentPage = index
     }
 
     nextPage() {
-        this.currentPage++;
+        this.currentPage++
     }
 
     prevPage() {
-        this.currentPage--;
+        this.currentPage--
+    }
+
+    searchPage() {
+        this.currentSearch = {}
+        this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
+
+    filterPage() {
+        this.currentPage = this.currentPage === 2 ? 0 : 2
+    }
+
+    async applyFilter() {
+        const result = await this.dataSource.filter(this.currentFilter)
+        this.oldFilterValues.clear();
+        this.isFilterModified = false;
+        this.currentItemRefresh = !this.currentItemRefresh
+        this.dataSource.setCurrentItem(result)
+        this.isFiltered = true
+    }
+
+    async clearFilter() {
+        const result = await this.dataSource.clearFilter()
+        this.currentFilter = {}
+        this.oldFilterValues?.clear();
+        this.isFilterModified = false;
+        this.dataSource.setCurrentItem(result)
+        this.currentItemRefresh = !this.currentItemRefresh
+        this.isFiltered = false
+    }
+
+    async cancelFilter() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить сделанные изменения в фильтре?')
+        if (modalResult !== 'Ok')
+            return modalResult
+        this.oldFilterValues.forEach( (value, key) => {
+            if (key.id === 'avatar') {
+                window.URL.revokeObjectURL(value);
+                this.avatar = value;
+                this.avatarFile = null;
+            } else {
+                if (key.currentObject) {
+                    key.currentObject[key.id?.split('.').at(-1)] = value
+                }
+                else {
+                    this.currentItem[key.id] = value;
+                }
+                key.value = value;
+            }
+        });
+        this.oldFilterValues.clear();
+        this.isFilterModified = false;
+        return 'Ok'
+    }
+
+    async closeFilter() {
+        this.filterPage()
+    }
+
+    get #filterFooter() {
+        if (this.isFilterModified) {
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.applyFilter}>${lang`Apply`}</simple-button>
+                    <simple-button @click=${this.cancelFilter}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
+        } else if (this.isFiltered){
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
+                    <simple-button @click=${this.clearFilter}>${lang`Clear`}</simple-button>
+                </nav>
+            `
+        }
+        else {
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
+                </nav>
+            `
+        }
+
+    }
+
+    sortPage() {
+        if (this.sortDirection) {
+            this.sortDirection = false
+        }
+        else if (this.sortDirection === false) {
+            this.sortDirection = undefined
+        } else {
+            this.sortDirection = true
+        }
+        this.dataSource.sort(this.sortDirection)
     }
 
     async showDialog(message, type='message') {
         const modalDialog = this.renderRoot.querySelector('modal-dialog')
         modalDialog.type = type
-        return modalDialog.show(message);
+        return modalDialog.show(message)
     }
 
     async confirmDialog(message) {
@@ -715,6 +817,10 @@ class MyCompetitionSection3 extends BaseElement {
     }
 
     async addNewItem() {
+        this.renderRoot.querySelector('.right-layout').scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
         this.dataSource.addNewItem(this.currentItem);
         // const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
         // page.startEdit()
@@ -722,62 +828,59 @@ class MyCompetitionSection3 extends BaseElement {
 
 
     async addItem() {
-        this.dataSource.addItem(this.currentItem);
+        this.dataSource.addItem(this.currentItem)
     }
 
-    saveFirstItem() {
-        this.dataSource.addItem(this.currentItem);
-        this.oldValues?.clear();
-        this.isModified = false;
+    async saveFirstItem() {
+        await this.dataSource.addItem(this.currentItem)
+        this.oldValues?.clear()
+        this.isModified = false
     }
 
     async saveNewItem() {
-        this.dataSource.saveNewItem(this.currentItem);
+        await this.dataSource.saveNewItem(this.currentItem)
         this.oldValues?.clear();
         this.isModified = false;
     }
 
     async saveItem() {
-        if ('_id' in this.currentItem) {
-            await this.dataSource.saveItem(this.currentItem);
-        } else {
-            await this.dataSource.addItem(this.currentItem);
-        }
-        if (this.avatarFile) {
-            let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
-            if (!result) return;
-        }
-        this.avatarFile = null;
-        this.oldValues?.clear();
-        this.isModified = false;
+        await this.dataSource.saveItem(this.currentItem)
+        this.oldValues?.clear()
+        this.isModified = false
     }
 
     async cancelNewItem() {
         const modalResult = await this.confirmDialog('Вы действительно хотите отменить добавление?')
         if (modalResult !== 'Ok')
-            return
+            return modalResult
         this.dataSource.cancelNewItem()
-        this.oldValues.clear();
-        this.isModified = false;
+        this.oldValues.clear()
+        this.isModified = false
+        return 'Ok'
     }
 
     async cancelItem() {
         const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
-            return
+            return modalResult
         this.oldValues.forEach( (value, key) => {
             if (key.id === 'avatar') {
                 window.URL.revokeObjectURL(value);
                 this.avatar = value;
                 this.avatarFile = null;
             } else {
-                const currentItem = key.currentObject ?? this.currentItem
-                currentItem[key.id] = value;
+                if (key.currentObject) {
+                    key.currentObject[key.id?.split('.').at(-1)] = value
+                }
+                else {
+                    this.currentItem[key.id] = value;
+                }
                 key.value = value;
             }
         });
         this.oldValues.clear();
         this.isModified = false;
+        return 'Ok'
     }
 
     validateAvatar(e) {
@@ -800,10 +903,11 @@ class MyCompetitionSection3 extends BaseElement {
     }
 
     async deleteItem() {
-        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого спортсмена?')
+        const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого тренера?')
         if (modalResult !== 'Ok')
-            return;
-        this.dataSource.deleteItem(this.currentItem, this.listItem)
+            return modalResult
+        this.dataSource.deleteItem(this.currentItem)
+        return 'Ok'
     }
 
     async firstUpdated() {

@@ -7,6 +7,9 @@ export default class DataSet {
     static #parentId;
 
     static async getDataSet(id) {
+        if (DataSet.#dataSet && !id) {
+            return DataSet.#dataSet
+        }
         if (!DataSet.#dataSet || DataSet.#parentId != id) {
             DataSet.#dataSet = await DataSet.#getItems(id)
             DataSet.#parentId = id
@@ -79,7 +82,8 @@ export default class DataSet {
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:${PORT}/api/competition-referee/${itemId}`)}
+        return fetch(`https://${HOST}:${PORT}/api/competition-referee/${itemId}`)
+    }
 
     static async getItem(itemId) {
 

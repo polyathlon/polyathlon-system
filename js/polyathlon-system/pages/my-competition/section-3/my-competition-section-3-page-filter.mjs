@@ -22,7 +22,7 @@ import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 import RefereeDataset from '../../my-referees/my-referees-dataset.mjs'
 
 
-class MyCompetitionSection3Page1 extends BaseElement {
+class MyCompetitionSection3PageFilter extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -33,7 +33,7 @@ class MyCompetitionSection3Page1 extends BaseElement {
             findDataSource: { type: Object, default: null },
             item: { type: Object, default: null },
             currentItemRefresh: { type: Boolean, default: false, local: true },
-            isModified: { type: Boolean, default: false, local: true },
+            isFilterModified: { type: Boolean, default: false, local: true },
             oldValues: { type: Map, default: null },
         }
     }
@@ -146,9 +146,6 @@ class MyCompetitionSection3Page1 extends BaseElement {
         }
 
         currentItem[e.target.id] = e.target.value
-        if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id == 'position' || e.target.id == 'sortOrder') {
-            this.currentItemRefresh = !this.currentItemRefresh
-        }
 
         if (e.target.id === 'region') {
             this.$id('city').setValue('')
@@ -163,7 +160,7 @@ class MyCompetitionSection3Page1 extends BaseElement {
             delete currentItem[e.target.id]
         }
 
-        this.isModified = this.oldValues.size !== 0;
+        this.isFilterModified = this.oldValues.size !== 0;
     }
 
     async findRefereeByName(e) {
@@ -283,7 +280,6 @@ class MyCompetitionSection3Page1 extends BaseElement {
     startEdit() {
         let input = this.$id("lastName")
         input.focus()
-        this.isModified = true
     }
 
     async firstUpdated() {
@@ -296,4 +292,4 @@ class MyCompetitionSection3Page1 extends BaseElement {
 
 }
 
-customElements.define("my-competition-section-3-page-1", MyCompetitionSection3Page1);
+customElements.define("my-competition-section-3-page-filter", MyCompetitionSection3PageFilter);

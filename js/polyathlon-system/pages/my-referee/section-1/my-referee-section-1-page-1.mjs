@@ -50,6 +50,21 @@ class MyRefereeSection1Page1 extends BaseElement {
         ]
     }
 
+    cityShowValue(item) {
+        return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
+    }
+
+    cityListLabel(item) {
+        if (item?.name) {
+            return item?.type?.shortName ? `${item?.type?.shortName} ${item?.name}` : item?.name
+        }
+        return ''
+    }
+
+    cityListStatus(item) {
+        return { name: item?.region?.name ?? ''}
+    }
+
     render() {
         return html`
             <div class="container">

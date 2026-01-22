@@ -20,6 +20,8 @@ import './my-competition-section-6-page-7.mjs'
 import './my-competition-section-6-page-8.mjs'
 import './my-competition-section-6-page-9.mjs'
 import './my-competition-section-6-page-10.mjs'
+import './my-competition-section-6-page-filter.mjs'
+import './my-competition-section-6-page-search.mjs'
 
 import './my-competition-section-6-table-1.mjs'
 import './my-competition-section-6-table-3.mjs'
@@ -47,15 +49,20 @@ class MyCompetitionSection6 extends BaseElement {
             dataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
-            currentItem: { type: Object, default: null },
+            currentItem: { type: Object, default: null, local: true },
+            currentItemRefresh: { type: Boolean, default: false, local: true },
             isModified: { type: Boolean, default: false, local: true },
-            sortDirection: { type: Boolean, default: true},
+            sortDirection: { type: Boolean, default: true, local: true},
+            currentFilter: { type: Object, default: {} },
+            isFiltered: { type: Boolean, default: false },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             parent: { type: Object, default: {} },
             isTable: { type: Boolean, default: false, local: true },
             isLot: { type: Boolean, default: false, local: true },
+            isFilterModified: { type: Boolean, default: false, local: true },
+            oldFilterValues: { type: Map, default: null },
         }
     }
 
@@ -108,7 +115,6 @@ class MyCompetitionSection6 extends BaseElement {
                             background-color: var(--layout-background-color);
                         }
                     }
-
                 }
 
                 .left-layout {
@@ -225,9 +231,11 @@ class MyCompetitionSection6 extends BaseElement {
 
     constructor() {
         super();
+        this.$partid = 'MyCompetitionSection6'
         this.statusDataSet = new Map()
-        this.currentPage = 0;
-        this.oldValues = new Map();
+        this.currentPage = 0
+        this.oldValues = new Map()
+        this.oldFilterValues = new Map()
         this.buttons = [
             {iconName: 'excel-import-solid', page: 'my-coach-categories', title: lang`Import from Excel`, click: () => this.ExcelFile()},
             {iconName: 'places-solid', page: 'my-coach-categories', title: lang`Sports place`, click: () => this.sportsPlace()},
@@ -245,6 +253,8 @@ class MyCompetitionSection6 extends BaseElement {
             {name: 'page8', iconName: 'skiing-solid', page: 6, title: lang`Skiing`, click: () => this.gotoPage(6)},
             {name: 'page9', iconName: 'roller-skiing-solid', page: 7, title: lang`Roller skiing`, click: () => this.gotoPage(7)},
             {name: 'page10', iconName: 'jumping-solid', page: 8, title: lang`Jumping`, click: () => this.gotoPage(8)},
+            {name: 'pageSearch', iconName: 'search-regular', page: 9, title: lang`Search`, click: () => this.gotoPage(9)},
+            {name: 'pageFilter', iconName: 'filter-regular', page: 10, title: lang`Filter`, click: () => this.gotoPage(10)},
         ]
         this.tables = [
             {name: 'table1', iconName: 'shooting-solid', page: 0, title: lang`Shooting`, click: () => this.gotoPage(0)},
@@ -446,7 +456,7 @@ class MyCompetitionSection6 extends BaseElement {
     //     }
     // }
 
-    get page() {
+    get #page() {
         return cache(this[(this.isLot ? this.lots : (this.isTable ? this.tables : this.pages))[this.currentPage].name])
     }
 
@@ -501,6 +511,18 @@ class MyCompetitionSection6 extends BaseElement {
     get page10() {
         return html`
             <my-competition-section-6-page-10 .discipline=${"jumping"} .parent=${this.parent} .oldValues=${this.oldValues} .item=${this.currentItem}></my-competition-section-6-page-10>
+        `;
+    }
+
+    #pageSearch() {
+        return html`
+            <my-competition-section-6-page-search .item=${this.currentSearch}></my-competition-section-6-page-search>
+        `;
+    }
+
+    #pageFilter() {
+        return html`
+            <my-competition-section-6-page-filter .item=${this.currentFilter} .oldValues=${this.oldFilterValues}></my-competition-section-3-page-filter>
         `;
     }
 
@@ -579,7 +601,9 @@ class MyCompetitionSection6 extends BaseElement {
     }
 
     newRecord() {
-        return html `<icon-button
+        return html `
+            ${this.currentItemRefresh ? '' : ''}
+            <icon-button
                 label=${ this.fio(this.currentItem) || "Новый спортсмен" }
                 title=''
                 icon-name=${ this.currentItem?.gender == 0 ? "sportsman-man-solid" : "sportsman-woman-solid" }
@@ -685,6 +709,9 @@ class MyCompetitionSection6 extends BaseElement {
         }
         if (!this.dataSource?.items)
             return ''
+        if (this.currentPage === 2) {
+            return this.#filterFooter
+        }
         if (this.dataSource.items.length) {
             if (this.dataSource.state === States.NEW) {
                 return this.#newItemFooter
@@ -703,6 +730,16 @@ class MyCompetitionSection6 extends BaseElement {
         return ''
     }
 
+    sectionName(section) {
+        if (this.currentPage == 0 ) {
+            return section
+        } else if (this.currentPage == 1 ) {
+            return { name: "section6", label: lang`Search`, iconName: 'search-regular' }
+        } else {
+            return { name: "section6", label: lang`Filter`, iconName: 'filter-regular' }
+        }
+    }
+
     render() {
         return html`
             <modal-dialog></modal-dialog>
@@ -711,13 +748,13 @@ class MyCompetitionSection6 extends BaseElement {
                 <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
                 <p>
                     <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
-                    <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
+                    <aside-button icon-name="filter-regular" ?active=${this.isFiltered} @click=${this.filterPage}></aside-button>
                 </p>
             </header>
             <header class="right-header">
-                ${this.sections.map( (page, index) =>
+                ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection} icon-name=${index === this.currentSection ? this.sectionName(section).iconName : section.iconName} label=${index === this.currentSection ? this.sectionName(section).label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -726,20 +763,22 @@ class MyCompetitionSection6 extends BaseElement {
                 ${this.#list}
             </div>
             <div class="right-layout">
-                ${this.page}
+                ${this.#page}
             </div>
             <footer class="left-footer">
                 ${this.#task}
             </footer>
-            <footer class="right-footer">
-                ${this.#rightFooter}
-            </footer>
+            ${isAuth() ? html`
+                <footer class="right-footer">
+                    ${this.#rightFooter}
+                </footer>
+            ` : ''}
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
     addFirstItem() {
-        const page = this.renderRoot.querySelector('my-sportsmen-section-1-page-1')
+        const page = this.renderRoot.querySelector('my-sportsmen-section-6-page-1')
         page.startEdit()
     }
 
@@ -748,7 +787,7 @@ class MyCompetitionSection6 extends BaseElement {
             this.isTable = !this.isTable
         }
         else {
-            this.parentNode.host.currentSection = index;
+            this.$root.currentSection = index;
         }
     }
 
@@ -769,9 +808,86 @@ class MyCompetitionSection6 extends BaseElement {
         this.currentPage--
     }
 
-    filterPage() {
-        this.currentFilter = {}
+    searchPage() {
+        this.currentSearch = {}
         this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
+
+    filterPage() {
+        this.currentPage = this.currentPage === 2 ? 0 : 2
+    }
+
+    async applyFilter() {
+        const result = await this.dataSource.filter(this.currentFilter)
+        this.oldFilterValues.clear();
+        this.isFilterModified = false;
+        this.currentItemRefresh = !this.currentItemRefresh
+        this.dataSource.setCurrentItem(result)
+        this.isFiltered = true
+    }
+
+    async clearFilter() {
+        const result = await this.dataSource.clearFilter()
+        this.currentFilter = {}
+        this.oldFilterValues?.clear();
+        this.isFilterModified = false;
+        this.dataSource.setCurrentItem(result)
+        this.currentItemRefresh = !this.currentItemRefresh
+        this.isFiltered = false
+    }
+
+    async cancelFilter() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить сделанные изменения в фильтре?')
+        if (modalResult !== 'Ok')
+            return modalResult
+        this.oldFilterValues.forEach( (value, key) => {
+            if (key.id === 'avatar') {
+                window.URL.revokeObjectURL(value);
+                this.avatar = value;
+                this.avatarFile = null;
+            } else {
+                if (key.currentObject) {
+                    key.currentObject[key.id?.split('.').at(-1)] = value
+                }
+                else {
+                    this.currentItem[key.id] = value;
+                }
+                key.value = value;
+            }
+        });
+        this.oldFilterValues.clear();
+        this.isFilterModified = false;
+        return 'Ok'
+    }
+
+    async closeFilter() {
+        this.filterPage()
+    }
+
+    get #filterFooter() {
+        if (this.isFilterModified) {
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.applyFilter}>${lang`Apply`}</simple-button>
+                    <simple-button @click=${this.cancelFilter}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
+        } else if (this.isFiltered){
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
+                    <simple-button @click=${this.clearFilter}>${lang`Clear`}</simple-button>
+                </nav>
+            `
+        }
+        else {
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
+                </nav>
+            `
+        }
+
     }
 
     sortPage() {
@@ -790,8 +906,12 @@ class MyCompetitionSection6 extends BaseElement {
     }
 
     async addNewItem() {
-        this.dataSource.addNewItem(this.currentItem)
-        // const page = this.renderRoot.querySelector('my-sportsmen-section-6-page-1')
+        this.renderRoot.querySelector('.right-layout').scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+        this.dataSource.addNewItem(this.currentItem);
+        // const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
         // page.startEdit()
     }
 
@@ -800,46 +920,38 @@ class MyCompetitionSection6 extends BaseElement {
         this.dataSource.addItem(this.currentItem)
     }
 
-    saveFirstItem() {
-        this.dataSource.addItem(this.currentItem)
+    async saveFirstItem() {
+        await this.dataSource.addItem(this.currentItem)
         this.oldValues?.clear()
-        this.isModified = false;
+        this.isModified = false
     }
 
     async saveNewItem() {
-        this.dataSource.saveNewItem(this.currentItem);
+        await this.dataSource.saveNewItem(this.currentItem)
         this.oldValues?.clear();
         this.isModified = false;
     }
 
     async saveItem() {
-        if ('_id' in this.currentItem) {
-            await this.dataSource.saveItem(this.currentItem);
-        } else {
-            await this.dataSource.addItem(this.currentItem);
-        }
-        if (this.avatarFile) {
-            let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
-            if (!result) return;
-        }
-        this.avatarFile = null;
-        this.oldValues?.clear();
-        this.isModified = false;
+        await this.dataSource.saveItem(this.currentItem)
+        this.oldValues?.clear()
+        this.isModified = false
     }
 
     async cancelNewItem() {
         const modalResult = await this.confirmDialog('Вы действительно хотите отменить добавление?')
         if (modalResult !== 'Ok')
-            return
+            return modalResult
         this.dataSource.cancelNewItem()
-        this.oldValues.clear();
-        this.isModified = false;
+        this.oldValues.clear()
+        this.isModified = false
+        return 'Ok'
     }
 
     async cancelItem() {
         const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
-            return
+            return modalResult
         this.oldValues.forEach( (value, key) => {
             if (key.id === 'avatar') {
                 window.URL.revokeObjectURL(value);
@@ -858,6 +970,7 @@ class MyCompetitionSection6 extends BaseElement {
         });
         this.oldValues.clear();
         this.isModified = false;
+        return 'Ok'
     }
 
     validateAvatar(e) {
@@ -882,8 +995,9 @@ class MyCompetitionSection6 extends BaseElement {
     async deleteItem() {
         const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого спортсмена?')
         if (modalResult !== 'Ok')
-            return;
-        this.dataSource.deleteItem(this.currentItem, this.listItem)
+            return modalResult
+        await this.dataSource.deleteItem(this.currentItem)
+        return 'Ok'
     }
 
     changeVisible() {

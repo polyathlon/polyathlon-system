@@ -767,6 +767,10 @@ const dictionary = {
         "ru-RU": 'Фильтровать',
         "en-EN": 'Filter'
     },
+    'Apply': {
+        "ru-RU": 'Применить',
+        "en-EN": 'Apply'
+    },
     'Clear': {
         "ru-RU": 'Очистить',
         "en-EN": 'Clear'
@@ -1078,6 +1082,22 @@ const dictionary = {
     'Club team number': {
         "ru-RU": 'Номер команды клуба',
         "en-EN": 'Club team number'
+    },
+    'Region team member': {
+        "ru-RU": 'Член команды субъекта РФ',
+        "en-EN": 'Region team member'
+    },
+    'Club team member': {
+        "ru-RU": 'Член команды клуба',
+        "en-EN": 'Club team member'
+    },
+    'Region team': {
+        "ru-RU": 'Команда субъекта РФ',
+        "en-EN": 'Region team'
+    },
+    'Club team': {
+        "ru-RU": 'Команда клуба',
+        "en-EN": 'Club team'
     },
 }
 
