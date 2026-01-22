@@ -20,7 +20,6 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
             value: { type: String, default: ''},
             currentObject: { type: Object, default: undefined},
             lang: { type: String, default: ''},
-            listLabel: { type: Function, default: null, attribute: 'list-name'},
             showValue: { type: Function, default: null, attribute: 'show-value'},
             isShowList: {type: Boolean, default: false},
             mask: {type: Function, default: undefined},
@@ -127,27 +126,13 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
         `
     }
 
-    fio(item) {
-        if (!item) {
-            return item
-        }
-        let result = item.lastName
-        if (item.firstName) {
-            result += ` ${item.firstName}`
-        }
-        if (item.middleName) {
-            result += ` ${item.middleName}`
-        }
-        return result
-    }
-
     get #list() {
         return html`
           <div class="options-list" @mouseenter=${this.listInFocus} @mouseleave=${this.listOutFocus}>
               ${this.dataSource?.items?.map((item, index) =>
                   html `
                     <icon-button
-                        label=${this.listLabel?.(item) ?? this.fio(item) ?? item.name}
+                        label=${this.listLabel?.(item) ?? item.name}
                         title=${ item.sportsmanId || item?._id }
                         icon-name=${this.listIcon?.(item) ?? this.iconName}
                         image-name=${ item.gender == 0 ? "images/sportsman-man-solid.svg" : "images/sportsman-woman-solid.svg" }
