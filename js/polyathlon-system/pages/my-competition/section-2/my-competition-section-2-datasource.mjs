@@ -163,86 +163,114 @@ export default class DataSource {
     }
 
     getTeamPoints(team) {
+        team.sort((a , b) => {
+            return b.points - a.points || b.gold - a.gold || b.silver - a.silver || b.bronze - a.bronze
+        })
         let sum = 0
         let gold = 0
         let silver = 0
         let bronze = 0
-        const sportDisciplines = ["shooting", "strengthTraining", "swimming", "throwing", "sprinting", "running", "skiing", "rollerSkiing", "jumping"]
-        team.forEach(athlete => {
-            sportDisciplines.forEach(discipline => {
-                sum += +(athlete[discipline]?.points ?? 0)
-                gold += athlete[discipline]?.place == 1 ? 1 : 0
-                silver += athlete[discipline]?.place == 2 ? 1 : 0
-                bronze += athlete[discipline]?.place == 3 ? 1 : 0
-                // let category = categories.get(athlete.category.shortName) ?? 0
-                // category++
-                // categories.set(athlete.category.shortName, category)
-            })
+        team.every( (athlete, index) => {
+            if (index >= 5) {
+                return false
+            }
+            sum += +(athlete?.points ?? 0)
+            gold += athlete?.gold ?? 0
+            silver += athlete.silver ?? 0
+            bronze += athlete.bronze ?? 0
+            return true
         })
-        team.medals = { gold, silver, bronze}
-        // team.categories = categories
+        team.medals = { gold, silver, bronze }
         return sum;
     }
 
     getClubPoints(team) {
+        team.sort((a , b) => {
+            return b.points - a.points || b.gold - a.gold || b.silver - a.silver || b.bronze - a.bronze
+        })
         let sum = 0
         let gold = 0
         let silver = 0
         let bronze = 0
-        // let categories = new Map()
-        const sportDisciplines = ["shooting", "strengthTraining", "swimming", "throwing", "sprinting", "running", "skiing", "rollerSkiing", "jumping"]
-        team.forEach(athlete => {
-            sportDisciplines.forEach(discipline => {
-                sum += +(athlete[discipline]?.points ?? 0)
-                gold += athlete[discipline]?.place == 1 ? 1 : 0
-                silver += athlete[discipline]?.place == 2 ? 1 : 0
-                bronze += athlete[discipline]?.place == 3 ? 1 : 0
-                // let category = categories.get(athlete.category.shortName) ?? 0
-                // category++
-                // categories.set(athlete.category.shortName, category)
-            })
+        team.every( (athlete, index) => {
+            if (index >= 4) {
+                return false
+            }
+            sum += +(athlete?.points ?? 0)
+            gold += athlete?.gold ?? 0
+            silver += athlete.silver ?? 0
+            bronze += athlete.bronze ?? 0
+            return true
         })
-        team.medals = { gold, silver, bronze}
-        // team.categories = categories
+        team.medals = { gold, silver, bronze }
         return sum;
     }
 
     getTeamResults() {
         const teams = new Map()
-        this.items.forEach(item => {
-            const team = teams.get(item.region?._id) ?? []
-            team.push(item)
-            if (team.length === 1) {
-                teams.set(item.region?._id, team)
+        const sportDisciplines = ["shooting", "strengthTraining", "swimming", "throwing", "sprinting", "running", "skiing", "rollerSkiing", "jumping"]
+        this.items.forEach(athlete => {
+            const team = teams.get(athlete.region?._id) ?? []
+            if (athlete.teamMember) {
+                let gold = 0
+                let silver = 0
+                let bronze = 0
+                let points = 0
+                sportDisciplines.forEach(discipline => {
+                    points += +(athlete[discipline]?.points ?? 0)
+                    gold += athlete[discipline]?.place == 1 ? 1 : 0
+                    silver += athlete[discipline]?.place == 2 ? 1 : 0
+                    bronze += athlete[discipline]?.place == 3 ? 1 : 0
+                })
+                athlete.points = points
+                athlete.medals = {gold, silver, bronze}
+                team.push(athlete)
+                if (team.length === 1) {
+                    teams.set(athlete.region?._id, team)
+                }
             }
         })
         const result = Array.from(teams.values(), team => ({
             place: 1,
             region: team[0].region,
             points: this.getTeamPoints(team),
-            team: team,
-            categories: this.getTeamCategories(team),
+            team: team
         }))
-        result.sort((a, b) => b.points - a.points).forEach( (value, index) => value.place = index + 1)
+        result.sort((a, b) => b.points - a.points || b.gold - a.gold || b.silver - a.silver || b.bronze - a.bronze).forEach( (value, index) => value.place = index + 1)
         return result
     }
 
     getClubResults() {
         const teams = new Map()
-        this.items.forEach(item => {
-            const team = teams.get(item.club?._id) ?? []
-            team.push(item)
-            if (team.length === 1) {
-                teams.set(item.club?._id, team)
+        const sportDisciplines = ["shooting", "strengthTraining", "swimming", "throwing", "sprinting", "running", "skiing", "rollerSkiing", "jumping"]
+        this.items.forEach(athlete => {
+            const team = teams.get(athlete.club?._id) ?? []
+            if (athlete.clubMember) {
+                let gold = 0
+                let silver = 0
+                let bronze = 0
+                let points = 0
+                sportDisciplines.forEach(discipline => {
+                    points += +(athlete[discipline]?.points ?? 0)
+                    gold += athlete[discipline]?.place == 1 ? 1 : 0
+                    silver += athlete[discipline]?.place == 2 ? 1 : 0
+                    bronze += athlete[discipline]?.place == 3 ? 1 : 0
+                })
+                athlete.points = points
+                athlete.medals = {gold, silver, bronze}
+                team.push(athlete)
+                if (team.length === 1) {
+                    teams.set(athlete.club?._id, team)
+                }
             }
         })
         const result = Array.from(teams.values(), team => ({
             place: 1,
             club: team[0].club,
             points: this.getClubPoints(team),
-            team: team,
+            team: team
         }))
-        result.sort((a, b) => b.points - a.points).forEach( (value, index) => value.place = index + 1)
+        result.sort((a, b) => b.points - a.points || b.gold - a.gold || b.silver - a.silver || b.bronze - a.bronze).forEach( (value, index) => value.place = index + 1)
         return result
     }
 
