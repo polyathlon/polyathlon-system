@@ -353,7 +353,7 @@ class MyCompetitionSection6 extends BaseElement {
                 place = 1
             }
             else {
-                place = this.getPoints(b) === this.getPoints(item[index - 1]) && this.getResult(b) === this.getResult(item[index - 1]) ? this.getPlace(item[index - 1]) : a + 1
+                place = this.getPoints(b) == this.getPoints(item[index - 1]) && this.getResult(b) == this.getResult(item[index - 1]) ? this.getPlace(item[index - 1]) : a + 1
             }
 
             if (this.getPlace(b) != place) {
