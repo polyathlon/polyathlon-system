@@ -31,8 +31,8 @@ class MyCompetitionSection4Page2 extends BaseElement {
                 label: lang`Short sports category`,
             },
             {
-                name: "year",
-                label: lang`Year of birth`,
+                name: "birthday",
+                label: lang`Date of birth`,
             },
             {
                 name: "region",
@@ -300,7 +300,7 @@ class MyCompetitionSection4Page2 extends BaseElement {
                     sportsman: `${item.lastName} ${item.firstName} ${item.middleName}`,
                     gender: item.gender,
                     category: item.category.shortName,
-                    year: new Date(item.birthday).getFullYear(),
+                    birthday: new Date(item.birthday).toLocaleDateString(),
                     region: item.region.shortName ?? item.region.name,
                     club: item.club.name,
                     points: points,
@@ -381,7 +381,7 @@ class MyCompetitionSection4Page2 extends BaseElement {
             [
                 { text: 'Место', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
                 { text: 'Спортсмен', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
-                { text: 'Год рожд', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
+                { text: 'Дата рожд', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
                 { text: 'Звание, разряд', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
                 { text: 'Субъект РФ', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
                 { text: 'Спортивный клуб', rowSpan: 2, fontSize: 8, fillColor: '#eeeeee' },
@@ -396,7 +396,7 @@ class MyCompetitionSection4Page2 extends BaseElement {
         tableBody.push(...this.items.map((item, index) => ([
             { text: item.place ?? index + 1, fontSize: 8 },
             { text: item.sportsman ?? '', fontSize: 8 },
-            { text: item.year ?? '', fontSize: 8 },
+            { text: item.birthday ?? '', fontSize: 8 },
             { text: item.category ?? '', fontSize: 8 },
             { text: item.region ?? '', fontSize: 8 },
             { text: item.club ?? '', fontSize: 8 },
