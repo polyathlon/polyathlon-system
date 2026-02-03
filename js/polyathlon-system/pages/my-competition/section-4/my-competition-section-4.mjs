@@ -274,8 +274,8 @@ class MyCompetitionSection4 extends BaseElement {
             {title: lang`Stadium statistic`, page: () => this.#page11(), iconName: 'stadium-solid', click: () => this.gotoPage(6)},
             {title: lang`Referee categories statistic`, page: () => this.#page7(), iconName: 'referee-category-solid', click: () => this.gotoPage(7)},
             {title: lang`Personal championship`, page: () => this.#page2(), iconName: 'person-championship-solid', click: () => this.gotoPage(8)},
-            {title: lang`Team championship`, page: () => this.#page4(), iconName: 'team-championship-solid', click: () => this.gotoPage(10)},
-            {title: lang`Club championship`, page: () => this.#page3(), iconName: 'club-championship-solid', click: () => this.gotoPage(9)},
+            {title: lang`Team championship`, page: () => this.#page4(), iconName: 'team-championship-solid', click: () => this.gotoPage(9)},
+            {title: lang`Club championship`, page: () => this.#page3(), iconName: 'club-championship-solid', click: () => this.gotoPage(10)},
         ]
     }
 
