@@ -147,6 +147,18 @@ const dictionary = {
         "ru-RU": 'Клуб',
         "en-EN": 'Club name'
     },
+    'Club': {
+        "ru-RU": 'Клуб',
+        "en-EN": 'Club'
+    },
+    'Clubs': {
+        "ru-RU": 'Клубы',
+        "en-EN": 'Clubs'
+    },
+    'Club PC': {
+        "ru-RU": 'Персональный код клуба',
+        "en-EN": 'Club PC'
+    },
     'Sportsman Ulid': {
         "ru-RU": 'Ulid спортсмена',
         "en-EN": 'Sportsman Ulid'

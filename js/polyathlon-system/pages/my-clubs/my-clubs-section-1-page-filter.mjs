@@ -5,8 +5,6 @@ import '../../../../components/selects/simple-select.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
-import DataSet from './my-clubs-dataset.mjs'
-
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 
@@ -16,16 +14,16 @@ import CityDataset from '../my-cities/my-cities-dataset.mjs'
 import ClubTypesDataset from '../my-club-types/my-club-types-dataset.mjs'
 import ClubTypesDataSource from '../my-club-types/my-club-types-datasource.mjs'
 
-class MyClubsSection1Page1 extends BaseElement {
+class MyClubsSection1PageFilter extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            DataSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: { type: Object, default: null },
+            clubTypesDataSource: { type: Object, default: null },
             item: { type: Object, default: null },
             currentItemRefresh: { type: Boolean, default: false, local: true },
-            isModified: { type: Boolean, default: false, local: true },
+            isFilterModified: { type: Boolean, default: false, local: true },
             oldValues: { type: Map, default: null },
         }
     }
@@ -73,10 +71,10 @@ class MyClubsSection1Page1 extends BaseElement {
             <div class="container">
                 <simple-input id="name" icon-name="club-solid" label="${lang`Club name`}:" .value=${this.item?.name} @input=${this.validateInput}></simple-input>
                 <simple-input id="fullName" icon-name="club-solid" label="${lang`Full name`}:" .value=${this.item?.fullName} @input=${this.validateInput}></simple-input>
-                <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="${lang`Region name`}:" .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
+                <simple-select id="region" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} label="${lang`Region name`}:" .dataSource=${this.regionDataSource} .value=${this.item?.city?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" .showValue=${this.cityShowValue} .listStatus=${this.cityListStatus} .listLabel=${this.cityListLabel} icon-name="city-solid" @icon-click=${() => this.showPage('my-cities')} label="${lang`City name`}:" .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
                 <simple-select id="type" icon-name="club-type-solid" @icon-click=${() => this.showPage('my-club-types')} label="${lang`Club type name`}:" .dataSource=${this.clubTypesDataSource} .value=${this.item?.type} @input=${this.validateInput}></simple-select>
-                <simple-input id="clubPC" label="${lang`Club PC`}:" icon-name="club-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createPersonalCode} .value=${this.item?.clubPC} @input=${this.validateInput}></simple-input>
+                <simple-input id="clubPC" label="${lang`Club PC`}:" icon-name="club-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createClubPC} .value=${this.item?.clubPC} @input=${this.validateInput}></simple-input>
             </div>
         `;
     }
@@ -89,9 +87,9 @@ class MyClubsSection1Page1 extends BaseElement {
         location.search = `?club=${this.item?._id.split(':')[1]}`
     }
 
-    async createPersonalCode(e) {
+    async createClubPC(e) {
         const target = e.target
-        const id = await DataSet.createPersonalCode({
+        const id = await DataSet.createRefereePC({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code
         })
@@ -116,42 +114,18 @@ class MyClubsSection1Page1 extends BaseElement {
         window.open(this.$id('order.link').value);
     }
 
-    startEdit() {
-        let input = this.$id("name")
-        input.focus()
-    }
-
     validateInput(e) {
-        let id = e.target.id
         let currentItem = e.target.currentObject ?? this.item
-        if (id == "order.number") {
-            id = "number"
-            if (!this.item.order) {
-                this.item.order = {}
-            }
-            currentItem = this.item.order
-        }
-        if (id == "order.link") {
-            id = "link"
-            if (!this.item.order) {
-                this.item.order = {}
-            }
-            currentItem = this.item.order
-        }
-
         if (!this.oldValues.has(e.target)) {
-            if (currentItem[id] !== e.target.value) {
-                this.oldValues.set(e.target, currentItem[id])
+            if (currentItem[e.target.id] !== e.target.value) {
+                this.oldValues.set(e.target, currentItem[e.target.id])
             }
-        } else if (this.oldValues.get(e.target) === e.target.value) {
-            this.oldValues.delete(e.target)
+        }
+        else if (this.oldValues.get(e.target) === e.target.value) {
+                this.oldValues.delete(e.target)
         }
 
         currentItem[e.target.id] = e.target.value
-
-        if (e.target.id === 'name' || e.target.id === 'region' || e.target.id === 'city') {
-            this.currentItemRefresh = !this.currentItemRefresh
-        }
 
         if (e.target.id === 'region') {
             this.$id('city').setValue('')
@@ -166,7 +140,29 @@ class MyClubsSection1Page1 extends BaseElement {
             delete currentItem[e.target.id]
         }
 
-        this.isModified = this.oldValues.size !== 0;
+        this.isFilterModified = this.oldValues.size !== 0;
+    }
+
+    async showDialog(message, type='message', title='') {
+        const modalDialog = this.renderRoot.querySelector('modal-dialog')
+        modalDialog.type = type
+        if (title) {
+            modalDialog.title = title
+        }
+        return modalDialog.show(message);
+    }
+
+    async confirmDialog(message) {
+        return this.showDialog(message, 'confirm')
+    }
+
+    async errorDialog(message) {
+        return this.showDialog(message, 'error', 'Ошибка')
+    }
+
+    startEdit() {
+        let input = this.$id("lastName")
+        input.focus()
     }
 
     async firstUpdated() {
@@ -177,4 +173,4 @@ class MyClubsSection1Page1 extends BaseElement {
     }
 }
 
-customElements.define("my-clubs-section-1-page-1", MyClubsSection1Page1)
+customElements.define("my-clubs-section-1-page-filter", MyClubsSection1PageFilter)

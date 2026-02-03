@@ -1,6 +1,8 @@
-import refreshToken, {getToken} from "../../refresh-token.mjs";
+import refreshToken, {getToken} from "../../refresh-token.mjs"
 
-import {HOST, PORT} from "../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../polyathlon-system-config.mjs"
+
+const requestName = 'club'
 
 export default class DataSet {
     static #dataSet;
@@ -20,7 +22,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems() {
-        return fetch(`https://${HOST}:${PORT}/api/clubs`)
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}s`)
     }
 
     static async #getItems() {
@@ -36,7 +38,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:${PORT}/api/club`, {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -55,25 +57,25 @@ export default class DataSet {
             response = await DataSet.fetchAddItem(token, item)
         }
         const result = await response.json()
+
         if (!response.ok) {
             throw new Error(result.error)
         }
 
         const newItem = await DataSet.getItem(result.id)
-        DataSet.addToDataset(newItem)
+        // DataSet.addToDataset(newItem)
         return newItem
     }
 
     static addToDataset(item) {
-        DataSet.#dataSet.unshift(item);
+        DataSet.#dataSet.push(item)
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:${PORT}/api/club/${itemId}`)
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}/${itemId}`)
     }
 
     static async getItem(itemId) {
-
         let response = await DataSet.#fetchGetItem(itemId)
 
         const result = await response.json()
@@ -84,8 +86,34 @@ export default class DataSet {
         return result
     }
 
+    static #fetchGetItemByLastName(token, itemId) {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}/last-name/${itemId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
+
+    static async getItemByLastName(itemId) {
+        let token = getToken();
+
+        let response = await DataSet.#fetchGetItemByLastName(token, itemId)
+
+        if (response.status === 419) {
+            token = await refreshToken(token)
+            response = await DataSet.#fetchGetItemByLastName(token, itemId)
+        }
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result
+    }
+
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:${PORT}/api/club/${item._id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -118,7 +146,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:${PORT}/api/club/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -151,5 +179,56 @@ export default class DataSet {
             return
         }
         DataSet.#dataSet.splice(itemIndex, 1)
+    }
+
+    static fetchCreatePersonalCode(token, item) {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}-pc`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(item)
+        })
+    }
+
+    static async createPersonalCode(item) {
+        let token = getToken();
+        let response = await DataSet.fetchCreatePersonalCode(token, item)
+
+        if (response.status === 419) {
+            token = await refreshToken(token)
+            response = await DataSet.fetchCreatePersonalCode(token, item)
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result.pc
+    }
+
+    static fetchGetQRCode(token, data) {
+        return fetch(`https://${HOST}:${PORT}/api/qr-code?data=${data}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        })
+    }
+
+    static async getQRCode(data) {
+        let token = getToken();
+        let response = await DataSet.fetchGetQRCode(token, btoa(data))
+
+        if (response.status === 419) {
+            token = await refreshToken(token)
+            response = await DataSet.fetchGetQRCode(token, btoa(data))
+        }
+        const result = await response.json()
+        if (!response.ok) {
+            throw new Error(result.error)
+        }
+        return result.qr
     }
 }
