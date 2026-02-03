@@ -10,6 +10,8 @@ import lang from '../../polyathlon-dictionary.mjs'
 import { isAuth, States } from '../../../utils.js'
 
 import './my-trainers-section-1-page-1.mjs'
+import './my-trainers-section-1-page-search.mjs'
+import './my-trainers-section-1-page-filter.mjs'
 
 import DataSet from './my-trainers-dataset.mjs'
 import DataSource from './my-trainers-datasource.mjs'
@@ -21,14 +23,19 @@ class MyTrainersSection1 extends BaseElement {
             dataSource: { type: Object, default: null },
             statusDataSet: { type: Map, default: null },
             oldValues: { type: Map, default: null },
-            currentItem: { type: Object, default: null },
-            isModified: { type: Boolean, default:  "", local: true },
-            sortDirection: { type: Boolean, default: true },
+            currentItem: { type: Object, default: null, local: true },
+            currentItemRefresh: { type: Boolean, default: false, local: true },
+            isModified: { type: Boolean, default: false, local: true },
+            sortDirection: { type: Boolean, default: true, local: true },
+            currentFilter: { type: Object, default: {} },
+            isFiltered: { type: Boolean, default: false },
             isReady: { type: Boolean, default: true },
             // isValidate: {type: Boolean, default: false, local: true},
             itemStatus: { type: Object, default: null, local: true },
             currentPage: { type: BigInt, default: 0 },
             currentFilter: { type: Object, default: {} },
+            isFilterModified: { type: Boolean, default: false, local: true },
+            oldFilterValues: { type: Map, default: null },
         }
     }
 
@@ -38,15 +45,15 @@ class MyTrainersSection1 extends BaseElement {
             css`
                 :host {
                     display: grid;
-                    width: 100%;
                     grid-template-columns: 3fr 9fr;
                     grid-template-rows: 50px 1fr 50px;
                     grid-template-areas:
                         "header1 header2"
-                        "sidebar content"
-                        "footer1  footer2";
+                        "aside main"
+                        "footer1 footer2";
                     gap: 0 20px;
-                    background: linear-gradient(180deg, var(--header-background-color) 0%, var(--gradient-background-color) 100%);
+                    width: 100%;
+                    height: 100%;
                 }
 
                 header {
@@ -104,7 +111,7 @@ class MyTrainersSection1 extends BaseElement {
                 }
 
                 .left-layout {
-                    grid-area: sidebar;
+                    grid-area: aside;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -119,7 +126,7 @@ class MyTrainersSection1 extends BaseElement {
                 }
 
                 .right-layout {
-                    grid-area: content;
+                    grid-area: main;
                     overflow-y: auto;
                     overflow-x: hidden;
                     display: flex;
@@ -128,7 +135,6 @@ class MyTrainersSection1 extends BaseElement {
                     align-items: safe center;
                     /* margin-right: 20px; */
                     background: var(--layout-background-color);
-                    /* overflow: hidden; */
                     gap: 10px;
                 }
 
@@ -209,9 +215,11 @@ class MyTrainersSection1 extends BaseElement {
 
     constructor() {
         super();
+        this.$partid = 'MyTrainersSection1'
         this.statusDataSet = new Map()
-        this.pageNames = [lang`Information`]
-        this.oldValues = new Map();
+        this.currentPage = 0
+        this.oldValues = new Map()
+        this.oldFilterValues = new Map()
         this.buttons = [
             {iconName: 'qr-code-solid', page: 'my-sportsmen', title: lang`QR code`, click: () => this.getQRCode()},
             {iconName: 'excel-import-solid', page: 'my-trainers', title: lang`Export to Excel`, click: () => this.ExportToExcel()},
@@ -219,6 +227,19 @@ class MyTrainersSection1 extends BaseElement {
             {iconName: 'pdf-make',  page: 'my-trainer-categories', title: lang`Make in PDF`, click: () => this.pdfMethod()},
             {iconName: 'arrow-left-solid', page: 'my-trainer-categories', title: lang`Back`, click: () => this.gotoBack()},
         ]
+        this.pages = [
+            {iconName: 'trainer-solid', page: () => this.#page1(), title: lang`Trainers`, click: () => this.gotoPage(0)},
+            {iconName: 'search-regular', page: () => this.#pageSearch(), title: lang`Search`, click: () => this.gotoPage(1)},
+            {iconName: 'filter-regular', page: () => this.#pageFilter(), title: lang`Filter`, click: () => this.gotoPage(2)},
+        ]
+    }
+
+    showPage(page) {
+        location.hash = page;
+    }
+
+    gotoBack(page) {
+        history.back();
     }
 
     pdfMethod() {
@@ -243,7 +264,7 @@ class MyTrainersSection1 extends BaseElement {
                 text: "Всероссийская федерация Полиатлона",
                 fontSize: 14,
                 alignment: "center",
-              },
+            },
             {
                 text: "I-ый этап КУБКА РОССИИ — 2023",
                 fontSize: 18,
@@ -262,26 +283,24 @@ class MyTrainersSection1 extends BaseElement {
                 bold:true,
                 alignment: "center",
             },
-              {
-                  columns: [
-
-                      {
-                          width: 'auto',
-                          text: '12-15 января 2023 года',
-                          margin: [0, 15, 0, 0],
-                          fontSize: 12,
-                      },
-                      {
-                          width: '*',
-                          text: 'г.Ковров, Владимирская обл.',
-                          alignment: "right",
-                          margin: [0, 15, 0, 0],
-                          fontSize: 12,
-                      },
-                  ],
-                  columnGap: 20
-              },
-
+            {
+                columns: [
+                    {
+                        width: 'auto',
+                        text: '12-15 января 2023 года',
+                        margin: [0, 15, 0, 0],
+                        fontSize: 12,
+                    },
+                    {
+                        width: '*',
+                        text: 'г.Ковров, Владимирская обл.',
+                        alignment: "right",
+                        margin: [0, 15, 0, 0],
+                        fontSize: 12,
+                    },
+                ],
+                columnGap: 20
+            },
             {
                 text: "СПРАВКА О СОСТАВЕ И КВАЛИФИКАЦИИ",
                 fontSize: 18,
@@ -393,15 +412,6 @@ class MyTrainersSection1 extends BaseElement {
         };
 
         pdfMake.createPdf(docInfo).open();
-
-    }
-
-    showPage(page) {
-        location.hash = page;
-    }
-
-    gotoBack(page) {
-        history.back();
     }
 
     async getNewFileHandle() {
@@ -510,6 +520,7 @@ class MyTrainersSection1 extends BaseElement {
                     lastName: r[1].split(' ')[0].toLowerCase()[0].toUpperCase() + r[1].split(' ')[0].toLowerCase().slice(1),
                     firstName: r[1].split(' ')[1],
                     middleName: r[1].split(' ')[2],
+                    gender: r[11],
                     category: {
                         "_id": "referee-category:01J7NQ2NX0G3Y1R4D0GY1FFJT1",
                         "_rev": "3-ef23dd9cc44affc2ec440951b1d527d9",
@@ -596,7 +607,7 @@ class MyTrainersSection1 extends BaseElement {
     }
 
     async showItem(item) {
-        if (this.currentPage == 1) {
+        if (this.currentPage != 0) {
             this.currentPage = 0
         }
         if (this.currentItem?._id === item._id) {
@@ -612,24 +623,30 @@ class MyTrainersSection1 extends BaseElement {
                 await this.cancelItem()
             }
         }
-        else {
+        else if (this.currentItem !== item) {
             this.dataSource.setCurrentItem(item)
         }
     }
 
     get #page() {
-        return cache(this.currentPage === 0 ? this.#page1() : this.#page2());
+        return this.pages[this.currentPage].page();
     }
 
     #page1() {
         return html`
-            <my-trainers-section-1-page-1 .oldValues=${this.oldValues} .item=${this.currentItem}></my-trainers-section-1-page-1>
+            <my-trainers-section-1-page-1 class="page" .oldValues=${this.oldValues} .item=${this.currentItem}></my-trainers-section-1-page-1>
         `;
     }
 
-    #page2() {
+    #pageSearch() {
         return html`
-            <my-trainers-section-1-page-2 .item=${this.currentItem}></my-trainers-section-1-page-2>
+            <my-trainers-section-1-page-search class="page" .item=${this.currentSearch}></my-trainers-section-1-page-search>
+        `;
+    }
+
+    #pageFilter() {
+        return html`
+            <my-trainers-section-1-page-filter class="page" .item=${this.currentFilter} .oldValues=${this.oldFilterValues}></my-trainers-section-1-page-filter>
         `;
     }
 
@@ -641,25 +658,52 @@ class MyTrainersSection1 extends BaseElement {
         if (!item) {
             return item
         }
-        let result = item.lastName
+        let result = item.lastName ?? ''
         if (item.firstName) {
             result += ` ${item.firstName}`
         }
         if (item.middleName) {
-        result += ` ${item.middleName}`
+            result += ` ${item.middleName}`
         }
+        result += item.category?.shortName ? ' (' + item.category.shortName + ')' : ''
         return result
+    }
+
+    newRecord() {
+        return html `
+            ${this.currentItemRefresh ? '' : ''}
+            <icon-button
+                label=${ this.fio(this.currentItem) || "Новый тренер" }
+                title=''
+                icon-name=${ this.currentItem?.gender == 0 ? "referee-man-solid" : "referee-woman-solid" }
+                ?selected=${ true }
+                .status=${{ name: this.listStatus(this.currentItem)?.name || 'Не задано', icon: 'region-solid' }}
+            >
+            </icon-button>
+        `
+    }
+
+    cityShowValue(item) {
+        return item?.name ? `${item?.type?.shortName || ''} ${item?.name}` : ''
+    }
+
+    listStatus(item) {
+        if (item?.region?.name) {
+            return { name: item?.region?.name + (item?.city?.name ? ', ' + this.cityShowValue(item.city) : '') }
+        }
+        return { name: item?.city?.name ? this.cityShowValue(item.city) : '' }
     }
 
     get #list() {
         return html`
             ${this.dataSource?.items?.map((item, index) =>
-                html `<icon-button
+                html `
+                    <icon-button
                         label=${this.fio(item)}
                         title=${item._id}
-                        image-name=${ item.gender == 0 ? "images/trainer-man-solid.svg" : "images/trainer-woman-solid.svg" }
+                        image-name=${item.gender == 0 ? "images/trainer-man-solid.svg" : "images/trainer-woman-solid.svg"}
                         ?selected=${this.currentItem === item}
-                        .status=${ { name: item.category?.name || item?._id, icon: 'trainer-category-solid'} }
+                        .status=${{ name: this.listStatus(item).name, icon: 'region-solid' }}
                         @click=${() => this.showItem(item)}
                         @dblclick=${this.gotoPersonalPage}
                     ></icon-button>
@@ -676,64 +720,99 @@ class MyTrainersSection1 extends BaseElement {
         `
     }
 
-    cancelFind() {
-        this.currentPage = 0
-    }
-
-    find() {
-        // alert(JSON.stringify(this.dataSource.findIndex(this.currentFilter)))
-        const result = this.dataSource.find(this.currentFilter)
-        this.currentPage = 0
-        this.dataSource.setCurrentItem(result)
-    }
-
-    get #findFooter() {
+    get #firstItemFooter() {
         return html`
-            <nav class='save'>
-                <simple-button @click=${this.find}>${lang`Find`}</simple-button>
-                <simple-button @click=${this.cancelFind}>${lang`Cancel`}</simple-button>
+            <nav>
+                <simple-button @click=${this.saveFirstItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
+    get #newItemFooter() {
+        return html`
+            <nav>
+                <simple-button @click=${this.saveNewItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelNewItem}>${lang`Cancel`}</simple-button>
+            </nav>
+        `
+    }
+
+    get #addItemFooter() {
+        return html`
+            <nav>
+                <simple-button @click=${this.addNewItem}>${lang`Add`}</simple-button>
+                <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
+            </nav>
+        `
+    }
+
+    get #itemFooter() {
+        return html`
+            <nav>
+                <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
+                <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
             </nav>
         `
     }
 
     get #rightFooter() {
-        if (this.currentPage === 1) {
-            return this.#findFooter
-        }
         if (!isAuth()) {
             return ''
         }
-        if (this.isModified) {
-            return html`
-                <nav>
-                    <simple-button @click=${this.saveItem}>${lang`Save`}</simple-button>
-                    <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
-                </nav>
-            `
-        } else {
-            return html`
-                <nav>
-                    <simple-button @click=${this.addItem}>${lang`Add`}</simple-button>
-                    <simple-button @click=${this.deleteItem}>${lang`Delete`}</simple-button>
-                </nav>
-            `
+        if (!this.dataSource?.items)
+            return ''
+        if (this.currentPage === 2) {
+            return this.#filterFooter
         }
+        if (this.dataSource.items.length) {
+            if (this.dataSource.state === States.NEW) {
+                return this.#newItemFooter
+            }
+            if (this.isModified) {
+                return this.#itemFooter
+            }
+            return this.#addItemFooter
+        }
+        if (this.dataSource.state === States.NEW) {
+            return this.#newItemFooter
+        }
+        if (this.isModified) {
+            return this.#firstItemFooter
+        }
+        return ''
+    }
 
+    sectionName(section) {
+        if (this.currentPage == 0 ) {
+            section.iconName = this.currentItem?.gender == 0 ?  "trainer-man-solid" : "trainer-woman-solid"
+            return section
+        } else if (this.currentPage == 1 ) {
+            return { name: "section1", label: lang`Search`, iconName: 'search-regular' }
+        } else {
+            return { name: "section1", label: lang`Filter`, iconName: 'filter-regular' }
+        }
+    }
+
+    leftHeaderTitle() {
+        return lang`Trainers` + (this.dataSource?.items?.length ? ' ('+ this.dataSource?.items?.length +')' : '')
     }
 
     render() {
         return html`
             <modal-dialog></modal-dialog>
             <header class="left-header">
-                <p>${lang`Trainers` + ' ('+ this.dataSource?.items?.length +')'}<p>
-                <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
-                <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
+                <p>${this.leftHeaderTitle()}</p>
+                <p>
+                    <aside-button icon-name=${ this.sortDirection ? "arrow-up-a-z-regular" : "arrow-up-z-a-regular"} @click=${this.sortPage}></aside-button>
+                    <aside-button icon-name="filter-regular" ?active=${this.isFiltered} @click=${this.filterPage}></aside-button>
+                </p>
             </header>
             <header class="right-header">
                 <div class="left-aside">
                     ${this.sections.map( (section, index) =>
                         html `
-                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(this.currentItem?.gender == 0 ? "trainer-man-solid" : "trainer-woman-solid") || section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                            <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${(index === this.currentSection ? this.sectionName(section).iconName : section.iconName) || nothing} label=${index === this.currentSection ? this.sectionName(section).label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
                         `
                     )}
                 </div>
@@ -742,6 +821,7 @@ class MyTrainersSection1 extends BaseElement {
                 </div>
             </header>
             <div class="left-layout">
+                ${this.dataSource?.state === States.NEW ? this.newRecord() : ''}
                 ${this.#list}
             </div>
             <div class="right-layout">
@@ -750,33 +830,138 @@ class MyTrainersSection1 extends BaseElement {
             <footer class="left-footer">
                 ${this.#task}
             </footer>
-            <footer class="right-footer">
-                ${this.#rightFooter}
-            </footer>
+            ${isAuth() ? html`
+                <footer class="right-footer">
+                    ${this.#rightFooter}
+                </footer>
+            ` : ''}
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv" @input=${this.importFromExcel}/>
         `;
     }
 
+    async gotoSection(index) {
+        if (this.currentSection == index) {
+            if (this.currentPage === 2) {
+                if (this.isFilterModified) {
+                    let modalResult = await this.confirmDialog('Вы хотите применить сделанные изменения в фильтре?')
+                    if (modalResult !== 'Ok') {
+                        modalResult = await this.cancelFilter()
+                        if (modalResult !== 'Ok') {
+                            return modalResult
+                        }
+                        this.closeFilter()
+                        return modalResult
+                    } else {
+                        this.applyFilter()
+                        this.closeFilter()
+                        return modalResult
+                    }
+                }
+                this.closeFilter()
+            }
+        } else {
+            this.$root.currentSection = index;
+        }
+    }
+
+    gotoPage(index) {
+        this.currentPage = index
+    }
+
     nextPage() {
-        this.currentPage++;
+        this.currentPage++
     }
 
     prevPage() {
-        this.currentPage--;
+        this.currentPage--
     }
 
     searchPage() {
-        this.currentFilter = {}
+        this.currentSearch = {}
         this.currentPage = this.currentPage === 1 ? 0 : 1
+    }
+
+    filterPage() {
+        this.currentPage = this.currentPage === 2 ? 0 : 2
+    }
+
+    async applyFilter() {
+        const result = await this.dataSource.filter(this.currentFilter)
+        this.oldFilterValues.clear();
+        this.isFilterModified = false;
+        this.currentItemRefresh = !this.currentItemRefresh
+        this.dataSource.setCurrentItem(result)
+        this.isFiltered = true
+    }
+
+    async clearFilter() {
+        const result = await this.dataSource.clearFilter()
+        this.currentFilter = {}
+        this.oldFilterValues?.clear();
+        this.isFilterModified = false;
+        this.dataSource.setCurrentItem(result)
+        this.currentItemRefresh = !this.currentItemRefresh
+        this.isFiltered = false
+        this.closeFilter()
+    }
+
+    async cancelFilter() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить сделанные изменения в фильтре?')
+        if (modalResult !== 'Ok')
+            return modalResult
+        this.oldFilterValues.forEach( (value, key) => {
+            if (key.id === 'avatar') {
+                window.URL.revokeObjectURL(value);
+                this.avatar = value;
+                this.avatarFile = null;
+            } else {
+                if (key.currentObject) {
+                    key.currentObject[key.id?.split('.').at(-1)] = value
+                }
+                else {
+                    this.currentFilter[key.id] = value;
+                }
+                key.value = value;
+            }
+        });
+        this.oldFilterValues.clear();
+        this.isFilterModified = false;
+        return 'Ok'
+    }
+
+    closeFilter() {
+        this.filterPage()
+    }
+
+    get #filterFooter() {
+        if (this.isFilterModified) {
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.applyFilter}>${lang`Apply`}</simple-button>
+                    <simple-button @click=${this.cancelFilter}>${lang`Cancel`}</simple-button>
+                </nav>
+            `
+        } else if (this.isFiltered){
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.clearFilter}>${lang`Clear`}</simple-button>
+                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
+                </nav>
+            `
+        }
+        else {
+            return html`
+                <nav class='save'>
+                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
+                </nav>
+            `
+        }
+
     }
 
     sortPage() {
         this.sortDirection = !this.sortDirection
         this.dataSource.sort(this.sortDirection)
-    }
-
-    filterPage() {
-
     }
 
     async saveToFile(blob, fileName) {
@@ -842,21 +1027,71 @@ class MyTrainersSection1 extends BaseElement {
         return this.showDialog(message, 'confirm')
     }
 
+    async addNewItem() {
+        const leftLayout = this.renderRoot.querySelector('.left-layout')
+        this.oldLeftLayoutTop = leftLayout.scrollTop
+        leftLayout?.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
+        const rightLayout = this.renderRoot.querySelector('.right-layout')
+        this.oldRightLayoutTop = rightLayout.scrollTop
+        rightLayout?.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
+        this.dataSource.addNewItem(this.currentItem);
+        // const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
+        rightLayout?.querySelector('.page')?.startEdit?.()
+    }
+
     async addItem() {
-        const newItem = { name: "Новый регион" }
-        this.dataSource.addItem(newItem);
+        this.dataSource.addItem(this.currentItem)
+    }
+
+    async saveFirstItem() {
+        await this.dataSource.addItem(this.currentItem)
+        this.oldValues?.clear()
+        this.isModified = false
+    }
+
+    async saveNewItem() {
+        await this.dataSource.saveNewItem(this.currentItem)
+        this.oldValues?.clear();
+        this.isModified = false;
     }
 
     async saveItem() {
-        await this.dataSource.saveItem(this.currentItem);
-        this.oldValues?.clear();
-        this.isModified = false;
+        await this.dataSource.saveItem(this.currentItem)
+        this.oldValues?.clear()
+        this.isModified = false
+    }
+
+    async cancelNewItem() {
+        const modalResult = await this.confirmDialog('Вы действительно хотите отменить добавление?')
+        if (modalResult !== 'Ok')
+            return modalResult
+        this.dataSource.cancelNewItem()
+        this.oldValues.clear()
+        const leftLayout = this.renderRoot.querySelector('.left-layout')
+        leftLayout?.scrollTo({
+            top: this.oldLeftLayoutTop,
+            behavior: "smooth"
+        })
+        const rightLayout = this.renderRoot.querySelector('.right-layout')
+        this.oldRightLayoutTop = rightLayout.scrollTop
+        rightLayout?.scrollTo({
+            top: this.oldRightLayoutTop,
+            behavior: "smooth"
+        })
+        this.isModified = false
+        return 'Ok'
     }
 
     async cancelItem() {
         const modalResult = await this.confirmDialog('Вы действительно хотите отменить все сделанные изменения?')
         if (modalResult !== 'Ok')
-            return
+            return modalResult
         this.oldValues.forEach( (value, key) => {
             let id = key.id
             let currentItem = this.currentItem
@@ -871,15 +1106,17 @@ class MyTrainersSection1 extends BaseElement {
             currentItem[id] = value;
             key.value = value;
         });
-        this.oldValues.clear();
-        this.isModified = false;
+        this.oldValues.clear()
+        this.isModified = false
+        return 'Ok'
     }
 
     async deleteItem() {
         const modalResult = await this.confirmDialog('Вы действительно хотите удалить этого тренера?')
         if (modalResult !== 'Ok')
-            return;
+            return modalResult
         this.dataSource.deleteItem(this.currentItem)
+        return 'Ok'
     }
 
     async firstUpdated() {
