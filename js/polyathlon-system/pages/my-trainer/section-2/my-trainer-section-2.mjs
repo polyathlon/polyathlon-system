@@ -637,7 +637,7 @@ class MyTrainerSection2 extends BaseElement {
                     <aside-button icon-name="filter-regular" @click=${this.filterPage}></aside-button>
                 </p>
             </header>
-            <header class="left-header">
+            <header class="right-header">
                 <p>${lang`Sportsmen` + ' ('+ this.dataSource?.items?.length +')'}</p>
                 <!-- <aside-button icon-name="search-regular" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button> -->
                 <aside-button icon-name="filter-regular" @click=${() => this.currentPage = this.currentPage === 1 ? 0 : 1}></aside-button>
