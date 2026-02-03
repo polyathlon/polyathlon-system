@@ -8,14 +8,14 @@ import lang from '../../polyathlon-dictionary.mjs'
 
 import DataSet from './my-federation-members-dataset.mjs'
 
-import FederationMemberPositionDataset from '../my-federation-member-positions/my-federation-member-positions-dataset.mjs'
-import FederationMemberPositionDataSource from '../my-federation-member-positions/my-federation-member-positions-datasource.mjs'
-
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 
 import CityDataSource from '../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../my-cities/my-cities-dataset.mjs'
+
+import FederationMemberPositionDataset from '../my-federation-member-positions/my-federation-member-positions-dataset.mjs'
+import FederationMemberPositionDataSource from '../my-federation-member-positions/my-federation-member-positions-datasource.mjs'
 
 class MyFederationMembersSection1Page1 extends BaseElement {
     static get properties() {
@@ -23,10 +23,11 @@ class MyFederationMembersSection1Page1 extends BaseElement {
             version: { type: String, default: '1.0.0' },
             federationMemberPositionDataSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
-            cityDataSource: {type: Object, default: null},
+            cityDataSource: { type: Object, default: null },
             item: { type: Object, default: null },
+            currentItemRefresh: { type: Boolean, default: false, local: true },
             isModified: { type: Boolean, default: false, local: true },
-            oldValues: { type: Map, default: null},
+            oldValues: { type: Map, default: null },
         }
     }
 
@@ -71,7 +72,7 @@ class MyFederationMembersSection1Page1 extends BaseElement {
     render() {
         return html`
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput} @icon-click=${this.gotoSportsmanPage}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" .value=${this.item?.lastName} @input=${this.validateInput} @icon-click=${this.gotoPersonalPage}></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
@@ -80,7 +81,7 @@ class MyFederationMembersSection1Page1 extends BaseElement {
                 <simple-select id="position" label="${lang`Position`}:" icon-name="federation-member-position-solid" @icon-click=${() => this.showPage('my-federation-member-positions')} .dataSource=${this.federationMemberPositionDataSource} .value=${this.item?.position} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
-                <simple-input id="federationMemberPC" label="${lang`Federation member PC`}:" icon-name="federation-member-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createFederationMemberPC} .value=${this.item?.federationMemberPC} @input=${this.validateInput}></simple-input>
+                <simple-input id="federationMemberPC" label="${lang`Federation member PC`}:" icon-name="federation-member-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createPersonalCode} .value=${this.item?.federationMemberPC} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
@@ -90,7 +91,7 @@ class MyFederationMembersSection1Page1 extends BaseElement {
         `;
     }
 
-    gotoSportsmanPage() {
+    gotoPersonalPage() {
         if (!this.item?._id) {
             return
         }
@@ -98,9 +99,9 @@ class MyFederationMembersSection1Page1 extends BaseElement {
         location.search = `?federation-member=${this.item?._id.split(':')[1]}`
     }
 
-    async createFederationMemberPC(e) {
+    async createPersonalCode(e) {
         const target = e.target
-        const id = await DataSet.createFederationMemberPC({
+        const id = await DataSet.createPersonalCode({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code,
             ulid: this.item?.profileUlid,
@@ -126,6 +127,11 @@ class MyFederationMembersSection1Page1 extends BaseElement {
         window.open(this.$id('order.link').value);
     }
 
+    startEdit() {
+        let input = this.$id("lastName")
+        input.focus()
+    }
+
     validateInput(e) {
         let id = e.target.id
         let currentItem = e.target.currentObject ?? this.item
@@ -148,20 +154,27 @@ class MyFederationMembersSection1Page1 extends BaseElement {
             if (currentItem[id] !== e.target.value) {
                 this.oldValues.set(e.target, currentItem[id])
             }
-        }
-        else if (this.oldValues.get(e.target) === e.target.value) {
-                this.oldValues.delete(e.target)
+        } else if (this.oldValues.get(e.target) === e.target.value) {
+            this.oldValues.delete(e.target)
         }
 
         currentItem[id] = e.target.value
 
-        if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName') {
-            this.parentNode.parentNode.host.requestUpdate()
+        if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'position') {
+            this.currentItemRefresh = !this.currentItemRefresh
         }
 
         if (e.target.id === 'region') {
             this.$id('city').setValue('')
             this.cityDataSource.regionFilter(currentItem.region?._id)
+        }
+
+        if (e.target.id === 'city' && !e.target.value) {
+            delete currentItem[e.target.id]
+        }
+
+        if (e.target.id === 'region' && !e.target.value) {
+            delete currentItem[e.target.id]
         }
 
         this.isModified = this.oldValues.size !== 0;
@@ -175,4 +188,4 @@ class MyFederationMembersSection1Page1 extends BaseElement {
     }
 }
 
-customElements.define("my-federation-members-section-1-page-1", MyFederationMembersSection1Page1);
+customElements.define("my-federation-members-section-1-page-1", MyFederationMembersSection1Page1)

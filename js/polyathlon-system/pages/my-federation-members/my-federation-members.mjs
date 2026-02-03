@@ -28,14 +28,14 @@ class MyFederationMembers extends BaseElement {
     constructor() {
         super();
         this.sections = [
-            {name: "section1", label: lang`Federation member`, iconName: 'referee-solid'},
+            {name: "section1", label: lang`Federation member`, iconName: 'federation-member-solid'},
         ]
         this.version = "1.0.0";
     }
 
     render() {
         return html`
-            <my-federation-members-section-1 .sections=${this.sections}></my-federation-members-section-1>
+            <my-federation-members-section-1 .sections=${this.sections} .currentSection=${0}></my-federation-members-section-1>
         `;
     }
 }
