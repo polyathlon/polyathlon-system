@@ -950,8 +950,7 @@ class MyRefereesSection1 extends BaseElement {
                     <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
                 </nav>
             `
-        }
-        else {
+        } else {
             return html`
                 <nav class='save'>
                     <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>

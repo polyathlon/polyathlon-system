@@ -105,8 +105,7 @@ customElements.define("checkbox-group-input", class CheckboxGroupInput extends B
         this.oldValue ??= [...this.value]
         if (e.target.checked) {
             this.value.push(ageGroup)
-        }
-        else {
+        } else {
             const index = this.value.findIndex( item =>
                 item.name === ageGroup.name && item.gender === ageGroup.gender
             )

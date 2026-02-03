@@ -153,8 +153,7 @@ class SignUpForm extends BaseElement {
     RememberMe(){
         if (this.#rememberMe) {
             localStorage.setItem('rememberMe', this.#rememberMe)
-        }
-        else {
+        } else {
             localStorage.removeItem('rememberMe')
         }
     }
@@ -712,8 +711,7 @@ class SignUpForm extends BaseElement {
     saveUserInfo(userInfo) {
         if (localStorage.getItem('rememberMe')) {
             localStorage.setItem('userInfo', userInfo)
-        }
-        else {
+        } else {
             sessionStorage.setItem('userInfo', userInfo)
         }
     }

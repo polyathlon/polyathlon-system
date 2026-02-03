@@ -585,8 +585,7 @@ class MyCompetitionSection2Table1 extends BaseElement {
                 // { name: "gender", label: item => item.gender == true ? lang`Women` : lang`Men`, title: lang`Gender` },
                 { name: "region", label: item => item.region, title: lang`Region` },
             ]
-        }
-        else {
+        } else {
             this.groups = [
                 { name: "ageGroup", label: item => item.ageGroup, title: lang`Age group` },
             ]

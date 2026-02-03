@@ -213,8 +213,7 @@ class MyCompetitionSection2PageFilter extends BaseElement {
 
         if (id.length === 1) {
             id = id[0]
-        }
-        else {
+        } else {
             currentItem = this.item[id[0]] ??= {}
             id = id.at(-1)
         }

@@ -69,8 +69,7 @@ class MyCompetitionSection1Page2 extends BaseElement {
             } else {
                 this.oldValues.set(e.target, e.target.value)
             }
-        }
-        else {
+        } else {
             const oldValue = this.oldValues.get(e.target)
             if (Array.isArray(oldValue) && oldValue.length === e.target.value.length) {
                 if (e.target.value.every(item1 => oldValue.some( item2 =>

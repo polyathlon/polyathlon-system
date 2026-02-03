@@ -220,8 +220,7 @@ customElements.define("simple-select", class SimpleInput extends BaseElement {
                 this.value = item;
                 this.fire('input')
             }
-        }
-        else {
+        } else {
             this.value = item;
             this.fire('input')
         }

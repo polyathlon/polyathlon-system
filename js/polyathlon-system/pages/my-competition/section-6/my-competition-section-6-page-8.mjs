@@ -120,8 +120,7 @@ class MyCompetitionSection6Page8 extends BaseElement {
             let b = a.sportsDisciplineComponents.find( item => item.group.name === "Лыжная гонка")
             this.$id("skiing.points").value = this.pointsFind(target.value, this.item.gender == 0 ? b.men : b.women)
             this.$id("skiing.points").fire('input')
-        }
-        else {
+        } else {
             this.$id("skiing.points").value = ''
             this.$id("skiing.points").fire('input')
         }
@@ -151,8 +150,7 @@ class MyCompetitionSection6Page8 extends BaseElement {
 
         if (id.length === 1) {
             id = id[0]
-        }
-        else {
+        } else {
             currentItem = this.item[id[0]] ??= {}
             id = id.at(-1)
         }

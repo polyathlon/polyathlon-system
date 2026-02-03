@@ -90,8 +90,7 @@ customElements.define("password-input", class PasswordInput extends BaseElement 
         this.value = value;
         if (this.value === '') {
             this.strength = -1
-        }
-        else {
+        } else {
             this.strength = this.testPasswordStrength(this.value)
         }
         this.fire('input')

@@ -98,8 +98,7 @@ class MyCompetitionSection6List1 extends BaseElement {
                     this.item.dataSource.setCurrentItem(item)
                 }
             }
-        }
-        else {
+        } else {
             this.item.dataSource.setCurrentItem(item)
         }
     }

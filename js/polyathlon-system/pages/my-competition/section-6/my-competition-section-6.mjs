@@ -785,8 +785,7 @@ class MyCompetitionSection6 extends BaseElement {
     gotoSection(index) {
         if (this.currentSection == index) {
             this.isTable = !this.isTable
-        }
-        else {
+        } else {
             this.$root.currentSection = index;
         }
     }
@@ -794,8 +793,7 @@ class MyCompetitionSection6 extends BaseElement {
     gotoPage(index) {
         if (this.currentPage == index) {
             this.isTable = !this.isTable
-        }
-        else {
+        } else {
             this.currentPage = index
         }
     }
@@ -880,8 +878,7 @@ class MyCompetitionSection6 extends BaseElement {
                     <simple-button @click=${this.clearFilter}>${lang`Clear`}</simple-button>
                 </nav>
             `
-        }
-        else {
+        } else {
             return html`
                 <nav class='save'>
                     <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>

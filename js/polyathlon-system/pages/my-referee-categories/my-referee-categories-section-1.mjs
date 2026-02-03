@@ -268,8 +268,7 @@ class MyRefereeCategoriesSection1 extends BaseElement {
             else {
                 await this.cancelItem()
             }
-        }
-        else {
+        } else {
             this.dataSource.setCurrentItem(this.dataSource.items[index])
         }
     }

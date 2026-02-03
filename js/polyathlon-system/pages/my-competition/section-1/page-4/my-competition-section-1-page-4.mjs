@@ -232,8 +232,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
 
         if (id.length === 1) {
             id = id[0]
-        }
-        else {
+        } else {
             for (let index = 0; index < id.length - 1; index++) {
                 currentItem = currentItem[id[index]] ??= {}
             }

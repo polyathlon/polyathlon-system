@@ -439,8 +439,7 @@ class MyFederationMemberSection2 extends BaseElement {
                     <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
                 </nav>
             `
-        }
-        else {
+        } else {
         //     ${this.pages.map( (button, index) =>
         //         button.visible ? '' : html`<aside-button icon-name=${button.iconName} title=${button.title} @click=${button.click} ?active=${this.currentPage === button.page}></aside-button>`)
         //     }

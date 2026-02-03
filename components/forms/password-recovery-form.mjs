@@ -164,8 +164,7 @@ class PasswordRecoveryForm extends BaseElement {
             this.isCodeValid = true
             this.isCodeError = false
             this.isCodeMessage = false
-        }
-        else {
+        } else {
             this.isCodeValid = false
             this.isCodeError = false
             this.isCodeMessage = true
@@ -175,8 +174,7 @@ class PasswordRecoveryForm extends BaseElement {
     RememberMe(){
         if (this.#rememberMe) {
             localStorage.setItem('rememberMe', this.#rememberMe)
-        }
-        else {
+        } else {
             localStorage.removeItem('rememberMe')
         }
     }

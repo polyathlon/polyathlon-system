@@ -116,8 +116,7 @@ export default class DataSource {
         }
         else if (currentIndex === 0) {
             this.setCurrentItem(this.items[currentIndex + 1])
-        }
-        else {
+        } else {
             this.setCurrentItem(this.items[currentIndex - 1])
         }
         this.items.splice(currentIndex, 1)

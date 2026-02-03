@@ -488,8 +488,7 @@ class MyCompetitionSection4 extends BaseElement {
                     <simple-button @click=${this.cancelItem}>${lang`Cancel`}</simple-button>
                 </nav>
             `
-        }
-        else {
+        } else {
             return html`
                 <nav class="buttons">
                     ${this.pages.map( (button, index) =>

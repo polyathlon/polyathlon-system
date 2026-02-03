@@ -89,8 +89,7 @@ class MySportsDisciplinesSection2Page1 extends BaseElement {
                     this.oldValues.set(e.target, currentItem[e.target.id])
                 }
             }
-        }
-        else {
+        } else {
             const oldValue = this.oldValues.get(e.target)
             if (Array.isArray(oldValue)) {
                 if (oldValue.length === e.target.value.length && e.target.value.every(item1 => oldValue.some( item2 =>

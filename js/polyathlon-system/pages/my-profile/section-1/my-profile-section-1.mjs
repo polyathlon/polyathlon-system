@@ -346,8 +346,7 @@ class MyProfileSection1 extends BaseElement {
             else {
                 await this.cancelItem()
             }
-        }
-        else {
+        } else {
             this.dataSource.setCurrentItem(this.dataSource.items[index])
         }
     }
@@ -424,8 +423,7 @@ class MyProfileSection1 extends BaseElement {
     get #loginInfo() {
         if (localStorage.getItem('rememberMe')) {
             return localStorage.getItem('userInfo')
-        }
-        else {
+        } else {
             return sessionStorage.getItem('userInfo')
         }
     }

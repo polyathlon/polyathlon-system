@@ -148,8 +148,7 @@ class MyCompetitionSection1Page1 extends BaseElement {
             } else {
                 this.oldValues.set(e.target, e.target.value)
             }
-        }
-        else {
+        } else {
             const oldValue = this.oldValues.get(e.target)
             if (Array.isArray(oldValue) && oldValue.length === e.target.value.length) {
                 if (e.target.value.every(item1 => oldValue.some( item2 =>
@@ -171,7 +170,7 @@ class MyCompetitionSection1Page1 extends BaseElement {
                 currentItem["sportsDiscipline1"].ageGroups = value
             })
         }
-        
+
         if (e.target.id === 'name' || e.target.id === 'startDate' || e.target.id === 'endDate' || e.target.id === 'stage') {
             this.parentNode.parentNode.host.requestUpdate()
         }

@@ -15,8 +15,7 @@ export default class DataSource {
         const item = sessionStorage.getItem('currentCountry')
         if (item) {
             return this.items.find(p => p._id === item)
-        }
-        else {
+        } else {
             sessionStorage.setItem('currentCountry', this.items[0]?._id)
             return this.items?.[0]
         }
@@ -53,8 +52,7 @@ export default class DataSource {
         }
         else if (currentIndex === 0) {
             this.setCurrentItem(this.items[currentIndex + 1])
-        }
-        else {
+        } else {
             this.setCurrentItem(this.items[currentIndex - 1])
         }
         this.items.splice(currentIndex, 1)

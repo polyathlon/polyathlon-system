@@ -466,8 +466,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     saveUserInfo(userInfo) {
         if (localStorage.getItem('rememberMe')) {
             localStorage.setItem('userInfo', userInfo)
-        }
-        else {
+        } else {
             sessionStorage.setItem('userInfo', userInfo)
         }
     }
@@ -475,8 +474,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
     rememberMe(){
         if (this.#rememberMe) {
             localStorage.setItem('rememberMe', this.#rememberMe)
-        }
-        else {
+        } else {
             localStorage.removeItem('rememberMe')
         }
     }
@@ -556,8 +554,7 @@ customElements.define("sign-in-form", class SignInForm extends BaseElement {
         regexp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&'()*+,^./\\:;<=>?[\]_`{~}|-])(?=.{8,})/
         if (regexp.test(e.target.value)) {
             this.isPasswordValid = true
-        }
-        else {
+        } else {
             this.isPasswordValid = false
         }
         this.isPasswordError = false

@@ -52,8 +52,7 @@ class MyFederationMemberSection2List1 extends BaseElement {
     get #loginInfo() {
         if (localStorage.getItem('rememberMe')) {
             return localStorage.getItem('userInfo')
-        }
-        else {
+        } else {
             return sessionStorage.getItem('userInfo')
         }
     }

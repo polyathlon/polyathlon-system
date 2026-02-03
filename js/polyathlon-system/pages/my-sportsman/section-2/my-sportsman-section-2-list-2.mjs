@@ -51,8 +51,7 @@ class MyRefereeSection2List2 extends BaseElement {
     get #loginInfo() {
         if (localStorage.getItem('rememberMe')) {
             return localStorage.getItem('userInfo')
-        }
-        else {
+        } else {
             return sessionStorage.getItem('userInfo')
         }
     }

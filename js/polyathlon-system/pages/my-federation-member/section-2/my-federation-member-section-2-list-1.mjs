@@ -119,8 +119,7 @@ class MyFederationMemberSection2List1 extends BaseElement {
             else {
                 await this.cancelItem()
             }
-        }
-        else {
+        } else {
             this.item.setCurrentItem(item)
         }
     }

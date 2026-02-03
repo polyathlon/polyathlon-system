@@ -84,8 +84,7 @@ class MyTrainerSection2List1 extends BaseElement {
             else {
                 await this.cancelItem()
             }
-        }
-        else {
+        } else {
             this.item.dataSource.setCurrentItem(item)
         }
     }

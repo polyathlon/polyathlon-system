@@ -143,8 +143,7 @@ customElements.define("lot-form", class LotForm extends BaseElement {
 
         if (id.length === 1) {
             id = id[0]
-        }
-        else {
+        } else {
             currentItem = this.item[id[0]] ??= {}
             id = id.at(-1)
         }
@@ -152,8 +151,7 @@ customElements.define("lot-form", class LotForm extends BaseElement {
             if (currentItem[id] !== e.target.value) {
                 this.oldValues.set(e.target, currentItem[id])
             }
-        }
-        else if (this.oldValues.get(e.target) === e.target.value) {
+        } else if (this.oldValues.get(e.target) === e.target.value) {
                 this.oldValues.delete(e.target)
         }
 

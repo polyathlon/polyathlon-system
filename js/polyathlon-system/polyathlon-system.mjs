@@ -94,8 +94,7 @@ class PolyathlonSystem extends BaseElement {
     isAuth() {
         if (localStorage.getItem('rememberMe')) {
             return localStorage.getItem('accessUserToken')
-        }
-        else {
+        } else {
             return sessionStorage.getItem('accessUserToken')
         }
     }

@@ -227,8 +227,7 @@ class MyCompetitionSection1Page4 extends BaseElement {
 
         if (id.length === 1) {
             id = id[0]
-        }
-        else {
+        } else {
             currentItem = this.item[id[0]] ??= {}
             id = id.at(-1)
         }
