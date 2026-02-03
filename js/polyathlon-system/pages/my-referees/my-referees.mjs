@@ -1,6 +1,6 @@
 import { BaseElement, html, css} from '../../../base-element.mjs'
 
-import './my-referees-section-1.mjs';
+import './my-referees-section-1.mjs'
 
 import lang from '../../polyathlon-dictionary.mjs'
 
@@ -40,4 +40,4 @@ class MyReferees extends BaseElement {
     }
 }
 
-customElements.define("my-referees", MyReferees);
+customElements.define("my-referees", MyReferees)

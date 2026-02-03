@@ -8,23 +8,24 @@ import lang from '../../polyathlon-dictionary.mjs'
 
 import DataSet from './my-referees-dataset.mjs'
 
-import RefereeCategoryDataSource from '../my-referee-categories/my-referee-categories-datasource.mjs'
-import RefereeCategoryDataset from '../my-referee-categories/my-referee-categories-dataset.mjs'
-
 import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
 import RegionDataset from '../my-regions/my-regions-dataset.mjs'
 
 import CityDataSource from '../my-cities/my-cities-datasource.mjs'
 import CityDataset from '../my-cities/my-cities-dataset.mjs'
 
+import RefereeCategoriesDataSource from '../my-referee-categories/my-referee-categories-datasource.mjs'
+import RefereeCategoriesDataset from '../my-referee-categories/my-referee-categories-dataset.mjs'
+
 class MyRefereesSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
-            refereeCategoryDataSource: { type: Object, default: null },
+            refereeCategoriesDataSource: { type: Object, default: null },
             regionDataSource: { type: Object, default: null },
             cityDataSource: { type: Object, default: null },
             item: { type: Object, default: null },
+            currentItemRefresh: { type: Boolean, default: false, local: true },
             isModified: { type: Boolean, default: false, local: true },
             oldValues: { type: Map, default: null },
         }
@@ -77,10 +78,10 @@ class MyRefereesSection1Page1 extends BaseElement {
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>
                 </div>
                 <gender-input id="gender" label="${lang`Gender`}:" icon-name="gender" .value="${this.item?.gender}" @input=${this.validateInput}></gender-input>
-                <simple-select id="category" label="${lang`Category`}:" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-referee-categories')} .dataSource=${this.refereeCategoryDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
+                <simple-select id="category" label="${lang`Category`}:" icon-name="referee-category-solid" @icon-click=${() => this.showPage('my-referee-categories')} .dataSource=${this.refereeCategoriesDataSource} .value=${this.item?.category} @input=${this.validateInput}></simple-select>
                 <simple-select id="region" label="${lang`Region name`}:" icon-name="region-solid" @icon-click=${() => this.showPage('my-regions')} .dataSource=${this.regionDataSource} .value=${this.item?.region} @input=${this.validateInput}></simple-select>
                 <simple-select id="city" label="${lang`City name`}:" icon-name="city-solid" .showValue=${this.cityShowValue} .listLabel=${this.cityListLabel} .listStatus=${this.cityListStatus} @icon-click=${() => this.showPage('my-cities')} .dataSource=${this.cityDataSource} .value=${this.item?.city} @input=${this.validateInput}></simple-select>
-                <simple-input id="refereePC" label="${lang`Referee PC`}:" icon-name="referee-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createRefereePC} .value=${this.item?.refereePC} @input=${this.validateInput}></simple-input>
+                <simple-input id="refereePC" label="${lang`Referee PC`}:" icon-name="referee-pc-solid" button-name="add-solid" @icon-click=${this.copyToClipboard}  @button-click=${this.createPersonalCode} .value=${this.item?.createPersonalCode} @input=${this.validateInput}></simple-input>
                 <div class="name-group">
                     <simple-input id="order.number" label="${lang`Order number`}:" icon-name="order-number-solid" @icon-click=${this.numberClick} .currentObject={this.item?.order} .value=${this.item?.order?.number} @input=${this.validateInput}></simple-input>
                     <simple-input id="order.link" label="${lang`Order link`}:" icon-name="link-solid" @icon-click=${this.linkClick} .currentObject={this.item?.order} .value=${this.item?.order?.link} @input=${this.validateInput}></simple-input>
@@ -98,9 +99,9 @@ class MyRefereesSection1Page1 extends BaseElement {
         location.search = `?referee=${this.item?._id.split(':')[1]}`
     }
 
-    async createRefereePC(e) {
+    async createPersonalCode(e) {
         const target = e.target
-        const id = await DataSet.createRefereePC({
+        const id = await DataSet.createPersonalCode({
             countryCode: this.item?.region?.country?.flag.toUpperCase(),
             regionCode: this.item?.region?.code,
             ulid: this.item?.profileUlid,
@@ -126,6 +127,11 @@ class MyRefereesSection1Page1 extends BaseElement {
         window.open(this.$id('order.link').value);
     }
 
+    startEdit() {
+        let input = this.$id("lastName")
+        input.focus()
+    }
+
     validateInput(e) {
         let id = e.target.id
         let currentItem = e.target.currentObject ?? this.item
@@ -148,15 +154,14 @@ class MyRefereesSection1Page1 extends BaseElement {
             if (currentItem[id] !== e.target.value) {
                 this.oldValues.set(e.target, currentItem[id])
             }
-        }
-        else if (this.oldValues.get(e.target) === e.target.value) {
+        } else if (this.oldValues.get(e.target) === e.target.value) {
             this.oldValues.delete(e.target)
         }
 
         currentItem[id] = e.target.value
 
-        if ( e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName') {
-            this.parentNode.parentNode.host.requestUpdate()
+        if (e.target.id === 'lastName' || e.target.id === 'firstName' || e.target.id === 'middleName' || e.target.id === 'category' || e.target.id === 'region' || e.target.id === 'city') {
+            this.currentItemRefresh = !this.currentItemRefresh
         }
 
         if (e.target.id === 'region') {
@@ -164,12 +169,20 @@ class MyRefereesSection1Page1 extends BaseElement {
             this.cityDataSource.regionFilter(currentItem.region?._id)
         }
 
+        if (e.target.id === 'city' && !e.target.value) {
+            delete currentItem[e.target.id]
+        }
+
+        if (e.target.id === 'region' && !e.target.value) {
+            delete currentItem[e.target.id]
+        }
+
         this.isModified = this.oldValues.size !== 0;
     }
 
     async firstUpdated() {
         super.firstUpdated();
-        this.refereeCategoryDataSource = new RefereeCategoryDataSource(this, await RefereeCategoryDataset.getDataSet())
+        this.refereeCategoriesDataSource = new RefereeCategoriesDataSource(this, await RefereeCategoriesDataset.getDataSet())
         this.regionDataSource = new RegionDataSource(this, await RegionDataset.getDataSet())
         this.cityDataSource = new CityDataSource(this, await CityDataset.getDataSet())
     }

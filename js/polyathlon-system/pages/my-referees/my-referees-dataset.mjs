@@ -1,6 +1,8 @@
-import refreshToken, {getToken} from "../../refresh-token.mjs";
+import refreshToken, {getToken} from "../../refresh-token.mjs"
 
-import {HOST, PORT} from "../../polyathlon-system-config.mjs";
+import {HOST, PORT} from "../../polyathlon-system-config.mjs"
+
+const requestName = 'referee'
 
 export default class DataSet {
     static #dataSet;
@@ -20,7 +22,7 @@ export default class DataSet {
     }
 
     static #fetchGetItems() {
-        return fetch(`https://${HOST}:${PORT}/api/referees`)
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}s`)
     }
 
     static async #getItems() {
@@ -36,7 +38,7 @@ export default class DataSet {
     }
 
     static fetchAddItem(token, item) {
-        return fetch(`https://${HOST}:${PORT}/api/referee`, {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -66,11 +68,11 @@ export default class DataSet {
     }
 
     static addToDataset(item) {
-        DataSet.#dataSet.unshift(item);
+        DataSet.#dataSet.push(item)
     }
 
     static #fetchGetItem(itemId) {
-        return fetch(`https://${HOST}:${PORT}/api/referee/${itemId}`)
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}/${itemId}`)
     }
 
     static async getItem(itemId) {
@@ -85,7 +87,7 @@ export default class DataSet {
     }
 
     static #fetchGetItemByLastName(token, itemId) {
-        return fetch(`https://${HOST}:${PORT}/api/referee/last-name/${itemId}`, {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}/last-name/${itemId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -111,7 +113,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:${PORT}/api/referee/${item._id}`, {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -144,7 +146,7 @@ export default class DataSet {
     }
 
     static #fetchDeleteItem(token, item) {
-        return fetch(`https://${HOST}:${PORT}/api/referee/${item._id}?rev=${item._rev}`, {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}/${item._id}?rev=${item._rev}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -179,8 +181,8 @@ export default class DataSet {
         DataSet.#dataSet.splice(itemIndex, 1)
     }
 
-    static fetchCreateRefereePC(token, item) {
-        return fetch(`https://${HOST}:${PORT}/api/referee-pc`, {
+    static fetchCreatePersonalCode(token, item) {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}-pc`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -190,13 +192,13 @@ export default class DataSet {
         })
     }
 
-    static async createRefereePC(item) {
+    static async createPersonalCode(item) {
         let token = getToken();
-        let response = await DataSet.fetchCreateRefereePC(token, item)
+        let response = await DataSet.fetchCreatePersonalCode(token, item)
 
         if (response.status === 419) {
             token = await refreshToken(token)
-            response = await DataSet.fetchCreateRefereePC(token, item)
+            response = await DataSet.fetchCreatePersonalCode(token, item)
         }
         const result = await response.json()
         if (!response.ok) {
