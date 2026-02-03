@@ -95,7 +95,7 @@ class MyCompetitionSection3PageFilter extends BaseElement {
     }
 
     refereeListStatus(item) {
-        return item?.region?.name + (item?.city?.name ? ' ' + cityShowValue(item.city) : '')
+        return { name: item?.region?.name + (item?.city?.name ? ' ' + this.cityShowValue(item.city) : '') }
     }
 
     refereeListIcon(item) {
@@ -106,7 +106,7 @@ class MyCompetitionSection3PageFilter extends BaseElement {
         return html`
             <modal-dialog></modal-dialog>
             <div class="container">
-                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" @icon-click=${this.gotoPersonalPage} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findRefereeByName} .listLabel=${this.refereeListLabel} .listIcon=${this.refereeListIcon} .listStatus=${this.refereeListStatus} .value=${this.item?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose}></simple-input>
+                <simple-input id="lastName" label="${lang`Last name`}:" icon-name="user" @icon-click=${this.gotoPersonalPage} .dataSource=${this.findDataSource} button-name="user-magnifying-glass-solid" @button-click=${this.findRefereeByName} .listLabel=${this.refereeListLabel} .listIcon=${this.refereeListIcon} .listStatus=${this.refereeListStatus.bind(this)} .value=${this.item?.lastName} @input=${this.validateInput} @select-item=${this.sportsmanChoose}></simple-input>
                 <div class="name-group">
                     <simple-input id="firstName" label="${lang`First name`}:" icon-name="user-group-solid" .value=${this.item?.firstName} @input=${this.validateInput}></simple-input>
                     <simple-input id="middleName" label="${lang`Middle name`}:" icon-name="users-solid" .value=${this.item?.middleName} @input=${this.validateInput}></simple-input>

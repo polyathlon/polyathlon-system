@@ -63,11 +63,13 @@ export default class DataSet {
     static async addItem(item) {
         let token = getToken()
         let response = await DataSet.fetchAddItem(token, item, DataSet.#parentId)
+
         if (response.status === 419) {
             token = await refreshToken(token)
             response = await DataSet.fetchAddItem(token, item, DataSet.#parentId)
         }
         const result = await response.json()
+
         if (!response.ok) {
             throw new Error(result.error)
         }
@@ -86,7 +88,6 @@ export default class DataSet {
     }
 
     static async getItem(itemId) {
-
         let response = await DataSet.#fetchGetItem(itemId)
 
         const result = await response.json()

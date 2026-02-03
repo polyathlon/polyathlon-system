@@ -11,6 +11,7 @@ export default class DataSource {
     constructor(component, dataSet) {
         this.component = component
         this.items = [...dataSet]
+        this.dataSet = dataSet
         this.sort(this.sortDirection)
         this.init()
         this.state = States.BROWSE
@@ -24,7 +25,7 @@ export default class DataSource {
                 item = this.items.find((item) => item.id == itemId)
             }
             item ??= this.items[0]
-            sessionStorage.setItem(storageName, item.id)
+            sessionStorage.setItem(storageName, item?.id)
             this.component.currentItem = item
         } else {
             this.component.currentItem = {}
@@ -179,7 +180,7 @@ export default class DataSource {
         }
     }
 
-    async saveItem(item, listItem) {
+    async saveItem(item) {
         await DataSet.saveItem(item)
         this.state = States.BROWSE
     }

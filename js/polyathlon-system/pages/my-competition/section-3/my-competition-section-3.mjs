@@ -738,6 +738,7 @@ class MyCompetitionSection3 extends BaseElement {
         this.dataSource.setCurrentItem(result)
         this.currentItemRefresh = !this.currentItemRefresh
         this.isFiltered = false
+        this.closeFilter()
     }
 
     async cancelFilter() {
@@ -754,7 +755,7 @@ class MyCompetitionSection3 extends BaseElement {
                     key.currentObject[key.id?.split('.').at(-1)] = value
                 }
                 else {
-                    this.currentItem[key.id] = value;
+                    this.currentFilter[key.id] = value;
                 }
                 key.value = value;
             }
@@ -764,7 +765,7 @@ class MyCompetitionSection3 extends BaseElement {
         return 'Ok'
     }
 
-    async closeFilter() {
+    closeFilter() {
         this.filterPage()
     }
 
@@ -779,8 +780,8 @@ class MyCompetitionSection3 extends BaseElement {
         } else if (this.isFiltered){
             return html`
                 <nav class='save'>
-                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
                     <simple-button @click=${this.clearFilter}>${lang`Clear`}</simple-button>
+                    <simple-button @click=${this.closeFilter}>${lang`Close`}</simple-button>
                 </nav>
             `
         }
@@ -817,15 +818,18 @@ class MyCompetitionSection3 extends BaseElement {
     }
 
     async addNewItem() {
-        this.renderRoot.querySelector('.right-layout').scrollTo({
+        this.renderRoot.querySelector('.left-layout')?.scrollTo({
             top: 0,
             behavior: "smooth"
-        });
+        })
+        this.renderRoot.querySelector('.right-layout')?.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
         this.dataSource.addNewItem(this.currentItem);
         // const page = this.renderRoot.querySelector('my-sportsmen-section-3-page-1')
         // page.startEdit()
     }
-
 
     async addItem() {
         this.dataSource.addItem(this.currentItem)
@@ -878,8 +882,8 @@ class MyCompetitionSection3 extends BaseElement {
                 key.value = value;
             }
         });
-        this.oldValues.clear();
-        this.isModified = false;
+        this.oldValues.clear()
+        this.isModified = false
         return 'Ok'
     }
 

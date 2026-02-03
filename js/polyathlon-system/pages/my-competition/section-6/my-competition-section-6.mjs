@@ -834,6 +834,7 @@ class MyCompetitionSection6 extends BaseElement {
         this.dataSource.setCurrentItem(result)
         this.currentItemRefresh = !this.currentItemRefresh
         this.isFiltered = false
+        this.closeFilter()
     }
 
     async cancelFilter() {
@@ -850,7 +851,7 @@ class MyCompetitionSection6 extends BaseElement {
                     key.currentObject[key.id?.split('.').at(-1)] = value
                 }
                 else {
-                    this.currentItem[key.id] = value;
+                    this.currentFilter[key.id] = value;
                 }
                 key.value = value;
             }
@@ -860,7 +861,7 @@ class MyCompetitionSection6 extends BaseElement {
         return 'Ok'
     }
 
-    async closeFilter() {
+    closeFilter() {
         this.filterPage()
     }
 
@@ -906,7 +907,11 @@ class MyCompetitionSection6 extends BaseElement {
     }
 
     async addNewItem() {
-        this.renderRoot.querySelector('.right-layout').scrollTo({
+        this.renderRoot.querySelector('.right-layout')?.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+        this.renderRoot.querySelector('.left-layout')?.scrollTo({
             top: 0,
             behavior: "smooth"
         });

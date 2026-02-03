@@ -95,7 +95,7 @@ class MyCompetitionSection6PageFilter extends BaseElement {
     }
 
     refereeListStatus(item) {
-        return item?.region?.name + (item?.city?.name ? ' ' + cityShowValue(item.city) : '')
+        return item?.region?.name + (item?.city?.name ? ' ' + this.cityShowValue(item.city) : '')
     }
 
     refereeListIcon(item) {
