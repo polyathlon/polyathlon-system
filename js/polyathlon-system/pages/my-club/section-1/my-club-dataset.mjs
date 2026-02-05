@@ -85,7 +85,7 @@ export default class DataSet {
     }
 
     static #fetchSaveItem(token, item) {
-        return fetch(`https://${HOST}:${PORT}/api/${requestName}`, {
+        return fetch(`https://${HOST}:${PORT}/api/${requestName}/${item._id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,

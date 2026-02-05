@@ -445,7 +445,7 @@ class MyClubSection1 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${section.iconName instanceof Function ? section.iconName(this.currentItem) : section.iconName || nothing} label=${section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
@@ -559,11 +559,12 @@ class MyClubSection1 extends BaseElement {
 
 
     async saveItem() {
-        // if ('_id' in this.currentItem) {
-        //     await this.dataSource.saveItem(this.currentItem);
-        // } else {
-        //     await this.dataSource.addItem(this.currentItem);
-        // }
+        if ('_id' in this.currentItem) {
+            await this.dataSource.saveItem(this.currentItem);
+        } else {
+            // await this.dataSource.addItem(this.currentItem);
+            return
+        }
         if (this.avatarFile) {
             let result = await DataSet.uploadAvatar(this.avatarFile, this.currentItem._id);
             if (!result) return;
