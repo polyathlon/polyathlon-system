@@ -1,22 +1,22 @@
-import { BaseElement, html, css } from '../../../base-element.mjs'
+import { BaseElement, html, css } from '../../../../base-element.mjs'
 
-import '../../../../components/inputs/simple-input.mjs'
-import '../../../../components/selects/simple-select.mjs'
+import '../../../../../components/inputs/simple-input.mjs'
+import '../../../../../components/selects/simple-select.mjs'
 
-import lang from '../../polyathlon-dictionary.mjs'
+import lang from '../../../polyathlon-dictionary.mjs'
 
-import DataSet from './my-clubs-dataset.mjs'
+import DataSet from './my-club-dataset.mjs'
 
-import RegionDataSource from '../my-regions/my-regions-datasource.mjs'
-import RegionDataset from '../my-regions/my-regions-dataset.mjs'
+import RegionDataSource from '../../my-regions/my-regions-datasource.mjs'
+import RegionDataset from '../../my-regions/my-regions-dataset.mjs'
 
-import CityDataSource from '../my-cities/my-cities-datasource.mjs'
-import CityDataset from '../my-cities/my-cities-dataset.mjs'
+import CityDataSource from '../../my-cities/my-cities-datasource.mjs'
+import CityDataset from '../../my-cities/my-cities-dataset.mjs'
 
-import ClubTypesDataset from '../my-club-types/my-club-types-dataset.mjs'
-import ClubTypesDataSource from '../my-club-types/my-club-types-datasource.mjs'
+import ClubTypesDataset from '../../my-club-types/my-club-types-dataset.mjs'
+import ClubTypesDataSource from '../../my-club-types/my-club-types-datasource.mjs'
 
-class MyClubsSection1Page1 extends BaseElement {
+class MyClubSection1Page1 extends BaseElement {
     static get properties() {
         return {
             version: { type: String, default: '1.0.0' },
@@ -177,4 +177,4 @@ class MyClubsSection1Page1 extends BaseElement {
     }
 }
 
-customElements.define("my-clubs-section-1-page-1", MyClubsSection1Page1)
+customElements.define("my-club-section-1-page-1", MyClubSection1Page1)
