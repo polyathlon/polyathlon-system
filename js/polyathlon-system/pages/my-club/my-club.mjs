@@ -59,7 +59,7 @@ class MyClub extends BaseElement {
         super.firstUpdated();
         let params = new URLSearchParams(window.location.search)
         if (params.has('club')) {
-            sessionStorage.setItem('club', 'club:' + params.get('referee'))
+            sessionStorage.setItem('club', 'club:' + params.get('club'))
             window.history.replaceState(null, '', window.location.pathname + window.location.hash);
         }
     }
