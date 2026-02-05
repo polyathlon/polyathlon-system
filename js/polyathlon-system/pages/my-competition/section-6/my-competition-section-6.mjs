@@ -754,7 +754,7 @@ class MyCompetitionSection6 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (section, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${index === this.currentSection ? this.sectionName(section).iconName : section.iconName} label=${index === this.currentSection ? this.sectionName(section).label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${index === this.currentSection ? this.sectionName(section).iconName : section.iconName} label=${index === this.currentSection ? this.sectionName(section).label : section.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>

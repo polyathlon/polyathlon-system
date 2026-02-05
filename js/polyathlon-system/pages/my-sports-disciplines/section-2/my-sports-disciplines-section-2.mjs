@@ -647,7 +647,7 @@ class MySportsDisciplinesSection2 extends BaseElement {
             <header class="right-header">
                 ${this.sections.map( (page, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoPage(index)}></icon-button>
                     `
                 )}
             </header>

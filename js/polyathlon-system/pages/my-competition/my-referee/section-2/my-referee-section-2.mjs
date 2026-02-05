@@ -395,7 +395,7 @@ class MyRefereeSection2 extends BaseElement {
             <header class="right-header">
                 ${this.sectionNames.map( (page, index) =>
                     html `
-                        <icon-button ?active=${index === this.currentSection} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSection(index)}></icon-button>
+                        <icon-button ?active=${index === this.currentSection && this.sections.length !== 1} icon-name=${page.iconName} label=${page.label} @click=${() => this.gotoSection(index)}></icon-button>
                     `
                 )}
             </header>
