@@ -333,21 +333,79 @@ class MySportsDisciplineComponentsSection1 extends BaseElement {
         }
     }
 
-    async showItem(item) {
-        if (this.isModified) {
-            const modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
-            if (modalResult === 'Ok') {
-                await this.dataSource.saveItem(item);
+async changeNewItemShow(item) {
+        let modalResult = await this.confirmDialog('Запись была добавлена. Сохранить добавление?')
+        if (modalResult === 'Ok') {
+            await this.saveNewItem(this.currentItem)
+            if (this.currentItem !== item) {
+                this.dataSource.setCurrentItem(item)
             }
-            else {
-                await this.cancelItem()
+        } else {
+            modalResult = await this.cancelNewItem(this.currentItem)
+            if (modalResult === 'Ok' && this.currentItem !== item) {
+                this.dataSource.setCurrentItem(item)
             }
-        }
-        else if (this.currentItem !== item) {
-            this.dataSource.setCurrentItem(item)
         }
     }
 
+    async changeOldItemShow(item) {
+        let modalResult = await this.confirmDialog('Запись была изменена. Сохранить изменения?')
+        if (modalResult === 'Ok') {
+            await this.saveItem(this.currentItem)
+            if (this.currentItem !== item) {
+               this.dataSource.setCurrentItem(item)
+            }
+        } else {
+            modalResult = await this.cancelItem()
+            if (modalResult === 'Ok' && this.currentItem !== item) {
+                this.dataSource.setCurrentItem(item)
+            }
+        }
+    }
+
+    async changeFilterItemShow(item) {
+        let modalResult = await this.confirmDialog('Фильтр был изменен. Сохранить изменения?')
+        if (modalResult == 'Ok') {
+            this.applyFilter()
+            return 'Save'
+        } else {
+            modalResult = await this.cancelFilter()
+            if (modalResult == 'Ok') {
+                this.closeFilter()
+                return modalResult
+            }
+            return modalResult
+        }
+    }
+
+    async showItem(item) {
+        if (this.currentItem?._id === item._id) {
+            this.copyToClipboard(item.id || item._id)
+            return
+        }
+        if (this.isFilterModified) {
+            const ModalResult = await this.changeFilterItemShow(item)
+            if (ModalResult != 'Ok') {
+                return
+            }
+        }
+        if (this.isModified) {
+            if (this.dataSource?.state === States.NEW) {
+                this.changeNewItemShow(item)
+            } else {
+                this.changeOldItemShow(item)
+            }
+            if (this.currentPage != 0) {
+               this.currentPage = 0
+            }
+        } else if (this.currentItem !== item) {
+            if (this.currentPage != 0) {
+               this.currentPage = 0
+            }
+            this.dataSource.setCurrentItem(item)
+        }
+    }
+    
     get #page() {
         switch(this.currentTab) {
             case 0:
