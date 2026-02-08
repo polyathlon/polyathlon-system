@@ -177,6 +177,7 @@ class PolyathlonSystemHeader extends BaseElement {
                         <li><a @click=${() => this.showPage("my-competitions")} ?active=${this.activePage==="my-competitions"}>${lang`Competitions`}</a></li>
                         <li><a @click=${() => this.showPage("my-sportsmen")} ?active=${this.activePage==="my-courses"}>${lang`Sportsmen`}</a></li>
                         <li><a @click=${() => this.showPage("my-trainers")} ?active=${this.activePage==="my-trainers"}>${lang`Trainers`}</a></li>
+                        <li><a @click=${() => this.showPage("my-clubs")} ?active=${this.activePage==="my-clubs"}>${lang`Clubs`}</a></li>
                         <li><a @click=${() => this.showPage("my-referees")} ?active=${this.activePage==="my-referees"}>${lang`Referees`}</a></li>
                         ${this.userAccount()}
                     </ul>
@@ -196,6 +197,7 @@ class PolyathlonSystemHeader extends BaseElement {
                     <li><a @click=${() => this.showPage("my-competitions")} ?active=${this.activePage==="my-competitions"}>${lang`Competitions`}</a></li>
                     <li><a @click=${() => this.showPage("my-sportsmen")} ?active=${this.activePage==="my-courses"}>${lang`Sportsmen`}</a></li>
                     <li><a @click=${() => this.showPage("my-trainers")} ?active=${this.activePage==="my-trainers"}>${lang`Trainers`}</a></li>
+                    <li><a @click=${() => this.showPage("my-clubs")} ?active=${this.activePage==="my-clubs"}>${lang`Clubs`}</a></li>
                     <li><a @click=${() => this.showPage("my-referees")} ?active=${this.activePage==="my-referees"}>${lang`Referees`}</a></li>
                     ${this.userAccount()}
                 </ul>
