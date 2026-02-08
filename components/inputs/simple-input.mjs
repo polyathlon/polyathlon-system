@@ -166,6 +166,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
                     @beforeinput=${this.mask ? this.beforeinput : nothing}
                     class=${this.textAlign ? 'text-align' : nothing}
                     @keydown=${this.keyDown}
+                    id="input"
                 >
                 ${this.#image}
                 ${this.buttonName ? this.#button : ''}
@@ -196,7 +197,7 @@ customElements.define("simple-input", class SimpleInput extends BaseElement {
     }
 
     get #input() {
-        return this.renderRoot?.querySelector('input') ?? null;
+        return this.renderRoot?.querySelector('#input') ?? null;
     }
 
     changeFocus(e) {
