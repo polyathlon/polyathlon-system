@@ -149,7 +149,7 @@ class PolyathlonSystemHeader extends BaseElement {
         return html`
             <div class="logo" title="Home">
                 <a href="#">
-                    <img src="images/favicon.svg" alt="">
+                    <img src="images/logo.svg" alt="">
                 </a>
                 <a href="#">
                     <h3 class="text">
